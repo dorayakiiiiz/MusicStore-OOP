@@ -1,0 +1,4 @@
+ID,Name,Artist,Genre,Price,Quantity
+1,APT,Rose & Brunor Mars,Pop,15.5,5
+2,Drama,aespa,kpop,20,10
+3,How you like that, Blackpink, Kpop,20,20
