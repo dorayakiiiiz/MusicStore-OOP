@@ -19,9 +19,17 @@
 
 ### Chương trình
 - Ngôn ngữ lập trinh: C++
-- Cơ sở dữ liệu: File văn bản(.txt) hoặc file nhị phân
+- Cơ sở dữ liệu: File sql, văn bản(.txt) hoặc nhị phân
 - Giao diện: Giao diện đồ họa (console nâng cao hoặc thư viện SFML, SDL, ncurses,…)
 - Áp dụng: Nguyên lý OOP + Design Pattern + Mô hình kiến trúc phần mềm
+
+### Các tính năng đã có
+- Tạo đơn hàng
+- Tìm nhạc
+- Hiện thị số bài hát còn lại
+- Mua và bám bài hát
+- Thêm, xóa, chỉnh sửa các bài hát
+- Thoát
 
 ### Các chức năng chính
 #### Tính năng cho người dùng (Customer)
@@ -33,6 +41,7 @@
 - Áp dụng giảm giá (theo % hoặc số tiền cố định)
 - Xem lịch sử mua hàng (hóa đơn)
 - Đánh giá sản phẩm (tùy chọn mở rộng)
+- Đăng xuất tài khoản
 
 #### Tính năng dành cho quản trị viên (Admin)
 - Đăng nhập với mã bảo mật riêng (admin-key)
@@ -41,3 +50,4 @@
 - Thống kê doanh thu theo ngày, tuần, tháng
 - Xem thống kê người dùng tích cực nhất (tuỳ chọn nâng cao)
 - Gửi khuyến mãi cho từng người dùng (nâng cao)
+- Đăng xuất tài khoản
