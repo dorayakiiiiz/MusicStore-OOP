@@ -27,9 +27,10 @@
 - Tạo đơn hàng
 - Tìm nhạc
 - Hiện thị số bài hát còn lại
-- Mua và bám bài hát
+- Mua và bán bài hát
 - Thêm, xóa, chỉnh sửa các bài hát
 - Thoát
+- Code không theo nguyên lý OOP và Design Pattern.
 
 ### Các chức năng sẽ cải tiến
 #### Tính năng cho người dùng (Customer)
