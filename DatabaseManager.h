@@ -3,8 +3,10 @@
 
 #include "MusicItem.h"
 #include "User.h"
+#include "Order.h"
 #include <vector>
-using std::cin, std::cout, std::vector;
+#include <memory>
+using std::cin, std::cout, std::vector, std::shared_ptr, std::make_shared;
 
 class DatabaseManager {
 private:
@@ -14,8 +16,9 @@ public:
     static DatabaseManager* getInstance();
     void loadItems(vector<MusicItem>&);
     void saveItems(const vector<MusicItem>&);
-    void loadCustomers(vector<Customer*>&);
-    void saveCustomers(const vector<Customer*>&);
+    void loadCustomers(vector<shared_ptr<Customer>>&);
+    void saveCustomers(const vector<shared_ptr<Customer>>&);
+    void saveOrder(const Order&);
 };
 
 #endif
