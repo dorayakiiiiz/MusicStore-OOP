@@ -57,7 +57,7 @@ void DatabaseManager::saveItems(const vector<MusicItem>& items) {
     file.close();
 }
 
-void DatabaseManager::loadCustomers(vector<Customer*>& users) {
+void DatabaseManager::loadCustomers(vector<shared_ptr<Customer>>& users) {
     ifstream file("customer_info.txt");
     if (!file.is_open()) {
         throw "Error opening customer_info.txt!";
@@ -74,13 +74,14 @@ void DatabaseManager::loadCustomers(vector<Customer*>& users) {
         getline(ss, username, ',');
         getline(ss, password, ',');
 
-        users.push_back(new Customer(username, password)); 
-    }
+        users.push_back(make_shared<Customer>(username, password));
 
+    }
     file.close();
 }
 
-void DatabaseManager::saveCustomers(const vector<Customer*>& users) {
+
+void DatabaseManager::saveCustomers(const vector<shared_ptr<Customer>>& users) {
     ofstream file("customer_info.txt");
     if (!file.is_open()) {
         throw "Error opening customer_info.txt!";
@@ -89,13 +90,16 @@ void DatabaseManager::saveCustomers(const vector<Customer*>& users) {
 
     file << "Username,Password\n";
     for (int i = 0; i < users.size(); ++i) {
-        Customer* customer = nullptr; 
-        if (typeid(*(users[i])) == typeid(Customer)) { 
-            customer = static_cast<Customer*>(users[i]); 
-            file << customer->getUsername() << "," << customer->getPassword() << "\n";
-        }
+        file << users[i]->getUsername() << "," << users[i]->getPassword() << "\n";
     }
-    
 
     file.close();
+}
+
+void DatabaseManager::saveOrder(const Order& order) {
+    ofstream file("orders.txt", std::ios::app);
+    if (!file.is_open()) {
+        file << order.getOrderId() << ","<<order.getTotal() << "\n";
+        file.close();
+    }
 }

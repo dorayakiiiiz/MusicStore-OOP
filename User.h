@@ -19,6 +19,7 @@ public:
     string getPassword() const;
     string getRole() const;
     void addPurchase(const string& item);
+    void viewPurchaseHistory() const;
 };
 
 // singleton pattern for Admin Passkey
