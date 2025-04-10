@@ -24,31 +24,31 @@
 - Áp dụng: Nguyên lý OOP + Design Pattern + Mô hình kiến trúc phần mềm
 
 ### Các tính năng đã có
-- Tạo đơn hàng
-- Tìm nhạc
-- Hiện thị số bài hát còn lại
-- Mua và bán bài hát
-- Thêm, xóa, chỉnh sửa các bài hát
-- Thoát
+- Tạo đơn hàng.
+- Tìm nhạc.
+- Hiện thị số bài hát còn lại.
+- Mua và bán bài hát.
+- Thêm, xóa, chỉnh sửa các bài hát.
+- Thoát.
 - Code không theo nguyên lý OOP và Design Pattern.
 
 ### Các chức năng sẽ cải tiến
 #### Tính năng cho người dùng (Customer)
-- Đăng ký tài khoản mới
-- Đăng nhập hệ thống
-- Xem danh sách tất cả các bài hát/các sản phẩm âm nhạc
+- Đăng ký tài khoản mới.
+- Đăng nhập hệ thống.
+- Xem danh sách tất cả các bài hát/các sản phẩm âm nhạc.
 - Tìm kiếm sản phẩm theo tên, thể loại, nghệ sĩ,...
-- Tạo đơn hàng và thanh toán
-- Áp dụng giảm giá (theo % hoặc số tiền cố định)
-- Xem lịch sử mua hàng (hóa đơn)
-- Đánh giá sản phẩm (tùy chọn mở rộng)
-- Đăng xuất tài khoản
+- Tạo đơn hàng và thanh toán.
+- Áp dụng giảm giá (theo % hoặc số tiền cố định).
+- Xem lịch sử mua hàng (hóa đơn).
+- Đánh giá sản phẩm (tùy chọn mở rộng).
+- Đăng xuất tài khoản.
 
 #### Tính năng dành cho quản trị viên (Admin)
-- Đăng nhập với mã bảo mật riêng (admin-key)
-- Quản lý sản phẩm âm nhạc (thêm, xóa, sửa, cập nhật giá/số lượng)
-- Quản lý tài khoản khách hàng (xem thông tin, xóa tài khoản, xem lịch sử mua hàng)
-- Thống kê doanh thu theo ngày, tuần, tháng
-- Xem thống kê người dùng tích cực nhất (tuỳ chọn nâng cao)
-- Gửi khuyến mãi cho từng người dùng (nâng cao)
-- Đăng xuất tài khoản
+- Đăng nhập với mã bảo mật riêng (admin-key).
+- Quản lý sản phẩm âm nhạc (thêm, xóa, sửa, cập nhật giá/số lượng).
+- Quản lý tài khoản khách hàng (xem thông tin, xóa tài khoản, xem lịch sử mua hàng).
+- Thống kê doanh thu theo ngày, tuần, tháng.
+- Xem thống kê người dùng tích cực nhất (tuỳ chọn nâng cao).
+- Gửi khuyến mãi cho từng người dùng (nâng cao).
+- Đăng xuất tài khoản.
