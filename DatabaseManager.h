@@ -8,6 +8,7 @@
 #include <memory>
 using std::cin, std::cout, std::vector, std::shared_ptr, std::make_shared;
 
+// class DatabaseManager quản lí các thao tác đọc/ghi file cho toàn bộ chương trình
 class DatabaseManager {
 private:
     inline static DatabaseManager* instance = nullptr;
