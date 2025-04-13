@@ -1,5 +1,7 @@
 #include "AdminMenu.h"
 
+// edit file này
+
 void AdminMenu::run(InventoryManager& inventory) {
     while (1) {
         UI::displayMenu({
