@@ -14,7 +14,7 @@ private:
     vector<pair<int, int>> purchasedItems;
     float total;
 public:
-    Order(const string&, const vector<pair<int, int>>&, const float&);
+    Order(const string&, const string&, const vector<pair<int, int>>&, const float&);
     string getOrderId() const;
     float getTotal() const;
     string getUsername() const;

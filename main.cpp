@@ -44,7 +44,7 @@ int main() {
             "---------- WELCOME TO MUSIC STORE ----------",
             "1. Sign up",
             "2. Login",
-            "3. Exit"
+            "3. Exit\n"
         });
 
         int choice = stoi(UI::getInput("Input choice: "));
@@ -55,8 +55,8 @@ int main() {
                 db->saveCustomers(customers);
                 break;
             case 2: {
-                UI::displayMenu({"You are: 1. Admin - 2. Customer"});
-                int role = stoi(UI::getInput("Input role: "));
+                UI::displayMenu({"\nYou are: 1. Admin - 2. Customer"});
+                int role = stoi(UI::getInput("\nInput role: "));
                 if (role == 1) {
                     if (auth.loginAdmin()) {
                         // cout << "Login to admin successfully\n";
@@ -65,7 +65,6 @@ int main() {
                         // code hereee
 
 
-                        system("pause");
                     } else {
                         // cout << "Invalid passkey. Please try again!\n";
                     }
@@ -77,7 +76,6 @@ int main() {
                         // code heree
                         CustomerController::run(inventory, currentCart, *currentCustomer);
 
-                        system("pause");
                     }
                 }
             }
@@ -89,8 +87,9 @@ int main() {
                 return 0;
             default:
                 cout << "Invalid choice. Please try again!\n";
+                Sleep(2500);
         }
-        Sleep(2000);
+        Sleep(2500);
         system("cls");
     }
     

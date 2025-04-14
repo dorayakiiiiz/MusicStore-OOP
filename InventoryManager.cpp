@@ -21,10 +21,14 @@ void InventoryManager::updateItemPrice(int id, float price) {
     items[id].updatePrice(price);
 }
 
-void InventoryManager::removeItem(int id) {
+bool InventoryManager::removeItem(int id) {
+    if (id < 0 || id >= items.size()) {
+        return false;
+    }
     items.erase(items.begin() + id);
+    return true;
 }
 
-const vector<MusicItem>& InventoryManager::getAllItems() const {
+vector<MusicItem>& InventoryManager::getAllItems() const {
     return items;
 }

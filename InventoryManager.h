@@ -12,9 +12,9 @@ private:
 public:
     InventoryManager(vector<MusicItem>&);
     void addItem(const MusicItem&);
-    void removeItem(int);
+    bool removeItem(int);
     void updateItemPrice(int, float);
-    const vector<MusicItem>& getAllItems() const;
+    vector<MusicItem>& getAllItems() const;
     vector<MusicItem> searchItems(const string& keyword);
 };
 

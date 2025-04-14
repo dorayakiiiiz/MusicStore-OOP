@@ -102,7 +102,7 @@ void Database::saveOrder(const Order& order) {
         throw std::runtime_error("Error opening orders.txt");
     }
     file << order.getOrderId() << ","
-         << order.getUsername() << ", "
+         << order.getUsername() << ","
          << order.getTotal() << ",";
     const auto& items = order.getPurchasedItems();
     for (int i = 0; i < items.size(); ++i) {
@@ -138,7 +138,7 @@ void Database::loadOrder(vector<Order>& orders) {
             int quantity = stoi(itemPair.substr(colonPos + 1));
             purchasedItems.emplace_back(id, quantity);
         }
-        Order order(username, purchasedItems, stof(totalStr));
+        Order order(orderId, username, purchasedItems, stof(totalStr));
         orders.push_back(order);
     }
 }
