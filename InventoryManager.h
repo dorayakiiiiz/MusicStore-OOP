@@ -2,7 +2,7 @@
 #define _INVENTORY_MANAGER_H_
 
 #include "MusicItem.h"
-#include "DatabaseManager.h"
+#include "Database.h"
 #include <vector>
 using std::vector;
 

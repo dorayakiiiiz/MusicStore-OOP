@@ -1,11 +1,10 @@
 #include "DiscountFactory.h"
 
-
-Discount* DiscountFactory::createDiscount(const std::string& type, float value) {
+unique_ptr<Discount> DiscountFactory::createDiscount(const std::string& type, float value) {
     if (type == "percentage") {
-        return new PercentageDiscount(value);
+        return make_unique<PercentageDiscount>(value);
     } else if (type == "fixed") {
-        return new FixedAmountDiscount(value);
+        return make_unique<FixedAmountDiscount>(value);
     }
     return nullptr;
 }

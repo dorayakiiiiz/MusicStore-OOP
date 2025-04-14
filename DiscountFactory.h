@@ -2,11 +2,12 @@
 #define _DISCOUNT_FACTORY_H_
 
 #include "Discount.h"
+#include <memory>
 #include <string>
-using std::string;
+using std::string, std::unique_ptr, std::make_unique;
 class DiscountFactory {
 public:
-    static Discount* createDiscount(const string&, float);
+    static unique_ptr<Discount> createDiscount(const string&, float);
 };
 
 

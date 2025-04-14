@@ -1,15 +1,15 @@
-#include "CustomerMenu.h"
+#include "CustomerController.h"
 #include "DiscountFactory.h"
 
 
-void CustomerMenu::run(InventoryManager& inventory, Cart& cart, Customer& customer) {
+void CustomerController::run(InventoryManager& inventory, Cart& cart, Customer& customer) {
     while (1) {
         UI::displayMenu({
             "---------- CHOOSE YOUR BEST MUSIC ----------",
             "1. See music list",
             "2. Find item",
             "3. Add to cart",
-            "4. Purchase",
+            "4. Check out",
             "5. Log out"
         });
         int choice = stoi(UI::getInput("Input choice: "));
@@ -38,20 +38,25 @@ void CustomerMenu::run(InventoryManager& inventory, Cart& cart, Customer& custom
             case 3: {
                 
                 int itemID = stoi(UI::getInput("Enter item ID: "));
+                int quantity = stoi(UI::getInput("Enter quantity: "));
 
                 vector<MusicItem> allItems = inventory.getAllItems();
 
                 MusicItem* item = nullptr;
-                for (int i = 0; i < allItems.size(); ++i) {
-                    if (allItems[i].getID() == itemID) {
-                        item = &allItems[i];
+                for (auto& inventoryItem : allItems) {
+                    if (inventoryItem.getID() == itemID) {
+                        if (inventoryItem.getQuantity() < quantity) {
+                            cout << "Not enough stock!\n";
+                        }
+                        item = &inventoryItem;
+                        break;
                     }
                 }
                 if (item) {
-                    cart.addItems(*item);
-                    cout << "Item added to cart!\n";
+                    cart.addItems(*item, quantity);
+                    cout << "Added to cart!\n";
                 } else {
-                    cout << "Item is out of stock!\n";
+                    cout << "Item not found!\n";
                 }
 
                 break;
@@ -63,21 +68,39 @@ void CustomerMenu::run(InventoryManager& inventory, Cart& cart, Customer& custom
                     float total = cart.calculateTotal();
                     cout << "Total: $" << total << '\n';
 
-                    string applyDiscount = UI::getInput("Apply discount? yes/no: ");
+                    string applyDiscount = UI::getInput("Apply discount? (yes/no): ");
                     if (applyDiscount == "yes") {
                         string discountType = UI::getInput("Discount type (percentage/fixed): ");
                         float value = stof(UI::getInput("Discount value: "));
                         
-                        Discount* discount = DiscountFactory::createDiscount(discountType, value);
-                        cart.applyDiscount(discount);
+                        unique_ptr<Discount> discount = DiscountFactory::createDiscount(discountType, value);
+                        cart.applyDiscount(move(discount));
                         
                         total = cart.calculateTotal();
                         
                         cout << "New total: $" << total << '\n';
-
                     }
-                }
 
+                    auto inventoryItems = inventory.getAllItems();
+                    for (const auto& [cartItem, quantity] : cart.getItems()) {
+                        for (auto& inventoryItem : inventoryItems) {
+                            if (inventoryItem.getID() == cartItem.getID()) {
+                                inventoryItem.updateQuantity(inventoryItem.getQuantity() - quantity);
+                                break;
+                            }
+                        }
+                    }
+                    vector<pair<int, int>> purchasedHistory;
+                    for (const auto& [items, total] : cart.getItems()) {
+                        purchasedHistory.emplace_back(items.getID(), total);
+                    }
+                    Order order(customer.getUsername(), purchasedHistory, cart.calculateTotal());
+                    Database::getInstance()->saveOrder(order);
+                    customer.addPurchase(order);
+                    cart.clear();
+                    Database::getInstance()->saveItems(inventory.getAllItems());
+                    cout << "Purchase completed. Order ID: " << order.getOrderId() << '\n';
+                }
                 break;
             }
             case 5: {

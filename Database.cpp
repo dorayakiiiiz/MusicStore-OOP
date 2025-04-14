@@ -1,18 +1,18 @@
-#include "DatabaseManager.h"
+#include "Database.h"
 
 #include <fstream>
 #include <sstream>
 using std::ifstream, std::ofstream, std::stringstream;
-DatabaseManager* DatabaseManager::getInstance() {
+Database* Database::getInstance() {
     if (!instance) {
-        instance = new DatabaseManager();
+        instance = new Database();
     }
     return instance;
 }
 
-DatabaseManager::DatabaseManager() {}
+Database::Database() {}
 
-void DatabaseManager::loadItems(vector<MusicItem>& items) {
+void Database::loadItems(vector<MusicItem>& items) {
     ifstream file("music_info.txt");
 
     if (!file.is_open()) {
@@ -37,7 +37,7 @@ void DatabaseManager::loadItems(vector<MusicItem>& items) {
     file.close();
 }
 
-void DatabaseManager::saveItems(const vector<MusicItem>& items) {
+void Database::saveItems(const vector<MusicItem>& items) {
     ofstream file("music_info.txt");
     if (!file.is_open()) {
         throw "Error opening music_info.txt!";
@@ -57,7 +57,7 @@ void DatabaseManager::saveItems(const vector<MusicItem>& items) {
     file.close();
 }
 
-void DatabaseManager::loadCustomers(vector<shared_ptr<Customer>>& users) {
+void Database::loadCustomers(vector<shared_ptr<Customer>>& users) {
     ifstream file("customer_info.txt");
     if (!file.is_open()) {
         throw "Error opening customer_info.txt!";
@@ -81,7 +81,7 @@ void DatabaseManager::loadCustomers(vector<shared_ptr<Customer>>& users) {
 }
 
 
-void DatabaseManager::saveCustomers(const vector<shared_ptr<Customer>>& users) {
+void Database::saveCustomers(const vector<shared_ptr<Customer>>& users) {
     ofstream file("customer_info.txt");
     if (!file.is_open()) {
         throw "Error opening customer_info.txt!";
@@ -96,10 +96,49 @@ void DatabaseManager::saveCustomers(const vector<shared_ptr<Customer>>& users) {
     file.close();
 }
 
-void DatabaseManager::saveOrder(const Order& order) {
+void Database::saveOrder(const Order& order) {
     ofstream file("orders.txt", std::ios::app);
     if (!file.is_open()) {
-        file << order.getOrderId() << ","<<order.getTotal() << "\n";
-        file.close();
+        throw std::runtime_error("Error opening orders.txt");
+    }
+    file << order.getOrderId() << ","
+         << order.getUsername() << ", "
+         << order.getTotal() << ",";
+    const auto& items = order.getPurchasedItems();
+    for (int i = 0; i < items.size(); ++i) {
+        file << items[i].first << ":" << items[i].second;
+        if (i != items.size() - 1) {
+            file << ";";
+        }
+    }
+    file << "\n";
+    file.close();
+}
+
+void Database::loadOrder(vector<Order>& orders) {
+    ifstream file("orders.txt");
+    if (!file.is_open()) {
+        return;
+    }
+    string line;
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string orderId, username, totalStr, itemsStr;
+        getline(ss, orderId, ',');
+        getline(ss, username, ',');
+        getline(ss, totalStr, ',');
+        getline(ss, itemsStr);
+
+        vector<pair<int, int>> purchasedItems;
+        stringstream itemsStream(itemsStr);
+        string itemPair;
+        while (getline(itemsStream, itemPair, ';')) {
+            int colonPos = itemPair.find(':');
+            int id = stoi(itemPair.substr(0, colonPos));
+            int quantity = stoi(itemPair.substr(colonPos + 1));
+            purchasedItems.emplace_back(id, quantity);
+        }
+        Order order(username, purchasedItems, stof(totalStr));
+        orders.push_back(order);
     }
 }

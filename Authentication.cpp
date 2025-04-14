@@ -1,7 +1,7 @@
-#include "AuthManager.h"
+#include "Authentication.h"
 #include "UI.h"
 
-void AuthManager::registerCustomer(vector<shared_ptr<Customer>>& customers) {
+void Authentication::registerCustomer(vector<shared_ptr<Customer>>& customers) {
     string username = UI::getInput("Input your username: ");
     string password = UI::getInput("Input your password: ");
 
@@ -15,7 +15,7 @@ void AuthManager::registerCustomer(vector<shared_ptr<Customer>>& customers) {
     cout << "Register successfully!\n";
 }
 
-shared_ptr<Customer> AuthManager::loginCustomer(const vector<shared_ptr<Customer>>& customers) {
+shared_ptr<Customer> Authentication::loginCustomer(const vector<shared_ptr<Customer>>& customers) {
     string username = UI::getInput("Input username: ");
     string password = UI::getInput("Input password: ");
     
@@ -29,7 +29,7 @@ shared_ptr<Customer> AuthManager::loginCustomer(const vector<shared_ptr<Customer
     return nullptr;
 }
 
-bool AuthManager::loginAdmin() {
+bool Authentication::loginAdmin() {
     string passkey = UI::getInput("Input admin passkey: ");
 
     if (AdminPasskey::getInstance()->isValid(passkey)) {

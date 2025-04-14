@@ -4,7 +4,7 @@ InventoryManager::InventoryManager(vector<MusicItem>& items) : items(items) {}
 
 void InventoryManager::addItem(const MusicItem& item) {
     items.push_back(item);
-    DatabaseManager::getInstance()->saveItems(items);
+    Database::getInstance()->saveItems(items);
 }
 
 vector<MusicItem> InventoryManager::searchItems(const string& keyword) {

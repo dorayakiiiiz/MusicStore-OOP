@@ -1,13 +1,13 @@
-#include "DatabaseManager.h"
-#include "AuthManager.h"
+#include "Database.h"
+#include "Authentication.h"
 #include "InventoryManager.h"
 #include "MusicItem.h"
 #include "User.h"
 #include "Cart.h"
 #include "Discount.h"
 #include "UI.h"
-#include "AdminMenu.h"
-#include "CustomerMenu.h"
+#include "AdminController.h"
+#include "CustomerController.h"
 
 
 #include <iostream>
@@ -20,7 +20,7 @@ using std::cin, std::cout, std::vector, std::string, std::exception;
 
 int main() {
     
-    DatabaseManager* db = DatabaseManager::getInstance();
+    Database* db = Database::getInstance();
     vector<MusicItem> items;
     vector<shared_ptr<Customer>> customers;
 
@@ -35,7 +35,7 @@ int main() {
     }
 
     InventoryManager inventory(items);
-    AuthManager auth;
+    Authentication auth;
     Cart currentCart;
     shared_ptr<Customer> currentCustomer = nullptr;
 
@@ -61,7 +61,7 @@ int main() {
                     if (auth.loginAdmin()) {
                         // cout << "Login to admin successfully\n";
 
-                        AdminMenu::run(inventory);
+                        AdminController::run(inventory);
                         // code hereee
 
 
@@ -75,7 +75,7 @@ int main() {
                         //cout << "Login to customer UI successfully!\n";
 
                         // code heree
-                        CustomerMenu::run(inventory, currentCart, *currentCustomer);
+                        CustomerController::run(inventory, currentCart, *currentCustomer);
 
                         system("pause");
                     }

@@ -1,16 +1,18 @@
 #ifndef _USER_H_
 #define _USER_H_
 
+#include "Order.h"
 #include <string>
 #include <vector>
-using std::string, std::vector;
+#include <iostream>
+using std::string, std::vector, std::cout;
 
 
 class Customer  {
 private:
     string username;
     string password;
-    vector<string> purchaseHistory;
+    vector<Order> purchaseHistory;
 public:
     Customer(const string&, const string&);
 public:
@@ -18,8 +20,8 @@ public:
     string getUsername() const;
     string getPassword() const;
     string getRole() const;
-    void addPurchase(const string& item);
-    void viewPurchaseHistory() const;
+    void addPurchase(const Order&);
+    const vector<Order>& getPurchaseHistory() const;
 };
 
 // singleton pattern for Admin Passkey
@@ -31,7 +33,7 @@ private:
 public:
     static AdminPasskey* getInstance();
     bool isValid(const string&) const;
-    void addPassket(const string&);
+    void addPasskey(const string&);
 };
 
 class Admin {

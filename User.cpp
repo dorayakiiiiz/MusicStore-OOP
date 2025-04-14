@@ -17,8 +17,12 @@ string Customer::getPassword() const {
     return password;
 }
 
-void Customer::addPurchase(const string& item) {
-    purchaseHistory.push_back(item);
+void Customer::addPurchase(const Order& order) {
+    purchaseHistory.push_back(order);
+}
+
+const vector<Order>& Customer::getPurchaseHistory() const {
+    return purchaseHistory;
 }
 
 AdminPasskey* AdminPasskey::getInstance() {
@@ -41,7 +45,7 @@ bool AdminPasskey::isValid(const string& pass) const {
     return false;
 }
 
-void AdminPasskey::addPassket(const string& pass) {
+void AdminPasskey::addPasskey(const string& pass) {
     passKeys.push_back(pass);
 }
 
@@ -52,3 +56,4 @@ Admin::Admin() {
 string Admin::getRole() const {
     return "Admin";
 }
+

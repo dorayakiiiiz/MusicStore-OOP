@@ -3,7 +3,7 @@
 #include "InventoryManager.h"
 #include "UI.h"
 
-class AdminMenu {
+class AdminController {
 public:
     static void run(InventoryManager&);
 };

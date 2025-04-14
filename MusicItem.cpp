@@ -44,3 +44,4 @@ void MusicItem::updatePrice(const float& price) {
 void MusicItem::updateQuantity(const int& quantity) {
     this->quantity = quantity;
 }
+
