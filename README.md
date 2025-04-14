@@ -32,7 +32,7 @@
 - Thoát.
 - Code không theo nguyên lý OOP và Design Pattern.
 
-### Các chức năng sẽ cải tiến
+### Các chức năng sẽ cải tiến.
 #### Tính năng cho người dùng (Customer)
 - Đăng ký tài khoản mới.
 - Đăng nhập hệ thống.
