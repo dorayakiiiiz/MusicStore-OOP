@@ -31,7 +31,7 @@
 - Thêm, xóa, chỉnh sửa các bài hát.
 - Thoát.
 
-### Các chức năng sẽ cải tiến
+### Các chức năng sẽ cải tiến.
 #### Tính năng cho người dùng (Customer)
 - Đăng ký tài khoản mới.
 - Đăng nhập hệ thống.
