@@ -1,6 +1,8 @@
 #include "Authentication.h"
 #include "UI.h"
 
+// git commit commit
+
 void Authentication::registerCustomer(vector<shared_ptr<Customer>>& customers) {
     string username = UI::getInput("Input your username: ");
     for (int i = 0; i < customers.size(); ++i) {
