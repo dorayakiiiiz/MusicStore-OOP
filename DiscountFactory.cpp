@@ -8,3 +8,5 @@ unique_ptr<Discount> DiscountFactory::createDiscount(const std::string& type, fl
     }
     return nullptr;
 }
+
+// commit
