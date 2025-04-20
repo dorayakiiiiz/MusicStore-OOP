@@ -1,5 +1,7 @@
 #include "MusicItem.h"
 
+// fix this .cpp
+
 #include <iostream>
 using std::cin, std::cout;
 MusicItem::MusicItem(const int& id, const string& name, const string& artist, const string& genre, const float& price, const int& quantity) {
