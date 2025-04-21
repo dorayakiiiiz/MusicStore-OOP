@@ -23,15 +23,14 @@ void Database::loadItems(vector<MusicItem>& items) {
     getline(file, line); 
     while (getline(file, line)) {
         stringstream ss(line);
-        string id, name, artist, genre, price, quantity;
-        getline(ss, id, ',');
+        string name, artist, genre, price, quantity;
         getline(ss, name, ',');
         getline(ss, artist, ',');
         getline(ss, genre, ',');
         getline(ss, price, ',');
         getline(ss, quantity, ',');
 
-        items.emplace_back(stoi(id), name, artist, genre, stof(price), stoi(quantity));
+        items.emplace_back(name, artist, genre, stof(price), stoi(quantity));
     }
 
     file.close();
@@ -44,10 +43,9 @@ void Database::saveItems(const vector<MusicItem>& items) {
         return;
     }
 
-    file << "ID,Name,Artist,Genre,Price,Quantity\n";
+    file << "Name,Artist,Genre,Price,Quantity\n";
     for (const auto &item : items) {
-        file << item.getID() << ","
-             << item.getName() << ","
+        file << item.getName() << ","
              << item.getArtist() << ","
              << item.getGenre() << ","
              << item.getPrice() << ","
@@ -101,15 +99,18 @@ void Database::saveOrder(const Order& order) {
     if (!file.is_open()) {
         throw std::runtime_error("Error opening orders.txt");
     }
-    file << order.getOrderId() << ","
-         << order.getUsername() << ","
-         << order.getTotal() << ",";
+
+    //format: username,total,name,arist,genre,price,totalquantity
+
+    file << order.getUsername() << "|"
+         << order.getTotal() << "|";
     const auto& items = order.getPurchasedItems();
     for (int i = 0; i < items.size(); ++i) {
-        file << items[i].first << ":" << items[i].second;
-        if (i != items.size() - 1) {
-            file << ";";
-        }
+        file << items[i].getName() << ";"
+             << items[i].getArtist() << ";"
+             << items[i].getGenre() << ";"
+             << items[i].getPrice() << ";"
+             << items[i].getQuantity() << "|";
     }
     file << "\n";
     file.close();
@@ -120,25 +121,31 @@ void Database::loadOrder(vector<Order>& orders) {
     if (!file.is_open()) {
         return;
     }
+
     string line;
     while (getline(file, line)) {
         stringstream ss(line);
-        string orderId, username, totalStr, itemsStr;
-        getline(ss, orderId, ',');
-        getline(ss, username, ',');
-        getline(ss, totalStr, ',');
-        getline(ss, itemsStr);
+        string username, totalPrice, items;
+        getline(ss, username, '|');
+        getline(ss, totalPrice, '|');
+        getline(ss, items);
 
-        vector<pair<int, int>> purchasedItems;
-        stringstream itemsStream(itemsStr);
-        string itemPair;
-        while (getline(itemsStream, itemPair, ';')) {
-            int colonPos = itemPair.find(':');
-            int id = stoi(itemPair.substr(0, colonPos));
-            int quantity = stoi(itemPair.substr(colonPos + 1));
-            purchasedItems.emplace_back(id, quantity);
+        vector<MusicItem> purchasedItems;
+        stringstream itemsStream(items);
+        string itemSS;
+        while (getline(itemsStream, itemSS, '|')) {
+            stringstream itemsStream(itemSS);
+            string name, artist, genre, price, quantity;
+            getline(itemsStream, name, ';');
+            getline(itemsStream, artist, ';');
+            getline(itemsStream, genre, ';');
+            getline(itemsStream, price, ';');
+            getline(itemsStream, quantity, '|');
+
+            MusicItem item(name, artist, genre, stof(price), stoi(quantity));
+            purchasedItems.emplace_back(item);
         }
-        Order order(orderId, username, purchasedItems, stof(totalStr));
+        Order order(username, purchasedItems, stof(totalPrice));
         orders.push_back(order);
     }
 }
