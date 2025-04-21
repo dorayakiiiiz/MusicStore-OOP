@@ -26,15 +26,9 @@ int main() {
     vector<MusicItem> items;
     vector<shared_ptr<Customer>> customers;
 
-    try {
-        
-        db->loadItems(items);
-        db->loadCustomers(customers);
+    db->loadItems(items);
+    db->loadCustomers(customers);
 
-    } catch (exception ex) {
-        cout << "Error while loading data: " << ex.what() << "\n";
-        return 1;
-    }
 
     InventoryManager inventory(items);
     Authentication auth;
@@ -42,6 +36,7 @@ int main() {
     shared_ptr<Customer> currentCustomer = nullptr;
 
     while (1) {
+        system("cls");
         UI::displayMenu({
             "---------- WELCOME TO MUSIC STORE ----------",
             "1. Sign up",
@@ -89,10 +84,8 @@ int main() {
                 return 0;
             default:
                 cout << "Invalid choice. Please try again!\n";
-                Sleep(2500);
         }
         Sleep(2500);
-        system("cls");
     }
     
     return 0;
