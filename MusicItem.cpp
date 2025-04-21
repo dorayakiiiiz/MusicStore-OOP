@@ -4,15 +4,10 @@
 
 #include <iostream>
 using std::cin, std::cout;
-MusicItem::MusicItem(const int& id, const string& name, const string& artist, const string& genre, const float& price, const int& quantity) {
-    this->id = id; this->name = name;
+MusicItem::MusicItem(const string& name, const string& artist, const string& genre, const float& price, const int& quantity) {
+    this->name = name;
     this->artist = artist; this->genre = genre;
     this->price = price; this->quantity = quantity;
-}
-    
-
-int MusicItem::getID() const {
-    return id;
 }
 
 string MusicItem::getName() const {
@@ -36,8 +31,8 @@ int MusicItem::getQuantity() const {
 }
 
 void MusicItem::displayItems() {
-    cout << id << " - " << name << " - " << artist;
-    cout << " - " << genre << " - " << price << " - " << quantity << "\n";
+    cout << name << " - " << artist << " - ";
+    cout << genre << " - " << price << " - " << quantity << "\n";
 
 }
 void MusicItem::updatePrice(const float& price) {
@@ -45,5 +40,9 @@ void MusicItem::updatePrice(const float& price) {
 }
 void MusicItem::updateQuantity(const int& quantity) {
     this->quantity = quantity;
+}
+
+bool MusicItem::operator==(const MusicItem& other) const {
+    return name == other.name && artist == other.artist && genre == other.genre && price == other.price;
 }
 

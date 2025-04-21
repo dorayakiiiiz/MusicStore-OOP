@@ -8,7 +8,6 @@ using std::string;
 
 class MusicItem {
 private:
-    int id;
     string name;
     string artist;
     string genre;
@@ -16,11 +15,10 @@ private:
     int quantity;
 
 public:
-    MusicItem(const int&, const string&, const string&, const string&, const float&, const int&);
+    MusicItem(const string&, const string&, const string&, const float&, const int&);
     ~MusicItem() = default;
 
 public:
-    int getID() const;
     string getName() const;
     string getArtist() const;
     string getGenre() const;
@@ -30,6 +28,8 @@ public:
     void displayItems();
     void updatePrice(const float&);
     void updateQuantity(const int&);
+
+    bool operator==(const MusicItem&) const;
 };
 
 #endif

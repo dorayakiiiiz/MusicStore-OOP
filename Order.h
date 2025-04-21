@@ -9,16 +9,14 @@ using std::string, std::vector, std::pair;
 
 class Order {
 private:
-    string orderId;
     string username;
-    vector<pair<int, int>> purchasedItems;
+    vector<MusicItem> purchasedItems;
     float total;
 public:
-    Order(const string&, const string&, const vector<pair<int, int>>&, const float&);
-    string getOrderId() const;
+    Order(const string&, const vector<MusicItem>&, const float&);
     float getTotal() const;
     string getUsername() const;
-    const vector<pair<int, int>>& getPurchasedItems() const;
+    const vector<MusicItem>& getPurchasedItems() const;
 };
 
 

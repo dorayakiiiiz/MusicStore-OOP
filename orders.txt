@@ -1,3 +1,1 @@
-ORD-1744611493,dora,181,2:5;1:2;3:5
-ORD-1744638280,dora,121,1:2;2:2;3:5
-ORD-1744645071,doraa,100,4:10
+dora|431|APT;Rose & Bruno Mars;Pop;15.5;2|Drama;aespa;Kpop;20;4|How you like that;Blackpink;Kpop;20;6|Xin dung lang im;Soobin;Vpop;10;8|Neu ngay ay;Soobin Hoang Son;Vpop;10;10|Chung ta cua hien tai;Son Tung MTP;Vpop;10;2|
