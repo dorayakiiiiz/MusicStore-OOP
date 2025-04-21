@@ -20,6 +20,7 @@ void CustomerController::run(InventoryManager& inventory, Cart& cart, Customer& 
             case 1: {
                 vector<MusicItem> allItems = inventory.getAllItems();
                 for (int i = 0; i < allItems.size(); ++i) {
+                    cout << i + 1 << ". ";
                     allItems[i].displayItems();
                 }
                 break;
@@ -44,22 +45,19 @@ void CustomerController::run(InventoryManager& inventory, Cart& cart, Customer& 
 
                 vector<MusicItem> allItems = inventory.getAllItems();
 
-                MusicItem* item = nullptr;
-                for (auto& inventoryItem : allItems) {
-                    if (inventoryItem.getID() == itemID) {
-                        if (inventoryItem.getQuantity() < quantity) {
-                            cout << "\nNot enough stock!\n";
-                        }
-                        item = &inventoryItem;
-                        break;
-                    }
+                if (itemID < 1 || itemID > allItems.size()) {
+                    cout << "\nInvalid item ID!\n";
+                    break;
                 }
-                if (item) {
-                    cart.addItems(*item, quantity);
-                    cout << "\nAdded to cart!\n";
-                } else {
-                    cout << "\nItem not found!\n";
+
+                MusicItem item = allItems[itemID - 1];
+                if (item.getQuantity() < quantity) {
+                    cout << "\nNot enough items in stock!\n";
+                    break;
                 }
+                item.updateQuantity(quantity);
+                cart.addItems(item);
+                cout << "\nAdded " << quantity << " of " << item.getName() << " to cart.\n";
 
                 break;
             }
@@ -67,9 +65,35 @@ void CustomerController::run(InventoryManager& inventory, Cart& cart, Customer& 
                 if (cart.getItems().empty()) {
                     cout << "\nCart is empty!\n";
                 } else {
-                    float total = cart.calculateTotal();
-                    cout << "\nTotal: $" << total << '\n';
+                    vector<MusicItem>& inventoryItems = inventory.getAllItems();
+                    
+                    // update inventory quantities
+                    for (const auto& item : cart.getItems()) {
+                        for (auto& inventoryItem : inventoryItems) {
+                            if (inventoryItem == item) {
+                                inventoryItem.updateQuantity(inventoryItem.getQuantity() - item.getQuantity());
+                                break;
+                            }
+                        }
+                    }
 
+                    vector<MusicItem> purchasedHistory;
+                    for (const auto& items : cart.getItems()) {
+                        purchasedHistory.emplace_back(items);
+                    }
+
+                    cout << "Your order details:\n";
+                    cout << "Username: " << customer.getUsername() << '\n';
+                    cout << "Items purchased:\n";
+                    for (const auto& item : cart.getItems()) {
+                        cout << " - " << item.getName() << " - Quantity: " << item.getQuantity()
+                             << " - Price per unit: $" << item.getPrice()
+                             << " - Total: $" << item.getPrice() * item.getQuantity() << '\n';
+                    }
+                    float total = cart.calculateTotal();
+                    cout << "Order total: $" << total << '\n';
+                    cout << "------------------------------------------\n";
+                    
                     string applyDiscount = UI::getInput("\nApply discount? (yes/no): ");
                     if (applyDiscount == "yes") {
                         string discountType = UI::getInput("Discount type (percentage/fixed): ");
@@ -83,30 +107,16 @@ void CustomerController::run(InventoryManager& inventory, Cart& cart, Customer& 
                         cout << "\nNew total: $" << total << '\n';
                     }
 
-                    vector<MusicItem>& inventoryItems = inventory.getAllItems();
-                    for (const auto& [cartItem, quantity] : cart.getItems()) {
-                        for (auto& inventoryItem : inventoryItems) {
-                            if (inventoryItem.getID() == cartItem.getID()) {
-                                inventoryItem.updateQuantity(inventoryItem.getQuantity() - quantity);
-                                break;
-                            }
-                        }
-                    }
-                    vector<pair<int, int>> purchasedHistory;
-                    for (const auto& [items, total] : cart.getItems()) {
-                        purchasedHistory.emplace_back(items.getID(), total);
-                    }
-                    time_t now = time(nullptr);
-                    stringstream ss;
-                    ss << "ORD-" << now;
-                    string orderId = ss.str();
-                    Order order(orderId, customer.getUsername(), purchasedHistory, cart.calculateTotal());
+                    Order order(customer.getUsername(), purchasedHistory, total);
                     Database::getInstance()->saveOrder(order);
                     customer.addPurchase(order);
                     cart.clear();
 
                     Database::getInstance()->saveItems(inventoryItems);
-                    cout << "\nPurchase completed. Order ID: " << order.getOrderId() << '\n';
+
+                    cout << "\nThank you for your purchase!\n";
+                    cout << "------------------------------------------\n";
+
                 }
                 break;
             }
