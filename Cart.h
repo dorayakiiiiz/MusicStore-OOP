@@ -10,14 +10,14 @@ using std::vector, std::pair, std::unique_ptr;
 
 class Cart {
 private:
-    vector<pair<MusicItem, int>> items;
+    vector<MusicItem> items;
     unique_ptr<Discount> discount;
 public:
-    void addItems(const MusicItem&, int);
+    void addItems(const MusicItem&);
     void removeItem(int);
     void applyDiscount(unique_ptr<Discount>);
     float calculateTotal() const;
-    const vector<pair<MusicItem, int>>& getItems() const;
+    const vector<MusicItem>& getItems() const;
     void clear();
 };
 

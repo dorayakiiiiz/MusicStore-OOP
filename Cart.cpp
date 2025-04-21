@@ -1,32 +1,34 @@
 #include "Cart.h"
 
-void Cart::addItems(const MusicItem& item, int quantity) {
-    for (auto& cartItem : items) {
-        if (cartItem.first.getID() == item.getID()) {
-            cartItem.second += quantity;
+void Cart::addItems(const MusicItem& item) {
+    for (int i = 0; i < items.size(); ++i) {
+        if (items[i] == item) {
+            items[i].updateQuantity(items[i].getQuantity() + item.getQuantity());
             return;
         }
     }
-    items.emplace_back(item, quantity);
+    items.push_back(item);
 }
 
-const vector<pair<MusicItem, int>>& Cart::getItems() const {
+const vector<MusicItem>& Cart::getItems() const {
     return items;
 }
 
 float Cart::calculateTotal() const {
     float total = 0;
-    for (const auto& [item, quantity] : items) {
-        float price = item.getPrice();
-        if (discount) {
-            price = discount->applyDiscount(price);
-        }
-        total += price * quantity;
+    for (const auto& item : items) {
+        total += item.getPrice() * item.getQuantity();
+    }
+    if (discount) {
+        total = discount->applyDiscount(total);
     }
     return total;
 }
 
 void Cart::removeItem(int id) {
+    if (id < 0 || id >= items.size()) {
+        return;
+    }
     items.erase(items.begin() + id);
 }
 
