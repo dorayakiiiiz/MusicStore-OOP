@@ -1,10 +1,11 @@
 #include "InventoryManager.h"
+#include "MusicDAO.h"
 
 InventoryManager::InventoryManager(vector<Music>& items) : items(items) {}
 
 void InventoryManager::addItem(const Music& item) {
     items.push_back(item);
-    Database::saveItems(items);
+    MusicDAO::saveItems(items);
 }
 
 vector<Music> InventoryManager::searchItems(const string& keyword) {

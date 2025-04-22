@@ -1,6 +1,7 @@
-#include "Database.h"
 #include "Authentication.h"
 #include "InventoryManager.h"
+#include "MusicDAO.h"
+#include "CustomerDAO.h"
 #include "Music.h"
 #include "User.h"
 #include "Cart.h"
@@ -25,8 +26,8 @@ int main() {
     vector<Music> items;
     vector<shared_ptr<Customer>> customers;
 
-    Database::loadItems(items);
-    Database::loadCustomers(customers);
+    MusicDAO::loadItems(items);
+    CustomerDAO::loadCustomers(customers);
 
 
     InventoryManager inventory(items);
@@ -53,7 +54,7 @@ int main() {
                 if (success) {
                     cout << "Sign up successfully!\n";
                     customers.push_back(make_shared<Customer>(username, password));
-                    Database::saveCustomers(customers);
+                    CustomerDAO::saveCustomers(customers);
                 } else {
                     cout << "Username already exists. Please try again!\n";
                 }
@@ -92,8 +93,8 @@ int main() {
             }
             break;
             case 3:
-                Database::saveItems(items);
-                Database::saveCustomers(customers);
+                MusicDAO::saveItems(items);
+                CustomerDAO::saveCustomers(customers);
                 cout << "---------- GOODBYE! ----------\n";
                 return 0;
             default:

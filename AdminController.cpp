@@ -2,7 +2,18 @@
 
 #include <unordered_map>
 #include <algorithm>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <memory>
+
+#include "User.h"
+#include "CustomerDAO.h"
+#include "OrderDAO.h"
+#include "MusicDAO.h"
+
 using std::unordered_map;
+using std::cout, std::endl, std::vector, std::string, std::make_shared, std::shared_ptr, std::sort, std::pair;
 
 // edit file này
 
@@ -77,7 +88,7 @@ void AdminController::run(InventoryManager& inventory) {
             }
             case 5: {
                 vector<shared_ptr<Customer>> allCustomers;
-                Database::loadCustomers(allCustomers);
+                CustomerDAO::loadCustomers(allCustomers);
                 cout << "---------- CUSTOMER LIST ----------\n";
                 cout << "ID - Username - Password\n";
                 for (int i = 0; i < allCustomers.size(); ++i) {
@@ -88,13 +99,13 @@ void AdminController::run(InventoryManager& inventory) {
             }
             case 6: {
                 vector<shared_ptr<Customer>> allCustomers;
-                Database::loadCustomers(allCustomers);
+                CustomerDAO::loadCustomers(allCustomers);
                 if (allCustomers.empty()) {
                     cout << "No customers found.\n";
                     break;
                 }
                 vector<Order> allOrders;
-                Database::loadOrder(allOrders);
+                OrderDAO::loadOrder(allOrders);
                 vector<Music> allItems = inventory.getAllItems(); 
                 
                 cout << "---------- CUSTOMER PURCHASE HISTORY ----------\n";
@@ -129,7 +140,7 @@ void AdminController::run(InventoryManager& inventory) {
             case 7: {
                 string usernameToDelete = getInput("Enter username to delete: ");
                 vector<shared_ptr<Customer>> allCustomers;
-                Database::loadCustomers(allCustomers);
+                CustomerDAO::loadCustomers(allCustomers);
 
                 int indexToDelete = -1;
                 for (int i = 0; i < allCustomers.size(); ++i) {
@@ -145,7 +156,7 @@ void AdminController::run(InventoryManager& inventory) {
                     }
                     allCustomers.pop_back(); 
             
-                    Database::saveCustomers(allCustomers);
+                    CustomerDAO::saveCustomers(allCustomers);
                     cout << "\nUser " << usernameToDelete << " deleted successfully.\n\n";
                 } else {
                     cout << "\nUser not found.\n\n";
@@ -155,7 +166,7 @@ void AdminController::run(InventoryManager& inventory) {
             case 8: {
 
                 vector<Order> allOrders;
-                Database::loadOrder(allOrders);
+                OrderDAO::loadOrder(allOrders);
                 vector<Music> allItems = inventory.getAllItems();
 
                 unordered_map<string, pair<int, float>> itemStats;

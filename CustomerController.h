@@ -5,7 +5,7 @@
 #include "Cart.h"
 #include "Order.h"
 #include "utils.h"
-
+#include "User.h"
 
 class CustomerController {
 public:

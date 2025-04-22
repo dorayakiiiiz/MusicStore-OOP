@@ -1,9 +1,14 @@
 #include "CustomerController.h"
 #include "DiscountFactory.h"
+#include "User.h"
+#include "OrderDAO.h"
+#include "VoucherDAO.h"
+#include "MusicDAO.h"
+#include "utils.h"
 
 #include <sstream>
-using std::stringstream;
-
+using std::stringstream, std::string, std::cout, std::endl, std::vector, std::make_shared, std::shared_ptr, std::endl;
+using std::cout;
 void CustomerController::run(InventoryManager& inventory, Cart& cart, Customer& customer) {
     while (1) {
         displayMenu({
@@ -20,7 +25,7 @@ void CustomerController::run(InventoryManager& inventory, Cart& cart, Customer& 
         switch (choice) {
             case 1: {
                 vector<Order> orders;
-                Database::loadOrder(orders);
+                OrderDAO::loadOrder(orders);
                 bool hasPurchase = false;
                 int idx = 1;
                 cout << "\n---------- YOUR PURCHASE HISTORY ----------\n";
@@ -155,21 +160,21 @@ void CustomerController::run(InventoryManager& inventory, Cart& cart, Customer& 
                             cout << "2. Fixed amount discount\n";
                             int discountChoice = stoi(getInput("Enter your choice: "));
                             vector<string> vouchers;
-                            Database::loadVoucher(vouchers);
+                            VoucherDAO::loadVoucher(vouchers);
                             if (discountChoice == 1) {
                                 cout << "You have received a percentage discount voucher!\n";
                                 string code = customer.getUsername() + "P" + "10";
                                 cout << "Discount code: " << code << '\n';
                                 // save the code to the database
                                 vouchers.push_back(code);
-                                Database::saveVoucher(vouchers);
+                                VoucherDAO::saveVoucher(vouchers);
                             } else if (discountChoice == 2) {
                                 cout << "You have received a fixed amount discount voucher!\n";
                                 string code = customer.getUsername() + "F" + "20";
                                 cout << "Discount code: " << code << '\n';
                                 // save the code to the database
                                 vouchers.push_back(code);
-                                Database::saveVoucher(vouchers);
+                                VoucherDAO::saveVoucher(vouchers);
                             } else {
                                 cout << "Invalid choice!\n";
                             } 
@@ -180,11 +185,11 @@ void CustomerController::run(InventoryManager& inventory, Cart& cart, Customer& 
                     }
 
                     Order order(customer.getUsername(), purchasedHistory, total);
-                    Database::saveOrder(order);
+                    OrderDAO::saveOrder(order);
                     customer.addPurchase(order);
                     cart.clear();
 
-                    Database::saveItems(inventoryItems);
+                    MusicDAO::saveItems(inventoryItems);
 
                     cout << "\nThank you for your purchase!\n";
                     cout << "------------------------------------------\n";

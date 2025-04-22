@@ -1,5 +1,5 @@
 #include "DiscountFactory.h"
-#include "Database.h"
+#include "VoucherDAO.h"
 #include <algorithm>
 #include <regex> // For extracting numbers from voucher codes
 
@@ -16,7 +16,7 @@ DiscountFactory::DiscountFactory() {
 
 void DiscountFactory::classifyVouchers() {
     vector<string> vouchers;
-    Database::loadVoucher(vouchers);
+    VoucherDAO::loadVoucher(vouchers);
 
     for (const auto& voucher : vouchers) {
         // Extract the discount value using regex
@@ -43,11 +43,11 @@ float DiscountFactory::applyDiscount(const string& code, const float& total) {
 
             // Remove the voucher from the list after applying it
             vector<string> vouchers;
-            Database::loadVoucher(vouchers);
+            VoucherDAO::loadVoucher(vouchers);
             auto it = std::find(vouchers.begin(), vouchers.end(), code);
             if (it != vouchers.end()) {
                 vouchers.erase(it);
-                Database::saveVoucher(vouchers);
+                VoucherDAO::saveVoucher(vouchers);
             }
 
             return newTotal;
