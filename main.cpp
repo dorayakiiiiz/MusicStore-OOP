@@ -1,7 +1,7 @@
 #include "Database.h"
 #include "Authentication.h"
 #include "InventoryManager.h"
-#include "MusicItem.h"
+#include "Music.h"
 #include "User.h"
 #include "Cart.h"
 #include "Discount.h"
@@ -23,7 +23,7 @@ int main() {
     // commit commit
     
     Database* db = Database::getInstance();
-    vector<MusicItem> items;
+    vector<Music> items;
     vector<shared_ptr<Customer>> customers;
 
     db->loadItems(items);

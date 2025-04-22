@@ -8,23 +8,25 @@ using std::unordered_map;
 
 void AdminController::run(InventoryManager& inventory) {
     while (1) {
+
         UI::displayMenu({
             "---------- MENU ADMIN ----------\n",
             "1. See music list",
             "2. Add new items",
             "3. Remove items",
             "4. Update price items",
-            "5. View all customer purchase history",
-            "6. Delete customer",
-            "7. View sale statistics",
-            "8. Log out\n"
+            "5. View customer list",
+            "6. View all customer purchase history",
+            "7. Delete customer",
+            "8. View sale statistics",
+            "9. Log out\n"
         });
 
 
         int choice = stoi(UI::getInput("Enter choice: "));
         switch (choice) {
             case 1: {
-                vector<MusicItem> allItems = inventory.getAllItems();
+                vector<Music> allItems = inventory.getAllItems();
                 cout << "---------- MUSIC LIST ----------\n";
                 cout << "ID - Name - Artist - Genre - Price - Quantity\n";
                 int idx = 1;
@@ -44,7 +46,7 @@ void AdminController::run(InventoryManager& inventory) {
                 float price = stof(UI::getInput("Enter price: "));
                 int quantity = stoi(UI::getInput("Enter quantity: "));
 
-                MusicItem item(name, artist, genre, price, quantity);
+                Music item(name, artist, genre, price, quantity);
 
                 inventory.addItem(item);
 
@@ -76,13 +78,24 @@ void AdminController::run(InventoryManager& inventory) {
             case 5: {
                 vector<shared_ptr<Customer>> allCustomers;
                 Database::getInstance()->loadCustomers(allCustomers);
+                cout << "---------- CUSTOMER LIST ----------\n";
+                cout << "ID - Username - Password\n";
+                for (int i = 0; i < allCustomers.size(); ++i) {
+                    cout << i + 1 << ". " << allCustomers[i]->getUsername() << " - " << allCustomers[i]->getPassword() << "\n";
+                }
+                cout << "-----------------------------------\n";
+                break;
+            }
+            case 6: {
+                vector<shared_ptr<Customer>> allCustomers;
+                Database::getInstance()->loadCustomers(allCustomers);
                 if (allCustomers.empty()) {
                     cout << "No customers found.\n";
                     break;
                 }
                 vector<Order> allOrders;
                 Database::getInstance()->loadOrder(allOrders);
-                vector<MusicItem> allItems = inventory.getAllItems(); 
+                vector<Music> allItems = inventory.getAllItems(); 
                 
                 cout << "---------- CUSTOMER PURCHASE HISTORY ----------\n";
                 for (const auto& customer : allCustomers) {
@@ -113,7 +126,7 @@ void AdminController::run(InventoryManager& inventory) {
                 }
                 break;
             }
-            case 6: {
+            case 7: {
                 string usernameToDelete = UI::getInput("Enter username to delete: ");
                 vector<shared_ptr<Customer>> allCustomers;
                 Database::getInstance()->loadCustomers(allCustomers);
@@ -139,11 +152,11 @@ void AdminController::run(InventoryManager& inventory) {
                 }
                 break;
             }
-            case 7: {
+            case 8: {
 
                 vector<Order> allOrders;
                 Database::getInstance()->loadOrder(allOrders);
-                vector<MusicItem> allItems = inventory.getAllItems();
+                vector<Music> allItems = inventory.getAllItems();
 
                 unordered_map<string, pair<int, float>> itemStats;
 
@@ -179,7 +192,7 @@ void AdminController::run(InventoryManager& inventory) {
                 cout << "TOTAL REVENUE: $" << totalRevenue << "\n\n";
                 break;
             }
-            case 8: {
+            case 9: {
                 return;
             }
             default: 

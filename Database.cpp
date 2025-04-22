@@ -12,7 +12,7 @@ Database* Database::getInstance() {
 
 Database::Database() {}
 
-void Database::loadItems(vector<MusicItem>& items) {
+void Database::loadItems(vector<Music>& items) {
     ifstream file("music_info.txt");
 
     if (!file.is_open()) {
@@ -36,7 +36,7 @@ void Database::loadItems(vector<MusicItem>& items) {
     file.close();
 }
 
-void Database::saveItems(const vector<MusicItem>& items) {
+void Database::saveItems(const vector<Music>& items) {
     ofstream file("music_info.txt");
     if (!file.is_open()) {
         throw "Error opening music_info.txt!";
@@ -100,8 +100,8 @@ void Database::saveOrder(const Order& order) {
         throw std::runtime_error("Error opening orders.txt");
     }
 
-    //format: username,total,name,arist,genre,price,totalquantity
-
+    //format: username|total|name;arist;genre;price;totalquantity|
+    
     file << order.getUsername() << "|"
          << order.getTotal() << "|";
     const auto& items = order.getPurchasedItems();
@@ -130,7 +130,7 @@ void Database::loadOrder(vector<Order>& orders) {
         getline(ss, totalPrice, '|');
         getline(ss, items);
 
-        vector<MusicItem> purchasedItems;
+        vector<Music> purchasedItems;
         stringstream itemsStream(items);
         string itemSS;
         while (getline(itemsStream, itemSS, '|')) {
@@ -142,10 +142,35 @@ void Database::loadOrder(vector<Order>& orders) {
             getline(itemsStream, price, ';');
             getline(itemsStream, quantity, '|');
 
-            MusicItem item(name, artist, genre, stof(price), stoi(quantity));
+            Music item(name, artist, genre, stof(price), stoi(quantity));
             purchasedItems.emplace_back(item);
         }
         Order order(username, purchasedItems, stof(totalPrice));
         orders.push_back(order);
     }
+}
+
+void Database::loadVoucher(vector<string>& vouchers) {
+    ifstream file("vouchers.txt");
+    if (!file.is_open()) {
+        return;
+    }
+
+    string line;
+    while (getline(file, line)) {
+        vouchers.push_back(line);
+    }
+    file.close();
+}
+
+void Database::saveVoucher(const vector<string>& vouchers) {
+    ofstream file("vouchers.txt");
+    if (!file.is_open()) {
+        throw std::runtime_error("Error opening vouchers.txt");
+    }
+
+    for (const auto& voucher : vouchers) {
+        file << voucher << "\n";
+    }
+    file.close();
 }

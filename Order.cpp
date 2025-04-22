@@ -1,7 +1,7 @@
 #include "Order.h"
 #include <sstream>
 using std::stringstream;
-Order::Order(const string& username, const vector<MusicItem>& items, const float& total) {
+Order::Order(const string& username, const vector<Music>& items, const float& total) {
     this->username = username;
     this->total = total;
 
@@ -19,6 +19,6 @@ string Order::getUsername() const {
     return username;
 }
 
-const vector<MusicItem>& Order::getPurchasedItems() const {
+const vector<Music>& Order::getPurchasedItems() const {
     return purchasedItems;
 }

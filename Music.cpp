@@ -1,48 +1,48 @@
-#include "MusicItem.h"
+#include "Music.h"
 
 // fix this .cpp
 
 #include <iostream>
 using std::cin, std::cout;
-MusicItem::MusicItem(const string& name, const string& artist, const string& genre, const float& price, const int& quantity) {
+Music::Music(const string& name, const string& artist, const string& genre, const float& price, const int& quantity) {
     this->name = name;
     this->artist = artist; this->genre = genre;
     this->price = price; this->quantity = quantity;
 }
 
-string MusicItem::getName() const {
+string Music::getName() const {
     return name;
 }
 
-string MusicItem::getArtist() const {
+string Music::getArtist() const {
     return artist;
 }
 
-string MusicItem::getGenre() const {
+string Music::getGenre() const {
     return genre;
 }
 
-float MusicItem::getPrice() const {
+float Music::getPrice() const {
     return price;
 }
 
-int MusicItem::getQuantity() const {
+int Music::getQuantity() const {
     return quantity;
 }
 
-void MusicItem::displayItems() {
+void Music::displayItems() {
     cout << name << " - " << artist << " - ";
     cout << genre << " - " << price << " - " << quantity << "\n";
 
 }
-void MusicItem::updatePrice(const float& price) {
+void Music::updatePrice(const float& price) {
     this->price = price;
 }
-void MusicItem::updateQuantity(const int& quantity) {
+void Music::updateQuantity(const int& quantity) {
     this->quantity = quantity;
 }
 
-bool MusicItem::operator==(const MusicItem& other) const {
+bool Music::operator==(const Music& other) const {
     return name == other.name && artist == other.artist && genre == other.genre && price == other.price;
 }
 

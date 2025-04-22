@@ -1,7 +1,7 @@
 #ifndef _CART_H_
 #define _CART_H_
 
-#include "MusicItem.h"
+#include "Music.h"
 #include "Discount.h"
 #include <vector>
 #include <utility>
@@ -10,14 +10,12 @@ using std::vector, std::pair, std::unique_ptr;
 
 class Cart {
 private:
-    vector<MusicItem> items;
-    unique_ptr<Discount> discount;
+    vector<Music> items;
 public:
-    void addItems(const MusicItem&);
+    void addItems(const Music&);
     void removeItem(int);
-    void applyDiscount(unique_ptr<Discount>);
     float calculateTotal() const;
-    const vector<MusicItem>& getItems() const;
+    const vector<Music>& getItems() const;
     void clear();
 };
 

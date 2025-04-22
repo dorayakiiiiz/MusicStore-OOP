@@ -1,18 +1,33 @@
 #include "Discount.h"
 
-PercentageDiscount::PercentageDiscount(const float& perc) {
-    this->percentage = perc;
-}
+PercentageDiscount::PercentageDiscount(float percentage, const vector<string>& codes)
+    : percentage(percentage), codes(codes) {}
 
-float PercentageDiscount::applyDiscount(const float& price) {
+float PercentageDiscount::applyDiscount(const float& price) const {
     return price * (1 - percentage / 100);
 }
 
-FixedAmountDiscount::FixedAmountDiscount(const float& amo) {
-    this->amount = amo;
+bool PercentageDiscount::isValidCode(const string& code) const {
+    for (const auto& c : codes) {
+        if (c == code) {
+            return true;
+        }
+    }
+    return false;
 }
 
-float FixedAmountDiscount::applyDiscount(const float& price) {
-    return price - amount;
+FixedAmountDiscount::FixedAmountDiscount(float amount, const vector<string>& codes)
+    : amount(amount), codes(codes) {}
+
+float FixedAmountDiscount::applyDiscount(const float& price) const {
+    return price - amount > 0 ? price - amount : 0; 
 }
-    
+
+bool FixedAmountDiscount::isValidCode(const string& code) const {
+    for (const auto& c : codes) {
+        if (c == code) {
+            return true;
+        }
+    }
+    return false;
+}

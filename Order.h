@@ -4,19 +4,19 @@
 #include <vector>
 #include <string>
 #include <utility>
-#include "MusicItem.h"
+#include "Music.h"
 using std::string, std::vector, std::pair;
 
 class Order {
 private:
     string username;
-    vector<MusicItem> purchasedItems;
+    vector<Music> purchasedItems;
     float total;
 public:
-    Order(const string&, const vector<MusicItem>&, const float&);
+    Order(const string&, const vector<Music>&, const float&);
     float getTotal() const;
     string getUsername() const;
-    const vector<MusicItem>& getPurchasedItems() const;
+    const vector<Music>& getPurchasedItems() const;
 };
 
 

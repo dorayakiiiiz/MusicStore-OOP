@@ -1,21 +1,21 @@
 #ifndef _INVENTORY_MANAGER_H_
 #define _INVENTORY_MANAGER_H_
 
-#include "MusicItem.h"
+#include "Music.h"
 #include "Database.h"
 #include <vector>
 using std::vector;
 
 class InventoryManager {
 private:
-    vector<MusicItem>& items;
+    vector<Music>& items;
 public:
-    InventoryManager(vector<MusicItem>&);
-    void addItem(const MusicItem&);
+    InventoryManager(vector<Music>&);
+    void addItem(const Music&);
     bool removeItem(int);
     void updateItemPrice(int, float);
-    vector<MusicItem>& getAllItems() const;
-    vector<MusicItem> searchItems(const string& keyword);
+    vector<Music>& getAllItems() const;
+    vector<Music> searchItems(const string& keyword);
 };
 
 

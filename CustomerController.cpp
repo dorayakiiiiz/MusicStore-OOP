@@ -8,26 +8,53 @@ void CustomerController::run(InventoryManager& inventory, Cart& cart, Customer& 
     while (1) {
         UI::displayMenu({
             "---------- CHOOSE YOUR BEST MUSIC ----------\n",
-            "1. See music list",
-            "2. Find item",
-            "3. Add to cart",
-            "4. Check out",
-            "5. Log out\n",
+            "1. See your purchased history",
+            "2. See music list",
+            "3. Find item",
+            "4. Add to cart",
+            "5. Check out",
+            "6. Log out\n",
         });
         int choice = stoi(UI::getInput("Input choice: "));
 
         switch (choice) {
             case 1: {
-                vector<MusicItem> allItems = inventory.getAllItems();
+                vector<Order> orders;
+                Database::getInstance()->loadOrder(orders);
+                bool hasPurchase = false;
+                int idx = 1;
+                cout << "\n---------- YOUR PURCHASE HISTORY ----------\n";
+                for (const auto& order : orders) {
+                    if (order.getUsername() == customer.getUsername()) {
+                        cout << "Order " << idx++ << ":\n";
+                        cout << "Items purchased:\n";
+                        for (const auto& item : order.getPurchasedItems()) {
+                            hasPurchase = true;
+                            cout << " - " << item.getName() << " - Quantity: " << item.getQuantity()
+                                 << " - Price per unit: $" << item.getPrice()
+                                 << " - Total: $" << item.getPrice() * item.getQuantity() << '\n';
+                        }
+                        cout << "Order total: $" << order.getTotal() << '\n';
+                    }
+                }
+                if (!hasPurchase) {
+                    cout << "\nNo purchase history found!\n";
+                } else {
+                    cout << "------------------------------------------\n";
+                }
+                break;
+            }
+            case 2: {
+                vector<Music> allItems = inventory.getAllItems();
                 for (int i = 0; i < allItems.size(); ++i) {
                     cout << i + 1 << ". ";
                     allItems[i].displayItems();
                 }
                 break;
             }
-            case 2: {
+            case 3: {
                 string keyword = UI::getInput("Enter keyword: ");
-                vector<MusicItem> results = inventory.searchItems(keyword);
+                vector<Music> results = inventory.searchItems(keyword);
                 if (results.empty()) {
                     cout << "\nNo items found!\n";
                 } else {
@@ -38,19 +65,24 @@ void CustomerController::run(InventoryManager& inventory, Cart& cart, Customer& 
                 }
                 break;
             }
-            case 3: {
+            case 4: {
                 
                 int itemID = stoi(UI::getInput("Enter item ID: "));
                 int quantity = stoi(UI::getInput("Enter quantity: "));
 
-                vector<MusicItem> allItems = inventory.getAllItems();
+                vector<Music> allItems = inventory.getAllItems();
 
                 if (itemID < 1 || itemID > allItems.size()) {
                     cout << "\nInvalid item ID!\n";
                     break;
                 }
 
-                MusicItem item = allItems[itemID - 1];
+                Music item = allItems[itemID - 1];
+
+                if (quantity <= 0) {
+                    cout << "\nInvalid quantity!\n";
+                    break;
+                }
                 if (item.getQuantity() < quantity) {
                     cout << "\nNot enough items in stock!\n";
                     break;
@@ -59,13 +91,20 @@ void CustomerController::run(InventoryManager& inventory, Cart& cart, Customer& 
                 cart.addItems(item);
                 cout << "\nAdded " << quantity << " of " << item.getName() << " to cart.\n";
 
+                cout << "Cart now:\n";
+                for (int i = 0; i < cart.getItems().size(); ++i) {
+                    cout << i + 1 << ". ";
+                    auto item = cart.getItems()[i];
+                    item.displayItems();
+                }
+
                 break;
             }
-            case 4: {
+            case 5: {
                 if (cart.getItems().empty()) {
                     cout << "\nCart is empty!\n";
                 } else {
-                    vector<MusicItem>& inventoryItems = inventory.getAllItems();
+                    vector<Music>& inventoryItems = inventory.getAllItems();
                     
                     // update inventory quantities
                     for (const auto& item : cart.getItems()) {
@@ -77,7 +116,7 @@ void CustomerController::run(InventoryManager& inventory, Cart& cart, Customer& 
                         }
                     }
 
-                    vector<MusicItem> purchasedHistory;
+                    vector<Music> purchasedHistory;
                     for (const auto& items : cart.getItems()) {
                         purchasedHistory.emplace_back(items);
                     }
@@ -96,15 +135,48 @@ void CustomerController::run(InventoryManager& inventory, Cart& cart, Customer& 
                     
                     string applyDiscount = UI::getInput("\nApply discount? (yes/no): ");
                     if (applyDiscount == "yes") {
-                        string discountType = UI::getInput("Discount type (percentage/fixed): ");
-                        float value = stof(UI::getInput("Discount value: "));
-                        
-                        unique_ptr<Discount> discount = DiscountFactory::createDiscount(discountType, value);
-                        cart.applyDiscount(move(discount));
-                        
-                        total = cart.calculateTotal();
-                        
+                        string code = UI::getInput("Enter code: ");
+                        float discount = DiscountFactory::getInstance()->applyDiscount(code, total);
+                        if (discount == -1) {
+                            cout << "\nInvalid discount code!\n";
+                        } else {
+                            cout << "\nDiscount applied! New total: $" << discount << '\n';
+                            total = discount;
+                        }               
                         cout << "\nNew total: $" << total << '\n';
+                    }
+
+                    if (total > 50) {
+                        cout << "Congratulations! As the total is over $50, you will receive a discount voucher.\n";
+                        string receiveVoucher = UI::getInput("Do you want to receive it? (yes/no): ");
+                        if (receiveVoucher == "yes") {
+                            cout << "What type of discount would you like to apply?\n";
+                            cout << "1. Percentage discount\n";
+                            cout << "2. Fixed amount discount\n";
+                            int discountChoice = stoi(UI::getInput("Enter your choice: "));
+                            vector<string> vouchers;
+                            Database::getInstance()->loadVoucher(vouchers);
+                            if (discountChoice == 1) {
+                                cout << "You have received a percentage discount voucher!\n";
+                                string code = customer.getUsername() + "P" + "10";
+                                cout << "Discount code: " << code << '\n';
+                                // save the code to the database
+                                vouchers.push_back(code);
+                                Database::getInstance()->saveVoucher(vouchers);
+                            } else if (discountChoice == 2) {
+                                cout << "You have received a fixed amount discount voucher!\n";
+                                string code = customer.getUsername() + "F" + "20";
+                                cout << "Discount code: " << code << '\n';
+                                // save the code to the database
+                                vouchers.push_back(code);
+                                Database::getInstance()->saveVoucher(vouchers);
+                            } else {
+                                cout << "Invalid choice!\n";
+                            } 
+                        } else {
+                            cout << "No discount voucher received.\n";
+                        }
+
                     }
 
                     Order order(customer.getUsername(), purchasedHistory, total);
@@ -120,7 +192,7 @@ void CustomerController::run(InventoryManager& inventory, Cart& cart, Customer& 
                 }
                 break;
             }
-            case 5: {
+            case 6: {
                 return;
             }
             default:

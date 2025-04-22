@@ -1,26 +1,35 @@
-#ifndef _DISCOUNT_STRATEGY_H_
-#define _DISCOUNT_STRATEGY_H_
+#ifndef _DISCOUNT_H_
+#define _DISCOUNT_H_
 
-class Discount {
+#include <string>
+#include <vector>
+using std::string, std::vector;
+
+class IDiscount {
 public:
-    virtual float applyDiscount(const float&) = 0;
-    virtual ~Discount() = default;
+    virtual float applyDiscount(const float& price) const = 0;
+    virtual bool isValidCode(const string& code) const = 0;
+    virtual ~IDiscount() = default;
 };
 
-class PercentageDiscount : public Discount {
+class PercentageDiscount : public IDiscount {
 private:
     float percentage;
+    vector<string> codes; 
 public:
-    PercentageDiscount(const float&);
-    float applyDiscount(const float&);
+    PercentageDiscount(float percentage, const vector<string>& codes);
+    float applyDiscount(const float& price) const override;
+    bool isValidCode(const string& code) const override;
 };
 
-class FixedAmountDiscount : public Discount {
+class FixedAmountDiscount : public IDiscount {
 private:
     float amount;
+    vector<string> codes; 
 public:
-    FixedAmountDiscount(const float&);
-    float applyDiscount(const float&);
+    FixedAmountDiscount(float amount, const vector<string>& codes);
+    float applyDiscount(const float& price) const override;
+    bool isValidCode(const string& code) const override;
 };
 
 #endif

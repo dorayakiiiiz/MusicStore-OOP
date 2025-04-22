@@ -1,7 +1,7 @@
 #ifndef _DATABASE_
 #define _DATABASE_
 
-#include "MusicItem.h"
+#include "Music.h"
 #include "User.h"
 #include "Order.h"
 #include <vector>
@@ -15,12 +15,14 @@ private:
     Database();
 public:
     static Database* getInstance();
-    void loadItems(vector<MusicItem>&);
-    void saveItems(const vector<MusicItem>&);
+    void loadItems(vector<Music>&);
+    void saveItems(const vector<Music>&);
     void loadCustomers(vector<shared_ptr<Customer>>&);
     void saveCustomers(const vector<shared_ptr<Customer>>&);
     void saveOrder(const Order&);
     void loadOrder(vector<Order>&);
+    void loadVoucher(vector<string>&);
+    void saveVoucher(const vector<string>&);
 };
 
 #endif

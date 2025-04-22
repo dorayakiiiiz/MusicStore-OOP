@@ -1,16 +1,24 @@
 #include "InventoryManager.h"
 
-InventoryManager::InventoryManager(vector<MusicItem>& items) : items(items) {}
+InventoryManager::InventoryManager(vector<Music>& items) : items(items) {}
 
-void InventoryManager::addItem(const MusicItem& item) {
+void InventoryManager::addItem(const Music& item) {
     items.push_back(item);
     Database::getInstance()->saveItems(items);
 }
 
-vector<MusicItem> InventoryManager::searchItems(const string& keyword) {
-    vector<MusicItem> results;
+vector<Music> InventoryManager::searchItems(const string& keyword) {
+    string lowerKeyword = keyword;
+    for (auto& c : lowerKeyword) {
+        c = tolower(c);
+    }
+    vector<Music> results;
     for (int i = 0; i < items.size(); ++i) {
-        if (items[i].getName().find(keyword) != string::npos) {
+        string lowerName = items[i].getName();
+        for (auto& c : lowerName) {
+            c = tolower(c);
+        }
+        if (lowerName.find(lowerKeyword) != string::npos) {
             results.push_back(items[i]);
         }
     }
@@ -29,6 +37,6 @@ bool InventoryManager::removeItem(int id) {
     return true;
 }
 
-vector<MusicItem>& InventoryManager::getAllItems() const {
+vector<Music>& InventoryManager::getAllItems() const {
     return items;
 }

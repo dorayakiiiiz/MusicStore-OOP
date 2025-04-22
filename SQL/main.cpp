@@ -19,7 +19,7 @@ public:
         if (SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &env) != SQL_SUCCESS ||
             SQLSetEnvAttr(env, SQL_ATTR_ODBC_VERSION, (void*)SQL_OV_ODBC3, 0) != SQL_SUCCESS ||
             SQLAllocHandle(SQL_HANDLE_DBC, env, &dbc) != SQL_SUCCESS) {
-            cout << "ODBC initialization failed.\n";
+            cout << "ODBC initialdization failed.\n";
             exit(1);
         }
 
