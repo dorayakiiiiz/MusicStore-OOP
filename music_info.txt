@@ -10,3 +10,4 @@ Waiting for you,Mono,Vpop,20,20
 Tung quen,Wren Evans,Vpop,15,10
 Mat ket noi,Duong Domic,Vpop,10,11
 Dai lo mat troi,Chillies,Vpop,20,10
+Vung Ky Uc,Chillies,Vpop,10,10

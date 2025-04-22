@@ -5,7 +5,7 @@
 #include "User.h"
 #include "Cart.h"
 #include "Discount.h"
-#include "UI.h"
+#include "utils.h"
 #include "AdminController.h"
 #include "CustomerController.h"
 
@@ -22,12 +22,11 @@ int main() {
 
     // commit commit
     
-    Database* db = Database::getInstance();
     vector<Music> items;
     vector<shared_ptr<Customer>> customers;
 
-    db->loadItems(items);
-    db->loadCustomers(customers);
+    Database::loadItems(items);
+    Database::loadCustomers(customers);
 
 
     InventoryManager inventory(items);
@@ -37,49 +36,64 @@ int main() {
 
     while (1) {
         system("cls");
-        UI::displayMenu({
+        displayMenu({
             "---------- WELCOME TO MUSIC STORE ----------",
             "1. Sign up",
             "2. Login",
             "3. Exit\n"
         });
 
-        int choice = stoi(UI::getInput("Input choice: "));
+        int choice = stoi(getInput("Input choice: "));
 
         switch (choice) {
-            case 1:
-                auth.registerCustomer(customers);
-                db->saveCustomers(customers);
+            case 1: {
+                string username = getInput("Input username: ");
+                string password = getInput("Input password: ");
+                bool success = auth.registerCustomer(customers, username, password);
+                if (success) {
+                    cout << "Sign up successfully!\n";
+                    customers.push_back(make_shared<Customer>(username, password));
+                    Database::saveCustomers(customers);
+                } else {
+                    cout << "Username already exists. Please try again!\n";
+                }
                 break;
+            }
             case 2: {
-                UI::displayMenu({"\nYou are: 1. Admin - 2. Customer"});
-                int role = stoi(UI::getInput("\nInput role: "));
+                displayMenu({"\nYou are: 1. Admin - 2. Customer"});
+                int role = stoi(getInput("\nInput role: "));
+
                 if (role == 1) {
-                    if (auth.loginAdmin()) {
-                        // cout << "Login to admin successfully\n";
+                    string passkey = getInput("Input admin passkey: ");
 
+                    if (auth.loginAdmin(passkey)) {
+                        cout << "Login successfully\n";
                         AdminController::run(inventory);
-                        // code hereee
-
 
                     } else {
-                        // cout << "Invalid passkey. Please try again!\n";
+
+                        cout << "Invalid passkey. Please try again!\n";
+
                     }
                 } else if (role == 2) {
-                    currentCustomer = auth.loginCustomer(customers);
-                    if (currentCustomer) {
-                        //cout << "Login to customer UI successfully!\n";
+                    string username = getInput("Input username: ");
+                    string password = getInput("Input password: ");
 
-                        // code heree
+                    currentCustomer = auth.loginCustomer(customers, username, password);
+                    if (currentCustomer) {
+                        cout << "Login successfully!\n";
+
                         CustomerController::run(inventory, currentCart, *currentCustomer);
 
+                    } else {
+                        cout << "\nUsername or password is incorrect.\n";
                     }
                 }
             }
             break;
             case 3:
-                db->saveItems(items);
-                db->saveCustomers(customers);
+                Database::saveItems(items);
+                Database::saveCustomers(customers);
                 cout << "---------- GOODBYE! ----------\n";
                 return 0;
             default:

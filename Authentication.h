@@ -8,9 +8,9 @@ using std::vector, std::shared_ptr, std::make_shared;
 
 class Authentication {
 public:
-    static void registerCustomer(vector<shared_ptr<Customer>>&);
-    static shared_ptr<Customer> loginCustomer(const vector<shared_ptr<Customer>>&);
-    static bool loginAdmin();
+    static bool registerCustomer(vector<shared_ptr<Customer>>&, const string&, const string&);
+    static shared_ptr<Customer> loginCustomer(const vector<shared_ptr<Customer>>&, const string&, const string&);
+    static bool loginAdmin(const string&);
 };
 
 #endif

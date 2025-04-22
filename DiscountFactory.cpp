@@ -16,7 +16,7 @@ DiscountFactory::DiscountFactory() {
 
 void DiscountFactory::classifyVouchers() {
     vector<string> vouchers;
-    Database::getInstance()->loadVoucher(vouchers);
+    Database::loadVoucher(vouchers);
 
     for (const auto& voucher : vouchers) {
         // Extract the discount value using regex
@@ -43,11 +43,11 @@ float DiscountFactory::applyDiscount(const string& code, const float& total) {
 
             // Remove the voucher from the list after applying it
             vector<string> vouchers;
-            Database::getInstance()->loadVoucher(vouchers);
+            Database::loadVoucher(vouchers);
             auto it = std::find(vouchers.begin(), vouchers.end(), code);
             if (it != vouchers.end()) {
                 vouchers.erase(it);
-                Database::getInstance()->saveVoucher(vouchers);
+                Database::saveVoucher(vouchers);
             }
 
             return newTotal;

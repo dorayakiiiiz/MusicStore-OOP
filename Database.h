@@ -10,19 +10,15 @@ using std::cin, std::cout, std::vector, std::shared_ptr, std::make_shared;
 
 // class Database quản lí các thao tác đọc/ghi file cho toàn bộ chương trình
 class Database {
-private:
-    inline static Database* instance = nullptr;
-    Database();
 public:
-    static Database* getInstance();
-    void loadItems(vector<Music>&);
-    void saveItems(const vector<Music>&);
-    void loadCustomers(vector<shared_ptr<Customer>>&);
-    void saveCustomers(const vector<shared_ptr<Customer>>&);
-    void saveOrder(const Order&);
-    void loadOrder(vector<Order>&);
-    void loadVoucher(vector<string>&);
-    void saveVoucher(const vector<string>&);
+    static void loadItems(vector<Music>&);
+    static void saveItems(const vector<Music>&);
+    static void loadCustomers(vector<shared_ptr<Customer>>&);
+    static void saveCustomers(const vector<shared_ptr<Customer>>&);
+    static void saveOrder(const Order&);
+    static void loadOrder(vector<Order>&);
+    static void loadVoucher(vector<string>&);
+    static void saveVoucher(const vector<string>&);
 };
 
 #endif

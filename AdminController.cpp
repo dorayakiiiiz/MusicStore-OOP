@@ -9,7 +9,7 @@ using std::unordered_map;
 void AdminController::run(InventoryManager& inventory) {
     while (1) {
 
-        UI::displayMenu({
+        displayMenu({
             "---------- MENU ADMIN ----------\n",
             "1. See music list",
             "2. Add new items",
@@ -23,7 +23,7 @@ void AdminController::run(InventoryManager& inventory) {
         });
 
 
-        int choice = stoi(UI::getInput("Enter choice: "));
+        int choice = stoi(getInput("Enter choice: "));
         switch (choice) {
             case 1: {
                 vector<Music> allItems = inventory.getAllItems();
@@ -40,11 +40,11 @@ void AdminController::run(InventoryManager& inventory) {
                 break;
             }
             case 2: {
-                string name = UI::getInput("Enter name: ");
-                string artist = UI::getInput("Enter artist: ");
-                string genre = UI::getInput("Enter genre: ");
-                float price = stof(UI::getInput("Enter price: "));
-                int quantity = stoi(UI::getInput("Enter quantity: "));
+                string name = getInput("Enter name: ");
+                string artist = getInput("Enter artist: ");
+                string genre = getInput("Enter genre: ");
+                float price = stof(getInput("Enter price: "));
+                int quantity = stoi(getInput("Enter quantity: "));
 
                 Music item(name, artist, genre, price, quantity);
 
@@ -55,7 +55,7 @@ void AdminController::run(InventoryManager& inventory) {
                 break;
             } 
             case 3: {
-                int id = stoi(UI::getInput("Enter ID: "));
+                int id = stoi(getInput("Enter ID: "));
                 
                 bool success = inventory.removeItem(id);
                 
@@ -68,8 +68,8 @@ void AdminController::run(InventoryManager& inventory) {
                 break;
             }
             case 4: {
-                int id = stoi(UI::getInput("Enter ID: "));
-                float newPrice = stof(UI::getInput("Enter new price: "));
+                int id = stoi(getInput("Enter ID: "));
+                float newPrice = stof(getInput("Enter new price: "));
                 inventory.updateItemPrice(id - 1, newPrice);
                 cout << "\nUpdate price successfully!\n";
 
@@ -77,7 +77,7 @@ void AdminController::run(InventoryManager& inventory) {
             }
             case 5: {
                 vector<shared_ptr<Customer>> allCustomers;
-                Database::getInstance()->loadCustomers(allCustomers);
+                Database::loadCustomers(allCustomers);
                 cout << "---------- CUSTOMER LIST ----------\n";
                 cout << "ID - Username - Password\n";
                 for (int i = 0; i < allCustomers.size(); ++i) {
@@ -88,13 +88,13 @@ void AdminController::run(InventoryManager& inventory) {
             }
             case 6: {
                 vector<shared_ptr<Customer>> allCustomers;
-                Database::getInstance()->loadCustomers(allCustomers);
+                Database::loadCustomers(allCustomers);
                 if (allCustomers.empty()) {
                     cout << "No customers found.\n";
                     break;
                 }
                 vector<Order> allOrders;
-                Database::getInstance()->loadOrder(allOrders);
+                Database::loadOrder(allOrders);
                 vector<Music> allItems = inventory.getAllItems(); 
                 
                 cout << "---------- CUSTOMER PURCHASE HISTORY ----------\n";
@@ -127,9 +127,9 @@ void AdminController::run(InventoryManager& inventory) {
                 break;
             }
             case 7: {
-                string usernameToDelete = UI::getInput("Enter username to delete: ");
+                string usernameToDelete = getInput("Enter username to delete: ");
                 vector<shared_ptr<Customer>> allCustomers;
-                Database::getInstance()->loadCustomers(allCustomers);
+                Database::loadCustomers(allCustomers);
 
                 int indexToDelete = -1;
                 for (int i = 0; i < allCustomers.size(); ++i) {
@@ -145,7 +145,7 @@ void AdminController::run(InventoryManager& inventory) {
                     }
                     allCustomers.pop_back(); 
             
-                    Database::getInstance()->saveCustomers(allCustomers);
+                    Database::saveCustomers(allCustomers);
                     cout << "\nUser " << usernameToDelete << " deleted successfully.\n\n";
                 } else {
                     cout << "\nUser not found.\n\n";
@@ -155,7 +155,7 @@ void AdminController::run(InventoryManager& inventory) {
             case 8: {
 
                 vector<Order> allOrders;
-                Database::getInstance()->loadOrder(allOrders);
+                Database::loadOrder(allOrders);
                 vector<Music> allItems = inventory.getAllItems();
 
                 unordered_map<string, pair<int, float>> itemStats;

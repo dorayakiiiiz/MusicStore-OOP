@@ -3,14 +3,6 @@
 #include <fstream>
 #include <sstream>
 using std::ifstream, std::ofstream, std::stringstream;
-Database* Database::getInstance() {
-    if (!instance) {
-        instance = new Database();
-    }
-    return instance;
-}
-
-Database::Database() {}
 
 void Database::loadItems(vector<Music>& items) {
     ifstream file("music_info.txt");
