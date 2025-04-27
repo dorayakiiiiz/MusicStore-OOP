@@ -7,29 +7,32 @@ using std::string, std::vector;
 
 class IDiscount {
 public:
-    virtual float applyDiscount(const float& price) const = 0;
-    virtual bool isValidCode(const string& code) const = 0;
-    virtual ~IDiscount() = default;
+    virtual string toString() const = 0;
+    virtual string getType() const = 0;
+    virtual float getDiscountValue() const = 0;
+    static IDiscount* toDiscount(const string&);
 };
 
 class PercentageDiscount : public IDiscount {
 private:
+    string username;
     float percentage;
-    vector<string> codes; 
 public:
-    PercentageDiscount(float percentage, const vector<string>& codes);
-    float applyDiscount(const float& price) const override;
-    bool isValidCode(const string& code) const override;
+    PercentageDiscount(string, float);
+    string toString() const override;
+    string getType() const override;
+    float getDiscountValue() const override;
 };
 
 class FixedAmountDiscount : public IDiscount {
 private:
+    string username;
     float amount;
-    vector<string> codes; 
 public:
-    FixedAmountDiscount(float amount, const vector<string>& codes);
-    float applyDiscount(const float& price) const override;
-    bool isValidCode(const string& code) const override;
+    FixedAmountDiscount(string, float);
+    string toString() const override;
+    string getType() const override;
+    float getDiscountValue() const override;
 };
 
 #endif

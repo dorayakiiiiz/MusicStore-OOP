@@ -8,15 +8,9 @@
 using std::shared_ptr, std::make_unique, std::string, std::vector, std::make_shared;
 
 class DiscountFactory {
-private:
-    inline static DiscountFactory* instance = nullptr;
-    vector<shared_ptr<IDiscount>> discounts;
-
-    void classifyVouchers();
 public:
-    static DiscountFactory* getInstance();
-    DiscountFactory();
-    float applyDiscount(const string& code, const float& total);
+    static float applyDiscount(IDiscount*, float);
+    static bool isValidDiscount(vector<IDiscount*> vouchers, IDiscount*);
 };
 
 #endif

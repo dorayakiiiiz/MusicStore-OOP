@@ -48,12 +48,11 @@ int main() {
 
         switch (choice) {
             case 1: {
-                string username = getInput("Input username: ");
+                string username = getInput("Input username (no spaces): ");
                 string password = getInput("Input password: ");
                 bool success = auth.registerCustomer(customers, username, password);
                 if (success) {
                     cout << "Sign up successfully!\n";
-                    customers.push_back(make_shared<Customer>(username, password));
                     CustomerDAO::saveCustomers(customers);
                 } else {
                     cout << "Username already exists. Please try again!\n";

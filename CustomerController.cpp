@@ -2,7 +2,7 @@
 #include "DiscountFactory.h"
 #include "User.h"
 #include "OrderDAO.h"
-#include "VoucherDAO.h"
+#include "DiscountDAO.h"
 #include "MusicDAO.h"
 #include "utils.h"
 
@@ -137,51 +137,81 @@ void CustomerController::run(InventoryManager& inventory, Cart& cart, Customer& 
                     float total = cart.calculateTotal();
                     cout << "Order total: $" << total << '\n';
                     cout << "------------------------------------------\n";
-                    
-                    string applyDiscount = getInput("\nApply discount? (yes/no): ");
-                    if (applyDiscount == "yes") {
-                        string code = getInput("Enter code: ");
-                        float discount = DiscountFactory::getInstance()->applyDiscount(code, total);
-                        if (discount == -1) {
-                            cout << "\nInvalid discount code!\n";
+
+                    vector<IDiscount*> vouchers;
+                    DiscountDAO::loadDiscount(vouchers);
+                    vector<IDiscount*> validVouchers;
+                    for (const auto& voucher : vouchers) {
+                        if (voucher->toString().find(customer.getUsername()) != string::npos) {
+                            validVouchers.push_back(voucher);
+                        }
+                    }
+                    if (!validVouchers.empty()) {
+                        cout << "You have the following vouchers:\n";
+                        for (int i = 0; i < validVouchers.size(); ++i) {
+                            cout << i + 1 << ". " << vouchers[i]->toString() << '\n';
+                        }
+                        string apply = getInput("Do you want to use a voucher? (yes/no): ");
+                        if (apply == "yes") {
+                            string code = getInput("Enter voucher code: ");
+                            IDiscount* voucher = IDiscount::toDiscount(code);
+                            if (DiscountFactory::isValidDiscount(validVouchers, voucher)) {
+                                
+                                float discount = DiscountFactory::applyDiscount(voucher, total);
+                                
+                                cout << "\nVoucher applied! You have received a discount of: $" << total - discount << '\n';
+                                cout << "New total: $" << discount << '\n';
+                                total = discount;
+
+                            } else {
+                                cout << "\nInvalid voucher code!\n";
+                                cout << "Remaining total: $" << total << '\n';
+                            }
+
+                            for (int i = 0; i < vouchers.size(); ++i) {
+                                if (vouchers[i]->toString() == code) {
+                                    vouchers.erase(vouchers.begin() + i);
+                                    break;
+                                }
+                            }
+                            delete voucher;
                         } else {
-                            cout << "\nDiscount applied! New total: $" << discount << '\n';
-                            total = discount;
-                        }               
-                        cout << "\nNew total: $" << total << '\n';
+                            cout << "\nNo voucher applied.\n";
+                            cout << "Remaining total: $" << total << '\n';
+                        }
+
+                        for (const auto& voucher : validVouchers) {
+                            delete voucher;
+                        }
                     }
 
                     if (total > 50) {
                         cout << "Congratulations! As the total is over $50, you will receive a discount voucher.\n";
-                        string receiveVoucher = getInput("Do you want to receive it? (yes/no): ");
-                        if (receiveVoucher == "yes") {
-                            cout << "What type of discount would you like to apply?\n";
-                            cout << "1. Percentage discount\n";
-                            cout << "2. Fixed amount discount\n";
-                            int discountChoice = stoi(getInput("Enter your choice: "));
-                            vector<string> vouchers;
-                            VoucherDAO::loadVoucher(vouchers);
-                            if (discountChoice == 1) {
-                                cout << "You have received a percentage discount voucher!\n";
-                                string code = customer.getUsername() + "P" + "10";
-                                cout << "Discount code: " << code << '\n';
-                                // save the code to the database
-                                vouchers.push_back(code);
-                                VoucherDAO::saveVoucher(vouchers);
-                            } else if (discountChoice == 2) {
-                                cout << "You have received a fixed amount discount voucher!\n";
-                                string code = customer.getUsername() + "F" + "20";
-                                cout << "Discount code: " << code << '\n';
-                                // save the code to the database
-                                vouchers.push_back(code);
-                                VoucherDAO::saveVoucher(vouchers);
-                            } else {
-                                cout << "Invalid choice!\n";
-                            } 
-                        } else {
-                            cout << "No discount voucher received.\n";
-                        }
+                        cout << "What type of discount would you like to apply?\n";
+                        cout << "1. Percentage discount\n";
+                        cout << "2. Fixed amount discount\n";
+                        int discountChoice = stoi(getInput("Enter your choice: "));
 
+                        if (discountChoice == 1) {
+                            cout << "You have received a percentage discount voucher!\n";
+                            IDiscount* voucher = new PercentageDiscount(customer.getUsername(), 10);
+                            cout << "Discount code: " << voucher->toString() << '\n';
+                            // // save the code to the database
+                            vouchers.push_back(voucher);
+                        } else if (discountChoice == 2) {
+                            cout << "You have received a fixed amount discount voucher!\n";
+                            IDiscount* voucher = new FixedAmountDiscount(customer.getUsername(), 10);
+                            cout << "Discount code: " << voucher->toString() << '\n';
+                            // // save the code to the database
+                            vouchers.push_back(voucher);
+                        } else {
+                            cout << "Invalid choice!\n";
+                        } 
+                    }
+
+                    DiscountDAO::saveDiscount(vouchers);
+                    for (const auto& voucher : vouchers) {
+                        delete voucher;
                     }
 
                     Order order(customer.getUsername(), purchasedHistory, total);
