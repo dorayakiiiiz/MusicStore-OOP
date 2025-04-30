@@ -30,7 +30,7 @@ void SaveUser::saveData(const string& filename, const vector<shared_ptr<IUser>>&
     for (const auto& user : users) {
         file << user->getUsername() << "," << user->getPassword() << ",";
         if (user->getRole() == "Admin") {
-            file << "," << "A\n";
+            file << "A\n";
         } else {
             file << '\n';
         }

@@ -86,14 +86,14 @@ void StoreApp::run() {
             case 1: {
                 system("cls");
                 printHeader("SIGN UP");
-                string role = getInput("Choose your role (admin/customer): ");
+                string role = getInput("Choose your role (Admin/Customer): ");
                 string username = getInput("Input username (no spaces): ");
                 string password = getInput("Input password: ");
                 
                 if (role == "Admin") {
                     string passkey = getInput("Input admin passkey: ");
                     if (!Admin::isValidPasskey(passkey)) {
-                        printMessage("Invalid passkey. Please try again!");
+                        printMessage("Invalid passkey. Please try again later!");
                         break;
                     }
                 }
@@ -102,7 +102,7 @@ void StoreApp::run() {
                 if (success) {
                     printMessage("Sign up successfully!");
                 } else {
-                    printMessage("Username already exists. Please try again!");
+                    printMessage("Username already exists. Please try again later!");
                 }
                 break;
             }
