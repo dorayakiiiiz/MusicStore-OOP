@@ -25,29 +25,25 @@ public:
     Customer(const string&, const string&);
     Customer(const Customer&);
     string getRole() const override;
-    // string getUsername() const;
-    // string getPassword() const;
 };
 
-// singleton pattern for Admin Passkey
 
-class AdminPasskey {
-private:
-    inline static vector<string> passKeys = {"23120197", "23120209"};
-public:
-    static bool isValid(const string&);
-    static void addPasskey(const string&);
-};
+// class AdminPasskey {
+// private:
+//     inline static vector<string> passKeys = {"23120197", "23120209"};
+// public:
+//     static bool isValid(const string&);
+//     static void addPasskey(const string&);
+// };
 
 class Admin : public IUser {
-// private:
-//     string passkey;
+private:
+    inline static vector<string> passKeys = {"23120197", "23120209"};
 public:
     Admin(const string&, const string&);
     Admin(const Admin&);
     string getRole() const override;
-    // string getUsername() const;
-    // string getPassword() const;
+    static bool isValidPasskey(const string&);
 };
 
 #endif

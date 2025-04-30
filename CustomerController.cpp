@@ -1,117 +1,110 @@
 #include "CustomerController.h"
 #include "utils.h"
 #include "MusicService.h"
+#include "CustomerUI.h"
+#include "windows.h"
+
+using std::to_string;
 
 void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& users, vector<Order>& orders, vector<shared_ptr<IDiscount>>& vouchers, shared_ptr<IUser>& currentUser) {
     Cart cart;
     Customer* customer = dynamic_cast<Customer*>(currentUser.get());
     while (1) {
-        cout << "\n---------- WELCOME CUSTOMER: " << customer->getUsername() << " ----------\n";
-        vector<string> options = {
-            "---------- MENU ----------\n",
-            "1. See your purchased history",
-            "2. See music list",
-            "3. Find item",
-            "4. Add to cart",
-            "5. Remove items from cart",
-            "6. Check out",
-            "7. Log out\n",
-        };
+        system("cls");
 
-        displayMenu(options);
+        printMessage("WELCOME CUSTOMER: " + customer->getUsername());
+        CustomerUI::displayMenu();
         int choice = stoi(getInput("Input choice: "));
 
         switch (choice) {
             case 1: {
+                system("cls");
                 vector<Order> orderHistory;
                 for (const auto& order : orders) {
                     if (order.getUsername() == customer->getUsername()) {
                         orderHistory.push_back(order);
                     }
                 }
-                cout << "\n---------- YOUR PURCHASE HISTORY ----------\n";
-                if (orderHistory.empty()) {
-                    cout << "\nNo purchase history found!\n";
-                } else {
-                    for (int i = 0; i < orderHistory.size(); ++i) {
-                        cout << "Order " << i + 1 << ": \n";
-                        vector<Music> items = orderHistory[i].getPurchasedItems();
-                        for (const auto& item : items) {
-                            cout << " - " << item.getName() << " - Quantity: " << item.getQuantity()
-                            << " - Price per unit: $" << item.getPrice()
-                            << " - Total: $" << item.getPrice() * item.getQuantity() << '\n';
-                        }
-                        cout << "Order total: $" << orderHistory[i].getTotal() << '\n';
-                        cout << "-----------------------------------------\n";
-                    }
-                }
-                cout << "------------------------------------------\n";
+
+                printHeader("PURCHASE HISTORY");
+                CustomerUI::displayPurchasedHistory(orderHistory, customer->getUsername());
+                printDashLine();
+                system("pause");
                 break;
             }
             case 2: {
-                cout << "\n---------- MUSIC LIST ----------\n";
-                for (int i = 0; i < items.size(); ++i) {
-                    cout << i + 1 << ". ";
-                    items[i].displayItems();
-                }
-                cout << "------------------------------------------\n";
+                system("cls");
+                printHeader("MUSIC LIST");
+                CustomerUI::displayMusicList(items);
+                printDashLine();
+                system("pause");
                 break;
             }
             case 3: {
-                cout << "\n---------- SEARCH ENGINE ----------\n";
+                system("cls");
+                printHeader("SEARCH ENGINE");
+
                 string keyword = getInput("Enter keyword: ");
                 vector<Music> results = MusicService::searchMusicItem(items, keyword);
+
                 if (results.empty()) {
-                    cout << "\nNo items found!\n";
+                    printMessage("No results found!");
                 } else {
-                    cout << "\nSearch results: \n";
+                    printMessage("Search results: ");
                     for (int i = 0; i < results.size(); ++i) {
-                        results[i].displayItems();
+                        CustomerUI::displayMusicList(results);
                     }
                 }
-                cout << "------------------------------------------\n";
+                printDashLine();
+                system("pause");
                 break;
             }
             case 4: {
-                cout << "\n---------- ADD TO CART ----------\n";
+                system("cls");
+                printHeader("ADD TO CART");
+
                 int itemID = stoi(getInput("Enter item ID: "));
                 int quantity = stoi(getInput("Enter quantity: "));
 
                 if (itemID < 1 || itemID > items.size()) {
-                    cout << "\nInvalid item ID!\n";
+                    printMessage("Invalid item ID!");
                     break;
                 }
 
                 Music item = items[itemID - 1];
 
                 if (quantity <= 0) {
-                    cout << "\nInvalid quantity!\n";
+                    printMessage("Invalid quantity!");
                     break;
                 }
                 if (item.getQuantity() < quantity) {
-                    cout << "\nNot enough items in stock!\n";
+                    printMessage("Not enough items in stock!");
                     break;
                 }
                 
                 cart.addItems(item, quantity);
                 items[itemID - 1].updateQuantity(items[itemID - 1].getQuantity() - quantity);
 
-                cout << "\nAdded " << quantity << " of " << item.getName() << " to cart.\n";
+                printMessage("Added " + to_string(quantity) + " " + item.getName() + " to cart successfully!");
 
-                cout << "---------- CURRENT CART ----------\n";
+                printHeader("YOUR CURRENT CART");
                 cart.displayCart();
-                cout << "------------------------------------------\n";
+                printDashLine();
+
+                system("pause");
                 break;
             }
             case 5: {
-                cout << "\n---------- YOUR CART ----------\n";
+                system("cls");
+                printHeader("REMOVE ITEMS FROM CART");
                 if (cart.getItems().empty()) {
-                    cout << "\nCart is empty!\n";
+                    printMessage("Cart is empty!");
                 } else {
+                    printMessage("Your current cart: ");
                     cart.displayCart();
                     int itemID = stoi(getInput("Enter item ID to remove: "));
                     if (itemID < 1 || itemID > cart.getItems().size()) {
-                        cout << "\nInvalid item ID!\n";
+                        printMessage("Invalid item ID!");
                         break;
                     }
 
@@ -124,30 +117,34 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                     }
                     
                     cart.removeItem(itemID - 1);
-                    cout << "\nItem removed from cart.\n";
-                    
+                    printMessage("Removed item successfully!");
+                    printHeader("YOUR CURRENT CART");
+                    cart.displayCart();
                 }
+                printDashLine();
+                system("pause");
+
                 break;
             }
             case 6: {
-                cout << "\n---------- CHECK OUT ----------\n";
+                system("cls");
+                printHeader("CHECK OUT");
                 if (cart.getItems().empty()) {
-                    cout << "\nCart is empty!\n";
+                    printMessage("Cart is empty! Please add items to cart before checking out.");
                 } else {
-
-                    cout << "Your order details:\n";
-                    cout << "Username: " << customer->getUsername() << '\n';
-                    cout << "Items purchased:\n";
+                    printMessage("Your order details: ");
+                    printMessage("Username: " + customer->getUsername());
+                    printMessage("Purchased items: ");
                     cart.displayCart();
 
                     float total = cart.calculateTotal();
-                    cout << "Order total: $" << total << '\n';
-                    cout << "------------------------------------------\n";
+                    printMessage("Total: $" + to_string(total));
+                    printDashLine();
 
                     vector<shared_ptr<IDiscount>> validVouchers = DiscountFactory::loadValidDiscounts(vouchers, customer->getUsername());
                     
                     if (!validVouchers.empty()) {
-                        cout << "You have the following vouchers:\n";
+                        printMessage("You have the following vouchers available: ");
                         for (int i = 0; i < validVouchers.size(); ++i) {
                             cout << i + 1 << ". " << validVouchers[i]->toString() << '\n';
                         }
@@ -159,19 +156,19 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                                 
                                 float discount = DiscountFactory::applyDiscount(voucher, total);
                                 
-                                cout << "\nVoucher applied! You have received a discount of: $" << total - discount << '\n';
-                                cout << "New total: $" << discount << '\n';
+                                printMessage("Voucher applied successfully!");
+                                printMessage("New total: $" + to_string(discount));
                                 total = discount;
 
                             } else {
-                                cout << "\nInvalid voucher code!\n";
-                                cout << "Remaining total: $" << total << '\n';
+                                printMessage("Invalid voucher code!");
+                                printMessage("Remaining total: $" + to_string(total));
                             }
 
                             DiscountFactory::removeDiscount(validVouchers, code);
                         } else {
-                            cout << "\nNo voucher applied.\n";
-                            cout << "Remaining total: $" << total << '\n';
+                            printMessage("No voucher applied.");
+                            printMessage("Remaining total: $" + to_string(total));
                         }
 
                     }
@@ -182,18 +179,19 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                     };
 
                     if (total > 50) {
-                        cout << "Congratulations! As the total is over $50, you will receive a discount voucher for your next purchase.\n";
-                        cout << "What type of discount would you like to apply? \n";
-                        cout << "1. Percentage discount\n";
-                        cout << "2. Fixed amount discount\n";
+                        printMessage("Congratulations! As the total is over $50, you will receive a discount voucher for your next purchase");
+                        printMessage("What type of discount would you like to apply?");
+                        printMessage("1. Percentage discount");
+                        printMessage("2. Fixed amount discount");
+
                         int discountChoice = stoi(getInput("Enter your choice: "));
 
                         if (discountChoice == 1 || discountChoice == 2) {
-                            cout << "Discount code: " << discountMap[discountChoice]->toString() << '\n';
+                            printMessage("Discount code: " + discountMap[discountChoice]->toString());  
                             vouchers.push_back(discountMap[discountChoice]);
                 
                         } else {
-                            cout << "Invalid choice. No discount voucher will be applied.\n";
+                            printMessage("Invalid choice! No discount voucher will be applied.");
                         }
                     }
 
@@ -201,23 +199,27 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                     orders.push_back(order);
                     cart.clear();
 
-                    cout << "\nThank you for your purchase!\n";
-                    cout << "------------------------------------------\n";
-
+                    printMessage("Order placed successfully! Thank you for your purchase!");
                 }
+                printDashLine();
+                system("pause");
                 break;
             }
             case 7: {
                 if (cart.getItems().empty()) {
-                    cout << "\nYou have logged out successfully!\n";
+                    printMessage("You have logged out successfully!");
+                    currentUser = nullptr;
+                    Sleep(1000);
                     return;
                 } else {
-                    cout << "\nYou have items in your cart. Please check out before logging out.\n";
+                    printMessage("You have items in your cart! Please check out before logging out.");
+                    Sleep(1000);
                     break;
                 }
             }
             default:
-            cout << "\nInvalid choice. Please try again!\n";
+                printMessage("Invalid choice! Please try again.");
+                Sleep(1000);
         }
     }
 }

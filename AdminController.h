@@ -2,6 +2,7 @@
 #define _ADMIN_CONTROLLER_H_
 
 #include "IController.h"
+#include "AdminUI.h"
 
 class AdminController : public IController {
 public:

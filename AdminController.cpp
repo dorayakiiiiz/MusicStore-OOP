@@ -1,44 +1,34 @@
 #include "AdminController.h"
 #include "utils.h"
 #include "MusicService.h"
+#include "windows.h"
 
 void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& users, vector<Order>& orders, vector<shared_ptr<IDiscount>>& vouchers, shared_ptr<IUser>& currentUser) {
 
     while (1) {
-        cout << "\n---------- WELCOME ADMIN: " << currentUser->getUsername() << " ----------\n\n";
-        vector<string> options = {
-            "---------- MENU ADMIN ----------\n",
-            "1. See music list",
-            "2. Add new items",
-            "3. Remove items",
-            "4. Update price items",
-            "5. View users list",
-            "6. View all customers purchased history",
-            "7. Delete customers",
-            "8. View sale statistics",
-            "9. Log out\n"
-        };
 
-        displayMenu(options);
+        system("cls");
+        printMessage("WELCOME ADMIN: " + currentUser->getUsername());
+        AdminUI::displayMenu();
 
         int choice = stoi(getInput("Enter choice: "));
+
         switch (choice) {
             case 1: {
-                cout << "---------- MUSIC LIST ----------\n";
-                cout << "ID - Name - Artist - Genre - Price - Quantity\n";
-                int idx = 1;
-                for (int i = 0; i < items.size(); ++i) {
-                    if (items[i].getQuantity() == 0) {
-                        continue;
-                    }  
-                    cout << idx++ << ". ";
-                    items[i].displayItems();
-                }
-                cout << "-------------------------------\n";
+                system("cls");
+                printHeader("MUSIC LIST");
+                AdminUI::displayMusicList(items);
+                printDashLine();
+
+                system("pause");
+
                 break;
             }
             case 2: {
-                cout << "\n---------- ADD NEW ITEMS ----------\n";
+
+                system("cls");
+                printHeader("ADD NEW ITEMS");
+                
                 string name = getInput("Enter name: ");
                 string artist = getInput("Enter artist: ");
                 string genre = getInput("Enter genre: ");
@@ -49,102 +39,122 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
 
                 MusicService::addMusicItem(items, item);
 
-                cout << "\nAdd new items successfully!\n";
-                cout << "------------------------------------------\n";
+                printMessage("Add items successfully!");
+                printDashLine();
+                system("pause");
+
                 break;
             } 
             case 3: {
-                cout << "\n---------- REMOVE ITEMS ----------\n";
-                int id = stoi(getInput("Enter ID: "));
+                system("cls");
+                printHeader("REMOVE ITEMS");
+
+                AdminUI::displayMusicList(items);
+
+                int id = stoi(getInput("Enter item's ID to remove: "));
                 
                 bool success = MusicService::removeMusicItem(items, id - 1);
                 
                 if (success) {
-                    cout << "\nRemove items successfully!\n";
+                    printMessage("Item removed successfully!");
                 } else {
-                    cout << "\nInvalid ID!\n";
+                    printMessage("Invalid ID! Item not found.");
                 }
-                cout << "------------------------------------------\n";
+                printDashLine();
+                system("pause");
                 break;
             }
             case 4: {
-                cout << "\n---------- UPDATE PRICE ----------\n";
-                int id = stoi(getInput("Enter ID: "));
+                system("cls");
+                printHeader("UPDATE PRICE ITEMS");
+
+                AdminUI::displayMusicList(items);
+
+                int id = stoi(getInput("\nEnter item's ID: "));
                 float newPrice = stof(getInput("Enter new price: "));
 
                 MusicService::updateMusicItemPrice(items, id - 1, newPrice);
 
-                cout << "\nUpdate price successfully!\n";
-                cout << "------------------------------------------\n";
+                printMessage("Price updated successfully!");
+                printDashLine();
+
+                system("pause");
                 break;
             }
             case 5: {
-                cout << "---------- USER LIST ----------\n";
-                cout << "ID - Username - Password - Role\n";
-                for (int i = 0; i < users.size(); ++i) {
-                    cout << i + 1 << ". ";
-                    users[i]->displayInfo();
-                }
-                cout << "-----------------------------------\n";
+                system("cls");
+                printHeader("USER LIST");
+
+                AdminUI::displayUserList(users);
+                printDashLine();
+
+                system("pause");
                 break;
             }
             case 6: {
-                
-                cout << "---------- CUSTOMER PURCHASE HISTORY ----------\n";
+                system("cls");
+                printHeader("CUSTOMER PURCHASE HISTORY");
+
                 for (const auto& customer : users) {
                     if (customer->getRole() == "Admin") {
                         continue;
                     }
-                    cout << "Customer: " << customer->getUsername() << "\n";
+
+                    printMessage("Customer: " + customer->getUsername());   
                     bool hasPurchase = false;
                     int idx = 1;
-                    for (const auto& order : orders) {
 
+                    for (const auto& order : orders) {
                         if (order.getUsername() == customer->getUsername()) {
                             hasPurchase = true;
-                            cout << "Order " << idx++ << ":\n";
-                            cout << "Items purchased:\n";
+                            
+                            AdminUI::displayPurchasedHistory(order, idx++);
 
-                            const auto& purchasedItems = order.getPurchasedItems();
-                            for (const auto& item : purchasedItems) {
-                                cout << "- " << item.getName() << " - Quantity: " << item.getQuantity()
-                                     << " - Price per unit: $" << item.getPrice()
-                                     << " - Total: $" << item.getPrice() * item.getQuantity() << '\n';
-                            }
-                            cout << "Order total: $" << order.getTotal() << '\n';
-                            cout << "-----------------------------\n";
+                            printDashLine();                  
+                        
                         }
                     }
                     if (!hasPurchase) {
-                        cout << "No purchase history.\n";
+                        printMessage("No purchase history found for this customer.");
                     }
-                    cout << "-----------------------------\n";
+                    printDashLine();                
                 }
+                system("pause"); 
                 break;
             }
             case 7: {
-                cout << "\n---------- DELETE CUSTOMER ----------\n";
-                string del = getInput("Enter username of customer: ");
+                system("cls");
+                printHeader("DELETE USER");
+                
+                AdminUI::displayUserList(users);
+
+                string del = getInput("\nEnter username to delete: ");
 
                 int indexToDelete = -1;
                 for (int i = 0; i < users.size(); ++i) {
-                    if (users[i]->getUsername() == del && users[i]->getRole() == "Customer") {
+                    if (users[i]->getUsername() == del) {
                         indexToDelete = i;
                         break;
                     }
                 }
-            
+                // will move to UserService after refactoring
                 if (indexToDelete != -1) {
                     users.erase(users.begin() + indexToDelete);
-                    cout << "\nCustomer " << del << " deleted successfully.\n\n";
+                    printMessage("User deleted successfully!");
+                    if (currentUser->getUsername() == del) {
+                        printMessage("You have deleted yourself! Please login again!");
+                        currentUser = nullptr;
+                        return;
+                    }
                 } else {
-                    cout << "\nCustomer not found.\n\n";
+                    printMessage("User not found!");
                 }
-                cout << "-----------------------------------\n";
+                printDashLine();
+                system("pause");
                 break;
             }
             case 8: {
-
+                system("cls");
                 unordered_map<string, pair<int, float>> itemStats;
 
                 for (const auto& order : orders) {
@@ -167,25 +177,22 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
                     return a.second.second > b.second.second;
                 });
                 
-                cout << "---------- SALES STATISTICS ----------\n\n";
-                float totalRevenue = 0;
-                for (const auto& [name, stats] : sortedItemStats) {
-                    cout << "Product: " << name << " - Sold : "
-                    << stats.first << " - Revenue: $" << stats.second << "\n";
-                    totalRevenue += stats.second;
-                }
+                printHeader("SALE STATISTICS");
 
-                cout << "------------------------------\n";
-                cout << "TOTAL REVENUE: $" << totalRevenue << "\n\n";
+                AdminUI::displaySaleStatistics(sortedItemStats);
+                printDashLine();
+                system("pause");
                 break;
             }
             case 9: {
-                cout << "\nYou have logged out successfully!\n";
+                printMessage("Log out successfully!");
                 currentUser = nullptr;
+                Sleep(1000);
                 return;
             }
             default: 
-            cout << "\nInvalid choice! Please try again!\n";
+                printMessage("Invalid choice! Please try again.");
+                Sleep(1000);
         }
     }
 }

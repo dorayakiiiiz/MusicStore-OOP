@@ -35,18 +35,27 @@ string Admin::getRole() const {
     return "Admin";
 }
 
-
-bool AdminPasskey::isValid(const string& key) {
-    for (int i = 0; i < passKeys.size(); ++i) {
-        if (passKeys[i] == key) {
+bool Admin::isValidPasskey(const string& key) {
+    for (const auto& passKey : passKeys) {
+        if (passKey == key) {
             return true;
         }
     }
     return false;
 }
 
-void AdminPasskey::addPasskey(const string& pass) {
-    passKeys.push_back(pass);
-}
+
+// bool AdminPasskey::isValid(const string& key) {
+//     for (int i = 0; i < passKeys.size(); ++i) {
+//         if (passKeys[i] == key) {
+//             return true;
+//         }
+//     }
+//     return false;
+// }
+
+// void AdminPasskey::addPasskey(const string& pass) {
+//     passKeys.push_back(pass);
+// }
 
 

@@ -1,6 +1,6 @@
 #include "StoreApp.h"
 #include "utils.h"
-#include "Authentication.h"
+#include "AuthService.h"
 #include "IController.h"
 #include "ControllerFactory.h"
 
@@ -69,54 +69,56 @@ void StoreApp::run() {
     Authentication auth;
     shared_ptr<IUser> currentUser = nullptr;    
     while (1) {
-
         system("cls");
-        displayMenu({
-            "---------- WELCOME TO MUSIC STORE ----------",
-            "1. Sign up",
-            "2. Login",
-            "3. Exit\n"
-        });
+
+        printHeader("WELCOME TO THE MUSIC STORE");
+
+        vector<string> options = {
+            "Sign up",
+            "Login",
+            "Exit\n",
+        };
+        printMenu(options);
 
         int choice = stoi(getInput("Input choice: "));
 
         switch (choice) {
             case 1: {
-                cout << "\n---------- SIGN UP ----------\n";
-                cout << "Choose your role (Admin/Customer): \n";
-                string role = getInput("Input role: ");
+                system("cls");
+                printHeader("SIGN UP");
+                string role = getInput("Choose your role (admin/customer): ");
                 string username = getInput("Input username (no spaces): ");
                 string password = getInput("Input password: ");
                 
                 if (role == "Admin") {
                     string passkey = getInput("Input admin passkey: ");
-                    if (!AdminPasskey::isValid(passkey)) {
-                        cout << "Invalid passkey. Please try again!\n";
+                    if (!Admin::isValidPasskey(passkey)) {
+                        printMessage("Invalid passkey. Please try again!");
                         break;
                     }
                 }
 
                 bool success = auth.registerUser(users, username, password, role);
                 if (success) {
-                    cout << "Sign up successfully!\n";
+                    printMessage("Sign up successfully!");
                 } else {
-                    cout << "Username already exists. Please try again!\n";
+                    printMessage("Username already exists. Please try again!");
                 }
                 break;
             }
             case 2: {
-
-                cout << "\n---------- LOGIN ----------\n";
+                system("cls");
+                printHeader("LOGIN");
                 string username = getInput("Input username: ");
                 string password = getInput("Input password: ");
                 currentUser = auth.loginUser(users, username, password);
 
                 if (!currentUser) {
-                    cout << "Invalid username or password. Please try again!\n";
+                    printMessage("Invalid username or password. Please try again!");
                     break;
                 }
                 
-                cout << "Login successfully!\n";
+                printMessage("Login successfully! Welcome " + currentUser->getUsername() + "!");
                 Sleep(1000);
                 system("cls");
 
@@ -125,11 +127,11 @@ void StoreApp::run() {
                 break;
             }
             case 3: {
-                cout << "---------- GOODBYE! ----------\n";
+                printMessage("Exiting the application. Thank you for using our service!");
                 return;
             }
             default:
-                cout << "Invalid choice. Please try again!\n";
+                printMessage("Invalid choice! Please try again!");
         }
         Sleep(2500);
     }
