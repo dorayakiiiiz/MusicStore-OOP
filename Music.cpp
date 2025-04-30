@@ -4,6 +4,11 @@
 
 #include <iostream>
 using std::cin, std::cout;
+
+Music::Music() {
+    name = ""; artist = ""; genre = ""; price = 0; quantity = 0;
+}
+
 Music::Music(const string& name, const string& artist, const string& genre, const float& price, const int& quantity) {
     this->name = name;
     this->artist = artist; this->genre = genre;

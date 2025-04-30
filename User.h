@@ -7,42 +7,47 @@
 #include <iostream>
 using std::string, std::vector, std::cout;
 
-
-class Customer  {
+class IUser {
 private:
     string username;
     string password;
-    vector<Order> purchaseHistory;
 public:
-    Customer(const string&, const string&);
-public:
-
+    virtual ~IUser();
+    IUser(const string&, const string&);
+    virtual string getRole() const = 0;
     string getUsername() const;
     string getPassword() const;
-    string getRole() const;
-    void addPurchase(const Order&);
-    const vector<Order>& getPurchaseHistory() const;
+    void displayInfo() const;
+};
+
+class Customer : public IUser {
+public:
+    Customer(const string&, const string&);
+    Customer(const Customer&);
+    string getRole() const override;
+    // string getUsername() const;
+    // string getPassword() const;
 };
 
 // singleton pattern for Admin Passkey
+
 class AdminPasskey {
 private:
-    inline static AdminPasskey* instance = nullptr;
-    vector<string> passKeys;
-    AdminPasskey();
+    inline static vector<string> passKeys = {"23120197", "23120209"};
 public:
-    static AdminPasskey* getInstance();
-    bool isValid(const string&) const;
-    void addPasskey(const string&);
+    static bool isValid(const string&);
+    static void addPasskey(const string&);
 };
 
-class Admin {
-private:
-    AdminPasskey* adminPasskey;
+class Admin : public IUser {
+// private:
+//     string passkey;
 public:
-    Admin();
-public:
-    string getRole() const;
+    Admin(const string&, const string&);
+    Admin(const Admin&);
+    string getRole() const override;
+    // string getUsername() const;
+    // string getPassword() const;
 };
 
 #endif

@@ -5,11 +5,11 @@
 #include <memory>
 using std::vector, std::shared_ptr, std::make_shared;
 
+
 class Authentication {
 public:
-    static bool registerCustomer(vector<shared_ptr<Customer>>&, const string&, const string&);
-    static shared_ptr<Customer> loginCustomer(const vector<shared_ptr<Customer>>&, const string&, const string&);
-    static bool loginAdmin(const string&);
+    static bool registerUser(vector<shared_ptr<IUser>>&, const string&, const string&, const string&);
+    static shared_ptr<IUser> loginUser(const vector<shared_ptr<IUser>>&, const string&, const string&);
 };
 
 #endif

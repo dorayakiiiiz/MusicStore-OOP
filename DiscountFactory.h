@@ -9,8 +9,10 @@ using std::shared_ptr, std::make_unique, std::string, std::vector, std::make_sha
 
 class DiscountFactory {
 public:
-    static float applyDiscount(IDiscount*, float);
-    static bool isValidDiscount(vector<IDiscount*> vouchers, IDiscount*);
+    static float applyDiscount(shared_ptr<IDiscount>, float);
+    static bool isValidDiscount(vector<shared_ptr<IDiscount>>, shared_ptr<IDiscount>);
+    static vector<shared_ptr<IDiscount>> loadValidDiscounts(const vector<shared_ptr<IDiscount>>&, const string&);
+    static void removeDiscount(vector<shared_ptr<IDiscount>>&, const string&);
 };
 
 #endif

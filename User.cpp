@@ -1,44 +1,44 @@
 #include "User.h"
 
-Customer::Customer(const string& uname, const string& pword) {
-    username = uname;
-    password = pword;
+IUser::IUser(const string& uname, const string& pword) : username(uname), password(pword) {}
+
+IUser::~IUser() {}
+
+string IUser::getUsername() const {
+    return username;
 }
+
+
+
+string IUser::getPassword() const {
+    return password;
+}
+
+void IUser::displayInfo() const {
+    cout << username << " - " << password << " - " << getRole() << '\n';
+}
+
+
+Customer::Customer(const Customer& other) : IUser(other.getUsername(), other.getPassword()) {}
+
+Customer::Customer(const string& uname, const string& pword) : IUser(uname, pword) {}
 
 string Customer::getRole() const {
     return "Customer";
 }
 
-string Customer::getUsername() const {
-    return username;
+Admin::Admin(const string& uname, const string& pword) : IUser(uname, pword) {}
+
+Admin::Admin(const Admin& other) : IUser(other.getUsername(), other.getPassword()) {}
+
+string Admin::getRole() const {
+    return "Admin";
 }
 
-string Customer::getPassword() const {
-    return password;
-}
 
-void Customer::addPurchase(const Order& order) {
-    purchaseHistory.push_back(order);
-}
-
-const vector<Order>& Customer::getPurchaseHistory() const {
-    return purchaseHistory;
-}
-
-AdminPasskey* AdminPasskey::getInstance() {
-    if (instance == nullptr) {
-        instance = new AdminPasskey();
-    }
-    return instance;
-}
-
-AdminPasskey::AdminPasskey() {
-    passKeys = {"VanSy", "NhatAnh"};
-}
-
-bool AdminPasskey::isValid(const string& pass) const {
+bool AdminPasskey::isValid(const string& key) {
     for (int i = 0; i < passKeys.size(); ++i) {
-        if (passKeys[i] == pass) {
+        if (passKeys[i] == key) {
             return true;
         }
     }
@@ -49,11 +49,4 @@ void AdminPasskey::addPasskey(const string& pass) {
     passKeys.push_back(pass);
 }
 
-Admin::Admin() {
-    adminPasskey = AdminPasskey::getInstance();
-}
-
-string Admin::getRole() const {
-    return "Admin";
-}
 

@@ -15,6 +15,7 @@ private:
     int quantity;
 
 public:
+    Music();
     Music(const string&, const string&, const string&, const float&, const int&);
     ~Music() = default;
 

@@ -1,6 +1,7 @@
 #include "Cart.h"
 
-void Cart::addItems(const Music& item) {
+void Cart::addItems(Music& item, int& quantity) {
+    item.updateQuantity(quantity);
     for (int i = 0; i < items.size(); ++i) {
         if (items[i] == item) {
             items[i].updateQuantity(items[i].getQuantity() + item.getQuantity());
@@ -31,4 +32,12 @@ void Cart::removeItem(int id) {
 
 void Cart::clear() {
     items.clear();
+}
+
+void Cart::displayCart() const {
+    for (int i = 0; i < items.size(); ++i) {
+        std::cout << i + 1 << " - " << items[i].getName() << " - Quantity: " << items[i].getQuantity()
+             << " - Price per unit: $" << items[i].getPrice()
+             << " - Total: $" << items[i].getPrice() * items[i].getQuantity() << '\n';
+    }
 }

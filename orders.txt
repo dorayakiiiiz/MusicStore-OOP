@@ -5,3 +5,6 @@ doraa|40|Tung quen;Wren Evans;Vpop;15;4|
 chaeunwoo|105|Hop on da show;LowG & Tlinh;Vpop;15;1|Mat ket noi;Duong Domic;Vpop;10;1|How you like that;Blackpink;Kpop;20;4|
 chaeunwoo|27.9|APT;Rose & Brunor Mars;Pop;15.5;2|
 chaeunwoo|60|Dai lo mat troi;Chillies;Vpop;20;2|Xin dung lang im;Soobin;Vpop;10;2|
+doraa|100|How you like that;Blackpink;Kpop;20;4|Xin dung lang im;Soobin;Vpop;10;2|
+dora|107|APT;Rose & Brunor Mars;Pop;15.5;4|Hop on da show;LowG & Tlinh;Vpop;15;1|Neu ngay ay;Soobin Hoang Son;Vpop;10;3|
+jennie|112|APT;Rose & Brunor Mars;Pop;15.5;4|Chung ta cua hien tai;Son Tung MTP;Vpop;10;5|

@@ -1,41 +1,45 @@
 #include "Discount.h"
 
-PercentageDiscount::PercentageDiscount(string username, float percentage) : username(username), percentage(percentage) {}
+string IDiscount::getUsername() const {
+    return username;
+}
+
+IDiscount::IDiscount(string username) : username(username) {}
+
+PercentageDiscount::PercentageDiscount(string username, int percentage) : IDiscount(username), percentage(percentage) {}
 
 string PercentageDiscount::toString() const {
-    // fix to print percentage with 1 decimal place
-    string percentageStr = std::to_string(percentage).substr(0, std::to_string(percentage).find(".") + 2);
-    return username + "P" + percentageStr;
+    return username + "P" + std::to_string(percentage);
 }
-FixedAmountDiscount::FixedAmountDiscount(string username, float amount) : username(username), amount(amount) {}
+FixedDiscount::FixedDiscount(string username, int amount) : IDiscount(username), amount(amount) {}
 
-string FixedAmountDiscount::toString() const {
-    string amountStr = std::to_string(amount).substr(0, std::to_string(amount).find(".") + 2);
-    return username + "F" + amountStr;
+string FixedDiscount::toString() const {
+    return username + "F" + std::to_string(amount);
 }
 
-IDiscount* IDiscount::toDiscount(const string& str) {
+shared_ptr<IDiscount> IDiscount::toDiscount(const string& str) {
     if (str.find("P") != string::npos) {
-        return new PercentageDiscount(str.substr(0, str.find("P")), stof(str.substr(str.find("P") + 1)));
+        return make_shared<PercentageDiscount>(str.substr(0, str.find("P")), stoi(str.substr(str.find("P") + 1)));
     } else if (str.find("F") != string::npos) {
-        return new FixedAmountDiscount(str.substr(0, str.find("F")), stof(str.substr(str.find("F") + 1)));
+        return make_shared<FixedDiscount>(str.substr(0, str.find("F")), stoi(str.substr(str.find("F") + 1)));
     }
     return nullptr;
 }
 
 string PercentageDiscount::getType() const {
-    return "Percentage";
+    return "percentage";
 }
 
-string FixedAmountDiscount::getType() const {
-    return "Fixed Amount";
+string FixedDiscount::getType() const {
+    return "fixed";
 }
 
 float PercentageDiscount::getDiscountValue() const {
     return percentage;
 }
 
-float FixedAmountDiscount::getDiscountValue() const {
+float FixedDiscount::getDiscountValue() const {
     return amount;
 }
 
+IDiscount::~IDiscount() {}

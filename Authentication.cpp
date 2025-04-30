@@ -3,31 +3,27 @@
 
 // git commit commit
 
-bool Authentication::registerCustomer(vector<shared_ptr<Customer>>& customers, const string& username, const string& password) {
-    for (int i = 0; i < customers.size(); ++i) {
-        if (customers[i]->getUsername() == username) {
+bool Authentication::registerUser(vector<shared_ptr<IUser>>& users, const string& username, const string& password, const string& role) {
+    for (int i = 0; i < users.size(); ++i) {
+        if (users[i]->getUsername() == username) {
             return false;
         }
     }
-    customers.push_back(make_shared<Customer>(username, password));
+    if (role == "Customer") {
+        users.push_back(make_shared<Customer>(username, password));
+    } else {
+        users.push_back(make_shared<Admin>(username, password));
+    }
     return true;
 }
 
-shared_ptr<Customer> Authentication::loginCustomer(const vector<shared_ptr<Customer>>& customers, const string& username, const string& password) {
-    
-    for (int i = 0; i < customers.size(); ++i) {
-        if (customers[i]->getUsername() == username && customers[i]->getPassword() == password) {
-            return customers[i];
+
+
+shared_ptr<IUser> Authentication::loginUser(const vector<shared_ptr<IUser>>& users, const string& username, const string& password) {
+    for (int i = 0; i < users.size(); ++i) {
+        if (users[i]->getUsername() == username && users[i]->getPassword() == password) {
+            return users[i];
         }
     }
     return nullptr;
-}
-
-bool Authentication::loginAdmin(const string& passkey) {
-
-    if (AdminPasskey::getInstance()->isValid(passkey)) {
-        return true;
-    } else { 
-        return false;
-    }
 }

@@ -1,11 +1,11 @@
 Name,Artist,Genre,Price,Quantity
-APT,Rose & Brunor Mars,Pop,15.5,22
+APT,Rose & Brunor Mars,Pop,15.5,14
 Drama,aespa,kpop,20,11
-How you like that,Blackpink,Kpop,20,14
-Xin dung lang im,Soobin,Vpop,10,12
-Neu ngay ay,Soobin Hoang Son,Vpop,10,13
-Chung ta cua hien tai,Son Tung MTP,Vpop,10,20
-Hop on da show,LowG & Tlinh,Vpop,15,21
+How you like that,Blackpink,Kpop,20,10
+Xin dung lang im,Soobin,Vpop,10,10
+Neu ngay ay,Soobin Hoang Son,Vpop,10,10
+Chung ta cua hien tai,Son Tung MTP,Vpop,10,15
+Hop on da show,LowG & Tlinh,Vpop,15,20
 Waiting for you,Mono,Vpop,20,20
 Tung quen,Wren Evans,Vpop,15,10
 Mat ket noi,Duong Domic,Vpop,10,10

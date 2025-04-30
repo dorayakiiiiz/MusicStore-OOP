@@ -4,7 +4,6 @@
 #include "Music.h"
 #include "Discount.h"
 #include <vector>
-#include <utility>
 #include <memory>
 using std::vector, std::pair, std::unique_ptr;
 
@@ -12,8 +11,9 @@ class Cart {
 private:
     vector<Music> items;
 public:
-    void addItems(const Music&);
+    void addItems(Music&, int&);
     void removeItem(int);
+    void displayCart() const;
     float calculateTotal() const;
     const vector<Music>& getItems() const;
     void clear();

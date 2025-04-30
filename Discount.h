@@ -3,33 +3,37 @@
 
 #include <string>
 #include <vector>
-using std::string, std::vector;
+#include <memory>
+using std::string, std::vector, std::shared_ptr, std::make_shared, std::make_unique;
 
 class IDiscount {
+protected:
+    string username;
 public:
+    string getUsername() const;
+    IDiscount(string);
     virtual string toString() const = 0;
     virtual string getType() const = 0;
     virtual float getDiscountValue() const = 0;
-    static IDiscount* toDiscount(const string&);
+    static shared_ptr<IDiscount> toDiscount(const string&);
+    virtual ~IDiscount();
 };
 
 class PercentageDiscount : public IDiscount {
 private:
-    string username;
-    float percentage;
+    int percentage;
 public:
-    PercentageDiscount(string, float);
+    PercentageDiscount(string, int);
     string toString() const override;
     string getType() const override;
     float getDiscountValue() const override;
 };
 
-class FixedAmountDiscount : public IDiscount {
+class FixedDiscount : public IDiscount {
 private:
-    string username;
-    float amount;
+    int amount;
 public:
-    FixedAmountDiscount(string, float);
+    FixedDiscount(string, int);
     string toString() const override;
     string getType() const override;
     float getDiscountValue() const override;
