@@ -1,9 +1,9 @@
 # Project Proposal
 ## Thông tin nhóm
 
-### Môn học: Phương pháp lập trình hướng đối tượng
+### Học phần: Phương pháp lập trình hướng đối tượng - OOP
 
-### Giảng viên hướng dẫn: Trần Duy Quang
+### GVHD: Trần Duy Quang
 
 ### Lớp: 23CTT3
 
@@ -12,16 +12,17 @@
 - 23120209 - Lê Hoàng Nhật Anh
 
 
-## Đồ án
+## Đồ án: Music Store Management
 ### Giới thiệu chung
-- Tên đồ án: Music Store – Hệ thống quản lý cửa hàng âm nhạc
+- Tên đồ án: Music Store Management – Hệ thống quản lý cửa hàng âm nhạc
 - Mục tiêu: xây dựng một phần mềm giả lập hệ thống bán hàng cho một cửa hàng âm nhạc trực tuyến dành cho khách hàng và quản trị viên cửa hàng.
 
 ### Chương trình
 - Ngôn ngữ lập trình: C++
-- Cơ sở dữ liệu: Văn bản (.txt), SQLServer (nâng cao).
-- Giao diện: Giao diện console (hoặc giao diện đồ họa nâng cao với các thư viện như SFML, SDL, ncurses,…)
-- Áp dụng: Nguyên lý OOP + Design Pattern + Mô hình kiến trúc phần mềm MVC
+- Cơ sở dữ liệu: Văn bản (.txt), SQLServer (nâng cao, sẽ cải tiến sau).
+- Giao diện: Giao diện console (hoặc giao diện đồ họa nâng cao với các thư viện như SFML, SDL, ncurses,... sẽ cải tiến sau nếu có thể)
+- Áp dụng: Nguyên lý OOP + design pattern (Factory, Singleton, ...) + mô hình kiến trúc phần mềm MVC (Model - View - Controll) hoặc tương tự
+- Tuân theo nguyên tắc SOLID.
 
 ### Mã nguồn tham khảo: 
 https://www.codewithc.com/music-store-management-system-c-program-with-mysql-database/
