@@ -15,7 +15,7 @@
 ## Đồ án
 ### Giới thiệu chung
 - Tên đồ án: Music Store – Hệ thống quản lý cửa hàng âm nhạc
-- Mục tiêu: xây dựng một phần mềm giả lập hệ thống bán hàng cho một cửa hàng âm nhạc trực tuyến với hai vai trò người dùng: Admin và Customer. Admin có thể quản lý sản phẩm âm nhạc (xem, thêm, xóa, cập nhật giá), quản lý người dùng (xem danh sách, xóa tài khoản) và xem báo cáo kinh doanh (lịch sử mua hàng, thống kê doanh thu). Customer có thể duyệt và tìm kiếm sản phẩm, quản lý giỏ hàng, thanh toán đơn hàng với chức năng áp dụng/nhận voucher giảm giá và xem lịch sử mua hàng. Hệ thống hỗ trợ hai loại voucher (cố định và phần trăm), lưu trữ thông tin sản phẩm âm nhạc, người dùng, đơn hàng và voucher. Ứng dụng được thiết kế theo kiến trúc MVC, đảm bảo khả năng mở rộng và bảo trì dễ dàng.
+- Mục tiêu: xây dựng một phần mềm giả lập hệ thống bán hàng cho một cửa hàng âm nhạc trực tuyến dành cho khách hàng và quản trị viên cửa hàng.
 
 ### Chương trình
 - Ngôn ngữ lập trình: C++
@@ -34,7 +34,7 @@ https://www.codewithc.com/music-store-management-system-c-program-with-mysql-dat
 - Thêm, xóa, chỉnh sửa các bài hát.
 - Thoát chương trình.
 
-### Các chức năng sẽ cải tiến.
+### Các chức năng cải tiến thêm.
 #### Tính năng cho người dùng (Customer)
 - Đăng ký tài khoản mới.
 - Đăng nhập hệ thống dịch vụ mua bán của cửa hàng.
