@@ -14,10 +14,9 @@ string IUser::getPassword() const {
     return password;
 }
 
-void IUser::displayInfo() const {
-    cout << username << " - " << password << " - " << getRole() << '\n';
+string IUser::toString() const {
+    return username + " - " + password + " - " + getRole();
 }
-
 
 Customer::Customer(const Customer& other) : IUser(other.getUsername(), other.getPassword()) {}
 

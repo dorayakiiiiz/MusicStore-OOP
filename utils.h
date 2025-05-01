@@ -11,6 +11,8 @@ void printHeader(const string&);
 void printMessage(const string&);
 void printMenu(const vector<string>&);
 void printDashLine();
+void clearScreen();
+void pauseScreen();
 string getInput(const string&);
 
 

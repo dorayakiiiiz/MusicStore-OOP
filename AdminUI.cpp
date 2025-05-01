@@ -1,6 +1,12 @@
 #include "AdminUI.h"
+#include "utils.h"
 
 using std::cout, std::cin, std::vector, std::string;
+
+void AdminUI::displayWelcomeMessage(const string& username) {
+    printMessage("welcome " + username + " to the admin menu!");
+    printDashLine();
+}
 
 void AdminUI::displayMenu() {
     printHeader("ADMIN MENU");
@@ -22,21 +28,15 @@ void AdminUI::displayMenu() {
 
 void AdminUI::displayMusicList(vector<Music>& items) {
     cout << "ID - Name - Artist - Genre - Price - Quantity\n";
-    int idx = 1;
     for (int i = 0; i < items.size(); ++i) {
-        if (items[i].getQuantity() == 0) {
-            continue;
-        }  
-        cout << idx++ << ". ";
-        items[i].displayItems();
+        cout << i + 1 << ". " << items[i].toString() << '\n';
     }
 }
 
-void AdminUI::displayUserList(vector<shared_ptr<IUser>>& users) {
+void AdminUI::displayUserList(const vector<shared_ptr<IUser>>& users) {
     cout << "ID - Username - Password - Role\n";
     for (int i = 0; i < users.size(); ++i) {
-        cout << i + 1 << ". ";
-        users[i]->displayInfo();
+        cout << i + 1 << ". " << users[i]->toString() << '\n';
     }
 }
 
@@ -44,7 +44,7 @@ void AdminUI::displayPurchasedHistory(const Order& order, int id) {
     cout << "Order " << id << ": \n";
     cout << "Purchased items:\n";
 
-    vector<Music> purchasedItems = order.getPurchasedItems();
+    const vector<Music>& purchasedItems = order.getPurchasedItems();
 
     for (const auto& item : purchasedItems) {
         cout << "- " << item.getName() << " - Quantity: " << item.getQuantity()
@@ -52,15 +52,24 @@ void AdminUI::displayPurchasedHistory(const Order& order, int id) {
              << " - Total: $" << item.getPrice() * item.getQuantity() << '\n';
     }
     cout << "Order total: $" << order.getTotal() << '\n';
-
 }
 
 void AdminUI::displaySaleStatistics(vector<pair<string, pair<int, float>>>& itemStats) {
     float totalRevenue = 0;
     for (const auto& [name, stats] : itemStats) {
-        cout << "Product: " << name << " - Sold : "
+        cout << "Product: " << name << " - Sold: "
         << stats.first << " - Revenue: $" << stats.second << "\n";
         totalRevenue += stats.second;
     }
     cout << "Total revenue: $" << totalRevenue << "\n";
+}
+
+Music AdminUI::getNewMusicDetails() {
+    string name = getInput("Enter name: ");
+    string artist = getInput("Enter artist: ");
+    string genre = getInput("Enter genre: ");
+    float price = stof(getInput("Enter price: "));
+    int quantity = stoi(getInput("Enter quantity: "));
+    
+    return Music(name, artist, genre, price, quantity);
 }

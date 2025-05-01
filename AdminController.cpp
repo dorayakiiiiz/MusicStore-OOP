@@ -1,190 +1,148 @@
 #include "AdminController.h"
-#include "utils.h"
-#include "MusicService.h"
+#include "AdminUI.h"
+#include "AdminService.h"
 #include "windows.h"
+#include "utils.h"
 
-void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& users, vector<Order>& orders, vector<shared_ptr<IDiscount>>& vouchers, shared_ptr<IUser>& currentUser) {
-
+void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& users, vector<Order>& orders, 
+                          vector<shared_ptr<IDiscount>>& vouchers, shared_ptr<IUser>& currentUser) {
     while (1) {
-
-        system("cls");
-        printMessage("WELCOME ADMIN: " + currentUser->getUsername());
+        clearScreen();
+        AdminUI::displayWelcomeMessage(currentUser->getUsername());
         AdminUI::displayMenu();
 
-        int choice = stoi(getInput("Enter choice: "));
+        int choice = stoi(getInput("Input choice: "));
 
         switch (choice) {
-            case 1: {
-                system("cls");
+            case 1: { // See Music List
+                clearScreen();
                 printHeader("MUSIC LIST");
                 AdminUI::displayMusicList(items);
                 printDashLine();
-
-                system("pause");
-
+                pauseScreen();
                 break;
             }
-            case 2: {
-
-                system("cls");
+            case 2: { // Add New Items
+                clearScreen();
                 printHeader("ADD NEW ITEMS");
                 
-                string name = getInput("Enter name: ");
-                string artist = getInput("Enter artist: ");
-                string genre = getInput("Enter genre: ");
-                float price = stof(getInput("Enter price: "));
-                int quantity = stoi(getInput("Enter quantity: "));
-
-                Music item(name, artist, genre, price, quantity);
-
-                MusicService::addMusicItem(items, item);
-
-                printMessage("Add items successfully!");
+                Music newItem = AdminUI::getNewMusicDetails();
+                if (AdminService::addMusicItem(items, newItem)) {
+                    printMessage("Item added successfully!");
+                } else {
+                    printMessage("Item already exists!");
+                }
+                
                 printDashLine();
-                system("pause");
-
+                pauseScreen();
                 break;
             } 
-            case 3: {
-                system("cls");
+            case 3: { // Remove Items
+                clearScreen();
                 printHeader("REMOVE ITEMS");
-
                 AdminUI::displayMusicList(items);
 
-                int id = stoi(getInput("Enter item's ID to remove: "));
+                int id = stoi(getInput("Enter item ID to remove: ")) - 1; 
                 
-                bool success = MusicService::removeMusicItem(items, id - 1);
-                
-                if (success) {
+                if (AdminService::removeMusicItem(items, id)) {
                     printMessage("Item removed successfully!");
                 } else {
                     printMessage("Invalid ID! Item not found.");
                 }
                 printDashLine();
-                system("pause");
+                pauseScreen();
                 break;
             }
-            case 4: {
-                system("cls");
+            case 4: { // Update Price Items
+                clearScreen();
                 printHeader("UPDATE PRICE ITEMS");
-
                 AdminUI::displayMusicList(items);
 
-                int id = stoi(getInput("\nEnter item's ID: "));
+                int id = stoi(getInput("Enter item ID: ")) - 1;
                 float newPrice = stof(getInput("Enter new price: "));
 
-                MusicService::updateMusicItemPrice(items, id - 1, newPrice);
-
-                printMessage("Price updated successfully!");
+                if (AdminService::updateMusicItemPrice(items, id, newPrice)) {
+                    printMessage("Price updated successfully!");
+                } else {
+                    printMessage("Invalid item ID!");
+                }
                 printDashLine();
-
-                system("pause");
+                pauseScreen();
                 break;
             }
-            case 5: {
-                system("cls");
+            case 5: { // View Users List
+                clearScreen();
                 printHeader("USER LIST");
-
                 AdminUI::displayUserList(users);
                 printDashLine();
-
-                system("pause");
+                pauseScreen();
                 break;
             }
-            case 6: {
-                system("cls");
+            case 6: { // View All Customers Purchase History
+                clearScreen();
                 printHeader("CUSTOMER PURCHASE HISTORY");
 
-                for (const auto& customer : users) {
-                    if (customer->getRole() == "Admin") {
+                for (const auto& user : users) {
+                    if (user->getRole() == "Admin") {
                         continue;
                     }
 
-                    printMessage("Customer: " + customer->getUsername());   
-                    bool hasPurchase = false;
-                    int idx = 1;
-
-                    for (const auto& order : orders) {
-                        if (order.getUsername() == customer->getUsername()) {
-                            hasPurchase = true;
-                            
-                            AdminUI::displayPurchasedHistory(order, idx++);
-
-                            printDashLine();                  
-                        
-                        }
-                    }
-                    if (!hasPurchase) {
+                    printMessage("Customer: " + user->getUsername());   
+                    vector<Order> userOrders = AdminService::getUserPurchaseHistory(orders, user->getUsername());
+                    
+                    if (userOrders.empty()) {
                         printMessage("No purchase history found for this customer.");
+                    } else {
+                        int idx = 1;
+                        for (const auto& order : userOrders) {
+                            AdminUI::displayPurchasedHistory(order, idx++);
+                            printDashLine();
+                        }
                     }
                     printDashLine();                
                 }
-                system("pause"); 
+                pauseScreen(); 
                 break;
             }
-            case 7: {
-                system("cls");
+            case 7: { // Delete Customers
+                clearScreen();
                 printHeader("DELETE USER");
-                
                 AdminUI::displayUserList(users);
 
-                string del = getInput("\nEnter username to delete: ");
-
-                int indexToDelete = -1;
-                for (int i = 0; i < users.size(); ++i) {
-                    if (users[i]->getUsername() == del) {
-                        indexToDelete = i;
-                        break;
-                    }
-                }
-                // will move to UserService after refactoring
-                if (indexToDelete != -1) {
-                    users.erase(users.begin() + indexToDelete);
+                string usernameToDelete = getInput("Enter username to delete: ");
+                bool isCurrentUser = (currentUser->getUsername() == usernameToDelete);
+                
+                if (AdminService::deleteUser(users, usernameToDelete)) {
                     printMessage("User deleted successfully!");
-                    if (currentUser->getUsername() == del) {
+                    
+                    if (isCurrentUser) {
                         printMessage("You have deleted yourself! Please login again!");
                         currentUser = nullptr;
+                        Sleep(1000);
                         return;
                     }
                 } else {
                     printMessage("User not found!");
                 }
-                printDashLine();
-                system("pause");
-                break;
-            }
-            case 8: {
-                system("cls");
-                unordered_map<string, pair<int, float>> itemStats;
-
-                for (const auto& order : orders) {
-                    const auto& purchasedItems = order.getPurchasedItems();
-                    for (const auto& item : purchasedItems) {
-                        itemStats[item.getName()].first += item.getQuantity();
-                        itemStats[item.getName()].second += item.getPrice() * item.getQuantity();
-                    }
-                }
-                // add the item that is not sold yet into itemStats
-                for (const auto& item : items) {
-                    if (item.getQuantity() > 0 && itemStats.find(item.getName()) == itemStats.end()) {
-                        itemStats[item.getName()] = {0, 0};
-                    }
-                }
-
-                // sort the itemStats by revenue
-                vector<pair<string, pair<int, float>>> sortedItemStats(itemStats.begin(), itemStats.end());
-                sort(sortedItemStats.begin(), sortedItemStats.end(), [](const auto& a, const auto& b) {
-                    return a.second.second > b.second.second;
-                });
                 
-                printHeader("SALE STATISTICS");
-
-                AdminUI::displaySaleStatistics(sortedItemStats);
                 printDashLine();
-                system("pause");
+                pauseScreen();
                 break;
             }
-            case 9: {
+            case 8: { // View Sales Statistics
+                clearScreen();
+                printHeader("SALE STATISTICS");
+                
+                // Generate sales statistics using AdminService
+                vector<pair<string, pair<int, float>>> salesStats = 
+                    AdminService::generateSalesStatistics(orders, items);
+                
+                AdminUI::displaySaleStatistics(salesStats);
+                printDashLine();
+                pauseScreen();
+                break;
+            }
+            case 9: { // Logout
                 printMessage("Log out successfully!");
                 currentUser = nullptr;
                 Sleep(1000);

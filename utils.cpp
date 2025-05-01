@@ -26,8 +26,8 @@ void printMenu(const vector<string>& option) {
 }
 
 void printDashLine() {
-    for (int i = 1; i < 20; ++i) {
-        cout << (char)42 << ' ';
+    for (int i = 1; i < 50; ++i) {
+        cout << (char)205;
     }
     cout << '\n';
 }
@@ -36,4 +36,12 @@ string getInput(const string& prompt) {
     cout << (char)16 << ' ' << prompt;
     string input; getline(cin, input);
     return input;
+}
+
+void clearScreen() {
+    system("cls");
+}
+
+void pauseScreen() {
+    system("pause");
 }

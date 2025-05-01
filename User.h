@@ -17,7 +17,7 @@ public:
     virtual string getRole() const = 0;
     string getUsername() const;
     string getPassword() const;
-    void displayInfo() const;
+    string toString() const;
 };
 
 class Customer : public IUser {

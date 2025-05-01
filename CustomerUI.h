@@ -4,19 +4,39 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
-#include "utils.h"
 #include "Order.h"
-
+#include "Music.h"
+#include "Discount.h"
 
 using std::cout, std::cin, std::string, std::vector;
 
-
 class CustomerUI {
 public:
+    static void displayWelcomeMessage(const string& username);
     static void displayMenu();
+
     static void displayPurchasedHistory(const vector<Order>& orders, const string& username);
-    static void displayMusicList(vector<Music>&);
+    static void displayMusicList(vector<Music>& items);
+
+
+    static void displayCart(const vector<Music>& items);
+    static void displayNoResultsMessage();
+
+    static void displaySearchResults(vector<Music>& results);
+
+    static void displayRemoveItemsHeader();
+    static void displayCheckOutHeader();
+    static void displayEmptyCartMessage();
+    static void displayOrderDetails(const string& username, const vector<Music>& items, float total);
+    static void displayVoucherList(const vector<shared_ptr<IDiscount>>& vouchers);
+    static string askUseVoucher();
+    static string getVoucherCode();
+    static void displayDiscountOptions();
+    static int getDiscountChoice();
+    static void displayOrderSuccessMessage();
+    static void displayLogoutMessage();
+    static void displayCartWarningMessage();
+    static void displayInvalidChoiceMessage();
 };
 
 #endif

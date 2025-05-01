@@ -1,224 +1,187 @@
 #include "CustomerController.h"
-#include "utils.h"
-#include "MusicService.h"
 #include "CustomerUI.h"
+#include "CustomerService.h"
 #include "windows.h"
+#include "utils.h"
 
 using std::to_string;
 
-void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& users, vector<Order>& orders, vector<shared_ptr<IDiscount>>& vouchers, shared_ptr<IUser>& currentUser) {
+void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& users, vector<Order>& orders, 
+                            vector<shared_ptr<IDiscount>>& vouchers, shared_ptr<IUser>& currentUser) {
     Cart cart;
     Customer* customer = dynamic_cast<Customer*>(currentUser.get());
+    
     while (1) {
-        system("cls");
-
-        printMessage("WELCOME CUSTOMER: " + customer->getUsername());
+        clearScreen();
+        CustomerUI::displayWelcomeMessage(customer->getUsername());
         CustomerUI::displayMenu();
+        
         int choice = stoi(getInput("Input choice: "));
 
         switch (choice) {
-            case 1: {
-                system("cls");
-                vector<Order> orderHistory;
-                for (const auto& order : orders) {
-                    if (order.getUsername() == customer->getUsername()) {
-                        orderHistory.push_back(order);
-                    }
-                }
-
+            case 1: { // Purchase History
+                clearScreen();
+                vector<Order> orderHistory = CustomerService::getUserOrders(orders, customer->getUsername());
+                
                 printHeader("PURCHASE HISTORY");
                 CustomerUI::displayPurchasedHistory(orderHistory, customer->getUsername());
                 printDashLine();
-                system("pause");
+                pauseScreen();
                 break;
             }
-            case 2: {
-                system("cls");
+            case 2: { // Music List
+                clearScreen();
                 printHeader("MUSIC LIST");
                 CustomerUI::displayMusicList(items);
                 printDashLine();
-                system("pause");
+                pauseScreen();
                 break;
             }
-            case 3: {
-                system("cls");
+            case 3: { // Search Engine
+                clearScreen();
                 printHeader("SEARCH ENGINE");
 
+                string criteria = getInput("Enter search criteria (name/artist/genre): ");
+                // will fix this input validation later
+                if (criteria != "name" && criteria != "artist" && criteria != "genre") {
+                    printMessage("Invalid search criteria! Please try again.");
+                    pauseScreen();
+                    break;
+                }
+
                 string keyword = getInput("Enter keyword: ");
-                vector<Music> results = MusicService::searchMusicItem(items, keyword);
+                vector<Music> results = CustomerService::searchMusic(items, criteria, keyword);
 
                 if (results.empty()) {
-                    printMessage("No results found!");
+                    CustomerUI::displayNoResultsMessage();
                 } else {
-                    printMessage("Search results: ");
-                    for (int i = 0; i < results.size(); ++i) {
-                        CustomerUI::displayMusicList(results);
-                    }
+                    CustomerUI::displaySearchResults(results);
                 }
                 printDashLine();
-                system("pause");
+                pauseScreen();
                 break;
             }
-            case 4: {
-                system("cls");
+            case 4: { // Add to Cart
+                clearScreen();
                 printHeader("ADD TO CART");
 
-                int itemID = stoi(getInput("Enter item ID: "));
+                int itemID = stoi(getInput("Enter item ID: ")) - 1; 
                 int quantity = stoi(getInput("Enter quantity: "));
 
-                if (itemID < 1 || itemID > items.size()) {
-                    printMessage("Invalid item ID!");
-                    break;
-                }
-
-                Music item = items[itemID - 1];
-
-                if (quantity <= 0) {
-                    printMessage("Invalid quantity!");
-                    break;
-                }
-                if (item.getQuantity() < quantity) {
-                    printMessage("Not enough items in stock!");
-                    break;
+                if (CustomerService::addItemToCart(cart, items, itemID, quantity)) {
+                    printMessage("Added " + std::to_string(quantity) + " " + 
+                                               items[itemID].getName() + " to cart successfully!");
+                } else {
+                    printMessage("Failed to add item! Invalid ID or insufficient stock.");
                 }
                 
-                cart.addItems(item, quantity);
-                items[itemID - 1].updateQuantity(items[itemID - 1].getQuantity() - quantity);
-
-                printMessage("Added " + to_string(quantity) + " " + item.getName() + " to cart successfully!");
-
                 printHeader("YOUR CURRENT CART");
-                cart.displayCart();
+                CustomerUI::displayCart(cart.getItems());
                 printDashLine();
-
-                system("pause");
+                pauseScreen();
                 break;
             }
-            case 5: {
-                system("cls");
-                printHeader("REMOVE ITEMS FROM CART");
+            case 5: { // Remove from Cart
+                clearScreen();
+                CustomerUI::displayRemoveItemsHeader();
+                
                 if (cart.getItems().empty()) {
                     printMessage("Cart is empty!");
                 } else {
                     printMessage("Your current cart: ");
-                    cart.displayCart();
-                    int itemID = stoi(getInput("Enter item ID to remove: "));
-                    if (itemID < 1 || itemID > cart.getItems().size()) {
-                        printMessage("Invalid item ID!");
-                        break;
-                    }
-
-                    // add item quantity back to inventory
-                    for (int i = 0; i < items.size(); ++i) {
-                        if (items[i] == cart.getItems()[itemID - 1]) {
-                            items[i].updateQuantity(items[i].getQuantity() + cart.getItems()[itemID - 1].getQuantity());
-                            break;
-                        }
-                    }
+                    CustomerUI::displayCart(cart.getItems());
                     
-                    cart.removeItem(itemID - 1);
-                    printMessage("Removed item successfully!");
-                    printHeader("YOUR CURRENT CART");
-                    cart.displayCart();
+                    int itemID = stoi(getInput("Enter item ID to remove: ")) - 1;
+                    
+                    if (CustomerService::removeItemFromCart(cart, items, itemID)) {
+                        printMessage("Removed item successfully!");
+                        printHeader("YOUR CURRENT CART");
+                        CustomerUI::displayCart(cart.getItems());
+                    } else {
+                        printMessage("Invalid item ID!");
+                    }
                 }
                 printDashLine();
-                system("pause");
-
+                pauseScreen();
                 break;
             }
-            case 6: {
-                system("cls");
-                printHeader("CHECK OUT");
+            case 6: { // Checkout
+                clearScreen();
+                CustomerUI::displayCheckOutHeader();
+                
                 if (cart.getItems().empty()) {
-                    printMessage("Cart is empty! Please add items to cart before checking out.");
+                    CustomerUI::displayEmptyCartMessage();
                 } else {
-                    printMessage("Your order details: ");
-                    printMessage("Username: " + customer->getUsername());
-                    printMessage("Purchased items: ");
-                    cart.displayCart();
-
                     float total = cart.calculateTotal();
-                    printMessage("Total: $" + to_string(total));
-                    printDashLine();
-
-                    vector<shared_ptr<IDiscount>> validVouchers = DiscountFactory::loadValidDiscounts(vouchers, customer->getUsername());
+                    CustomerUI::displayOrderDetails(customer->getUsername(), cart.getItems(), total);
                     
+                    // Handle vouchers
+                    vector<shared_ptr<IDiscount>> validVouchers = 
+                        DiscountFactory::loadValidDiscounts(vouchers, customer->getUsername());
+                    
+                    shared_ptr<IDiscount> selectedVoucher = nullptr;
                     if (!validVouchers.empty()) {
-                        printMessage("You have the following vouchers available: ");
-                        for (int i = 0; i < validVouchers.size(); ++i) {
-                            cout << i + 1 << ". " << validVouchers[i]->toString() << '\n';
-                        }
-                        string apply = getInput("Do you want to use a voucher? (yes/no): ");
-                        if (apply == "yes") {
-                            string code = getInput("Enter voucher code: ");
-                            shared_ptr<IDiscount> voucher = IDiscount::toDiscount(code);
-                            if (DiscountFactory::isValidDiscount(validVouchers, voucher)) {
-                                
-                                float discount = DiscountFactory::applyDiscount(voucher, total);
-                                
-                                printMessage("Voucher applied successfully!");
-                                printMessage("New total: $" + to_string(discount));
-                                total = discount;
-
-                            } else {
-                                printMessage("Invalid voucher code!");
-                                printMessage("Remaining total: $" + to_string(total));
+                        CustomerUI::displayVoucherList(validVouchers);
+                        string useVoucher = CustomerUI::askUseVoucher();
+                        
+                        if (useVoucher == "yes") {
+                            string voucherCode = CustomerUI::getVoucherCode();
+                            
+                            // Find the selected voucher
+                            for (const auto& voucher : validVouchers) {
+                                if (voucher->toString() == voucherCode) {
+                                    selectedVoucher = voucher;
+                                    
+                                    // Apply the voucher
+                                    total = DiscountFactory::applyDiscount(voucher, total);
+                                    printMessage("Voucher applied! New total: $" + 
+                                                               std::to_string(total));
+                                    
+                                    // Remove the used voucher
+                                    DiscountFactory::removeDiscount(vouchers, voucherCode);
+                                    break;
+                                }
                             }
-
-                            DiscountFactory::removeDiscount(validVouchers, code);
-                        } else {
-                            printMessage("No voucher applied.");
-                            printMessage("Remaining total: $" + to_string(total));
+                            
+                            if (!selectedVoucher) {
+                                printMessage("Invalid voucher code!");
+                            }
                         }
-
                     }
-
-                    map<int, shared_ptr<IDiscount>> discountMap = {
-                        {1, make_shared<PercentageDiscount>(customer->getUsername(), 10)},
-                        {2, make_shared<FixedDiscount>(customer->getUsername(), 10)}
-                    };
+                    
+                    // Create the order
+                    CustomerService::checkout(orders, customer->getUsername(), cart, total);
 
                     if (total > 50) {
-                        printMessage("Congratulations! As the total is over $50, you will receive a discount voucher for your next purchase");
-                        printMessage("What type of discount would you like to apply?");
-                        printMessage("1. Percentage discount");
-                        printMessage("2. Fixed amount discount");
-
-                        int discountChoice = stoi(getInput("Enter your choice: "));
-
-                        if (discountChoice == 1 || discountChoice == 2) {
-                            printMessage("Discount code: " + discountMap[discountChoice]->toString());  
-                            vouchers.push_back(discountMap[discountChoice]);
-                
-                        } else {
-                            printMessage("Invalid choice! No discount voucher will be applied.");
-                        }
+                        CustomerUI::displayDiscountOptions();
+                        int discountChoice = CustomerUI::getDiscountChoice();
+                        int discountValue = (discountChoice == 1) ? 10 : 5;
+                        
+                        CustomerService::createNewVoucher(vouchers, customer->getUsername(), 
+                                                     discountChoice, discountValue);
+                        
+                        printMessage("A new voucher has been added to your account!");
                     }
-
-                    Order order(customer->getUsername(), cart.getItems(), total);
-                    orders.push_back(order);
-                    cart.clear();
-
-                    printMessage("Order placed successfully! Thank you for your purchase!");
+                    CustomerUI::displayOrderSuccessMessage();
                 }
                 printDashLine();
-                system("pause");
+                pauseScreen();
                 break;
             }
-            case 7: {
+            case 7: { // Logout
                 if (cart.getItems().empty()) {
-                    printMessage("You have logged out successfully!");
+                    CustomerUI::displayLogoutMessage();
                     currentUser = nullptr;
                     Sleep(1000);
                     return;
                 } else {
-                    printMessage("You have items in your cart! Please check out before logging out.");
+                    CustomerUI::displayCartWarningMessage();
                     Sleep(1000);
                     break;
                 }
             }
             default:
-                printMessage("Invalid choice! Please try again.");
+                CustomerUI::displayInvalidChoiceMessage();
                 Sleep(1000);
         }
     }

@@ -11,3 +11,5 @@ Tung quen,Wren Evans,Vpop,15,10
 Mat ket noi,Duong Domic,Vpop,10,10
 Dai lo mat troi,Chillies,Vpop,20,10
 Vung Ky Uc,Chillies,Vpop,10,10
+Dat trai tim len ban,Tung,Vpop,20,20
+Cau Vinh Tuy,Wren Evans,Vpop,10,25
