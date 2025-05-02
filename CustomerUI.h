@@ -7,8 +7,10 @@
 #include "Order.h"
 #include "Music.h"
 #include "Discount.h"
+#include <tuple>
+#include "utils.h"
 
-using std::cout, std::cin, std::string, std::vector;
+using std::cout, std::cin, std::string, std::vector, std::tuple, std::make_tuple;
 
 class CustomerUI {
 public:
@@ -22,17 +24,17 @@ public:
     static void displayCart(const vector<Music>& items);
     static void displayNoResultsMessage();
 
+
     static void displaySearchResults(vector<Music>& results);
 
-    static void displayRemoveItemsHeader();
-    static void displayCheckOutHeader();
+
     static void displayEmptyCartMessage();
     static void displayOrderDetails(const string& username, const vector<Music>& items, float total);
     static void displayVoucherList(const vector<shared_ptr<IDiscount>>& vouchers);
-    static string askUseVoucher();
-    static string getVoucherCode();
+
+    
     static void displayDiscountOptions();
-    static int getDiscountChoice();
+
     static void displayOrderSuccessMessage();
     static void displayLogoutMessage();
     static void displayCartWarningMessage();

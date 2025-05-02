@@ -6,12 +6,24 @@
 
 void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& users, vector<Order>& orders, 
                           vector<shared_ptr<IDiscount>>& vouchers, shared_ptr<IUser>& currentUser) {
+    bool isValid;
+    Error error;
+
+
     while (1) {
         clearScreen();
         AdminUI::displayWelcomeMessage(currentUser->getUsername());
         AdminUI::displayMenu();
 
-        int choice = stoi(getInput("Input choice: "));
+        int choice;
+        do {
+            std::tie(isValid, choice, error) = getIntInput("Enter your choice: ", 1, 9);
+            if (!isValid) {
+                printMessage(error.message);
+                Sleep(1000);
+                continue;
+            }
+        } while (!isValid);
 
         switch (choice) {
             case 1: { // See Music List
@@ -42,9 +54,17 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
                 printHeader("REMOVE ITEMS");
                 AdminUI::displayMusicList(items);
 
-                int id = stoi(getInput("Enter item ID to remove: ")) - 1; 
+                int id;
+                do {
+                    std::tie(isValid, id, error) = getIntInput("Enter item ID: ", 1, items.size());
+                    if (!isValid) {
+                        printMessage(error.message);
+                        Sleep(1000);
+                        continue;
+                    }
+                } while (!isValid);
                 
-                if (AdminService::removeMusicItem(items, id)) {
+                if (AdminService::removeMusicItem(items, id - 1)) {
                     printMessage("Item removed successfully!");
                 } else {
                     printMessage("Invalid ID! Item not found.");
@@ -58,8 +78,25 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
                 printHeader("UPDATE PRICE ITEMS");
                 AdminUI::displayMusicList(items);
 
-                int id = stoi(getInput("Enter item ID: ")) - 1;
-                float newPrice = stof(getInput("Enter new price: "));
+                int id;
+                do {
+                    std::tie(isValid, id, error) = getIntInput("Enter item ID: ", 1, items.size());
+                    if (!isValid) {
+                        printMessage(error.message);
+                        Sleep(1000);
+                        continue;
+                    }
+                } while (!isValid);
+
+                float newPrice;
+                do {
+                    std::tie(isValid, newPrice, error) = getFloatInput("Enter new price: ", 0.0f);
+                    if (!isValid) {
+                        printMessage(error.message);
+                        Sleep(1000);
+                        continue;
+                    }
+                } while (!isValid);
 
                 if (AdminService::updateMusicItemPrice(items, id, newPrice)) {
                     printMessage("Price updated successfully!");
@@ -109,7 +146,16 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
                 printHeader("DELETE USER");
                 AdminUI::displayUserList(users);
 
-                string usernameToDelete = getInput("Enter username to delete: ");
+                string usernameToDelete;
+                do {
+                    std::tie(isValid, usernameToDelete, error) = getStringInput("Enter username to delete: ");
+                    if (!isValid) {
+                        printMessage(error.message);
+                        Sleep(1000);
+                        continue;
+                    }
+                } while (!isValid);
+
                 bool isCurrentUser = (currentUser->getUsername() == usernameToDelete);
                 
                 if (AdminService::deleteUser(users, usernameToDelete)) {

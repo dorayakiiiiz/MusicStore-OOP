@@ -57,7 +57,7 @@ void AdminUI::displayPurchasedHistory(const Order& order, int id) {
 void AdminUI::displaySaleStatistics(vector<pair<string, pair<int, float>>>& itemStats) {
     float totalRevenue = 0;
     for (const auto& [name, stats] : itemStats) {
-        cout << "Product: " << name << " - Sold: "
+        cout << "Item: " << name << " - Sold: "
         << stats.first << " - Revenue: $" << stats.second << "\n";
         totalRevenue += stats.second;
     }
@@ -65,11 +65,58 @@ void AdminUI::displaySaleStatistics(vector<pair<string, pair<int, float>>>& item
 }
 
 Music AdminUI::getNewMusicDetails() {
-    string name = getInput("Enter name: ");
-    string artist = getInput("Enter artist: ");
-    string genre = getInput("Enter genre: ");
-    float price = stof(getInput("Enter price: "));
-    int quantity = stoi(getInput("Enter quantity: "));
+    bool isValid;
+    Error error;
+
+    string name, artist, genre;
+    float price = 0.0f;
+    int quantity = 0;
+
+
+    do {
+        std::tie(isValid, name, error) = getStringInput("Enter name: ");
+        if (!isValid) {
+            printMessage(error.message);
+            pauseScreen();
+            continue;
+        }
+    } while (!isValid);
+
+    do {
+        std::tie(isValid, artist, error) = getStringInput("Enter artist: ");
+        if (!isValid) {
+            printMessage(error.message);
+            pauseScreen();
+            continue;
+        }
+    } while (!isValid);
+
+    do {
+        std::tie(isValid, genre, error) = getStringInput("Enter genre: ");
+        if (!isValid) {
+            printMessage(error.message);
+            pauseScreen();
+            continue;
+        }
+    } while (!isValid);
+
+    do {
+        std::tie(isValid, price, error) = getFloatInput("Enter price: ", 0.0F);
+        if (!isValid) {
+            printMessage(error.message);
+            pauseScreen();
+            continue;
+        }
+    } while (!isValid);
+
+    do {
+        std::tie(isValid, quantity, error) = getIntInput("Enter quantity: ", 0);
+        if (!isValid) {
+            printMessage(error.message);
+            pauseScreen();
+            continue;
+        }
+    } while (!isValid);
     
     return Music(name, artist, genre, price, quantity);
 }

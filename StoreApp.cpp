@@ -71,6 +71,9 @@ void StoreApp::run() {
     while (1) {
         system("cls");
 
+        bool isValid;
+        Error error;
+
         printHeader("WELCOME TO THE MUSIC STORE");
 
         vector<string> options = {
@@ -80,20 +83,53 @@ void StoreApp::run() {
         };
         printMenu(options);
 
-        int choice = stoi(getInput("Input choice: "));
+        int choice;
+        do {
+            std::tie(isValid, choice, error) = getIntInput("Enter your choice: ", 1, 3);
+            if (!isValid) {
+                printMessage(error.message);
+                Sleep(1000);
+                continue;
+            }
+        } while (!isValid);
 
         switch (choice) {
             case 1: {
                 system("cls");
                 printHeader("SIGN UP");
-                string role = getInput("Choose your role (Admin/Customer): ");
-                string username = getInput("Input username (no spaces): ");
-                string password = getInput("Input password: ");
+                string role, username, password;
+                vector<string> options = {"admin", "user"};
+                do {
+                    std::tie(isValid, role, error) = getStringInput("Enter your role (admin/user): ", options);
+                    if (!isValid) {
+                        printMessage(error.message);
+                        Sleep(1000);
+                        continue;
+                    }
+                } while (!isValid);
+                do {
+                    std::tie(isValid, username, error) = getStringInput("Input username: ");
+                    if (!isValid) {
+                        printMessage(error.message);
+                        Sleep(1000);
+                        continue;
+                    }
+                } while (!isValid);
                 
-                if (role == "Admin") {
+                do {
+                    std::tie(isValid, password, error) = getStringInput("Input password: ");
+                    if (!isValid) {
+                        printMessage(error.message);
+                        Sleep(1000);
+                        continue;
+                    }
+                } while (!isValid);
+                
+                if (role == "admin") {
                     string passkey = getInput("Input admin passkey: ");
                     if (!Admin::isValidPasskey(passkey)) {
                         printMessage("Invalid passkey. Please try again later!");
+                        Sleep(1000);
                         break;
                     }
                 }
@@ -101,20 +137,41 @@ void StoreApp::run() {
                 bool success = auth.registerUser(users, username, password, role);
                 if (success) {
                     printMessage("Sign up successfully!");
+                    Sleep(1000);
                 } else {
                     printMessage("Username already exists. Please try again later!");
+                    Sleep(1000);
                 }
                 break;
             }
             case 2: {
                 system("cls");
                 printHeader("LOGIN");
-                string username = getInput("Input username: ");
-                string password = getInput("Input password: ");
+                string username, password;
+                bool isValid = true;
+                do {
+                    std::tie(isValid, username, error) = getStringInput("Input username: ");
+                    if (!isValid) {
+                        printMessage(error.message);
+                        Sleep(1000);
+                        continue;
+                    }
+                } while (!isValid);
+
+                do {
+                    std::tie(isValid, password, error) = getStringInput("Input password: ");
+                    if (!isValid) {
+                        printMessage(error.message);
+                        Sleep(1000);
+                        continue;
+                    }
+                } while (!isValid);
+
                 currentUser = auth.loginUser(users, username, password);
 
                 if (!currentUser) {
                     printMessage("Invalid username or password. Please try again!");
+                    Sleep(1000);
                     break;
                 }
                 
@@ -130,9 +187,9 @@ void StoreApp::run() {
                 printMessage("Exiting the application. Thank you for using our service!");
                 return;
             }
-            default:
-                printMessage("Invalid choice! Please try again!");
+            default: {
+
+            }
         }
-        Sleep(2500);
     }
 }

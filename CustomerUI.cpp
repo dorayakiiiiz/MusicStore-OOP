@@ -60,19 +60,12 @@ void CustomerUI::displayNoResultsMessage() {
     printMessage("No results found!");
 }
 
+
 void CustomerUI::displaySearchResults(vector<Music>& results) {
     printMessage("Search results: ");
     displayMusicList(results);
 }
 
-
-void CustomerUI::displayRemoveItemsHeader() {
-    printHeader("REMOVE ITEMS FROM CART");
-}
-
-void CustomerUI::displayCheckOutHeader() {
-    printHeader("CHECK OUT");
-}
 
 void CustomerUI::displayEmptyCartMessage() {
     printMessage("Cart is empty! Please add items to cart before checking out.");
@@ -94,13 +87,6 @@ void CustomerUI::displayVoucherList(const vector<shared_ptr<IDiscount>>& voucher
     }
 }
 
-string CustomerUI::askUseVoucher() {
-    return getInput("Do you want to use a voucher? (yes/no): ");
-}
-
-string CustomerUI::getVoucherCode() {
-    return getInput("Enter voucher code: ");
-}
 
 void CustomerUI::displayDiscountOptions() {
     printMessage("Congratulations! As the total is over $50, you will receive a discount voucher for your next purchase");
@@ -109,9 +95,6 @@ void CustomerUI::displayDiscountOptions() {
     printMessage("2. Fixed amount discount");
 }
 
-int CustomerUI::getDiscountChoice() {
-    return stoi(getInput("Enter your choice: "));
-}
 
 void CustomerUI::displayOrderSuccessMessage() {
     printMessage("Order placed successfully! Thank you for your purchase!");
