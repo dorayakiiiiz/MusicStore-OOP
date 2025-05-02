@@ -9,7 +9,6 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
     bool isValid;
     Error error;
 
-
     while (1) {
         clearScreen();
         AdminUI::displayWelcomeMessage(currentUser->getUsername());
@@ -98,7 +97,7 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
                     }
                 } while (!isValid);
 
-                if (AdminService::updateMusicItemPrice(items, id, newPrice)) {
+                if (AdminService::updateMusicItemPrice(items, id - 1, newPrice)) {
                     printMessage("Price updated successfully!");
                 } else {
                     printMessage("Invalid item ID!");

@@ -40,9 +40,7 @@ void CustomerUI::displayPurchasedHistory(const vector<Order>& orders, const stri
 void CustomerUI::displayMusicList(vector<Music>& items) {
     cout << "ID - Name - Artist - Genre - Price - Quantity\n";
     for (int i = 0; i < items.size(); ++i) {
-        cout << i + 1 << ". " << items[i].getName() << " - " << items[i].getArtist() 
-             << " - " << items[i].getGenre() << " - " << items[i].getPrice() 
-             << " - " << items[i].getQuantity() << "\n";
+        cout << i + 1 << ". " << items[i].toString() << '\n';
     }
 }
 

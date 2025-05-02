@@ -108,11 +108,9 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                     }
                 } while (!isValid);
 
-                itemID -= 1; 
-
-                if (CustomerService::addItemToCart(cart, items, itemID, quantity)) {
+                if (CustomerService::addItemToCart(cart, items, itemID - 1, quantity)) {
                     printMessage("Added " + std::to_string(quantity) + " " + 
-                                               items[itemID].getName() + " to cart successfully!");
+                                               items[itemID - 1].getName() + " to cart successfully!");
                 } else {
                     printMessage("Failed to add item! Invalid ID or insufficient stock.");
                 }
@@ -143,7 +141,7 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                         }
                     } while (!isValid);
                     
-                    if (CustomerService::removeItemFromCart(cart, items, itemID)) {
+                    if (CustomerService::removeItemFromCart(cart, items, itemID - 1)) {
                         printMessage("Removed item successfully!");
                         printHeader("YOUR CURRENT CART");
                         CustomerUI::displayCart(cart.getItems());
