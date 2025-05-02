@@ -6,20 +6,25 @@
 
 using std::to_string;
 
+// Implements the customer menu interface and all customer operations
 void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& users, vector<Order>& orders, 
                             vector<shared_ptr<IDiscount>>& vouchers, shared_ptr<IUser>& currentUser) {
     bool isValid;
     Error error;
 
-
+    // Create a shopping cart for the current session
     Cart cart;
+    
+    // Cast the IUser pointer to Customer type for customer-specific operations
     Customer* customer = dynamic_cast<Customer*>(currentUser.get());
     
+    // Main customer menu loop
     while (1) {
         clearScreen();
         CustomerUI::displayWelcomeMessage(customer->getUsername());
         CustomerUI::displayMenu();
         
+        // Get user choice with validation
         int choice;
         do {
             std::tie(isValid, choice, error) = getIntInput("Enter your choice: ", 1, 7);
@@ -33,6 +38,7 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
         switch (choice) {
             case 1: { // Purchase History
                 clearScreen();
+                // Get order history for the current customer
                 vector<Order> orderHistory = CustomerService::getUserOrders(orders, customer->getUsername());
                 
                 printHeader("PURCHASE HISTORY");
@@ -54,6 +60,7 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                 clearScreen();
                 printHeader("SEARCH ENGINE");
 
+                // Get search criteria with validation
                 vector<string> options = {"name", "artist", "genre"};
                 do {
                     std::tie(isValid, criteria, error) = getStringInput("Enter search criteria (name/artist/genre): ", options);
@@ -64,6 +71,7 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                     }
                 } while (!isValid);
 
+                // Get search keyword
                 do {
                     std::tie(isValid, keyword, error) = getStringInput("Enter keyword: ");
                     if (!isValid) {
@@ -73,6 +81,7 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                     }
                 } while (!isValid);
 
+                // Perform search and display results
                 vector<Music> results = CustomerService::searchMusic(items, criteria, keyword);
 
                 if (results.empty()) {
@@ -85,11 +94,11 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                 break;
             }
             case 4: { // Add to Cart
-
                 int itemID, quantity;
                 clearScreen();
                 printHeader("ADD TO CART");
 
+                // Get item ID with validation
                 do {
                     std::tie(isValid, itemID, error) = getIntInput("Enter item ID: ", 1, items.size());
                     if (!isValid) {
@@ -99,6 +108,7 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                     }
                 } while (!isValid);
 
+                // Get quantity with validation
                 do {
                     std::tie(isValid, quantity, error) = getIntInput("Enter quantity: ", 1, INT_MAX);
                     if (!isValid) {
@@ -108,6 +118,7 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                     }
                 } while (!isValid);
 
+                // Add item to cart
                 if (CustomerService::addItemToCart(cart, items, itemID - 1, quantity)) {
                     printMessage("Added " + std::to_string(quantity) + " " + 
                                                items[itemID - 1].getName() + " to cart successfully!");
@@ -131,6 +142,7 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                     printMessage("Your current cart: ");
                     CustomerUI::displayCart(cart.getItems());
 
+                    // Get item ID to remove with validation
                     int itemID;
                     do {
                         std::tie(isValid, itemID, error) = getIntInput("Enter item ID to remove: ", 1, cart.getItems().size());
@@ -141,6 +153,7 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                         }
                     } while (!isValid);
                     
+                    // Remove item from cart
                     if (CustomerService::removeItemFromCart(cart, items, itemID - 1)) {
                         printMessage("Removed item successfully!");
                         printHeader("YOUR CURRENT CART");
@@ -160,18 +173,21 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                 if (cart.getItems().empty()) {
                     CustomerUI::displayEmptyCartMessage();
                 } else {
+                    // Calculate initial total
                     float total = cart.calculateTotal();
                     CustomerUI::displayOrderDetails(customer->getUsername(), cart.getItems(), total);
                     
-                    // Handle vouchers
+                    // Handle discount vouchers if available
                     vector<shared_ptr<IDiscount>> validVouchers = 
                         DiscountFactory::loadValidDiscounts(vouchers, customer->getUsername());
                     
                     shared_ptr<IDiscount> selectedVoucher = nullptr;
                     if (!validVouchers.empty()) {
+                        // Display available vouchers
                         CustomerUI::displayVoucherList(validVouchers);
                         string useVoucher;
 
+                        // Ask if user wants to apply a voucher
                         vector<string> options = {"yes", "no"};
                         do {
                             std::tie(isValid, useVoucher, error) = getStringInput("Do you want to use a voucher? (yes/no): ", options);
@@ -183,6 +199,7 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                         } while (!isValid);
 
                         if (useVoucher == "yes") {
+                            // Get voucher code
                             bool isValid = true;
                             string voucherCode;
                             do {
@@ -194,12 +211,12 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                                 }
                             } while (!isValid);
                             
-                            // Find the selected voucher
+                            // Find and apply the selected voucher
                             for (const auto& voucher : validVouchers) {
                                 if (voucher->toString() == voucherCode) {
                                     selectedVoucher = voucher;
                                     
-                                    // Apply the voucher
+                                    // Apply the discount to the total
                                     total = DiscountFactory::applyDiscount(voucher, total);
                                     printMessage("Voucher applied! New total: $" + 
                                                                std::to_string(total));
@@ -216,12 +233,14 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                         }
                     }
                     
-                    // Create the order
+                    // Create the order with final total
                     CustomerService::checkout(orders, customer->getUsername(), cart, total);
 
+                    // Give a new voucher if total is over $50
                     if (total > 50) {
                         CustomerUI::displayDiscountOptions();
 
+                        // Get discount type choice
                         int discountChoice;
                         do {
                             std::tie(isValid, discountChoice, error) = getIntInput("Choose a discount option (1 or 2): ", 1, 2);
@@ -231,8 +250,11 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                                 continue;
                             }
                         } while (!isValid);
+                        
+                        // Set discount value based on choice (10% for percentage, $5 for fixed amount)
                         int discountValue = (discountChoice == 1) ? 10 : 5;
                         
+                        // Create and add the new voucher
                         CustomerService::createNewVoucher(vouchers, customer->getUsername(), 
                                                      discountChoice, discountValue);
                         
@@ -245,6 +267,7 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                 break;
             }
             case 7: { // Logout
+                // Check if cart is empty before allowing logout
                 if (cart.getItems().empty()) {
                     CustomerUI::displayLogoutMessage();
                     currentUser = nullptr;
@@ -257,6 +280,7 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                 }
             }
             default:
+                // Invalid choice handling (cannot reach here due to input validation, will remove later)
                 CustomerUI::displayInvalidChoiceMessage();
                 Sleep(1000);
         }

@@ -4,16 +4,19 @@
 #include "windows.h"
 #include "utils.h"
 
+// Implements the admin menu interface and all administrative operations
 void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& users, vector<Order>& orders, 
                           vector<shared_ptr<IDiscount>>& vouchers, shared_ptr<IUser>& currentUser) {
     bool isValid;
     Error error;
 
+    // Main admin menu loop
     while (1) {
         clearScreen();
         AdminUI::displayWelcomeMessage(currentUser->getUsername());
         AdminUI::displayMenu();
 
+        // Get admin choice with validation
         int choice;
         do {
             std::tie(isValid, choice, error) = getIntInput("Enter your choice: ", 1, 9);
@@ -37,7 +40,10 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
                 clearScreen();
                 printHeader("ADD NEW ITEMS");
                 
+                // Get details for new music item
                 Music newItem = AdminUI::getNewMusicDetails();
+                
+                // Add the new item to inventory
                 if (AdminService::addMusicItem(items, newItem)) {
                     printMessage("Item added successfully!");
                 } else {
@@ -53,6 +59,7 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
                 printHeader("REMOVE ITEMS");
                 AdminUI::displayMusicList(items);
 
+                // Get ID of item to remove with validation
                 int id;
                 do {
                     std::tie(isValid, id, error) = getIntInput("Enter item ID: ", 1, items.size());
@@ -63,6 +70,7 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
                     }
                 } while (!isValid);
                 
+                // Remove the selected item
                 if (AdminService::removeMusicItem(items, id - 1)) {
                     printMessage("Item removed successfully!");
                 } else {
@@ -77,6 +85,7 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
                 printHeader("UPDATE PRICE ITEMS");
                 AdminUI::displayMusicList(items);
 
+                // Get ID of item to update with validation
                 int id;
                 do {
                     std::tie(isValid, id, error) = getIntInput("Enter item ID: ", 1, items.size());
@@ -87,6 +96,7 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
                     }
                 } while (!isValid);
 
+                // Get new price with validation
                 float newPrice;
                 do {
                     std::tie(isValid, newPrice, error) = getFloatInput("Enter new price: ", 0.0f);
@@ -97,6 +107,7 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
                     }
                 } while (!isValid);
 
+                // Update the item's price
                 if (AdminService::updateMusicItemPrice(items, id - 1, newPrice)) {
                     printMessage("Price updated successfully!");
                 } else {
@@ -118,7 +129,9 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
                 clearScreen();
                 printHeader("CUSTOMER PURCHASE HISTORY");
 
+                // Display purchase history for each customer
                 for (const auto& user : users) {
+                    // Skip admin users
                     if (user->getRole() == "Admin") {
                         continue;
                     }
@@ -145,6 +158,7 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
                 printHeader("DELETE USER");
                 AdminUI::displayUserList(users);
 
+                // Get username to delete
                 string usernameToDelete;
                 do {
                     std::tie(isValid, usernameToDelete, error) = getStringInput("Enter username to delete: ");
@@ -155,11 +169,14 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
                     }
                 } while (!isValid);
 
+                // Check if admin is deleting their own account
                 bool isCurrentUser = (currentUser->getUsername() == usernameToDelete);
                 
+                // Delete the selected user
                 if (AdminService::deleteUser(users, usernameToDelete)) {
                     printMessage("User deleted successfully!");
                     
+                    // If admin deleted their own account, log them out
                     if (isCurrentUser) {
                         printMessage("You have deleted yourself! Please login again!");
                         currentUser = nullptr;
@@ -178,7 +195,7 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
                 clearScreen();
                 printHeader("SALE STATISTICS");
                 
-                // Generate sales statistics using AdminService
+                // Generate sales statistics 
                 vector<pair<string, pair<int, float>>> salesStats = 
                     AdminService::generateSalesStatistics(orders, items);
                 

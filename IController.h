@@ -21,8 +21,12 @@
 
 using std::vector, std::string, std::cout, std::endl, std::make_shared, std::shared_ptr, std::unordered_map, std::sort, std::pair, std::endl;
 using std::shared_ptr, std::make_unique, std::unique_ptr, std::map;
+
+// Interface for controller classes that handle user interactions
 class IController {
 public:
+    // Menu method implemented by concrete controllers to handle user interactions
+    // Parameters include application data and current user
     virtual void menu(vector<Music>& items, vector<shared_ptr<IUser>>& users, vector<Order>& orders, vector<shared_ptr<IDiscount>>&, shared_ptr<IUser>& currentUser) = 0;
 };
 

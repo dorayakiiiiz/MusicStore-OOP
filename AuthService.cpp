@@ -1,14 +1,16 @@
 #include "AuthService.h"
 #include "utils.h"
 
-// git commit commit
-
+// Register a new user with username, password, and role
 bool Authentication::registerUser(vector<shared_ptr<IUser>>& users, const string& username, const string& password, const string& role) {
+    // Check if username already exists
     for (int i = 0; i < users.size(); ++i) {
         if (users[i]->getUsername() == username) {
             return false;
         }
     }
+    
+    // Create appropriate user type based on role
     if (role == "Customer") {
         users.push_back(make_shared<Customer>(username, password));
     } else {
@@ -17,9 +19,9 @@ bool Authentication::registerUser(vector<shared_ptr<IUser>>& users, const string
     return true;
 }
 
-
-
+// Authenticate a user with username and password
 shared_ptr<IUser> Authentication::loginUser(const vector<shared_ptr<IUser>>& users, const string& username, const string& password) {
+    // Search for matching username and password
     for (int i = 0; i < users.size(); ++i) {
         if (users[i]->getUsername() == username && users[i]->getPassword() == password) {
             return users[i];
