@@ -10,22 +10,45 @@
 using std::string, std::vector, std::tuple, std::make_tuple, std::get, std::stoi, std::cout, std::cin;
 
 
-// nên sửa class này lại ra design pattern mới
-
+/**
+ * @brief Prints a formatted header with decorative elements
+ * @param header The header text to display
+ */
 void printHeader(const string&);
+
+/**
+ * @brief Prints a message with a decorative symbol prefix
+ * @param message The message to display
+ */
 void printMessage(const string&);
+
+/**
+ * @brief Prints a numbered menu of options
+ * @param options Vector of menu options to display
+ */
 void printMenu(const vector<string>&);
+
+/**
+ * @brief Prints a horizontal line of dashes
+ */
 void printDashLine();
+
+/**
+ * @brief Clears the console screen
+ */
 void clearScreen();
+
+/**
+ * @brief Pauses execution until user presses a key
+ */
 void pauseScreen();
+
+/**
+ * @brief Gets user input with a prompt
+ * @param prompt The prompt to display to the user
+ * @return The string input by the user
+ */
 string getInput(const string&);
 
-struct Error {
-    int code;
-    string message;
-};
 
-tuple <bool, int, Error> getIntInput(string prompt, int min = INT_MIN, int max = INT_MAX);
-tuple <bool, float, Error> getFloatInput(string prompt, float min = -FLT_MAX, float max = FLT_MAX);
-tuple <bool, string, Error> getStringInput(string prompt, vector<string> option = {});
 #endif

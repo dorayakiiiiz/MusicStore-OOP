@@ -5,15 +5,30 @@
 #include <memory>
 using std::vector, std::shared_ptr, std::make_shared;
 
-// Service class for user authentication operations
+/**
+ * @brief Service class for user authentication operations
+ */
 class Authentication {
 public:
-    // Register a new user with username, password and role
-    // Returns true if registration is successful, false if username already exists
+    /**
+     * @brief Register a new user with username, password and role
+     * 
+     * @param users Vector of existing users to add the new user to
+     * @param username Username for the new user
+     * @param password Password for the new user 
+     * @param role Role of the new user (Admin or Customer)
+     * @return bool True if registration successful, false if username already exists
+     */
     static bool registerUser(vector<shared_ptr<IUser>>&, const string&, const string&, const string&);
     
-    // Authenticate a user with username and password
-    // Returns a pointer to the user if authentication succeeds, nullptr otherwise
+    /**
+     * @brief Authenticate a user with username and password
+     * 
+     * @param users Vector of existing users to check against
+     * @param username Username to authenticate
+     * @param password Password to verify
+     * @return shared_ptr<IUser> Pointer to the authenticated user or nullptr if authentication failed
+     */
     static shared_ptr<IUser> loginUser(const vector<shared_ptr<IUser>>&, const string&, const string&);
 };
 

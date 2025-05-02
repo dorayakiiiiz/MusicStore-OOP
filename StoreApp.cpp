@@ -1,5 +1,6 @@
 #include "StoreApp.h"
 #include "utils.h"
+#include "InputValidator.h"
 #include "AuthService.h"
 #include "IController.h"
 #include "ControllerFactory.h"
@@ -12,7 +13,7 @@
 #include <iostream>
 #include <windows.h>
 
-// Constructor - initializes the application by loading all data from files
+// Constructor - initializes the StoreApp by loading data from files
 StoreApp::StoreApp() {
     try {
         // Load music items from file
@@ -44,7 +45,7 @@ StoreApp::StoreApp() {
     
 }
 
-// Destructor - saves all data to files before application termination
+// Destructor - saves all data to files before exiting the application
 StoreApp::~StoreApp() {
     try {
         // Save music inventory to file
@@ -75,7 +76,8 @@ StoreApp::~StoreApp() {
     }
 }
 
-// Main application execution loop that handles the authentication flow and redirects to appropriate controller
+// This function displays the main menu, handles user input, and directs users to the appropriate flow (sign up or login). 
+// It also manages the application state and ensures a smooth user experience.
 void StoreApp::run() {
     Authentication auth;
     shared_ptr<IUser> currentUser = nullptr;    
@@ -98,7 +100,7 @@ void StoreApp::run() {
         // Get user choice with validation
         int choice;
         do {
-            std::tie(isValid, choice, error) = getIntInput("Enter your choice: ", 1, 3);
+            std::tie(isValid, choice, error) = InputValidator::validateInt("Enter your choice: ", 1, 3);
             if (!isValid) {
                 printMessage(error.message);
                 Sleep(1000);
@@ -115,7 +117,7 @@ void StoreApp::run() {
                 
                 // Get role input with validation
                 do {
-                    std::tie(isValid, role, error) = getStringInput("Enter your role (admin/user): ", options);
+                    std::tie(isValid, role, error) = InputValidator::validateString("Enter your role (admin/user): ", options);
                     if (!isValid) {
                         printMessage(error.message);
                         Sleep(1000);
@@ -125,7 +127,7 @@ void StoreApp::run() {
                 
                 // Get username input with validation
                 do {
-                    std::tie(isValid, username, error) = getStringInput("Input username: ");
+                    std::tie(isValid, username, error) = InputValidator::validateString("Input username: ");
                     if (!isValid) {
                         printMessage(error.message);
                         Sleep(1000);
@@ -135,7 +137,7 @@ void StoreApp::run() {
                 
                 // Get password input with validation
                 do {
-                    std::tie(isValid, password, error) = getStringInput("Input password: ");
+                    std::tie(isValid, password, error) = InputValidator::validateString("Input password: ");
                     if (!isValid) {
                         printMessage(error.message);
                         Sleep(1000);
@@ -172,7 +174,7 @@ void StoreApp::run() {
                 
                 // Get username input with validation
                 do {
-                    std::tie(isValid, username, error) = getStringInput("Input username: ");
+                    std::tie(isValid, username, error) = InputValidator::validateString("Input username: ");
                     if (!isValid) {
                         printMessage(error.message);
                         Sleep(1000);
@@ -182,7 +184,7 @@ void StoreApp::run() {
 
                 // Get password input with validation
                 do {
-                    std::tie(isValid, password, error) = getStringInput("Input password: ");
+                    std::tie(isValid, password, error) = InputValidator::validateString("Input password: ");
                     if (!isValid) {
                         printMessage(error.message);
                         Sleep(1000);

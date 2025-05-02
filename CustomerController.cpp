@@ -3,6 +3,7 @@
 #include "CustomerService.h"
 #include "windows.h"
 #include "utils.h"
+#include "InputValidator.h"
 
 using std::to_string;
 
@@ -27,7 +28,7 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
         // Get user choice with validation
         int choice;
         do {
-            std::tie(isValid, choice, error) = getIntInput("Enter your choice: ", 1, 7);
+            std::tie(isValid, choice, error) = InputValidator::validateInt("Enter your choice: ", 1, 7);
             if (!isValid) {
                 printMessage(error.message);
                 Sleep(1000);
@@ -63,7 +64,7 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                 // Get search criteria with validation
                 vector<string> options = {"name", "artist", "genre"};
                 do {
-                    std::tie(isValid, criteria, error) = getStringInput("Enter search criteria (name/artist/genre): ", options);
+                    std::tie(isValid, criteria, error) = InputValidator::validateString("Enter search criteria (name/artist/genre): ", options);
                     if (!isValid) {
                         printMessage(error.message);
                         Sleep(1000);
@@ -73,7 +74,7 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
 
                 // Get search keyword
                 do {
-                    std::tie(isValid, keyword, error) = getStringInput("Enter keyword: ");
+                    std::tie(isValid, keyword, error) = InputValidator::validateString("Enter keyword: ");
                     if (!isValid) {
                         printMessage(error.message);
                         Sleep(1000);
@@ -100,7 +101,7 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
 
                 // Get item ID with validation
                 do {
-                    std::tie(isValid, itemID, error) = getIntInput("Enter item ID: ", 1, items.size());
+                    std::tie(isValid, itemID, error) = InputValidator::validateInt("Enter item ID: ", 1, items.size());
                     if (!isValid) {
                         printMessage(error.message);
                         Sleep(1000);
@@ -110,7 +111,7 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
 
                 // Get quantity with validation
                 do {
-                    std::tie(isValid, quantity, error) = getIntInput("Enter quantity: ", 1, INT_MAX);
+                    std::tie(isValid, quantity, error) = InputValidator::validateInt("Enter quantity: ", 1, INT_MAX);
                     if (!isValid) {
                         printMessage(error.message);
                         Sleep(1000);
@@ -145,7 +146,7 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                     // Get item ID to remove with validation
                     int itemID;
                     do {
-                        std::tie(isValid, itemID, error) = getIntInput("Enter item ID to remove: ", 1, cart.getItems().size());
+                        std::tie(isValid, itemID, error) = InputValidator::validateInt("Enter item ID to remove: ", 1, cart.getItems().size());
                         if (!isValid) {
                             printMessage(error.message);
                             Sleep(1000);
@@ -190,7 +191,7 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                         // Ask if user wants to apply a voucher
                         vector<string> options = {"yes", "no"};
                         do {
-                            std::tie(isValid, useVoucher, error) = getStringInput("Do you want to use a voucher? (yes/no): ", options);
+                            std::tie(isValid, useVoucher, error) = InputValidator::validateString("Do you want to use a voucher? (yes/no): ", options);
                             if (!isValid) {
                                 printMessage(error.message);
                                 Sleep(1000);
@@ -203,7 +204,7 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                             bool isValid = true;
                             string voucherCode;
                             do {
-                                std::tie(isValid, voucherCode, error) = getStringInput("Enter voucher code: ");
+                                std::tie(isValid, voucherCode, error) = InputValidator::validateString("Enter voucher code: ");
                                 if (!isValid) {
                                     printMessage(error.message);
                                     Sleep(1000);
@@ -243,7 +244,7 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                         // Get discount type choice
                         int discountChoice;
                         do {
-                            std::tie(isValid, discountChoice, error) = getIntInput("Choose a discount option (1 or 2): ", 1, 2);
+                            std::tie(isValid, discountChoice, error) = InputValidator::validateInt("Choose a discount option (1 or 2): ", 1, 2);
                             if (!isValid) {
                                 printMessage(error.message);
                                 Sleep(1000);

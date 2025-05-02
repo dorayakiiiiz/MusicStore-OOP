@@ -3,6 +3,7 @@
 #include "AdminService.h"
 #include "windows.h"
 #include "utils.h"
+#include "InputValidator.h"
 
 // Implements the admin menu interface and all administrative operations
 void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& users, vector<Order>& orders, 
@@ -19,7 +20,7 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
         // Get admin choice with validation
         int choice;
         do {
-            std::tie(isValid, choice, error) = getIntInput("Enter your choice: ", 1, 9);
+            std::tie(isValid, choice, error) = InputValidator::validateInt("Enter your choice: ", 1, 9);
             if (!isValid) {
                 printMessage(error.message);
                 Sleep(1000);
@@ -62,7 +63,7 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
                 // Get ID of item to remove with validation
                 int id;
                 do {
-                    std::tie(isValid, id, error) = getIntInput("Enter item ID: ", 1, items.size());
+                    std::tie(isValid, id, error) = InputValidator::validateInt("Enter item ID: ", 1, items.size());
                     if (!isValid) {
                         printMessage(error.message);
                         Sleep(1000);
@@ -88,7 +89,7 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
                 // Get ID of item to update with validation
                 int id;
                 do {
-                    std::tie(isValid, id, error) = getIntInput("Enter item ID: ", 1, items.size());
+                    std::tie(isValid, id, error) = InputValidator::validateInt("Enter item ID: ", 1, items.size());
                     if (!isValid) {
                         printMessage(error.message);
                         Sleep(1000);
@@ -99,7 +100,7 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
                 // Get new price with validation
                 float newPrice;
                 do {
-                    std::tie(isValid, newPrice, error) = getFloatInput("Enter new price: ", 0.0f);
+                    std::tie(isValid, newPrice, error) = InputValidator::validateFloat("Enter new price: ", 0.0f);
                     if (!isValid) {
                         printMessage(error.message);
                         Sleep(1000);
@@ -161,7 +162,7 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
                 // Get username to delete
                 string usernameToDelete;
                 do {
-                    std::tie(isValid, usernameToDelete, error) = getStringInput("Enter username to delete: ");
+                    std::tie(isValid, usernameToDelete, error) = InputValidator::validateString("Enter username to delete: ");
                     if (!isValid) {
                         printMessage(error.message);
                         Sleep(1000);

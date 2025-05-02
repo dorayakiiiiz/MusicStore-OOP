@@ -7,38 +7,123 @@
 #include <iostream>
 using std::string, std::vector, std::cout;
 
-// Abstract base class for all user types in the system
+/**
+ * @brief Abstract base class for all user types in the system
+ */
 class IUser {
 private:
-    string username; // Username for authentication
-    string password; // Password for authentication
+    string username; /**< Username for authentication */
+    string password; /**< Password for authentication */
 public:
-    virtual ~IUser(); // Virtual destructor for proper inheritance
-    IUser(const string&, const string&); // Constructor with username and password
-    virtual string getRole() const = 0; // Pure virtual method to get user role
-    string getUsername() const; // Get the username
-    string getPassword() const; // Get the password
-    string toString() const; // Convert user to string representation
+    /**
+     * @brief Virtual destructor for proper inheritance
+     */
+    virtual ~IUser();
+    
+    /**
+     * @brief Constructor with username and password
+     * 
+     * @param username Username for the user
+     * @param password Password for the user
+     */
+    IUser(const string&, const string&);
+    
+    /**
+     * @brief Pure virtual method to get user role
+     * 
+     * @return string The role of the user
+     */
+    virtual string getRole() const = 0;
+    
+    /**
+     * @brief Get the username
+     * 
+     * @return string The username
+     */
+    string getUsername() const;
+    
+    /**
+     * @brief Get the password
+     * 
+     * @return string The password
+     */
+    string getPassword() const;
+    
+    /**
+     * @brief Convert user to string representation
+     * 
+     * @return string String representation of the user
+     */
+    string toString() const;
 };
 
-// Customer user type - regular user with standard privileges
+/**
+ * @brief Customer user type - regular user with standard privileges
+ */
 class Customer : public IUser {
 public:
-    Customer(const string&, const string&); // Constructor with username and password
-    Customer(const Customer&); // Copy constructor
-    string getRole() const override; // Implementation of getRole() returning "Customer"
+    /**
+     * @brief Constructor with username and password
+     * 
+     * @param username Username for the customer
+     * @param password Password for the customer
+     */
+    Customer(const string&, const string&);
+    
+    /**
+     * @brief Copy constructor
+     * 
+     * @param other The Customer object to copy
+     */
+    Customer(const Customer&);
+    
+    /**
+     * @brief Implementation of getRole() returning "Customer"
+     * 
+     * @return string The role "Customer"
+     */
+    string getRole() const override;
 };
 
-// Admin user type - privileged user with administrative capabilities
+/**
+ * @brief Admin user type - privileged user with administrative capabilities
+ */
 class Admin : public IUser {
 private:
-    // Static list of valid admin registration passkeys
+    /**
+     * @brief Static list of valid admin registration passkeys
+     */
     inline static vector<string> passKeys = {"23120197", "23120209"};
 public:
-    Admin(const string&, const string&); // Constructor with username and password
-    Admin(const Admin&); // Copy constructor
-    string getRole() const override; // Implementation of getRole() returning "Admin"
-    static bool isValidPasskey(const string&); // Validates if a passkey is authorized for admin registration
+    /**
+     * @brief Constructor with username and password
+     * 
+     * @param username Username for the admin
+     * @param password Password for the admin
+     */
+    Admin(const string&, const string&);
+    
+    /**
+     * @brief Copy constructor
+     * 
+     * @param other The Admin object to copy
+     */
+    Admin(const Admin&);
+    
+    /**
+     * @brief Implementation of getRole() returning "Admin"
+     * 
+     * @return string The role "Admin"
+     */
+    string getRole() const override;
+    
+    /**
+     * @brief Validates if a passkey is authorized for admin registration
+     * 
+     * @param key The passkey to validate
+     * @return bool True if the passkey is valid
+     */
+    static bool isValidPasskey(const string&);
 };
 
 #endif
