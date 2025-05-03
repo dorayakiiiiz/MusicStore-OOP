@@ -81,7 +81,7 @@ void SaveOrder::saveData(const string& filename, const vector<Order>& orders) co
 }
 
 // Saves discount data to a file
-void SaveDiscount::saveData(const string& filename, const vector<shared_ptr<IDiscount>>& vouchers) const {
+void SaveDiscount::saveData(const string& filename, const vector<shared_ptr<Discount>>& vouchers) const {
     ofstream file(filename);
 
     // Check if the file can be opened

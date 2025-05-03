@@ -10,8 +10,9 @@
 #include "User.h"
 #include "Order.h"
 #include "Discount.h"
+#include <memory>   
 
-using std::vector, std::string, std::ofstream, std::stringstream;
+using std::vector, std::string, std::ofstream, std::stringstream, std::shared_ptr;
 
 /**
  * @brief Interface for saving data to files
@@ -79,7 +80,7 @@ public:
 /**
  * @brief Class for saving discount voucher data to files
  */
-class SaveDiscount : public ISaveData<shared_ptr<IDiscount>> {
+class SaveDiscount : public ISaveData<shared_ptr<Discount>> {
 public:
     /**
      * @brief Save discount voucher data to a file
@@ -87,6 +88,6 @@ public:
      * @param filename Path to the file to save data to
      * @param vouchers List of discount vouchers to save
      */
-    void saveData(const string&, const vector<shared_ptr<IDiscount>>&) const override;
+    void saveData(const string&, const vector<shared_ptr<Discount>>&) const override;
 };
 #endif

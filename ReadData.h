@@ -5,13 +5,16 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <iostream>
+#include <memory>
 
 #include "Music.h"
 #include "User.h"
 #include "Order.h"
 #include "Discount.h"
+#include "Discount.h"
 
-using std::vector, std::string, std::ifstream, std::stringstream;
+using std::vector, std::string, std::ifstream, std::stringstream, std::make_shared, std::shared_ptr;   
 
 /**
  * @brief Interface for reading data from files
@@ -79,14 +82,16 @@ public:
 /**
  * @brief Class for reading discount voucher data from files
  */
-class ReadDiscount : public IReadData<shared_ptr<IDiscount>> {
+class ReadDiscount : public IReadData<shared_ptr<Discount>> {
 public:
     /**
      * @brief Read discount voucher data from a file
      * 
      * @param filename Path to the file to read data from
-     * @return vector<shared_ptr<IDiscount>> List of discount vouchers read from the file
+     * @return vector<shared_ptr<Discount>> List of discount vouchers read from the file
      */
-    vector<shared_ptr<IDiscount>> readData(const string&) const override;
+    vector<shared_ptr<Discount>> readData(const string& filename) const override;
 };
+
+
 #endif

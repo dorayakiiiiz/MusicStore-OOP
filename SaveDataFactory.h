@@ -49,7 +49,7 @@ inline shared_ptr<ISaveData<Order>> SaveDataFactory<Order>::createSaveData() {
  * @return shared_ptr<ISaveData<shared_ptr<IDiscount>>> Pointer to a Discount saver
  */
 template <>
-inline shared_ptr<ISaveData<shared_ptr<IDiscount>>> SaveDataFactory<shared_ptr<IDiscount>>::createSaveData() {
+inline shared_ptr<ISaveData<shared_ptr<Discount>>> SaveDataFactory<shared_ptr<Discount>>::createSaveData() {
     return make_shared<SaveDiscount>();
 }
 

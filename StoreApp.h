@@ -22,7 +22,7 @@ private:
     vector<Music> items;             /**< Collection of music items available in the store */
     vector<shared_ptr<IUser>> users; /**< Collection of registered users (customers and admins) */
     vector<Order> orders;            /**< Collection of all placed orders */
-    vector<shared_ptr<IDiscount>> vouchers; /**< Collection of available discount vouchers */
+    vector<shared_ptr<Discount>> vouchers; /**< Collection of available discount vouchers */
 
 public:
     /**

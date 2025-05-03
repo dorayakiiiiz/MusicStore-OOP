@@ -88,7 +88,7 @@ void CustomerUI::displayOrderDetails(const string& username, const vector<Music>
 }
 
 // Displays the list of available discount vouchers for the customer
-void CustomerUI::displayVoucherList(const vector<shared_ptr<IDiscount>>& vouchers) {
+void CustomerUI::displayVoucherList(const vector<shared_ptr<Discount>>& vouchers) {
     printMessage("You have the following vouchers available: ");
     for (int i = 0; i < vouchers.size(); ++i) {
         cout << i + 1 << ". " << vouchers[i]->toString() << '\n';

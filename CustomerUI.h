@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <memory>
 #include <vector>
 #include "Order.h"
 #include "Music.h"
@@ -11,6 +12,7 @@
 #include "utils.h"
 
 using std::cout, std::cin, std::string, std::vector, std::tuple, std::make_tuple;
+using std::shared_ptr, std::make_shared;
 
 /**
  * @brief UI class for customer interface
@@ -77,7 +79,7 @@ public:
      * @brief Displays the list of available discount vouchers for the customer
      * @param vouchers Vector of discount vouchers available to the customer
      */
-    static void displayVoucherList(const vector<shared_ptr<IDiscount>>& vouchers);
+    static void displayVoucherList(const vector<shared_ptr<Discount>>& vouchers);
 
     /**
      * @brief Displays discount options after a large purchase (over $50)

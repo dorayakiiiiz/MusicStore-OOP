@@ -49,7 +49,7 @@ inline shared_ptr<IReadData<Order>> ReadDataFactory<Order>::createReadData() {
  * @return shared_ptr<IReadData<shared_ptr<IDiscount>>> Pointer to a Discount reader
  */
 template <>
-inline shared_ptr<IReadData<shared_ptr<IDiscount>>> ReadDataFactory<shared_ptr<IDiscount>>::createReadData() {
+inline shared_ptr<IReadData<shared_ptr<Discount>>> ReadDataFactory<shared_ptr<Discount>>::createReadData() {
     return make_shared<ReadDiscount>();
 }
 

@@ -1,13 +1,15 @@
 #include "AdminController.h"
 #include "AdminUI.h"
-#include "AdminService.h"
+#include "MusicService.h"
+#include "UserService.h"
+#include "OrderService.h"
 #include "windows.h"
 #include "utils.h"
 #include "InputValidator.h"
 
 // Implements the admin menu interface and all administrative operations
 void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& users, vector<Order>& orders, 
-                          vector<shared_ptr<IDiscount>>& vouchers, shared_ptr<IUser>& currentUser) {
+                          vector<shared_ptr<Discount>>& vouchers, shared_ptr<IUser>& currentUser) {
     bool isValid;
     Error error;
 
@@ -45,7 +47,7 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
                 Music newItem = AdminUI::getNewMusicDetails();
                 
                 // Add the new item to inventory
-                if (AdminService::addMusicItem(items, newItem)) {
+                if (MusicService::addMusicItem(items, newItem)) {
                     printMessage("Item added successfully!");
                 } else {
                     printMessage("Item already exists!");
@@ -72,7 +74,7 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
                 } while (!isValid);
                 
                 // Remove the selected item
-                if (AdminService::removeMusicItem(items, id - 1)) {
+                if (MusicService::removeMusicItem(items, id - 1)) {
                     printMessage("Item removed successfully!");
                 } else {
                     printMessage("Invalid ID! Item not found.");
@@ -109,7 +111,7 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
                 } while (!isValid);
 
                 // Update the item's price
-                if (AdminService::updateMusicItemPrice(items, id - 1, newPrice)) {
+                if (MusicService::updateMusicItemPrice(items, id - 1, newPrice)) {
                     printMessage("Price updated successfully!");
                 } else {
                     printMessage("Invalid item ID!");
@@ -138,7 +140,7 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
                     }
 
                     printMessage("Customer: " + user->getUsername());   
-                    vector<Order> userOrders = AdminService::getUserPurchaseHistory(orders, user->getUsername());
+                    vector<Order> userOrders = OrderService::getUserPurchaseHistory(orders, user->getUsername());
                     
                     if (userOrders.empty()) {
                         printMessage("No purchase history found for this customer.");
@@ -174,7 +176,7 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
                 bool isCurrentUser = (currentUser->getUsername() == usernameToDelete);
                 
                 // Delete the selected user
-                if (AdminService::deleteUser(users, usernameToDelete)) {
+                if (UserService::deleteUser(users, usernameToDelete)) {
                     printMessage("User deleted successfully!");
                     
                     // If admin deleted their own account, log them out
@@ -198,7 +200,7 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& user
                 
                 // Generate sales statistics 
                 vector<pair<string, pair<int, float>>> salesStats = 
-                    AdminService::generateSalesStatistics(orders, items);
+                    OrderService::generateSalesStatistics(orders, items);
                 
                 AdminUI::displaySaleStatistics(salesStats);
                 printDashLine();

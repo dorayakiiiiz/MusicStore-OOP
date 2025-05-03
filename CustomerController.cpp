@@ -1,6 +1,9 @@
 #include "CustomerController.h"
 #include "CustomerUI.h"
-#include "CustomerService.h"
+#include "DiscountService.h"
+#include "MusicService.h"
+#include "CartService.h"
+#include "OrderService.h"
 #include "windows.h"
 #include "utils.h"
 #include "InputValidator.h"
@@ -9,7 +12,7 @@ using std::to_string;
 
 // Implements the customer menu interface and all customer operations
 void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& users, vector<Order>& orders, 
-                            vector<shared_ptr<IDiscount>>& vouchers, shared_ptr<IUser>& currentUser) {
+                            vector<shared_ptr<Discount>>& vouchers, shared_ptr<IUser>& currentUser) {
     bool isValid;
     Error error;
 
@@ -40,7 +43,7 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
             case 1: { // Purchase History
                 clearScreen();
                 // Get order history for the current customer
-                vector<Order> orderHistory = CustomerService::getUserOrders(orders, customer->getUsername());
+                vector<Order> orderHistory = OrderService::getUserOrders(orders, customer->getUsername());
                 
                 printHeader("PURCHASE HISTORY");
                 CustomerUI::displayPurchasedHistory(orderHistory, customer->getUsername());
@@ -83,7 +86,7 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                 } while (!isValid);
 
                 // Perform search and display results
-                vector<Music> results = CustomerService::searchMusic(items, criteria, keyword);
+                vector<Music> results = MusicService::searchMusic(items, criteria, keyword);
 
                 if (results.empty()) {
                     CustomerUI::displayNoResultsMessage();
@@ -98,6 +101,8 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                 int itemID, quantity;
                 clearScreen();
                 printHeader("ADD TO CART");
+
+                CustomerUI::displayMusicList(items);
 
                 // Get item ID with validation
                 do {
@@ -120,11 +125,11 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                 } while (!isValid);
 
                 // Add item to cart
-                if (CustomerService::addItemToCart(cart, items, itemID - 1, quantity)) {
+                if (CartService::addItemToCart(cart, items, itemID - 1, quantity)) {
                     printMessage("Added " + std::to_string(quantity) + " " + 
                                                items[itemID - 1].getName() + " to cart successfully!");
                 } else {
-                    printMessage("Failed to add item! Invalid ID or insufficient stock.");
+                    printMessage("Failed to add item. Insufficient stock!");
                 }
                 
                 printHeader("YOUR CURRENT CART");
@@ -155,7 +160,7 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                     } while (!isValid);
                     
                     // Remove item from cart
-                    if (CustomerService::removeItemFromCart(cart, items, itemID - 1)) {
+                    if (CartService::removeItemFromCart(cart, items, itemID - 1)) {
                         printMessage("Removed item successfully!");
                         printHeader("YOUR CURRENT CART");
                         CustomerUI::displayCart(cart.getItems());
@@ -179,10 +184,10 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                     CustomerUI::displayOrderDetails(customer->getUsername(), cart.getItems(), total);
                     
                     // Handle discount vouchers if available
-                    vector<shared_ptr<IDiscount>> validVouchers = 
-                        DiscountFactory::loadValidDiscounts(vouchers, customer->getUsername());
+                    vector<shared_ptr<Discount>> validVouchers = 
+                        DiscountService::loadValidDiscounts(vouchers, customer->getUsername());
                     
-                    shared_ptr<IDiscount> selectedVoucher = nullptr;
+                    shared_ptr<Discount> selectedVoucher = nullptr;
                     if (!validVouchers.empty()) {
                         // Display available vouchers
                         CustomerUI::displayVoucherList(validVouchers);
@@ -218,12 +223,12 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                                     selectedVoucher = voucher;
                                     
                                     // Apply the discount to the total
-                                    total = DiscountFactory::applyDiscount(voucher, total);
+                                    total = DiscountService::applyDiscount(selectedVoucher, total);
                                     printMessage("Voucher applied! New total: $" + 
                                                                std::to_string(total));
                                     
                                     // Remove the used voucher
-                                    DiscountFactory::removeDiscount(vouchers, voucherCode);
+                                    DiscountService::removeDiscount(vouchers, voucherCode);
                                     break;
                                 }
                             }
@@ -235,7 +240,7 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                     }
                     
                     // Create the order with final total
-                    CustomerService::checkout(orders, customer->getUsername(), cart, total);
+                    OrderService::checkout(orders, customer->getUsername(), cart, total);
 
                     // Give a new voucher if total is over $50
                     if (total > 50) {
@@ -256,12 +261,15 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& u
                         int discountValue = (discountChoice == 1) ? 10 : 5;
                         
                         // Create and add the new voucher
-                        CustomerService::createNewVoucher(vouchers, customer->getUsername(), 
+                        DiscountService::createDiscount(vouchers, customer->getUsername(), 
                                                      discountChoice, discountValue);
                         
                         printMessage("A new voucher has been added to your account!");
                     }
                     CustomerUI::displayOrderSuccessMessage();
+                    // delete the item that was sold out from the inventory
+                    MusicService::removeSoldOutItems(items);
+
                 }
                 printDashLine();
                 pauseScreen();

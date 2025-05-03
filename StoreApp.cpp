@@ -9,6 +9,7 @@
 #include "ReadDataFactory.h"
 #include "SaveData.h"
 #include "SaveDataFactory.h"
+#include <exception>
 
 #include <iostream>
 #include <windows.h>
@@ -38,7 +39,7 @@ StoreApp::StoreApp() {
 
     try {
         // Load discount vouchers from file
-        vouchers = ReadDataFactory<shared_ptr<IDiscount>>::createReadData()->readData("vouchers.txt");
+        vouchers = ReadDataFactory<shared_ptr<Discount>>::createReadData()->readData("vouchers.txt");
     } catch (const char* msg) {
         std::cerr << msg << std::endl;
     }
@@ -70,7 +71,7 @@ StoreApp::~StoreApp() {
 
     try {
         // Save discount vouchers to file
-        SaveDataFactory<shared_ptr<IDiscount>>::createSaveData()->saveData("vouchers.txt", vouchers);
+        SaveDataFactory<shared_ptr<Discount>>::createSaveData()->saveData("vouchers.txt", vouchers);
     } catch (const char* msg) {
         std::cerr << msg << std::endl;
     }
@@ -82,7 +83,7 @@ void StoreApp::run() {
     Authentication auth;
     shared_ptr<IUser> currentUser = nullptr;    
     while (1) {
-        system("cls"); // Clear console screen
+        clearScreen();
 
         bool isValid;
         Error error;
@@ -110,14 +111,14 @@ void StoreApp::run() {
 
         switch (choice) {
             case 1: { // Sign up flow
-                system("cls");
+                clearScreen();
                 printHeader("SIGN UP");
                 string role, username, password;
-                vector<string> options = {"admin", "user"};
+                vector<string> options = {"Admin", "Customer"};
                 
                 // Get role input with validation
                 do {
-                    std::tie(isValid, role, error) = InputValidator::validateString("Enter your role (admin/user): ", options);
+                    std::tie(isValid, role, error) = InputValidator::validateString("Enter your role (Admin/Customer): ", options);
                     if (!isValid) {
                         printMessage(error.message);
                         Sleep(1000);
@@ -146,7 +147,7 @@ void StoreApp::run() {
                 } while (!isValid);
                 
                 // Additional validation for admin registration
-                if (role == "admin") {
+                if (role == "Admin") {
                     string passkey = getInput("Input admin passkey: ");
                     if (!Admin::isValidPasskey(passkey)) {
                         printMessage("Invalid passkey. Please try again later!");
@@ -167,10 +168,9 @@ void StoreApp::run() {
                 break;
             }
             case 2: { // Login flow
-                system("cls");
+                clearScreen();
                 printHeader("LOGIN");
                 string username, password;
-                bool isValid = true;
                 
                 // Get username input with validation
                 do {

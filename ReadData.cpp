@@ -2,6 +2,7 @@
 
 using std::string;
 
+
 // Reads music data from a file and returns a vector of Music objects
 vector<Music> ReadMusic::readData(const string& filename) const {
     ifstream file(filename);
@@ -123,9 +124,9 @@ vector<Order> ReadOrder::readData(const string& filename) const {
 }
 
 // Reads discount data from a file and returns a vector of IDiscount objects
-vector<shared_ptr<IDiscount>> ReadDiscount::readData(const string& filename) const {
+vector<shared_ptr<Discount>> ReadDiscount::readData(const string& filename) const {
     ifstream file(filename);
-    vector<shared_ptr<IDiscount>> vouchers;
+    vector<shared_ptr<Discount>> vouchers;
 
     // Check if the file can be opened
     if (!file.is_open()) {
@@ -136,7 +137,7 @@ vector<shared_ptr<IDiscount>> ReadDiscount::readData(const string& filename) con
 
     // Read each line and parse the discount data
     while (getline(file, line)) {
-        shared_ptr<IDiscount> voucher = IDiscount::toDiscount(line);
+        shared_ptr<Discount> voucher = Discount::fromString(line);
         vouchers.push_back(voucher);
     }
 

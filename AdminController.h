@@ -20,7 +20,7 @@ public:
      * @param vouchers Reference to available discount vouchers
      * @param currentUser Reference to the currently logged-in admin user
      */
-    void menu(vector<Music>& items, vector<shared_ptr<IUser>>& users, vector<Order>& orders, vector<shared_ptr<IDiscount>>& vouchers, shared_ptr<IUser>& currentUser) override;
+    void menu(vector<Music>& items, vector<shared_ptr<IUser>>& users, vector<Order>& orders, vector<shared_ptr<Discount>>& vouchers, shared_ptr<IUser>& currentUser) override;
 };
 
 #endif

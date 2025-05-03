@@ -14,4 +14,4 @@ Vung Ky Uc,Chillies,Vpop,10,10
 Dat trai tim len ban,Tung,Vpop,20,20
 Cau Vinh Tuy,Wren Evans,Vpop,10,25
 Truoc khi em ton tai,Thang,Vpop,10,15
-Nang tho,Hoang Dung,Vpop,15,16
+Nang tho,Hoang Dung,Vpop,15,12
