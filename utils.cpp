@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <windows.h>
 using std::cout, std::cin, std::string, std::vector, std::tuple, std::make_tuple, std::get, std::stoi;
 using std::to_string;
 
@@ -62,3 +63,7 @@ void pauseScreen() {
     system("pause");
 }
 
+// Sleeps the program for a specified duration
+void sleepScreen() {
+    Sleep(1000);
+}

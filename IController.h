@@ -18,6 +18,13 @@
 #include <map>
 #include <algorithm>
 
+#include "MusicService.h"
+#include "UserService.h"
+#include "OrderService.h"
+#include "DiscountService.h"
+#include "CartService.h"
+#include "AuthService.h"
+
 using std::vector, std::string, std::cout, std::endl, std::make_shared, std::shared_ptr, std::unordered_map, std::sort, std::pair, std::endl;
 using std::shared_ptr, std::make_unique, std::unique_ptr, std::map;
 

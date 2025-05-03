@@ -34,7 +34,7 @@ void AdminUI::displayMenu() {
 void AdminUI::displayMusicList(vector<Music>& items) {
     cout << "ID - Name - Artist - Genre - Price - Quantity\n";
     for (int i = 0; i < items.size(); ++i) {
-        cout << i + 1 << ". " << items[i].toString() << '\n';
+        cout << i + 1 << " - " << items[i].toString() << '\n';
     }
 }
 
@@ -43,7 +43,7 @@ void AdminUI::displayMusicList(vector<Music>& items) {
 void AdminUI::displayUserList(const vector<shared_ptr<IUser>>& users) {
     cout << "ID - Username - Password - Role\n";
     for (int i = 0; i < users.size(); ++i) {
-        cout << i + 1 << ". " << users[i]->toString() << '\n';
+        cout << i + 1 << " - " << users[i]->toString() << '\n';
     }
 }
 

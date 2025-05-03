@@ -13,13 +13,23 @@ using std::vector, std::shared_ptr, std::string, std::make_shared, std::make_uni
 class DiscountService {
 public:
     /**
+     * @brief Default constructor
+     */
+    DiscountService() = default;
+
+    /**
+     * @brief Default destructor
+     */
+    ~DiscountService() = default;
+
+    /**
      * @brief Apply a discount to a total price
      * 
      * @param voucher The discount to apply
      * @param total The original total price
      * @return float The price after applying the discount
      */
-    static float applyDiscount(const shared_ptr<Discount>& voucher, float total);
+    float applyDiscount(const shared_ptr<Discount>& voucher, float total);
     
     /**
      * @brief Check if a discount exists in the list of vouchers
@@ -28,7 +38,7 @@ public:
      * @param voucher The discount voucher to check
      * @return bool True if the voucher exists in the list, false otherwise
      */
-    static bool isValidDiscount(const vector<shared_ptr<Discount>>& vouchers, 
+    bool isValidDiscount(const vector<shared_ptr<Discount>>& vouchers, 
                                const shared_ptr<Discount>& voucher);
     
     /**
@@ -38,7 +48,7 @@ public:
      * @param username Username to filter vouchers by
      * @return vector<shared_ptr<Discount>> Vector of discount vouchers valid for the specified user
      */
-    static vector<shared_ptr<Discount>> loadValidDiscounts(
+    vector<shared_ptr<Discount>> loadValidDiscounts(
         const vector<shared_ptr<Discount>>& vouchers, const string& username);
     
     /**
@@ -47,7 +57,7 @@ public:
      * @param vouchers Vector of discount vouchers to modify
      * @param discountString The string representation of the voucher to remove
      */
-    static void removeDiscount(vector<shared_ptr<Discount>>& vouchers, 
+    void removeDiscount(vector<shared_ptr<Discount>>& vouchers, 
                               const string& discountString);
     
     /**
@@ -57,7 +67,7 @@ public:
      * @param percentage Percentage value of the discount
      * @return shared_ptr<Discount> New percentage discount
      */
-    static shared_ptr<Discount> createPercentageDiscount(
+    shared_ptr<Discount> createPercentageDiscount(
         const string& username, int percentage);
     
     /**
@@ -67,7 +77,7 @@ public:
      * @param amount Fixed amount value of the discount
      * @return shared_ptr<Discount> New fixed amount discount
      */
-    static shared_ptr<Discount> createFixedDiscount(
+    shared_ptr<Discount> createFixedDiscount(
         const string& username, float amount);
 
     /**
@@ -78,7 +88,7 @@ public:
      * @param discountType Type of discount (1 for percentage, 2 for fixed)
      * @param discountValue Value of the discount (percentage or amount)
      */
-    static void createDiscount(vector<shared_ptr<Discount>>& vouchers, 
+    void createDiscount(vector<shared_ptr<Discount>>& vouchers, 
         const string& username, int discountType, int discountValue);
 };
 

@@ -18,6 +18,16 @@ using std::vector, std::string;
 class CartService {
 public:
     /**
+     * @brief Default constructor
+     */
+    CartService() = default;
+
+    /**
+     * @brief Default destructor
+     */
+    ~CartService() = default;
+
+    /**
      * @brief Add a music item to the shopping cart
      * 
      * @param cart Reference to the customer's shopping cart
@@ -26,7 +36,7 @@ public:
      * @param quantity Quantity of the item to add
      * @return bool True if successful, false if invalid ID or insufficient stock
      */
-    static bool addItemToCart(Cart& cart, vector<Music>& inventory, int itemID, int quantity);
+    bool addItemToCart(Cart& cart, vector<Music>& inventory, int itemID, int quantity);
     
     /**
      * @brief Remove an item from the shopping cart
@@ -36,7 +46,7 @@ public:
      * @param itemID Index of the item to remove from cart
      * @return bool True if successful, false if invalid item ID
      */
-    static bool removeItemFromCart(Cart& cart, vector<Music>& inventory, int itemID);
+    bool removeItemFromCart(Cart& cart, vector<Music>& inventory, int itemID);
     
     /**
      * @brief Process order checkout and create a new order

@@ -1,5 +1,6 @@
 #include "CustomerUI.h"
 #include "utils.h"
+#include <iomanip> 
 
 // Displays a personalized welcome message for the customer
 void CustomerUI::displayWelcomeMessage(const string& username) {
@@ -46,7 +47,7 @@ void CustomerUI::displayPurchasedHistory(const vector<Order>& orders, const stri
 void CustomerUI::displayMusicList(vector<Music>& items) {
     cout << "ID - Name - Artist - Genre - Price - Quantity\n";
     for (int i = 0; i < items.size(); ++i) {
-        cout << i + 1 << ". " << items[i].toString() << '\n';
+        cout << i + 1 << " - " << items[i].toString() << '\n';
     }
 }
 

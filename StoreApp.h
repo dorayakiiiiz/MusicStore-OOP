@@ -6,6 +6,13 @@
 #include "User.h"
 #include "Cart.h"
 #include "Discount.h"
+#include "AuthService.h"
+#include "MusicService.h"
+#include "UserService.h"
+#include "OrderService.h"
+#include "DiscountService.h"
+#include "CartService.h"
+#include "ControllerFactory.h"
 
 #include <vector>
 #include <string>
@@ -19,14 +26,49 @@ using std::vector, std::string, std::cout, std::endl, std::make_shared, std::sha
  */
 class StoreApp {
 private:
-    vector<Music> items;             /**< Collection of music items available in the store */
-    vector<shared_ptr<IUser>> users; /**< Collection of registered users (customers and admins) */
-    vector<Order> orders;            /**< Collection of all placed orders */
-    vector<shared_ptr<Discount>> vouchers; /**< Collection of available discount vouchers */
+    // Data
+    vector<Music> items; /**< Music inventory */
+    vector<shared_ptr<IUser>> users; /**< Registered users */
+    vector<Order> orders; /**< Order history */
+    vector<shared_ptr<Discount>> vouchers; /**< Discount vouchers */
+    
+    // Services
+    Authentication auth;   /**< Authentication service for user management */
+    MusicService musicService;  /**< Music service for inventory operations */
+    UserService userService;     /**< User service for user management */
+    OrderService orderService;  /**< Order service for order processing */
+    CartService cartService;    /**< Cart service for shopping operations */
+    DiscountService discountService;     /**< Discount service for managing vouchers */
+    ControllerFactory controllerFactory;    /**< Factory for creating controllers based on user role */
+
+    /**
+     * @brief Handles the sign up process
+     */
+    void handleSignUp();
+
+    /**
+     * @brief Handles the login process
+     * 
+     * @param currentUser Reference to store the authenticated user
+     * @return true if login was successful, false otherwise
+     */
+    bool handleLogin(shared_ptr<IUser>& currentUser);
+
+    /**
+     * @brief Loads data from files
+     */
+    void loadData();
+
+    /**
+     * @brief Saves data to files
+     */
+    void saveData();
 
 public:
     /**
-     * @brief Constructor - loads data from files
+     * @brief Constructor - initializes the StoreApp with all required dependencies
+     * 
+     * @param auth Reference to the Authentication service for user management
      */
     StoreApp();
     

@@ -16,13 +16,23 @@ using std::vector, std::string, std::shared_ptr;
 class UserService {
 public:
     /**
+     * @brief Default constructor
+     */
+    UserService() = default;
+
+    /**
+     * @brief Default destructor
+     */
+    ~UserService() = default;
+
+    /**
      * @brief Delete a user account by username
      * 
      * @param users Reference to the vector of user accounts
      * @param username Username of the account to delete
      * @return bool True if successful, false if user not found
      */
-    static bool deleteUser(vector<shared_ptr<IUser>>& users, const string& username);
+    bool deleteUser(vector<shared_ptr<IUser>>& users, const string& username);
     
     /**
      * @brief Find a user by username
@@ -31,7 +41,7 @@ public:
      * @param username Username to search for
      * @return int Index of the found user or -1 if not found
      */
-    static int findUserByUsername(const vector<shared_ptr<IUser>>& users, const string& username);
+    int findUserByUsername(const vector<shared_ptr<IUser>>& users, const string& username);
     
 
 };

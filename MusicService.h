@@ -14,6 +14,18 @@ using std::vector, std::string;
  */
 class MusicService {
 public:
+
+    /**
+     * @brief Default constructor
+     */
+    MusicService() = default;
+
+    /**
+     * @brief Default destructor
+     */
+    ~MusicService() = default;
+
+
     /**
      * @brief Add a new music item to the inventory
      * 
@@ -21,7 +33,7 @@ public:
      * @param item The new music item to add
      * @return bool True if successful, false if item already exists
      */
-    static bool addMusicItem(vector<Music>& items, const Music& item);
+    bool addMusicItem(vector<Music>& items, const Music& item);
     
     /**
      * @brief Remove a music item from the inventory by ID
@@ -30,7 +42,7 @@ public:
      * @param id Index of the item to remove
      * @return bool True if successful, false if invalid ID
      */
-    static bool removeMusicItem(vector<Music>& items, int id);
+    bool removeMusicItem(vector<Music>& items, int id);
     
     /**
      * @brief Update the price of a music item by ID
@@ -40,7 +52,7 @@ public:
      * @param price New price for the item
      * @return bool True if successful, false if invalid ID
      */
-    static bool updateMusicItemPrice(vector<Music>& items, int id, float price);
+    bool updateMusicItemPrice(vector<Music>& items, int id, float price);
 
     /**
      * @brief Search music catalog by criteria (name/artist/genre) and keyword
@@ -51,9 +63,7 @@ public:
      * @return vector<Music> Vector of music items matching the search criteria
      * @throws std::invalid_argument If an invalid search criteria is provided
      */
-    static vector<Music> searchMusic(const vector<Music>& items, const string& criteria, const string& keyword);
-
-
+    vector<Music> searchMusic(const vector<Music>& items, const string& criteria, const string& keyword);
 
     /**
      * @brief Remove sold-out items from the inventory

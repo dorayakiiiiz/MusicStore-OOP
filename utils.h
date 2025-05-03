@@ -50,5 +50,10 @@ void pauseScreen();
  */
 string getInput(const string&);
 
+/**
+ * @brief Sleeps the program for a specified duration
+ */
+void sleepScreen();
+
 
 #endif

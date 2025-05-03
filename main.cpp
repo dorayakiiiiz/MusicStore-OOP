@@ -7,7 +7,9 @@
  * @return int Exit code (0 for successful execution)
  */
 int main() {
-    // Initialize the music store application
+
+    
+    // Create an instance of the StoreApp with the authentication service
     StoreApp app;
 
     // Start the application's main execution loop
