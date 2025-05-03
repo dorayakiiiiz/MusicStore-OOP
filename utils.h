@@ -55,5 +55,12 @@ string getInput(const string&);
  */
 void sleepScreen();
 
+/**
+ * @brief Converts a string to lowercase
+ * @param str The string to convert
+ * @return The lowercase version of the input string
+ */
+string toLower(const string& str);
+
 
 #endif

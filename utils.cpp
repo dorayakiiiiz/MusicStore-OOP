@@ -67,3 +67,11 @@ void pauseScreen() {
 void sleepScreen() {
     Sleep(1000);
 }
+
+string toLower(const string& str) {
+    string result = str;
+    for (char& c : result) {
+        c = tolower(c);
+    }
+    return result;
+}

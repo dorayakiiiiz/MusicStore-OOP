@@ -6,31 +6,13 @@
 
 // Search music catalog by criteria and keyword
 vector<Music> MusicService::searchMusic(const vector<Music>& items,const string& criteria, const string& keyword) {
-    // Convert keyword to lowercase for case-insensitive search
-    string kw = keyword;
-    for (auto& c : kw) {
-        c = tolower(c);
+    shared_ptr<ISearch> searchStrategy = SearchFactory::createSearch(criteria);
+    
+    if (!searchStrategy) {
+        throw std::invalid_argument("Invalid search criteria: " + criteria);
     }
     
-    vector<Music> results;
-    for (const auto& item : items) {
-        // Get the appropriate field based on search criteria
-        string str = (criteria == "name") ? item.getName() : 
-                       (criteria == "artist") ? item.getArtist() : 
-                       (criteria == "genre") ? item.getGenre() : 
-                       throw std::invalid_argument("Invalid search criteria!");       
-        
-        // Convert to lowercase for case-insensitive comparison
-        for (auto& c : str) {
-            c = tolower(c);
-        }
-        
-        // Add item to results if keyword is found
-        if (str.find(kw) != string::npos) {
-            results.push_back(item);
-        }
-    }
-    
+    vector<Music> results = searchStrategy->search(items, keyword);
     return results;
 }
 

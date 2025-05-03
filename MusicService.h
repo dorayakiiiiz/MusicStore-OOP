@@ -2,10 +2,13 @@
 #define _MUSIC_SERVICE_H_
 
 #include "Music.h"
+#include "Search.h"
+#include "SearchFactory.h"
 #include <vector>
 #include <string>
+#include <memory>
 
-using std::vector, std::string;
+using std::vector, std::string, std::shared_ptr, std::make_shared;
 
 /**
  * @brief Service class for managing music inventory
