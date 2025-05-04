@@ -27,28 +27,25 @@ IF OBJECT_ID('user_info', 'U') IS NULL
     );
 GO
 
+-- Sửa bảng orders để không có IDENTITY
 IF OBJECT_ID('orders', 'U') IS NULL
     CREATE TABLE orders (
-        OrderCode INT PRIMARY KEY,
-        Username VARCHAR(255) NOT NULL,
-        TotalPrice INT NOT NULL
-   );
+        OrderCode INT PRIMARY KEY,  -- Không phải tự động tăng
+        Username NVARCHAR(255) NOT NULL,
+        TotalPrice FLOAT NOT NULL
+    );
 GO
 
 IF OBJECT_ID('detail_order', 'U') IS NULL
     CREATE TABLE detail_order (
-        OrderCode INT NOT NULL,
-        NameSong VARCHAR(255) NOT NULL,
-        Artist VARCHAR(255) NOT NULL,
-        Genre VARCHAR(100) NOT NULL,
+        OrderCode INT FOREIGN KEY REFERENCES orders(OrderCode) ON DELETE CASCADE,
+        NameSong NVARCHAR(255) NOT NULL,
+        Artist NVARCHAR(255) NOT NULL,
+        Genre NVARCHAR(100) NOT NULL,
         Price FLOAT NOT NULL,
-        Quantity INT NOT NULL,
-        PRIMARY KEY (OrderCode, NameSong, Artist),
-        FOREIGN KEY (OrderCode) REFERENCES orders(OrderCode)
-    ); 
+        Quantity INT NOT NULL
+   );
 GO
-
-
 
 IF OBJECT_ID('vouchers', 'U') IS NULL
     CREATE TABLE vouchers (
@@ -56,3 +53,5 @@ IF OBJECT_ID('vouchers', 'U') IS NULL
         PRIMARY KEY (Vouchername)
     );
 GO
+
+

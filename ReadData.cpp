@@ -1,36 +1,22 @@
 #include "ReadData.h"
 
-using std::string;
 
-vector<Music> ReadMusic::readData(const string& filename) const {
+// Đọc dữ liệu từ bảng music_info
+vector<Music> ReadMusic::readData() const {
     vector<Music> items;
-    SQLHENV hEnv = nullptr;
-    SQLHDBC hDbc = nullptr;
+    DatabaseConnector dbConnector;
+
+    if (!dbConnector.connect()) {
+        return items;
+    }
+
+    SQLHDBC hDbc = dbConnector.getConnection();  // Lấy kết nối từ DatabaseConnector
     SQLHSTMT hStmt = nullptr;
     SQLRETURN ret;
 
-    // 1. Khởi tạo môi trường
-    if (SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &hEnv) != SQL_SUCCESS) return items;
-    SQLSetEnvAttr(hEnv, SQL_ATTR_ODBC_VERSION, (void*)SQL_OV_ODBC3, 0);
-    if (SQLAllocHandle(SQL_HANDLE_DBC, hEnv, &hDbc) != SQL_SUCCESS) {
-        SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
-        return items;
-    }
-
-    // 2. Kết nối CSDL
-    SQLCHAR connStr[] = "Driver={ODBC Driver 17 for SQL Server};Server=localhost\\SQLEXPRESS;Database=music_store;Trusted_Connection=yes;";
-    ret = SQLDriverConnect(hDbc, NULL, connStr, SQL_NTS, NULL, 0, NULL, SQL_DRIVER_NOPROMPT);
-    if (!SQL_SUCCEEDED(ret)) {
-        SQLFreeHandle(SQL_HANDLE_DBC, hDbc);
-        SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
-        return items;
-    }
-
     // 3. Tạo và thực thi truy vấn SELECT
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
-        SQLDisconnect(hDbc);
-        SQLFreeHandle(SQL_HANDLE_DBC, hDbc);
-        SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
+        dbConnector.disconnect();
         return items;
     }
 
@@ -59,43 +45,27 @@ vector<Music> ReadMusic::readData(const string& filename) const {
 
     // 4. Dọn dẹp tài nguyên
     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-    SQLDisconnect(hDbc);
-    SQLFreeHandle(SQL_HANDLE_DBC, hDbc);
-    SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
+    dbConnector.disconnect();
 
     return items;
 }
 
-
-vector<shared_ptr<IUser>> ReadUser::readData(const string& filename) const {
+// Đọc dữ liệu từ bảng user_info
+vector<shared_ptr<IUser>> ReadUser::readData() const {
     vector<shared_ptr<IUser>> users;
-    SQLHENV hEnv = nullptr;
-    SQLHDBC hDbc = nullptr;
+    DatabaseConnector dbConnector;
+
+    if (!dbConnector.connect()) {
+        return users;
+    }
+
+    SQLHDBC hDbc = dbConnector.getConnection();
     SQLHSTMT hStmt = nullptr;
     SQLRETURN ret;
 
-    // 1. Khởi tạo môi trường
-    if (SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &hEnv) != SQL_SUCCESS) return users;
-    SQLSetEnvAttr(hEnv, SQL_ATTR_ODBC_VERSION, (void*)SQL_OV_ODBC3, 0);
-    if (SQLAllocHandle(SQL_HANDLE_DBC, hEnv, &hDbc) != SQL_SUCCESS) {
-        SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
-        return users;
-    }
-
-    // 2. Kết nối CSDL
-    SQLCHAR connStr[] = "Driver={ODBC Driver 17 for SQL Server};Server=localhost\\SQLEXPRESS;Database=music_store;Trusted_Connection=yes;";
-    ret = SQLDriverConnect(hDbc, NULL, connStr, SQL_NTS, NULL, 0, NULL, SQL_DRIVER_NOPROMPT);
-    if (!SQL_SUCCEEDED(ret)) {
-        SQLFreeHandle(SQL_HANDLE_DBC, hDbc);
-        SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
-        return users;
-    }
-
     // 3. Tạo và thực thi truy vấn SELECT
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
-        SQLDisconnect(hDbc);
-        SQLFreeHandle(SQL_HANDLE_DBC, hDbc);
-        SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
+        dbConnector.disconnect();
         return users;
     }
 
@@ -125,82 +95,107 @@ vector<shared_ptr<IUser>> ReadUser::readData(const string& filename) const {
 
     // 4. Dọn dẹp tài nguyên
     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-    SQLDisconnect(hDbc);
-    SQLFreeHandle(SQL_HANDLE_DBC, hDbc);
-    SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
+    dbConnector.disconnect();
 
     return users;
 }
 
-
-vector<Order> ReadOrder::readData(const string& filename) const {
-    ifstream file(filename);
+// Đọc dữ liệu từ bảng orders và detail_order
+vector<Order> ReadOrder::readData() const {
     vector<Order> orders;
-    if (!file.is_open()) {
-        throw std::runtime_error("Error opening file!");
-    }
-    string line;
-    while (getline(file, line)) {
-        stringstream ss(line);
-        string username, totalPrice, items;
-        getline(ss, username, '|');
-        getline(ss, totalPrice, '|');
-        getline(ss, items);
+    DatabaseConnector dbConnector;
 
-        vector<Music> purchasedItems;
-        stringstream itemsStream(items);
-        string itemSS;
-        while (getline(itemsStream, itemSS, '|')) {
-            stringstream itemsStream(itemSS);
-            string name, artist, genre, price, quantity;
-            getline(itemsStream, name, ';');
-            getline(itemsStream, artist, ';');
-            getline(itemsStream, genre, ';');
-            getline(itemsStream, price, ';');
-            getline(itemsStream, quantity, '|');
-
-            Music item(name, artist, genre, stof(price), stoi(quantity));
-            purchasedItems.emplace_back(item);
-        }
-        Order order(username, purchasedItems, stof(totalPrice));
-        orders.push_back(order);
+    if (!dbConnector.connect()) {
+        return orders;
     }
 
-    file.close();
-    return orders;
-}
-
-
-vector<shared_ptr<IDiscount>> ReadDiscount::readData(const string& filename) const {
-    vector<shared_ptr<IDiscount>> vouchers;
-
-    SQLHENV hEnv = nullptr;
-    SQLHDBC hDbc = nullptr;
+    SQLHDBC hDbc = dbConnector.getConnection();
     SQLHSTMT hStmt = nullptr;
     SQLRETURN ret;
 
-    // 1. Khởi tạo môi trường
-    if (SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &hEnv) != SQL_SUCCESS) return vouchers;
-    SQLSetEnvAttr(hEnv, SQL_ATTR_ODBC_VERSION, (void*)SQL_OV_ODBC3, 0);
-    if (SQLAllocHandle(SQL_HANDLE_DBC, hEnv, &hDbc) != SQL_SUCCESS) {
-        SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
+    // 3. Lấy dữ liệu: mỗi dòng là 1 đơn hàng, gom theo OrderCode (dù không cần lưu nó)
+    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+        dbConnector.disconnect();
+        return orders;
+    }
+
+    string query = R"(
+        SELECT Username, TotalPrice, NameSong, Artist, Genre, Price, Quantity
+        FROM orders
+        JOIN detail_order ON orders.OrderCode = detail_order.OrderCode
+    )";
+    ret = SQLExecDirect(hStmt, (SQLCHAR*)query.c_str(), SQL_NTS);
+
+    if (SQL_SUCCEEDED(ret)) {
+        char tempUsername[256], tempNameSong[256], tempArtist[256], tempGenre[100];
+        string Username, NameSong, Artist, Genre;
+        float Price, TotalPrice;
+        int Quantity;
+
+        string lastUsername = "";
+        float currentTotalPrice = 0.0f;
+        vector<Music> purchasedItems;
+
+        SQLINTEGER prevOrderCode = -1, currentOrderCode;
+        bool first = true;
+
+        while ((ret = SQLFetch(hStmt)) == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO) {
+            SQLGetData(hStmt, 1, SQL_C_CHAR, tempUsername, sizeof(tempUsername), NULL);
+            SQLGetData(hStmt, 2, SQL_C_FLOAT, &TotalPrice, 0, NULL);
+            SQLGetData(hStmt, 3, SQL_C_CHAR, tempNameSong, sizeof(tempNameSong), NULL);
+            SQLGetData(hStmt, 4, SQL_C_CHAR, tempArtist, sizeof(tempArtist), NULL);
+            SQLGetData(hStmt, 5, SQL_C_CHAR, tempGenre, sizeof(tempGenre), NULL);
+            SQLGetData(hStmt, 6, SQL_C_FLOAT, &Price, 0, NULL);
+            SQLGetData(hStmt, 7, SQL_C_SLONG, &Quantity, 0, NULL);
+
+            Username = tempUsername;
+            NameSong = tempNameSong;
+            Artist = tempArtist;
+            Genre = tempGenre;
+
+            // Nếu là dòng đầu tiên hoặc đơn hàng mới (phân biệt bằng reset purchasedItems mỗi khi đổi Username + TotalPrice)
+            if (!first && (Username != lastUsername || TotalPrice != currentTotalPrice)) {
+                orders.emplace_back(Order(lastUsername, purchasedItems, currentTotalPrice));
+                purchasedItems.clear();
+            }
+
+            first = false;
+            lastUsername = Username;
+            currentTotalPrice = TotalPrice;
+
+            // Thêm sản phẩm vào danh sách
+            purchasedItems.emplace_back(Music(NameSong, Artist, Genre, Price, Quantity));
+        }
+
+        // Thêm đơn hàng cuối cùng nếu có
+        if (!purchasedItems.empty()) {
+            orders.emplace_back(Order(lastUsername, purchasedItems, currentTotalPrice));
+        }
+    }
+
+    // 4. Dọn dẹp tài nguyên
+    SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+    dbConnector.disconnect();
+
+    return orders;
+}
+
+// Đọc dữ liệu từ bảng vouchers
+vector<shared_ptr<Discount>> ReadDiscount::readData() const {
+    vector<shared_ptr<Discount>> vouchers;
+    DatabaseConnector dbConnector;
+
+    if (!dbConnector.connect()) {
         return vouchers;
     }
 
-    // 2. Kết nối CSDL
-    SQLCHAR connStr[] = "Driver={ODBC Driver 17 for SQL Server};Server=localhost\\SQLEXPRESS;Database=music_store;Trusted_Connection=yes;";
-    ret = SQLDriverConnect(hDbc, NULL, connStr, SQL_NTS, NULL, 0, NULL, SQL_DRIVER_NOPROMPT);
-    if (!SQL_SUCCEEDED(ret)) {
-        SQLFreeHandle(SQL_HANDLE_DBC, hDbc);
-        SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
-        return vouchers;
-    }
+    SQLHDBC hDbc = dbConnector.getConnection();
+    SQLHSTMT hStmt = nullptr;
+    SQLRETURN ret;
 
     // 3. Tạo và thực thi truy vấn SELECT
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
-        SQLDisconnect(hDbc);
-        SQLFreeHandle(SQL_HANDLE_DBC, hDbc);
-        SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
+        dbConnector.disconnect();
         return vouchers;
     }
 
@@ -216,16 +211,14 @@ vector<shared_ptr<IDiscount>> ReadDiscount::readData(const string& filename) con
 
             Voucher = tempVoucher;
 
-            shared_ptr<IDiscount> voucher = IDiscount::toDiscount(Voucher);
+            shared_ptr<Discount> voucher = Discount::fromString(Voucher);
             vouchers.push_back(voucher);
         }
     }
 
     // 4. Dọn dẹp tài nguyên
     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-    SQLDisconnect(hDbc);
-    SQLFreeHandle(SQL_HANDLE_DBC, hDbc);
-    SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
+    dbConnector.disconnect();
 
     return vouchers;
 }

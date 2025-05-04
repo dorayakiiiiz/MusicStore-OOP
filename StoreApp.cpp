@@ -1,5 +1,6 @@
 #include "StoreApp.h"
 #include "utils.h"
+#include "InputValidator.h"
 #include "AuthService.h"
 #include "IController.h"
 #include "ControllerFactory.h"
@@ -8,85 +9,217 @@
 #include "ReadDataFactory.h"
 #include "SaveData.h"
 #include "SaveDataFactory.h"
+#include "DatabaseConnector.h"
+#include <exception>
 
 #include <iostream>
 #include <windows.h>
 
-// Constructor - initializes the application by loading all data from files
-StoreApp::StoreApp() {
+using std::tie;
+
+// Constructor - initializes the StoreApp by loading data from files
+StoreApp::StoreApp() :
+    auth(),
+    musicService(),
+    userService(), 
+    orderService(),
+    cartService(),
+    discountService(),
+    controllerFactory(musicService, cartService, orderService, discountService, userService) {
+    loadData();
+}
+
+// Loads all data from files
+void StoreApp::loadData() {
     try {
         // Load music items from file
-        items = ReadDataFactory<Music>::createReadData()->readData("music_info.txt");
+        items = ReadDataFactory<Music>::createReadData()->readData();
     } catch (const char* msg) {
         std::cerr << msg << std::endl;
     }
 
     try {
         // Load user accounts from file
-        users = ReadDataFactory<shared_ptr<IUser>>::createReadData()->readData("user_info.txt");
+        users = ReadDataFactory<shared_ptr<IUser>>::createReadData()->readData();
     } catch (const char* msg) {
         std::cerr << msg << std::endl;
     }
 
     try {
         // Load order history from file
-        orders = ReadDataFactory<Order>::createReadData()->readData("orders.txt");
+        orders = ReadDataFactory<Order>::createReadData()->readData();
     } catch (const char* msg) {
         std::cerr << msg << std::endl;
     }
 
     try {
         // Load discount vouchers from file
-        vouchers = ReadDataFactory<shared_ptr<IDiscount>>::createReadData()->readData("vouchers.txt");
+        vouchers = ReadDataFactory<shared_ptr<Discount>>::createReadData()->readData();
     } catch (const char* msg) {
         std::cerr << msg << std::endl;
     }
-    
 }
 
-// Destructor - saves all data to files before application termination
+// Destructor - saves all data to files before exiting the application
 StoreApp::~StoreApp() {
+    saveData();
+}
+
+// Saves all data to files
+void StoreApp::saveData() {
     try {
         // Save music inventory to file
-        SaveDataFactory<Music>::createSaveData()->saveData("music_info.txt", items);
+        SaveDataFactory<Music>::createSaveData()->saveData(items);
     } catch (const char* msg) {
         std::cerr << msg << std::endl;
     }
 
     try {
         // Save user accounts to file
-        SaveDataFactory<shared_ptr<IUser>>::createSaveData()->saveData("user_info.txt", users);
+        SaveDataFactory<shared_ptr<IUser>>::createSaveData()->saveData(users);
     } catch (const char* msg) {
         std::cerr << msg << std::endl;
     }
 
     try {
         // Save order history to file
-        SaveDataFactory<Order>::createSaveData()->saveData("orders.txt", orders);
+        SaveDataFactory<Order>::createSaveData()->saveData(orders);
     } catch (const char* msg) {
         std::cerr << msg << std::endl;
     }
 
     try {
         // Save discount vouchers to file
-        SaveDataFactory<shared_ptr<IDiscount>>::createSaveData()->saveData("vouchers.txt", vouchers);
+        SaveDataFactory<shared_ptr<Discount>>::createSaveData()->saveData(vouchers);
     } catch (const char* msg) {
         std::cerr << msg << std::endl;
     }
 }
 
-// Main application execution loop that handles the authentication flow and redirects to appropriate controller
+// Handles the sign up process
+void StoreApp::handleSignUp() {
+    bool isValid;
+    Error error;
+    
+    clearScreen();
+    printHeader("SIGN UP");
+    string role, username, password;
+    vector<string> options = {"Admin", "Customer"};
+    
+    // Get role input with validation
+    do {
+        std::tie(isValid, role, error) = InputValidator::validateString("Enter your role (Admin/Customer): ", options);
+        if (!isValid) {
+            printMessage(error.message);
+            sleepScreen();
+            continue;
+        }
+    } while (!isValid);
+    
+    // Get username input with validation
+    do {
+        std::tie(isValid, username, error) = InputValidator::validateString("Input username: ");
+        if (!isValid) {
+            printMessage(error.message);
+            sleepScreen();
+            continue;
+        }
+    } while (!isValid);
+    
+    // Get password input with validation
+    do {
+        std::tie(isValid, password, error) = InputValidator::validateString("Input password: ");
+        if (!isValid) {
+            printMessage(error.message);
+            sleepScreen();
+            continue;
+        }
+    } while (!isValid);
+    
+    // Additional validation for admin registration
+    if (role == "Admin") {
+        string passkey = getInput("Input admin passkey: ");
+        if (!Admin::isValidPasskey(passkey)) {
+            printMessage("Invalid passkey. Please try again later!");
+            sleepScreen();
+            return;
+        }
+    }
+
+    // Register the new user
+    bool success = auth.registerUser(users, username, password, role);
+    if (success) {
+        printMessage("Sign up successfully!");
+        sleepScreen();
+    } else {
+        printMessage("Username already exists. Please try again later!");
+        sleepScreen();
+    }
+}
+
+// Handles the login process
+bool StoreApp::handleLogin(shared_ptr<IUser>& currentUser) {
+    bool isValid;
+    Error error;
+    
+    clearScreen();
+    printHeader("LOGIN");
+    string username, password;
+    
+    // Get username input with validation
+    do {
+        std::tie(isValid, username, error) = InputValidator::validateString("Input username: ");
+        if (!isValid) {
+            printMessage(error.message);
+            sleepScreen();
+            continue;
+        }
+    } while (!isValid);
+
+    // Get password input with validation
+    do {
+        std::tie(isValid, password, error) = InputValidator::validateString("Input password: ");
+        if (!isValid) {
+            printMessage(error.message);
+            sleepScreen();
+            continue;
+        }
+    } while (!isValid);
+
+    // Attempt to authenticate the user
+    currentUser = auth.loginUser(users, username, password);
+
+    if (!currentUser) {
+        printMessage("Invalid username or password. Please try again!");
+        sleepScreen();
+        return false;
+    }
+
+    // create the appropriate controller based on user role
+    // and call the menu function of the controller
+    string role = currentUser->getRole();
+    shared_ptr<IController> controller = controllerFactory.createController(role);
+
+    if (controller) {
+        printMessage("Login successfully! Welcome " + currentUser->getUsername() + "!");
+        sleepScreen();
+        clearScreen();
+        controller->menu(items, users, orders, vouchers, currentUser);
+        return true;
+    }
+    
+    return false;
+}
+
+// Main application loop
 void StoreApp::run() {
-    Authentication auth;
-    shared_ptr<IUser> currentUser = nullptr;    
-    while (1) {
-        system("cls"); // Clear console screen
+    shared_ptr<IUser> currentUser = nullptr;
 
-        bool isValid;
-        Error error;
+    while (true) {
 
+        clearScreen();
         printHeader("WELCOME TO THE MUSIC STORE");
-
+    
         // Display main menu options
         vector<string> options = {
             "Sign up",
@@ -94,127 +227,36 @@ void StoreApp::run() {
             "Exit\n",
         };
         printMenu(options);
-
-        // Get user choice with validation
+        
+        // get user choice from the main menu
         int choice;
+        bool isValid;
+        Error error;    
         do {
-            std::tie(isValid, choice, error) = getIntInput("Enter your choice: ", 1, 3);
+            tie(isValid, choice, error) = InputValidator::validateInt("Enter your choice: ", 1, 7);
             if (!isValid) {
                 printMessage(error.message);
-                Sleep(1000);
+                sleepScreen();
                 continue;
             }
         } while (!isValid);
 
         switch (choice) {
-            case 1: { // Sign up flow
-                system("cls");
-                printHeader("SIGN UP");
-                string role, username, password;
-                vector<string> options = {"Admin", "Customer"};
-                
-                // Get role input with validation
-                do {
-                    std::tie(isValid, role, error) = getStringInput("Enter your role (Admin/Customer): ", options);
-                    if (!isValid) {
-                        printMessage(error.message);
-                        Sleep(1000);
-                        continue;
-                    }
-                } while (!isValid);
-                
-                // Get username input with validation
-                do {
-                    std::tie(isValid, username, error) = getStringInput("Input username: ");
-                    if (!isValid) {
-                        printMessage(error.message);
-                        Sleep(1000);
-                        continue;
-                    }
-                } while (!isValid);
-                
-                // Get password input with validation
-                do {
-                    std::tie(isValid, password, error) = getStringInput("Input password: ");
-                    if (!isValid) {
-                        printMessage(error.message);
-                        Sleep(1000);
-                        continue;
-                    }
-                } while (!isValid);
-                
-                // Additional validation for admin registration
-                if (role == "Admin") {
-                    string passkey = getInput("Input admin passkey: ");
-                    if (!Admin::isValidPasskey(passkey)) {
-                        printMessage("Invalid passkey. Please try again later!");
-                        Sleep(1000);
-                        break;
-                    }
-                }
-
-                // Register the new user
-                bool success = auth.registerUser(users, username, password, role);
-                if (success) {
-                    printMessage("Sign up successfully!");
-                    Sleep(1000);
-                } else {
-                    printMessage("Username already exists. Please try again later!");
-                    Sleep(1000);
-                }
+            case 1: // Sign up
+                handleSignUp();
                 break;
-            }
-            case 2: { // Login flow
-                system("cls");
-                printHeader("LOGIN");
-                string username, password;
-                bool isValid = true;
                 
-                // Get username input with validation
-                do {
-                    std::tie(isValid, username, error) = getStringInput("Input username: ");
-                    if (!isValid) {
-                        printMessage(error.message);
-                        Sleep(1000);
-                        continue;
-                    }
-                } while (!isValid);
-
-                // Get password input with validation
-                do {
-                    std::tie(isValid, password, error) = getStringInput("Input password: ");
-                    if (!isValid) {
-                        printMessage(error.message);
-                        Sleep(1000);
-                        continue;
-                    }
-                } while (!isValid);
-
-                // Attempt to authenticate the user
-                currentUser = auth.loginUser(users, username, password);
-
-                if (!currentUser) {
-                    printMessage("Invalid username or password. Please try again!");
-                    Sleep(1000);
-                    break;
-                }
-                
-                printMessage("Login successfully! Welcome " + currentUser->getUsername() + "!");
-                Sleep(1000);
-                system("cls");
-
-                // Create appropriate controller based on user role and redirect to respective menu
-                ControllerFactory::createController(currentUser->getRole())->menu(items, users, orders, vouchers, currentUser);
-
+            case 2: // Login
+                handleLogin(currentUser);
                 break;
-            }
-            case 3: { // Exit application
+                
+            case 3: // Exit
                 printMessage("Exiting the application. Thank you for using our service!");
+                sleepScreen();
                 return;
-            }
-            default: {
-                // This should not be reached due to input validation
-            }
+                
+            default:
+                break;
         }
     }
 }

@@ -7,23 +7,43 @@
 #include "Music.h"
 using std::string, std::vector, std::pair;
 
-// Class representing a customer order in the system
+/**
+ * @brief Class representing a customer order in the system
+ */
 class Order {
 private:
-    string username;             // Username of the customer who placed the order
-    vector<Music> purchasedItems; // List of music items in the order
-    float total;                 // Total price of the order (after discounts)
+    string username;             /**< Username of the customer who placed the order */
+    vector<Music> purchasedItems; /**< List of music items in the order */
+    float total;                 /**< Total price of the order (after discounts) */
 public:
-    // Constructor - creates a new order with customer username, purchased items and total price
+    /**
+     * @brief Constructor - creates a new order with customer username, purchased items and total price
+     * 
+     * @param username Username of the customer who placed the order
+     * @param items List of purchased music items
+     * @param total Total price of the order
+     */
     Order(const string&, const vector<Music>&, const float&);
     
-    // Get the total price of the order
+    /**
+     * @brief Get the total price of the order
+     * 
+     * @return float The total price of the order
+     */
     float getTotal() const;
     
-    // Get the username of the customer who placed the order
+    /**
+     * @brief Get the username of the customer who placed the order
+     * 
+     * @return string Username of the customer
+     */
     string getUsername() const;
     
-    // Get the list of purchased music items
+    /**
+     * @brief Get the list of purchased music items
+     * 
+     * @return const vector<Music>& Reference to the vector of purchased items
+     */
     const vector<Music>& getPurchasedItems() const;
 };
 

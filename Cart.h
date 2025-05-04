@@ -7,27 +7,50 @@
 #include <memory>
 using std::vector, std::pair, std::unique_ptr;
 
-// Class representing a customer's shopping cart
+/**
+ * @brief Class representing a customer's shopping cart
+ */
 class Cart {
 private:
-    vector<Music> items; // List of music items in the cart
+    vector<Music> items; /**< List of music items in the cart */
 public:
-    // Add a music item to the cart with specified quantity
+    /**
+     * @brief Add a music item to the cart with specified quantity
+     * 
+     * @param item The music item to add
+     * @param quantity The quantity of the item to add
+     */
     void addItems(Music&, int&);
     
-    // Remove an item from the cart by index
+    /**
+     * @brief Remove an item from the cart by index
+     * 
+     * @param id The index of the item to remove
+     */
     void removeItem(int);
     
-    // Display the contents of the cart
+    /**
+     * @brief Display the contents of the cart
+     */
     void displayCart() const;
     
-    // Calculate the total price of all items in the cart
+    /**
+     * @brief Calculate the total price of all items in the cart
+     * 
+     * @return float The total price of all items
+     */
     float calculateTotal() const;
     
-    // Get the list of music items in the cart
+    /**
+     * @brief Get the list of music items in the cart
+     * 
+     * @return const vector<Music>& Reference to the vector of items in the cart
+     */
     const vector<Music>& getItems() const;
     
-    // Clear all items from the cart
+    /**
+     * @brief Clear all items from the cart
+     */
     void clear();
 };
 

@@ -3,50 +3,54 @@
 
 #include "ReadData.h"
 
+/**
+ * @brief Factory class for creating data reader objects
+ * @tparam T Type of data to read
+ */
 template <typename T>
 class ReadDataFactory {
 public:
+    /**
+     * @brief Create a reader object for the specified type
+     * @return shared_ptr<IReadData<T>> Pointer to a reader for the specified type
+     */
     static shared_ptr<IReadData<T>> createReadData();
 };
 
+/**
+ * @brief Specialization for Music data
+ * @return shared_ptr<IReadData<Music>> Pointer to a Music reader
+ */
 template <>
 inline shared_ptr<IReadData<Music>> ReadDataFactory<Music>::createReadData() {
     return make_shared<ReadMusic>();
 }
 
+/**
+ * @brief Specialization for User data
+ * @return shared_ptr<IReadData<shared_ptr<IUser>>> Pointer to a User reader
+ */
 template <>
 inline shared_ptr<IReadData<shared_ptr<IUser>>> ReadDataFactory<shared_ptr<IUser>>::createReadData() {
     return make_shared<ReadUser>();
 }
 
+/**
+ * @brief Specialization for Order data
+ * @return shared_ptr<IReadData<Order>> Pointer to an Order reader
+ */
 template <>
 inline shared_ptr<IReadData<Order>> ReadDataFactory<Order>::createReadData() {
     return make_shared<ReadOrder>();
 }
 
+/**
+ * @brief Specialization for Discount data
+ * @return shared_ptr<IReadData<shared_ptr<IDiscount>>> Pointer to a Discount reader
+ */
 template <>
-inline shared_ptr<IReadData<shared_ptr<IDiscount>>> ReadDataFactory<shared_ptr<IDiscount>>::createReadData() {
+inline shared_ptr<IReadData<shared_ptr<Discount>>> ReadDataFactory<shared_ptr<Discount>>::createReadData() {
     return make_shared<ReadDiscount>();
 }
-
-// template <typename T>
-// class ReadDataFactory {
-// public:
-//     static shared_ptr<IReadData<T>> createReadData(const string& type) {
-//         if (type == "Music") {
-//             return make_shared<ReadMusic>();
-//         } else if (type == "User") {
-//             return make_shared<ReadUser>();
-//         } else if (type == "Order") {
-//             return make_shared<ReadOrder>();
-//         } else if (type == "Discount") {
-//             return make_shared<ReadDiscount>();
-//         } else {
-//             throw std::invalid_argument("Invalid type for ReadDataFactory");
-//         }
-//     }
-
-// };
-
 
 #endif

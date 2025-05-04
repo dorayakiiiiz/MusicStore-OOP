@@ -5,42 +5,92 @@
 
 using std::string;
 
-// Class representing a music item that can be purchased in the store
+/**
+ * @brief Class representing a music item that can be purchased in the store
+ */
 class Music {
 private:
-    string name;     // Name of the music track
-    string artist;   // Artist who performed the music
-    string genre;    // Genre of the music (e.g., Pop, Rock, etc.)
-    float price;     // Price of the music item
-    int quantity;    // Available quantity in inventory
+    string name;     /**< Name of the music track */
+    string artist;   /**< Artist who performed the music */
+    string genre;    /**< Genre of the music (e.g., Pop, Rock, etc.) */
+    float price;     /**< Price of the music item */
+    int quantity;    /**< Available quantity in inventory */
 
 public:
-    // Default constructor - creates an empty music item
+    /**
+     * @brief Default constructor - creates an empty music item
+     */
     Music();
     
-    // Parameterized constructor - creates a music item with specified details
+    /**
+     * @brief Parameterized constructor - creates a music item with specified details
+     * 
+     * @param name Name of the music track
+     * @param artist Artist who performed the music
+     * @param genre Genre of the music
+     * @param price Price of the music item
+     * @param quantity Available quantity in inventory
+     */
     Music(const string&, const string&, const string&, const float&, const int&);
     
-    // Default destructor
+    /**
+     * @brief Default destructor
+     */
     ~Music() = default;
 
-    // Getters
-    string getName() const;      // Get the name of the music
-    string getArtist() const;    // Get the artist name
-    string getGenre() const;     // Get the genre
-    float getPrice() const;      // Get the price
-    int getQuantity() const;     // Get the available quantity
+    /**
+     * @brief Get the name of the music
+     * @return string The name of the music track
+     */
+    string getName() const;
     
-    // Converts the music object to a string representation
+    /**
+     * @brief Get the artist of the music
+     * @return string The artist name
+     */
+    string getArtist() const;
+    
+    /**
+     * @brief Get the genre of the music
+     * @return string The genre
+     */
+    string getGenre() const;
+    
+    /**
+     * @brief Get the price of the music
+     * @return float The price
+     */
+    float getPrice() const;
+    
+    /**
+     * @brief Get the available quantity
+     * @return int The available quantity
+     */
+    int getQuantity() const;
+    
+    /**
+     * @brief Converts the music object to a string representation
+     * @return string String representation of the music item
+     */
     string toString() const; 
     
-    // Updates the price of the music item
+    /**
+     * @brief Updates the price of the music item
+     * @param price New price to set
+     */
     void updatePrice(const float&);
     
-    // Updates the quantity of the music item
+    /**
+     * @brief Updates the quantity of the music item
+     * @param quantity New quantity to set
+     */
     void updateQuantity(const int&);
 
-    // Overload equality operator to compare music items by name and artist
+    /**
+     * @brief Overload equality operator to compare music items by name and artist
+     * @param other The music item to compare with
+     * @return bool True if the items have the same name and artist
+     */
     bool operator==(const Music&) const;
 };
 

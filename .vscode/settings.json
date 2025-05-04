@@ -112,6 +112,7 @@
     "variant": "cpp",
     "bitset": "cpp",
     "regex": "cpp",
+<<<<<<< HEAD
     "cstring": "cpp",
     "ios": "cpp",
     "list": "cpp",
@@ -131,5 +132,8 @@
     "xtr1common": "cpp",
     "xtree": "cpp",
     "xutility": "cpp"
+=======
+    "iomanip": "cpp"
+>>>>>>> 7e97d545e3963a7ada2f8e72a42b997a62a63995
   }
 }
