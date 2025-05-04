@@ -3,56 +3,135 @@
 using std::string;
 
 vector<Music> ReadMusic::readData(const string& filename) const {
-    ifstream file(filename);
     vector<Music> items;
-    if (!file.is_open()) {
-        throw std::runtime_error("Error opening file!");
-    }
-    string line;
-    getline(file, line); // skip header line
-    while (getline(file, line)) {
-        stringstream ss(line);
-        string name, artist, genre, price, quantity;
-        getline(ss, name, ',');
-        getline(ss, artist, ',');
-        getline(ss, genre, ',');
-        getline(ss, price, ',');
-        getline(ss, quantity, ',');
+    SQLHENV hEnv = nullptr;
+    SQLHDBC hDbc = nullptr;
+    SQLHSTMT hStmt = nullptr;
+    SQLRETURN ret;
 
-        items.emplace_back(name, artist, genre, stof(price), stoi(quantity));
+    // 1. Khởi tạo môi trường
+    if (SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &hEnv) != SQL_SUCCESS) return items;
+    SQLSetEnvAttr(hEnv, SQL_ATTR_ODBC_VERSION, (void*)SQL_OV_ODBC3, 0);
+    if (SQLAllocHandle(SQL_HANDLE_DBC, hEnv, &hDbc) != SQL_SUCCESS) {
+        SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
+        return items;
     }
 
-    file.close();
+    // 2. Kết nối CSDL
+    SQLCHAR connStr[] = "Driver={ODBC Driver 17 for SQL Server};Server=localhost\\SQLEXPRESS;Database=music_store;Trusted_Connection=yes;";
+    ret = SQLDriverConnect(hDbc, NULL, connStr, SQL_NTS, NULL, 0, NULL, SQL_DRIVER_NOPROMPT);
+    if (!SQL_SUCCEEDED(ret)) {
+        SQLFreeHandle(SQL_HANDLE_DBC, hDbc);
+        SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
+        return items;
+    }
+
+    // 3. Tạo và thực thi truy vấn SELECT
+    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+        SQLDisconnect(hDbc);
+        SQLFreeHandle(SQL_HANDLE_DBC, hDbc);
+        SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
+        return items;
+    }
+
+    string selectQuery = "SELECT NameSong, Artist, Genre, Price, Quantity FROM music_info";
+    ret = SQLExecDirect(hStmt, (SQLCHAR*)selectQuery.c_str(), SQL_NTS);
+
+    if (SQL_SUCCEEDED(ret)) {
+        char tempNameSong[256], tempArtist[256], tempGenre[100];
+        float price;
+        int quantity;
+
+        while ((ret = SQLFetch(hStmt)) == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO) {
+            SQLGetData(hStmt, 1, SQL_C_CHAR, tempNameSong, sizeof(tempNameSong), NULL);
+            SQLGetData(hStmt, 2, SQL_C_CHAR, tempArtist, sizeof(tempArtist), NULL);
+            SQLGetData(hStmt, 3, SQL_C_CHAR, tempGenre, sizeof(tempGenre), NULL);
+            SQLGetData(hStmt, 4, SQL_C_FLOAT, &price, 0, NULL);
+            SQLGetData(hStmt, 5, SQL_C_SLONG, &quantity, 0, NULL);
+
+            string nameSong = tempNameSong;
+            string artist = tempArtist;
+            string genre = tempGenre;
+
+            items.emplace_back(nameSong, artist, genre, price, quantity);
+        }
+    }
+
+    // 4. Dọn dẹp tài nguyên
+    SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+    SQLDisconnect(hDbc);
+    SQLFreeHandle(SQL_HANDLE_DBC, hDbc);
+    SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
+
     return items;
 }
 
+
 vector<shared_ptr<IUser>> ReadUser::readData(const string& filename) const {
-    ifstream file(filename);
     vector<shared_ptr<IUser>> users;
-    if (!file.is_open()) {
-        throw "Error opening file!";
+    SQLHENV hEnv = nullptr;
+    SQLHDBC hDbc = nullptr;
+    SQLHSTMT hStmt = nullptr;
+    SQLRETURN ret;
+
+    // 1. Khởi tạo môi trường
+    if (SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &hEnv) != SQL_SUCCESS) return users;
+    SQLSetEnvAttr(hEnv, SQL_ATTR_ODBC_VERSION, (void*)SQL_OV_ODBC3, 0);
+    if (SQLAllocHandle(SQL_HANDLE_DBC, hEnv, &hDbc) != SQL_SUCCESS) {
+        SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
+        return users;
     }
 
-    string line;
-    getline(file, line); 
+    // 2. Kết nối CSDL
+    SQLCHAR connStr[] = "Driver={ODBC Driver 17 for SQL Server};Server=localhost\\SQLEXPRESS;Database=music_store;Trusted_Connection=yes;";
+    ret = SQLDriverConnect(hDbc, NULL, connStr, SQL_NTS, NULL, 0, NULL, SQL_DRIVER_NOPROMPT);
+    if (!SQL_SUCCEEDED(ret)) {
+        SQLFreeHandle(SQL_HANDLE_DBC, hDbc);
+        SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
+        return users;
+    }
 
-    while (getline(file, line)) {
-        stringstream ss(line);
+    // 3. Tạo và thực thi truy vấn SELECT
+    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+        SQLDisconnect(hDbc);
+        SQLFreeHandle(SQL_HANDLE_DBC, hDbc);
+        SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
+        return users;
+    }
+
+    string selectQuery = "SELECT Username, Pass, UserRole FROM user_info";
+    ret = SQLExecDirect(hStmt, (SQLCHAR*)selectQuery.c_str(), SQL_NTS);
+
+    if (SQL_SUCCEEDED(ret)) {
+        char tempUsername[256], tempPass[256], tempRole[2];
         string username, password, role;
 
-        getline(ss, username, ',');
-        getline(ss, password, ',');
-        getline(ss, role);
-        if (role.empty()) {
-            users.push_back(make_shared<Customer>(username, password));
-        } else {
-            users.push_back(make_shared<Admin>(username, password));
-        }
+        while ((ret = SQLFetch(hStmt)) == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO) {
+            SQLGetData(hStmt, 1, SQL_C_CHAR, tempUsername, sizeof(tempUsername), NULL);
+            SQLGetData(hStmt, 2, SQL_C_CHAR, tempPass, sizeof(tempPass), NULL);
+            SQLGetData(hStmt, 3, SQL_C_CHAR, tempRole, sizeof(tempRole), NULL);
 
+            username = tempUsername;
+            password = tempPass;
+            role = tempRole;
+
+            if (role == "C") {
+                users.push_back(make_shared<Customer>(username, password));
+            } else {
+                users.push_back(make_shared<Admin>(username, password));
+            }
+        }
     }
-    file.close();
+
+    // 4. Dọn dẹp tài nguyên
+    SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+    SQLDisconnect(hDbc);
+    SQLFreeHandle(SQL_HANDLE_DBC, hDbc);
+    SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
+
     return users;
 }
+
 
 vector<Order> ReadOrder::readData(const string& filename) const {
     ifstream file(filename);
@@ -93,16 +172,60 @@ vector<Order> ReadOrder::readData(const string& filename) const {
 
 
 vector<shared_ptr<IDiscount>> ReadDiscount::readData(const string& filename) const {
-    ifstream file(filename);
     vector<shared_ptr<IDiscount>> vouchers;
-    if (!file.is_open()) {
-        throw std::runtime_error("Error opening file!");
+
+    SQLHENV hEnv = nullptr;
+    SQLHDBC hDbc = nullptr;
+    SQLHSTMT hStmt = nullptr;
+    SQLRETURN ret;
+
+    // 1. Khởi tạo môi trường
+    if (SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &hEnv) != SQL_SUCCESS) return vouchers;
+    SQLSetEnvAttr(hEnv, SQL_ATTR_ODBC_VERSION, (void*)SQL_OV_ODBC3, 0);
+    if (SQLAllocHandle(SQL_HANDLE_DBC, hEnv, &hDbc) != SQL_SUCCESS) {
+        SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
+        return vouchers;
     }
-    string line;
-    while (getline(file, line)) {
-        shared_ptr<IDiscount> voucher = IDiscount::toDiscount(line);
-        vouchers.push_back(voucher);
+
+    // 2. Kết nối CSDL
+    SQLCHAR connStr[] = "Driver={ODBC Driver 17 for SQL Server};Server=localhost\\SQLEXPRESS;Database=music_store;Trusted_Connection=yes;";
+    ret = SQLDriverConnect(hDbc, NULL, connStr, SQL_NTS, NULL, 0, NULL, SQL_DRIVER_NOPROMPT);
+    if (!SQL_SUCCEEDED(ret)) {
+        SQLFreeHandle(SQL_HANDLE_DBC, hDbc);
+        SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
+        return vouchers;
     }
-    file.close();
+
+    // 3. Tạo và thực thi truy vấn SELECT
+    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+        SQLDisconnect(hDbc);
+        SQLFreeHandle(SQL_HANDLE_DBC, hDbc);
+        SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
+        return vouchers;
+    }
+
+    string selectQuery = "SELECT Vouchername FROM vouchers";
+    ret = SQLExecDirect(hStmt, (SQLCHAR*)selectQuery.c_str(), SQL_NTS);
+
+    if (SQL_SUCCEEDED(ret)) {
+        char tempVoucher[256];
+        string Voucher;
+
+        while ((ret = SQLFetch(hStmt)) == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO) {
+            SQLGetData(hStmt, 1, SQL_C_CHAR, tempVoucher, sizeof(tempVoucher), NULL);
+
+            Voucher = tempVoucher;
+
+            shared_ptr<IDiscount> voucher = IDiscount::toDiscount(Voucher);
+            vouchers.push_back(voucher);
+        }
+    }
+
+    // 4. Dọn dẹp tài nguyên
+    SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+    SQLDisconnect(hDbc);
+    SQLFreeHandle(SQL_HANDLE_DBC, hDbc);
+    SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
+
     return vouchers;
 }

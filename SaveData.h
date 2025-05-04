@@ -5,6 +5,10 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <windows.h>
+#include <sqlext.h>
+#include <sqltypes.h>
+#include <sql.h>
 
 #include "Music.h"
 #include "User.h"
