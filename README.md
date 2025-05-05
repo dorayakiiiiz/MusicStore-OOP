@@ -1,6 +1,7 @@
 ## Đồ án môn học: Music Store Management - Hệ thống quản lí cửa hàng âm nhạc
 
 ### Lớp: 23CTT3
+### Môn: Phương pháp lập trình hướng đối tượngtượng
 ### GVHD: Trần Duy Quang
 
 ## Thành viên nhóm
@@ -54,16 +55,41 @@ Nhóm đã phân tách ra 2 vai trò riêng biệt với 2 loại đối tượn
 
 #### Tính năng dành cho quản trị viên cửa hàng (Admin)
 - Quản lý kho nhạc: Thêm, xóa, chỉnh sửa thông tin và giá bài hát
-- Cập nhật số lượng: Điều chỉnh số lượng sản phẩm có sẵn trong kho
 - Xem danh sách người dùng: Quản lý thông tin tài khoản khách hàng
 - Quản lý tài khoản: Có quyền xóa tài khoản người dùng vi phạm
 - Xem lịch sử đơn hàng: Kiểm tra toàn bộ đơn hàng trong hệ thống
 - Thống kê doanh thu: Xem báo cáo doanh thu và số lượng bài hát đã bán
-- Phân tích mặt hàng: Xác định các bài hát bán chạy nhất và doanh thu cao nhất
 - Đăng xuất: Kết thúc phiên quản trị
 
-#### Nâng cao: Áp dụng load/save data từ database với MySQL thay vì từ file text hay file nhị phân thông thường
+#### Nâng cao: Áp dụng load/save data từ database với SQL Server thay vì từ file text hay file nhị phân thông thường
 #### Hướng dẫn cài đặt
+- Bước 1: Cài đặt ODBC Driver for SQL Server 17 (Đây là driver cần thiết để C++ có thể giao tiếp với SQL Server thông qua ODBC)
+    + Tải từ trang chính thức của Microsoft: https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server
+    + Chọn phiên bản tương ứng hệ điều hành của máy bạn (Windows 64-bit) và cài đặt.
+- Bước 2: Cài đặt MSYS2 & UnixODBC
+    + Mở MSYS2 UCRT64 Terminal và nhập lệnh: pacman -S mingw-w64-ucrt-x86_64-unixodbc
+    + Sau đó nhấn Y để cài đặt
+- Bước 3: Cài đặt SQL Server (mssql extension) trong VSCode
+    + Mở VSCode → nhấn Ctrl + Shift + X để mở Marketplace Extensions
+    + Tìm và cài đặt SQL Server (mssql) của Microsoft. 
+    + Sau khi cài, nhấn Ctrl + Alt + D → Chọn vào dấu + trong phần CONNECTIONS để thêm kết nối.
+- Bước 4: Tạo cơ sở dữ liệu
+    + Mở file music_store.sql bằng VSCode hoặc SQL Server Management Studio.
+    + Chạy lệnh Execute để tạo database music_store và các bảng cần thiết.
+- Bước 5: Kết nối đến cơ sở dữ liệu
+    + Tại VSCode trong phần Connection Dialog (Preview), ta nhập các thông tin như
+        - Profile Name: tên tùy chọn
+        - Server name: tên máy SQL Server của bạn
+        - Authentication type: SQL Login hoặc Windows Authentication. Nếu là SQL Login cần nhập User name và Password
+        - Database name: music_store
+        - Encrypt: chọn Optional
+    + Tích chọn Trust server certificate
+    + Sau đó nhấn Connect để kết nối
+- Bước 6: Biên dịch chương trình
+    + Nhấn Ctrl + ` để mở Termianl
+    + Nhập lệnh: g++ *.cpp -lole32 -lodbc32 -o program/main
+    + Trong trường hợp máy không nhận diện được *.cpp ta phải nhập tất cả file .cpp để biên dịch với lệnh: g++ main.cpp AdminController.cpp AdminUI.cpp AuthService.cpp Cart.cpp CartService.cpp ControllerFactory.cpp CustomerController.cpp CustomerUI.cpp Discount.cpp DiscountService.cpp DiscountStrategy.cpp InputValidator.cpp Music.cpp MusicService.cpp Order.cpp OrderService.cpp ReadData.cpp SaveData.cpp Search.cpp SearchFactory.cpp StoreApp.cpp User.cpp UserService.cpp utils.cpp DatabaseConnector.cpp -lole32 -lodbc32 -o program/main
+    + Sau khi đã biên dịch thành công, nhập lệnh program/main để chạy chương trình
 
 ### Kiến trúc phần mềm được áp dụng (cho đến thời điểm báo cáo tiến độ)
 Dự án được xây dựng theo mô hình kiến trúc MVC (Model-View-Controller) nhằm phân tách rõ ràng các thành phần của ứng dụng:
