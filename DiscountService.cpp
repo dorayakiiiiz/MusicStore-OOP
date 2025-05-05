@@ -1,3 +1,11 @@
+/**
+ * @file DiscountService.cpp
+ * @brief Implementation file for the DiscountService class
+ * 
+ * @details Contains implementations for managing discount vouchers, including
+ *          creating, applying, and removing discounts
+ */
+
 #include "DiscountService.h"
 #include "Discount.h"
 #include "DiscountStrategy.h"
@@ -55,9 +63,9 @@ shared_ptr<Discount> DiscountService::createFixedDiscount(
 
 void DiscountService::createDiscount(vector<shared_ptr<Discount>>& vouchers, 
     const string& username, int discountType, int discountValue) {
-    if (discountType == 1) {
+    if (1 == discountType) {
         vouchers.push_back(createPercentageDiscount(username, discountValue));
-    } else if (discountType == 2) {
+    } else if (2 == discountType) {
         vouchers.push_back(createFixedDiscount(username, discountValue));
     }
 }

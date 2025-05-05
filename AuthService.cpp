@@ -1,3 +1,11 @@
+/**
+ * @file AuthService.cpp
+ * @brief Implementation file for the Authentication service
+ * 
+ * @details Contains implementations for user login, registration and authentication
+ *          functionality for the music store system
+ */
+
 #include "AuthService.h"
 #include "utils.h"
 
@@ -11,7 +19,7 @@ bool Authentication::registerUser(vector<shared_ptr<IUser>>& users, const string
     }
     
     // Create appropriate user type based on role
-    if (role == "Customer") {
+    if ("Customer" == role) {   
         users.push_back(make_shared<Customer>(username, password));
     } else {
         users.push_back(make_shared<Admin>(username, password));

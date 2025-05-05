@@ -1,3 +1,12 @@
+/**
+ * @file AdminController.h
+ * @brief Header file for the AdminController class
+ * 
+ * @details Defines the AdminController class which is responsible for all administrative
+ * operations in the music store system including inventory management, user management,
+ * and sales reporting.
+ */
+
 #ifndef _ADMIN_CONTROLLER_H_
 #define _ADMIN_CONTROLLER_H_
 

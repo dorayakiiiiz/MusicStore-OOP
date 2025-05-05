@@ -1,3 +1,11 @@
+/**
+ * @file DiscountStrategy.h
+ * @brief Header file for discount strategy classes
+ * 
+ * @details Defines the interface and concrete implementations for
+ *          different discount calculation strategies
+ */
+
 #ifndef _DISCOUNT_STRATEGY_H_
 #define _DISCOUNT_STRATEGY_H_
 

@@ -1,6 +1,11 @@
 var searchData=
 [
-  ['savedata_0',['saveData',['../class_i_save_data.html#a2d1130f3b895b97e9187a673cf176ef4',1,'ISaveData::saveData()'],['../class_save_music.html#a15592834767242e49ec510da49bb213d',1,'SaveMusic::saveData()'],['../class_save_user.html#a5f82ee42bd3a9106c444e3ab5dda75f9',1,'SaveUser::saveData()'],['../class_save_order.html#a2b069f41e3abcdb333ce9dceab4a637a',1,'SaveOrder::saveData()'],['../class_save_discount.html#ad37b5e2e2d8998f4f6cde57c3c2ac812',1,'SaveDiscount::saveData()']]],
-  ['searchmusic_1',['searchMusic',['../class_customer_service.html#a83526d071333e51b6600946c21cbfd26',1,'CustomerService']]],
-  ['storeapp_2',['StoreApp',['../class_store_app.html#a5fe8bb2ed9b391e76bd20c89f0ad9cbf',1,'StoreApp']]]
+  ['readdata_0',['readData',['../class_i_read_data.html#a598685bb4f2199076de7a64cf82884a6',1,'IReadData::readData()'],['../class_read_music.html#a7a4c6c9a8bcdee002c599d682e6e7a20',1,'ReadMusic::readData()'],['../class_read_user.html#a81f6940f1d9e7c3dc04c6da32847f0aa',1,'ReadUser::readData()'],['../class_read_order.html#aad38e1c69449a12bf9ecf831d98440c3',1,'ReadOrder::readData()'],['../class_read_discount.html#a1e535b471a67e073ea3dda054a0595e3',1,'ReadDiscount::readData()']]],
+  ['registeruser_1',['registerUser',['../class_authentication.html#a1ee861b932d4233c110e29d02ce5fe59',1,'Authentication']]],
+  ['removediscount_2',['removeDiscount',['../class_discount_service.html#a99c5235490f7299d343530de030326dc',1,'DiscountService']]],
+  ['removeitem_3',['removeItem',['../class_cart.html#af452e2513e5923c81ab522fc6ab286b7',1,'Cart']]],
+  ['removeitemfromcart_4',['removeItemFromCart',['../class_cart_service.html#a544c86c3bf9cdb98569d4a016fe7b7cc',1,'CartService']]],
+  ['removemusicitem_5',['removeMusicItem',['../class_music_service.html#a5b7d471664d002c80dbdb9d748c11b00',1,'MusicService']]],
+  ['removesoldoutitems_6',['removeSoldOutItems',['../class_music_service.html#ae72cbf5580e9d9604db5fc39b19b4d11',1,'MusicService']]],
+  ['run_7',['run',['../class_store_app.html#aeecda98d7b8bca5d464081534e0a5413',1,'StoreApp']]]
 ];

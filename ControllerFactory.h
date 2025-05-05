@@ -1,3 +1,13 @@
+
+/************************************************************************************
+ * @file ControllerFactory.h
+ * @brief Header file for the ControllerFactory class
+ * 
+ * @details This file contains the declaration of the ControllerFactory class, which is
+ *          responsible for creating controller instances based on user roles (Admin or Customer).
+ * 
+ ************************************************************************************/
+
 #ifndef _CONTROLLER_FACTORY_H_
 #define _CONTROLLER_FACTORY_H_
 

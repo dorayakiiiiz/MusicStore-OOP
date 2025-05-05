@@ -1,3 +1,11 @@
+/**
+ * @file Cart.cpp
+ * @brief Implementation file for the Cart class
+ * 
+ * @details Contains implementations for the shopping cart functionality,
+ *          including adding, removing items and calculating totals
+ */
+
 #include "Cart.h"
 #include <iostream>
 

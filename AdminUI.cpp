@@ -1,3 +1,11 @@
+/**
+ * @file AdminUI.cpp
+ * @brief Implementation file for the AdminUI class
+ * 
+ * @details Contains implementations of all display functions and input collection
+ *          methods for the administrator interface
+ */
+
 #include "AdminUI.h"
 #include "utils.h"
 #include "InputValidator.h"

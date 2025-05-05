@@ -1,3 +1,11 @@
+/**
+ * @file IController.h
+ * @brief Header file for the IController interface
+ * 
+ * @details Defines the common interface for all controller classes in the system,
+ *          establishing a contract for menu functionality implementation
+ */
+
 #ifndef _ICONTROLLER_H_
 #define _ICONTROLLER_H_
 

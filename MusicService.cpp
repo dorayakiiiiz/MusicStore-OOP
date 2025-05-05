@@ -1,3 +1,11 @@
+/**
+ * @file MusicService.cpp
+ * @brief Implementation file for the MusicService class
+ * 
+ * @details Contains implementations for music inventory management functions
+ *          including adding, removing, searching, and updating items
+ */
+
 #include "MusicService.h"
 #include <stdexcept>
 

@@ -1,3 +1,11 @@
+
+
+/************************************************************************************
+ * @file CustomerController.cpp
+ * @brief Implementation of the CustomerController class, which handles customer operations
+ *        in a music store application.
+ ************************************************************************************/
+
 #include "CustomerController.h"
 #include "CustomerUI.h"
 #include "DiscountService.h"
@@ -205,7 +213,7 @@ void CustomerController::handleCheckout(vector<Order>& orders, vector<Music>& it
                 }
             } while (!isValid);
 
-            if (useVoucher == "yes") {
+            if ("yes" == useVoucher) {
                 // Get voucher code
                 string voucherCode;
                 do {

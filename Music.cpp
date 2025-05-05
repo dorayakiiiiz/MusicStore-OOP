@@ -1,3 +1,11 @@
+/**
+ * @file Music.cpp
+ * @brief Implementation file for the Music class
+ * 
+ * @details Contains implementations for the Music class which represents
+ *          a music item in the inventory system
+ */
+
 #include "Music.h"
 #include <sstream>
 

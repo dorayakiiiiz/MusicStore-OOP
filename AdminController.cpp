@@ -1,3 +1,11 @@
+/**
+ * @file AdminController.cpp
+ * @brief Implementation file for the AdminController class 
+ * 
+ * @details Contains implementations of admin operations including managing music inventory,
+ * user management, and generating sales reports.
+ */
+
 #include "AdminController.h"
 #include "AdminUI.h"
 #include "MusicService.h"
@@ -128,7 +136,7 @@ void AdminController::handleViewPurchaseHistory(vector<shared_ptr<IUser>>& users
     // Display purchase history for each customer
     for (const auto& user : users) {
         // Skip admin users
-        if (user->getRole() == "Admin") {
+        if ("Admin" == user->getRole()) {
             continue;
         }
 

@@ -1,3 +1,10 @@
+/**
+ * @file main.cpp
+ * @brief Main entry point for the Music Store application
+ * 
+ * @details Creates and initializes the StoreApp object and starts the application
+ */
+
 #include "StoreApp.h"
 
 /**

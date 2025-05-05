@@ -1,3 +1,11 @@
+/**
+ * @file ReadData.h
+ * @brief Header file for data reading classes
+ * 
+ * @details Defines interfaces and classes for loading different types of data
+ *          from persistent storage into the application
+ */
+
 #ifndef _READDATA_H_
 #define _READDATA_H_
 

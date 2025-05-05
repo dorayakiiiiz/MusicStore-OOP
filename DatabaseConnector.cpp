@@ -1,3 +1,11 @@
+/**
+ * @file DatabaseConnector.cpp
+ * @brief Implementation file for the DatabaseConnector class
+ * 
+ * @details Contains implementations for database connectivity functionality,
+ *          managing connections to data storage
+ */
+
 #include "DatabaseConnector.h"
 
 // handle errors that occur during database operations

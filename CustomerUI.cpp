@@ -1,3 +1,11 @@
+/**
+ * @file CustomerUI.cpp
+ * @brief Implementation file for the CustomerUI class
+ * 
+ * @details Contains implementations of all display functions and input collection
+ *          methods for the customer interface
+ */
+
 #include "CustomerUI.h"
 #include "utils.h"
 #include <iomanip> 

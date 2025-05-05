@@ -1,3 +1,11 @@
+/**
+ * @file Discount.cpp
+ * @brief Implementation file for the Discount classes
+ * 
+ * @details Contains implementations of the Discount base class and its derived
+ *          classes for different discount types
+ */
+
 #include "Discount.h"
 #include "DiscountStrategy.h"
 #include <memory>
@@ -69,7 +77,7 @@ shared_ptr<Discount> Discount::fromString(const string& str) {
     }
     
     // Create the appropriate discount type based on the marker
-    if (type == 'P') {
+    if ('P' == type) {
         return make_shared<Discount>(username, 
             make_unique<PercentageDiscountStrategy>(value));
     } else {

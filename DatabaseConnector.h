@@ -1,3 +1,11 @@
+/**
+ * @file DatabaseConnector.h
+ * @brief Header file for the DatabaseConnector class
+ * 
+ * @details Defines the DatabaseConnector class which manages connections
+ *          to the database or file storage system
+ */
+
 #ifndef _DATABASE_CONNECTOR_H_
 #define _DATABASE_CONNECTOR_H_
 #include <windows.h>

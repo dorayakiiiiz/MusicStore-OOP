@@ -1,3 +1,11 @@
+/**
+ * @file ReadDataFactory.h
+ * @brief Header file for the ReadDataFactory class
+ * 
+ * @details Defines a factory for creating appropriate data readers
+ *          based on the data type being loaded
+ */
+
 #ifndef _READDATAFACTORY_H_
 #define _READDATAFACTORY_H_
 

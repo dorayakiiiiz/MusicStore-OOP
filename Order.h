@@ -1,3 +1,11 @@
+/**
+ * @file Order.h
+ * @brief Header file for the Order class
+ * 
+ * @details Defines the Order class which represents a completed purchase
+ *          transaction in the system
+ */
+
 #ifndef _ORDER_H_
 #define _ORDER_H_
 

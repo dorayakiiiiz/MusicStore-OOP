@@ -1,3 +1,11 @@
+/**
+ * @file StoreApp.cpp
+ * @brief Implementation file for the StoreApp class
+ * 
+ * @details Contains the main application logic, handling initialization,
+ *          authentication, and the main program flow
+ */
+
 #include "StoreApp.h"
 #include "utils.h"
 #include "InputValidator.h"
@@ -137,7 +145,7 @@ void StoreApp::handleSignUp() {
     } while (!isValid);
     
     // Additional validation for admin registration
-    if (role == "Admin") {
+    if ("Admin" == toLower(role)) {
         string passkey = getInput("Input admin passkey: ");
         if (!Admin::isValidPasskey(passkey)) {
             printMessage("Invalid passkey. Please try again later!");

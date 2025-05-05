@@ -1,8 +1,10 @@
 var searchData=
 [
   ['additems_0',['addItems',['../class_cart.html#a1eb7f4bc503e518c1ae29beabd0ad131',1,'Cart']]],
-  ['additemtocart_1',['addItemToCart',['../class_customer_service.html#a2cf783d78fba27a9fc07427065130c9b',1,'CustomerService']]],
-  ['addmusicitem_2',['addMusicItem',['../class_admin_service.html#a22b20d09e1f08bff9d6bff50af8fed1c',1,'AdminService']]],
+  ['additemtocart_1',['addItemToCart',['../class_cart_service.html#a330723d931be5fe0769f22e27e49d917',1,'CartService']]],
+  ['addmusicitem_2',['addMusicItem',['../class_music_service.html#aeebed79cf6b34cd4b66e451c50bcb7e1',1,'MusicService']]],
   ['admin_3',['Admin',['../class_admin.html#a1dab44d75aabb062d38135e83804cd43',1,'Admin::Admin(const string &amp;, const string &amp;)'],['../class_admin.html#a8bd398885cf8c4cc76294498cf0c164d',1,'Admin::Admin(const Admin &amp;)']]],
-  ['applydiscount_4',['applyDiscount',['../class_discount_factory.html#a52b45bd82e3ddce469e6678aa549cd5a',1,'DiscountFactory']]]
+  ['admincontroller_4',['AdminController',['../class_admin_controller.html#a55d306ac709714a1d6d7d3f4af857737',1,'AdminController']]],
+  ['apply_5',['apply',['../class_discount.html#a0d285b5f5d4f36a83d9e77fa8c9574d8',1,'Discount']]],
+  ['applydiscount_6',['applyDiscount',['../class_discount_service.html#a7f4c98ec8f5a70bb6571168af9055fd5',1,'DiscountService']]]
 ];

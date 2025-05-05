@@ -1,3 +1,11 @@
+/**
+ * @file Discount.h
+ * @brief Header file for the Discount class hierarchy
+ * 
+ * @details Defines the abstract Discount base class and concrete discount types
+ *          such as percentage and fixed amount discounts
+ */
+
 #ifndef _DISCOUNT_H_
 #define _DISCOUNT_H_
 

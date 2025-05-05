@@ -3,11 +3,11 @@
 
 shared_ptr<ISearch> SearchFactory::createSearch(const string& criteria) {
     string lowerCriteria = toLower(criteria);
-    if (lowerCriteria == "name") {
+    if ("name" == lowerCriteria) {
         return make_shared<NameSearch>();
-    } else if (lowerCriteria == "artist") {
+    } else if ("artist" == lowerCriteria) {
         return make_shared<ArtistSearch>();
-    } else if (lowerCriteria == "genre") {
+    } else if ( "genre" == lowerCriteria) {
         return make_shared<GenreSearch>();
     } else {
         return nullptr;
