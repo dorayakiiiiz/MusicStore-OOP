@@ -198,6 +198,7 @@ void SaveOrder::saveData(const vector<Order>& orders) const {
     }
 
     // Step 4: Clean up resources
+    SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
     dbConnector.disconnect();
 }
 
