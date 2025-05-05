@@ -95,9 +95,4 @@ public:
      */
     void saveData(const vector<shared_ptr<Discount>>&) const override;
 };
-
-//askasfjbasf
-//ajkbfsjkasbf
-//ajbsfjsabf
-//jabfeke
 #endif
