@@ -1,9 +1,7 @@
 var searchData=
 [
-  ['_7eidiscount_0',['~IDiscount',['../class_i_discount.html#a735eb240fd7e30d85b49a4c724e24294',1,'IDiscount']]],
-  ['_7eireaddata_1',['~IReadData',['../class_i_read_data.html#a42e9941ba8b42f1c52ec8c0383e2ee9d',1,'IReadData']]],
-  ['_7eisavedata_2',['~ISaveData',['../class_i_save_data.html#ab7385b0867ed99245eaadcd66ed778ef',1,'ISaveData']]],
-  ['_7eiuser_3',['~IUser',['../class_i_user.html#abb2da393900e7b3635166c6f9f93ef12',1,'IUser']]],
-  ['_7emusic_4',['~Music',['../class_music.html#a6846b48b4318cbf38c2a7e8636749e93',1,'Music']]],
-  ['_7estoreapp_5',['~StoreApp',['../class_store_app.html#acd6b9e865eb4557845295e59aed95dd0',1,'StoreApp']]]
+  ['updatemusicitemprice_0',['updateMusicItemPrice',['../class_music_service.html#a9fb5d438885e0315ca1f9b4aa4c1d0f1',1,'MusicService']]],
+  ['updateprice_1',['updatePrice',['../class_music.html#a77ab1b74e2249c79f6d161f0dbd3be67',1,'Music']]],
+  ['updatequantity_2',['updateQuantity',['../class_music.html#a8d2b8f56408a37e15228966f5ab13393',1,'Music']]],
+  ['userservice_3',['UserService',['../class_user_service.html#a03d833b47a0680425945cc8c615433f7',1,'UserService']]]
 ];

@@ -1,3 +1,11 @@
+/**
+ * @file User.cpp
+ * @brief Implementation file for User classes
+ * 
+ * @details Contains implementations for the user hierarchy including
+ *          IUser interface and derived Admin and Customer classes
+ */
+
 #include "User.h"
 
 // Constructor for the base user class

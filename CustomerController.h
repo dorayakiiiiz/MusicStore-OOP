@@ -1,3 +1,11 @@
+/**
+ * @file CustomerController.h
+ * @brief Header file for the CustomerController class
+ * 
+ * @details Defines the CustomerController class which handles customer operations
+ *          including viewing music, searching, cart management, and checkout
+ */
+
 #ifndef _CUSTOMER_CONTROLLER_H_
 #define _CUSTOMER_CONTROLLER_H_
 

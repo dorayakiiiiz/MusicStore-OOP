@@ -36,7 +36,8 @@
 - Thêm, xóa, chỉnh sửa các bài hát trong kho.
 - Tìm nhạc theo các tiêu chí như tên, thể loại, ca sĩ...
 - Tạo đơn hàng mua/bán các bài hát.
-- Hiển thị số bài hát trong kho và các bài hát đã bán hết.
+- Hiển thị số bài hát trong kho và các bài hát đã bán hết.  
+[Mã nguồn tham khảo](https://www.codewithc.com/music-store-management-system-c-program-with-mysql-database/)
 
 ### Các chức năng mà nhóm đã cải tiến thêm
 Nhóm đã phân tách ra 2 vai trò riêng biệt với 2 loại đối tượng người dùng riêng so với chương trình gốc chỉ đơn giản là mua/bán trên chung 1 giao diện
@@ -62,7 +63,7 @@ Nhóm đã phân tách ra 2 vai trò riêng biệt với 2 loại đối tượn
 - Đăng xuất: Kết thúc phiên quản trị
 
 #### Nâng cao: Áp dụng load/save data từ database với SQL Server thay vì từ file text hay file nhị phân thông thường
-#### Hướng dẫn cài đặt
+#### Hướng dẫn biên dịch chương trình
 - Bước 1: Cài đặt ODBC Driver for SQL Server 17 (Đây là driver cần thiết để C++ có thể giao tiếp với SQL Server thông qua ODBC)
     + Tải từ trang chính thức của Microsoft: https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server
     + Chọn phiên bản tương ứng hệ điều hành của máy bạn (Windows 64-bit) và cài đặt.
@@ -87,9 +88,14 @@ Nhóm đã phân tách ra 2 vai trò riêng biệt với 2 loại đối tượn
     + Sau đó nhấn Connect để kết nối
 - Bước 6: Biên dịch chương trình
     + Nhấn Ctrl + ` để mở Termianl
-    + Nhập lệnh: g++ *.cpp -lole32 -lodbc32 -o program/main
-    + Trong trường hợp máy không nhận diện được *.cpp ta phải nhập tất cả file .cpp để biên dịch với lệnh: g++ main.cpp AdminController.cpp AdminUI.cpp AuthService.cpp Cart.cpp CartService.cpp ControllerFactory.cpp CustomerController.cpp CustomerUI.cpp Discount.cpp DiscountService.cpp DiscountStrategy.cpp InputValidator.cpp Music.cpp MusicService.cpp Order.cpp OrderService.cpp ReadData.cpp SaveData.cpp Search.cpp SearchFactory.cpp StoreApp.cpp User.cpp UserService.cpp utils.cpp DatabaseConnector.cpp -lole32 -lodbc32 -o program/main
-    + Sau khi đã biên dịch thành công, nhập lệnh program/main để chạy chương trình
+    + Nhập lệnh:   
+    ```g++ main.cpp AdminController.cpp AdminUI.cpp AuthService.cpp Cart.cpp CartService.cpp ControllerFactory.cpp CustomerController.cpp CustomerUI.cpp Discount.cpp DiscountService.cpp DiscountStrategy.cpp InputValidator.cpp Music.cpp MusicService.cpp Order.cpp OrderService.cpp ReadData.cpp SaveData.cpp Search.cpp SearchFactory.cpp StoreApp.cpp User.cpp UserService.cpp utils.cpp DatabaseConnector.cpp -lole32 -lodbc32 -o program/main```  
+    để biên dịch chương trình
+    + Nếu đã điều chỉnh trong .vscode/task.json thì chỉ cần gõ lệnh sau để biên dịch:
+    ```g++ *.cpp -lole32 -lodbc32 -o program/main```
+
+    + Nhập lệnh:
+    ```./program/main``` để chạy chương trình.
 
 ### Kiến trúc phần mềm được áp dụng (cho đến thời điểm báo cáo tiến độ)
 Dự án được xây dựng theo mô hình kiến trúc MVC (Model-View-Controller) nhằm phân tách rõ ràng các thành phần của ứng dụng:
@@ -105,14 +111,6 @@ Dự án được xây dựng theo mô hình kiến trúc MVC (Model-View-Contro
 - Các class Controller riêng biệt cho từng vai trò (AdminController, CustomerController)
 - Điều phối luồng dữ liệu giữa Model và View
 
-### Các Design Pattern được sử dụng (cho đến hiện tại)
-#### Factory Pattern
-- ControllerFactory: Tạo ra các Controller phù hợp dựa trên vai trò của người dùng (Admin/Customer)
-- ReadDataFactory và SaveDataFactory: Tạo ra các đối tượng xử lý đọc/ghi dữ liệu phù hợp với loại dữ liệu
-#### Strategy Pattern
-- Áp dụng cho việc xử lý các loại mã giảm giá khác nhau (giảm theo phần trăm, giảm theo số tiền cố định)
-- Cho phép linh hoạt thêm các chiến lược giảm giá mới mà không ảnh hưởng đến code hiện có
-
 ### Nguyên lí OOP được áp dụng
 #### Tính đóng gói (Encapsulation)
 - Các thuộc tính của class được khai báo private
@@ -121,11 +119,13 @@ Dự án được xây dựng theo mô hình kiến trúc MVC (Model-View-Contro
 - Các class con kế thừa từ class cha để tái sử dụng code
 - Ví dụ: AdminController và CustomerController kế thừa từ IController
 #### Tính đa hình (Polymorphism)
-- Sử dụng giao diện và lớp trừu tượng để triển khai các hành vi khác nhau
+- Sử dụng lớp trừu tượng để triển khai các hành vi khác nhau
 - Ví dụ: Các chiến lược giảm giá khác nhau đều triển khai từ interface DiscountStrategy
 #### Tính trừu tượng (Abstraction)
 - Sử dụng các lớp trừu tượng và interface để định nghĩa các hành vi
 - Giúp code dễ mở rộng và bảo trì
+- Ví dụ như lớp Admin và Customer đều được kế thừa từ abstract class IUser chỉ người dùng, AdminController 
+và CustomerController đều kế thừa từ abstract class IController
 
 ### Tuân thủ các nguyên tắc SOLID
 #### Single Responsibility Principle (SRP)
@@ -144,4 +144,20 @@ Dự án được xây dựng theo mô hình kiến trúc MVC (Model-View-Contro
 - Các module cấp cao không phụ thuộc vào module cấp thấp, cả hai phụ thuộc vào abstraction
 - Ví dụ: sử dụng dependency injection trong các constructor của Controller và Service, lớp Discount phụ thuộc vào interface DiscountStrategy thay vì các lớp cụ thể
 
-###
+### Các Design Pattern được sử dụng (cho đến hiện tại)
+#### Factory Pattern
+- ControllerFactory: Tạo ra các Controller phù hợp dựa trên vai trò của người dùng (Admin/Customer)
+- ReadDataFactory và SaveDataFactory: Tạo ra các đối tượng xử lý đọc/ghi dữ liệu phù hợp với loại dữ liệu
+#### Strategy Pattern
+- Áp dụng cho việc xử lý các loại mã giảm giá khác nhau (giảm theo phần trăm, giảm theo số tiền cố định)
+- Cho phép linh hoạt thêm các chiến lược giảm giá mới mà không ảnh hưởng đến code hiện có
+
+### Đảm bảo chất lượng (sẽ hoàn thành ở đợt nộp chính thức)
+
+### Tài liệu mô tả kiến trúc phần mềm + Coding Convention
+- [Tài liệu mô tả](docs/html/index.html)
+
+- [Tài liệu Coding Convention](https://docs.google.com/document/d/10KNVaHAwrnSvY9fQ1v7uBX2IVxCTLYYALBpOFh5hXmo/edit?tab=t.0)
+
+
+### Video demo mô tả:

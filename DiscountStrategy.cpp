@@ -1,3 +1,11 @@
+/**
+ * @file DiscountStrategy.cpp
+ * @brief Implementation file for discount strategy classes
+ * 
+ * @details Contains implementations of different discount calculation
+ *          strategies used by the discount system
+ */
+
 #include "DiscountStrategy.h"
 #include <algorithm>
 

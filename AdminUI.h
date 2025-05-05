@@ -1,3 +1,11 @@
+/**
+ * @file AdminUI.h
+ * @brief Header file for the AdminUI class
+ * 
+ * @details Defines the AdminUI class which provides display functions and
+ *          input collection methods for the administrator interface
+ */
+
 #ifndef _ADMIN_UI_H_
 #define _ADMIN_UI_H_
 

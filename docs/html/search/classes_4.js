@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['fixeddiscount_0',['FixedDiscount',['../class_fixed_discount.html',1,'']]]
+  ['fixeddiscountstrategy_0',['FixedDiscountStrategy',['../class_fixed_discount_strategy.html',1,'']]]
 ];

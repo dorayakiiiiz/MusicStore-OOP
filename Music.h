@@ -1,5 +1,13 @@
-#ifndef _MUSIC_ITEM_H_
-#define _MUSIC_ITEM_H_
+/**
+ * @file Music.h
+ * @brief Header file for the Music class
+ * 
+ * @details Defines the Music class which represents music items
+ *          sold in the store, containing properties like name, artist, price, etc.
+ */
+
+#ifndef _MUSIC_H_
+#define _MUSIC_H_
 
 #include <string>
 

@@ -1,3 +1,11 @@
+/**
+ * @file SaveData.cpp
+ * @brief Implementation file for data saving classes
+ * 
+ * @details Contains implementations for saving different types of data
+ *          (music, users, orders, discounts) to persistent storage
+ */
+
 #include "SaveData.h"
 #include "DatabaseConnector.h"
 

@@ -1,3 +1,11 @@
+/**
+ * @file Cart.h
+ * @brief Header file for the Cart class
+ * 
+ * @details Defines the Cart class which manages a customer's shopping cart
+ *          during a shopping session
+ */
+
 #ifndef _CART_H_
 #define _CART_H_
 

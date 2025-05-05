@@ -1,3 +1,11 @@
+/**
+ * @file User.h
+ * @brief Header file for User classes
+ * 
+ * @details Defines the user class hierarchy, including the IUser interface
+ *          and derived Admin and Customer classes
+ */
+
 #ifndef _USER_H_
 #define _USER_H_
 

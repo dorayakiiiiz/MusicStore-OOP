@@ -1,3 +1,11 @@
+/**
+ * @file CustomerUI.h
+ * @brief Header file for the CustomerUI class
+ * 
+ * @details Defines the CustomerUI class which provides display functions
+ *          and input collection methods for the customer interface
+ */
+
 #ifndef _CUSTOMER_UI_H_
 #define _CUSTOMER_UI_H_
 

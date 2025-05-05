@@ -1,3 +1,11 @@
+/**
+ * @file MusicService.h
+ * @brief Header file for the MusicService class
+ * 
+ * @details Defines the MusicService class which provides functionality
+ *          for managing music inventory, including adding, removing, and searching
+ */
+
 #ifndef _MUSIC_SERVICE_H_
 #define _MUSIC_SERVICE_H_
 

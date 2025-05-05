@@ -1,3 +1,11 @@
+/**
+ * @file ReadData.cpp
+ * @brief Implementation file for data reading classes
+ * 
+ * @details Contains implementations for loading different types of data
+ *          (music, users, orders, discounts) from persistent storage
+ */
+
 #include "ReadData.h"
 
 // Implements the readData method for Music class

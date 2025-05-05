@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['percentagediscount_0',['PercentageDiscount',['../class_percentage_discount.html',1,'']]]
+  ['namesearch_0',['NameSearch',['../class_name_search.html',1,'']]]
 ];

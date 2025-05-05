@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['operator_3d_3d_0',['operator==',['../class_music.html#a7a100184e45eb36c79e13e929f382c82',1,'Music']]],
-  ['order_1',['Order',['../class_order.html',1,'Order'],['../class_order.html#a43b5614756c0bb85ac4c5d23a25de834',1,'Order::Order()']]],
-  ['order_2ecpp_2',['Order.cpp',['../_order_8cpp.html',1,'']]],
-  ['order_2eh_3',['Order.h',['../_order_8h.html',1,'']]]
+  ['loadvaliddiscounts_0',['loadValidDiscounts',['../class_discount_service.html#acdca0382f6b516f75f9430f80b725223',1,'DiscountService']]],
+  ['loginuser_1',['loginUser',['../class_authentication.html#abd5171861071e7c18ce8ca2310605e40',1,'Authentication']]]
 ];

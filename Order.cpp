@@ -1,3 +1,11 @@
+/**
+ * @file Order.cpp
+ * @brief Implementation file for the Order class
+ * 
+ * @details Contains implementations for order functionality including
+ *          creation, item management and total calculation
+ */
+
 #include "Order.h"
 #include <sstream>
 using std::stringstream;

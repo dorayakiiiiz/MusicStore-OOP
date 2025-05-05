@@ -1,3 +1,11 @@
+/**
+ * @file DiscountService.h
+ * @brief Header file for the DiscountService class
+ * 
+ * @details Defines the DiscountService class which manages discount vouchers
+ *          for the music store system
+ */
+
 #ifndef _DISCOUNT_SERVICE_H_
 #define _DISCOUNT_SERVICE_H_
 

@@ -1,5 +1,13 @@
-#ifndef _AUTHENTICATION_H_
-#define _AUTHENTICATION_H_
+/**
+ * @file AuthService.h
+ * @brief Header file for the Authentication service
+ * 
+ * @details Defines the Authentication class which handles user login,
+ *          registration and validation operations
+ */
+
+#ifndef _AUTH_SERVICE_H_
+#define _AUTH_SERVICE_H_
 #include "User.h"
 #include <vector>
 #include <memory>
