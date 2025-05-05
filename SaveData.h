@@ -96,6 +96,9 @@ public:
     void saveData(const vector<shared_ptr<Discount>>&) const override;
 };
 
-// hehehehe
+
+/**
+ * @brief Class for saving data to a database
+ */
 #endif
 
