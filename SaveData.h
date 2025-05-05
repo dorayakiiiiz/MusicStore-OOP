@@ -5,11 +5,16 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <windows.h>
+#include <sqlext.h>
+#include <sqltypes.h>
+#include <sql.h>
 
 #include "Music.h"
 #include "User.h"
 #include "Order.h"
 #include "Discount.h"
+#include "DatabaseConnector.h"
 #include <memory>   
 
 using std::vector, std::string, std::ofstream, std::stringstream, std::shared_ptr;
@@ -27,7 +32,7 @@ public:
      * @param filename Path to the file to save data to
      * @param data List of data items to save
      */
-    virtual void saveData(const string&, const vector<T>&) const = 0;
+    virtual void saveData(const vector<T>&) const = 0;
     
     /**
      * @brief Virtual destructor
@@ -46,7 +51,7 @@ public:
      * @param filename Path to the file to save data to
      * @param items List of music items to save
      */
-    void saveData(const string&, const vector<Music>&) const override;
+    void saveData(const vector<Music>&) const override;
 };
 
 /**
@@ -60,7 +65,7 @@ public:
      * @param filename Path to the file to save data to
      * @param users List of users to save
      */
-    void saveData(const string&, const vector<shared_ptr<IUser>>&) const override;
+    void saveData(const vector<shared_ptr<IUser>>&) const override;
 };
 
 /**
@@ -74,7 +79,7 @@ public:
      * @param filename Path to the file to save data to
      * @param orders List of orders to save
      */
-    void saveData(const string&, const vector<Order>&) const override;
+    void saveData(const vector<Order>&) const override;
 };
 
 /**
@@ -88,6 +93,6 @@ public:
      * @param filename Path to the file to save data to
      * @param vouchers List of discount vouchers to save
      */
-    void saveData(const string&, const vector<shared_ptr<Discount>>&) const override;
+    void saveData(const vector<shared_ptr<Discount>>&) const override;
 };
 #endif

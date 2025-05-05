@@ -7,12 +7,12 @@
 #include <sstream>
 #include <iostream>
 #include <memory>
-
 #include "Music.h"
 #include "User.h"
 #include "Order.h"
 #include "Discount.h"
 #include "Discount.h"
+#include "DatabaseConnector.h"
 
 using std::vector, std::string, std::ifstream, std::stringstream, std::make_shared, std::shared_ptr;   
 
@@ -29,7 +29,7 @@ public:
      * @param filename Path to the file to read data from
      * @return vector<T> List of data items read from the file
      */
-    virtual vector<T> readData(const string&) const = 0;
+    virtual vector<T> readData() const = 0;
     
     /**
      * @brief Virtual destructor
@@ -48,7 +48,7 @@ public:
      * @param filename Path to the file to read data from
      * @return vector<Music> List of music items read from the file
      */
-    vector<Music> readData(const string&) const override;
+    vector<Music> readData() const override;
 };
 
 /**
@@ -62,7 +62,7 @@ public:
      * @param filename Path to the file to read data from
      * @return vector<shared_ptr<IUser>> List of users read from the file
      */
-    vector<shared_ptr<IUser>> readData(const string&) const override;
+    vector<shared_ptr<IUser>> readData() const override;
 };
 
 /**
@@ -76,7 +76,7 @@ public:
      * @param filename Path to the file to read data from
      * @return vector<Order> List of orders read from the file
      */
-    vector<Order> readData(const string&) const override;
+    vector<Order> readData() const override;
 };
 
 /**
@@ -90,7 +90,7 @@ public:
      * @param filename Path to the file to read data from
      * @return vector<shared_ptr<Discount>> List of discount vouchers read from the file
      */
-    vector<shared_ptr<Discount>> readData(const string& filename) const override;
+    vector<shared_ptr<Discount>> readData() const override;
 };
 
 

@@ -9,6 +9,7 @@
 #include "ReadDataFactory.h"
 #include "SaveData.h"
 #include "SaveDataFactory.h"
+#include "DatabaseConnector.h"
 #include <exception>
 
 #include <iostream>
@@ -32,28 +33,28 @@ StoreApp::StoreApp() :
 void StoreApp::loadData() {
     try {
         // Load music items from file
-        items = ReadDataFactory<Music>::createReadData()->readData("music_info.txt");
+        items = ReadDataFactory<Music>::createReadData()->readData();
     } catch (const char* msg) {
         std::cerr << msg << std::endl;
     }
 
     try {
         // Load user accounts from file
-        users = ReadDataFactory<shared_ptr<IUser>>::createReadData()->readData("user_info.txt");
+        users = ReadDataFactory<shared_ptr<IUser>>::createReadData()->readData();
     } catch (const char* msg) {
         std::cerr << msg << std::endl;
     }
 
     try {
         // Load order history from file
-        orders = ReadDataFactory<Order>::createReadData()->readData("orders.txt");
+        orders = ReadDataFactory<Order>::createReadData()->readData();
     } catch (const char* msg) {
         std::cerr << msg << std::endl;
     }
 
     try {
         // Load discount vouchers from file
-        vouchers = ReadDataFactory<shared_ptr<Discount>>::createReadData()->readData("vouchers.txt");
+        vouchers = ReadDataFactory<shared_ptr<Discount>>::createReadData()->readData();
     } catch (const char* msg) {
         std::cerr << msg << std::endl;
     }
@@ -68,28 +69,28 @@ StoreApp::~StoreApp() {
 void StoreApp::saveData() {
     try {
         // Save music inventory to file
-        SaveDataFactory<Music>::createSaveData()->saveData("music_info.txt", items);
+        SaveDataFactory<Music>::createSaveData()->saveData(items);
     } catch (const char* msg) {
         std::cerr << msg << std::endl;
     }
 
     try {
         // Save user accounts to file
-        SaveDataFactory<shared_ptr<IUser>>::createSaveData()->saveData("user_info.txt", users);
+        SaveDataFactory<shared_ptr<IUser>>::createSaveData()->saveData(users);
     } catch (const char* msg) {
         std::cerr << msg << std::endl;
     }
 
     try {
         // Save order history to file
-        SaveDataFactory<Order>::createSaveData()->saveData("orders.txt", orders);
+        SaveDataFactory<Order>::createSaveData()->saveData(orders);
     } catch (const char* msg) {
         std::cerr << msg << std::endl;
     }
 
     try {
         // Save discount vouchers to file
-        SaveDataFactory<shared_ptr<Discount>>::createSaveData()->saveData("vouchers.txt", vouchers);
+        SaveDataFactory<shared_ptr<Discount>>::createSaveData()->saveData(vouchers);
     } catch (const char* msg) {
         std::cerr << msg << std::endl;
     }
