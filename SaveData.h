@@ -94,6 +94,5 @@ public:
      * @param vouchers List of discount vouchers to save
      */
     void saveData(const vector<shared_ptr<Discount>>&) const override;
-    // hehe
 };
 #endif
