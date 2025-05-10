@@ -30,6 +30,7 @@
 ## Các mô tả cụ thể cho các yêu cầu trong phần "Cách thức đánh giá"
 
 ### Teamwork
+[Mức độ commit hàng tuần của từng thành viên](references/image.png)
 
 ### UI/UX
 ### Các chức năng đã có của chương trình ban đầu:
@@ -68,21 +69,21 @@ Nhóm đã phân tách ra 2 vai trò riêng biệt với 2 loại đối tượn
     + Tải từ trang chính thức của Microsoft: https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server
     + Chọn phiên bản tương ứng hệ điều hành của máy bạn (Windows 64-bit) và cài đặt.
 - Bước 2: Cài đặt MSYS2 & UnixODBC
-    + Mở MSYS2 UCRT64 Terminal và nhập lệnh: pacman -S mingw-w64-ucrt-x86_64-unixodbc
-    + Sau đó nhấn Y để cài đặt
+    + Mở MSYS2 UCRT64 Terminal và nhập lệnh: ```pacman -S mingw-w64-ucrt-x86_64-unixodbc```
+    + Sau đó nhấn ```Y``` để cài đặt
 - Bước 3: Cài đặt SQL Server (mssql extension) trong VSCode
-    + Mở VSCode → nhấn Ctrl + Shift + X để mở Marketplace Extensions
+    + Mở VSCode → nhấn ```Ctrl + Shift + X``` để mở Marketplace Extensions
     + Tìm và cài đặt SQL Server (mssql) của Microsoft. 
-    + Sau khi cài, nhấn Ctrl + Alt + D → Chọn vào dấu + trong phần CONNECTIONS để thêm kết nối.
+    + Sau khi cài, nhấn ```Ctrl + Alt + D``` → Chọn vào dấu + trong phần CONNECTIONS để thêm kết nối.
 - Bước 4: Tạo cơ sở dữ liệu
-    + Mở file music_store.sql bằng VSCode hoặc SQL Server Management Studio.
-    + Chạy lệnh Execute để tạo database music_store và các bảng cần thiết.
+    + Mở file ```music_store.sql``` bằng VSCode hoặc SQL Server Management Studio.
+    + Chạy lệnh Execute để tạo database ```music_store``` và các bảng cần thiết.
 - Bước 5: Kết nối đến cơ sở dữ liệu
     + Tại VSCode trong phần Connection Dialog (Preview), ta nhập các thông tin như
         - Profile Name: tên tùy chọn
         - Server name: tên máy SQL Server của bạn
         - Authentication type: SQL Login hoặc Windows Authentication. Nếu là SQL Login cần nhập User name và Password
-        - Database name: music_store
+        - Database name: ```music_store```
         - Encrypt: chọn Optional
     + Tích chọn Trust server certificate
     + Sau đó nhấn Connect để kết nối
@@ -97,12 +98,12 @@ Nhóm đã phân tách ra 2 vai trò riêng biệt với 2 loại đối tượn
     + Nhập lệnh:
     ```./program/main``` để chạy chương trình.
 
-### Kiến trúc phần mềm được áp dụng (cho đến thời điểm báo cáo tiến độ)
+### Kiến trúc phần mềm được áp dụng (cho đến thời điểm hiện tại)
 Dự án được xây dựng theo mô hình kiến trúc MVC (Model-View-Controller) nhằm phân tách rõ ràng các thành phần của ứng dụng:
 
 #### Model: Đại diện cho dữ liệu và logic nghiệp vụ của ứng dụng
 - Các class như Music, Order, User, Voucher đại diện cho các đối tượng dữ liệu
-- Logic nghiệp vụ được đóng gói trong các class Service như MusicService, OrderService, UserService
+- Logic nghiệp vụ được đóng gói trong các class Service như MusicService, OrderService, UserService, DiscountService, CartService
 
 #### View: Xử lí giao diện người dùng
 - Được tách biệt thành các class UI riêng biệt (AdminUI, CustomerUI)
@@ -149,15 +150,23 @@ và CustomerController đều kế thừa từ abstract class IController
 - ControllerFactory: Tạo ra các Controller phù hợp dựa trên vai trò của người dùng (Admin/Customer)
 - ReadDataFactory và SaveDataFactory: Tạo ra các đối tượng xử lý đọc/ghi dữ liệu phù hợp với loại dữ liệu
 #### Strategy Pattern
-- Áp dụng cho việc xử lý các loại mã giảm giá khác nhau (giảm theo phần trăm, giảm theo số tiền cố định)
-- Cho phép linh hoạt thêm các chiến lược giảm giá mới mà không ảnh hưởng đến code hiện có
+- Áp dụng cho việc xử lý các loại mã giảm giá khác nhau (Percentage Discount giảm theo phần trăm tổng bill, Fixed Discount giảm theo giá tiền cố định)
 
 ### Đảm bảo chất lượng (sẽ hoàn thành ở đợt nộp chính thức)
 
 ### Tài liệu mô tả kiến trúc phần mềm + Coding Convention
-- [Tài liệu mô tả](docs/html/index.html)
+- [Tài liệu mô tả](references/html/index.html)
 
 - [Tài liệu Coding Convention](https://docs.google.com/document/d/10KNVaHAwrnSvY9fQ1v7uBX2IVxCTLYYALBpOFh5hXmo/edit?tab=t.0)
 
 
 ### Video demo mô tả:
+https://youtu.be/7A5fEKxOeRI?si=2_lJkSKKqz_AJuZ-
+
+
+## Đánh giá mức độ hoàn thành
+- Xây dựng các chức năng của chương trình: ước chừng hoàn thành khoảng 70-80%, có thể mở rộng thêm các chức năng khác vào lần nộp kế tiếp nếu có.
+- Các class xử lí UI: tầm khoảng 50% (chỉ nhập xuất console cơ bản), sẽ cải thiện giao diện hợp lí hơn vào lần nộp kế tiếp (có thể sử dụng các thư viện đồ họa như SFML...)
+- Áp dụng các Design Pattern: đã áp dụng được các Design Pattern như Factory Pattern, Strategy Pattern, sẽ cải tiến áp dụng thêm các Design Pattern khác nữa.
+- Kiến trúc phần mềm: cơ bản đã chia thành 3 tầng Model, View, Controller như mô tả, tuy nhiên còn 1 vài logic xử lí UI còn lẫn lộn trong Controll, sẽ xử lí sau.
+- Nguyên tắc SOLID, nguyên tắc dependency injection: Cơ bản đã tuân thủ hầu hết các nguyên tắc, tuy nhiên còn một vài lẫn lộn giữa các class và sẽ được xử lí sau.
