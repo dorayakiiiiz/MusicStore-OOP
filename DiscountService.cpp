@@ -62,10 +62,10 @@ shared_ptr<Discount> DiscountService::createFixedDiscount(
 }
 
 void DiscountService::createDiscount(vector<shared_ptr<Discount>>& vouchers, 
-    const string& username, int discountType, int discountValue) {
-    if (1 == discountType) {
+    const string& username, DiscountType type, int discountValue) {
+    if (DiscountType::PERCENTAGE ==type) {
         vouchers.push_back(createPercentageDiscount(username, discountValue));
-    } else if (2 == discountType) {
+    } else if (DiscountType::FIXED_AMOUNT == type) {
         vouchers.push_back(createFixedDiscount(username, discountValue));
     }
 }

@@ -1,13 +1,20 @@
 #include "SearchFactory.h"
 #include "utils.h"
+#include <map>
+using std::map;
 
-shared_ptr<ISearch> SearchFactory::createSearch(const string& criteria) {
-    string lowerCriteria = toLower(criteria);
-    if ("name" == lowerCriteria) {
+// map<SearchType, shared_ptr<ISearch>> searchMap = {
+//     {SearchType::NAME, make_shared<NameSearch>()},
+//     {SearchType::ARTIST, make_shared<ArtistSearch>()},
+//     {SearchType::GENRE, make_shared<GenreSearch>()}
+// };
+
+shared_ptr<ISearch> SearchFactory::createSearch(SearchType criteria) {
+    if (SearchType::NAME == criteria) {
         return make_shared<NameSearch>();
-    } else if ("artist" == lowerCriteria) {
+    } else if (SearchType::ARTIST == criteria) {
         return make_shared<ArtistSearch>();
-    } else if ( "genre" == lowerCriteria) {
+    } else if (SearchType::GENRE == criteria) {
         return make_shared<GenreSearch>();
     } else {
         return nullptr;

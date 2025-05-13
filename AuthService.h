@@ -16,7 +16,7 @@ using std::vector, std::shared_ptr, std::make_shared;
 /**
  * @brief Service class for user authentication operations
  */
-class Authentication {
+class AuthService {
 public:
     /**
      * @brief Register a new user with username, password and role
@@ -27,7 +27,7 @@ public:
      * @param role Role of the new user (Admin or Customer)
      * @return bool True if registration successful, false if username already exists
      */
-    static bool registerUser(vector<shared_ptr<IUser>>&, const string&, const string&, const string&);
+    bool registerUser(vector<shared_ptr<IUser>>&, const string&, const string&, Role);
     
     /**
      * @brief Authenticate a user with username and password
@@ -37,7 +37,7 @@ public:
      * @param password Password to verify
      * @return shared_ptr<IUser> Pointer to the authenticated user or nullptr if authentication failed
      */
-    static shared_ptr<IUser> loginUser(const vector<shared_ptr<IUser>>&, const string&, const string&);
+    shared_ptr<IUser> loginUser(const vector<shared_ptr<IUser>>&, const string&, const string&);
 };
 
 #endif

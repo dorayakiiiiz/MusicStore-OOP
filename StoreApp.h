@@ -33,13 +33,18 @@ private:
     vector<shared_ptr<Discount>> vouchers; /**< Discount vouchers */
     
     // Services
-    Authentication auth;   /**< Authentication service for user management */
-    MusicService musicService;  /**< Music service for inventory operations */
-    UserService userService;     /**< User service for user management */
-    OrderService orderService;  /**< Order service for order processing */
-    CartService cartService;    /**< Cart service for shopping operations */
-    DiscountService discountService;     /**< Discount service for managing vouchers */
+    AuthService auth;   /**< Authentication service for user management */
+    shared_ptr<MusicService> musicService;  /**< Music service for inventory operations */
+    shared_ptr<UserService> userService;     /**< User service for user management */
+    shared_ptr<OrderService> orderService;  /**< Order service for order processing */
+    shared_ptr<CartService> cartService;    /**< Cart service for shopping operations */
+    shared_ptr<DiscountService> discountService;     /**< Discount service for managing vouchers */
     ControllerFactory controllerFactory;    /**< Factory for creating controllers based on user role */
+
+    /**
+     * @brief Initializes all services used in the application
+     */
+    void initServices();
 
     /**
      * @brief Handles the sign up process
@@ -66,12 +71,10 @@ private:
 
 public:
     /**
-     * @brief Constructor - initializes the StoreApp with all required dependencies
-     * 
-     * @param auth Reference to the Authentication service for user management
+     * @brief Constructor - initializes the StoreApp 
      */
     StoreApp();
-    
+
     /**
      * @brief Destructor - saves data to files before application exits
      */

@@ -10,6 +10,22 @@
 #ifndef _ADMIN_CONTROLLER_H_
 #define _ADMIN_CONTROLLER_H_
 
+
+/**
+ * @brief Enumeration for admin menu options
+ */
+enum AdminOption {
+    ADMIN_MUSIC_LIST = 1,
+    ADD_NEW_ITEMS = 2,
+    REMOVE_ITEMS = 3,
+    UPDATE_PRICE = 4,
+    VIEW_USERS = 5,
+    VIEW_PURCHASE_HISTORY = 6,
+    DELETE_CUSTOMERS = 7,
+    VIEW_SALES_STATISTICS = 8,
+    ADMIN_LOGOUT = 9
+};
+
 #include "IController.h"
 #include "AdminUI.h"
 
@@ -20,9 +36,9 @@
  */
 class AdminController : public IController {
 private:
-    MusicService& musicService; /**< Reference to the music service for inventory operations */
-    UserService& userService;   /**< Reference to the user service for user management */
-    OrderService& orderService; /**< Reference to the order service for order management */
+    shared_ptr<MusicService> musicService; /**< Music service for inventory operations */
+    shared_ptr<UserService> userService; /**< User service for user management */
+    shared_ptr<OrderService> orderService; /**< Order service for order management */
 public:
     /**
      * @brief Constructor for AdminController
@@ -31,7 +47,7 @@ public:
      * @param userService Reference to the user service for user management
      * @param orderService Reference to the order service for order management
      */
-    AdminController(MusicService& musicService, UserService& userService, OrderService& orderService);
+    AdminController(shared_ptr<MusicService> musicService, shared_ptr<UserService> userService, shared_ptr<OrderService> orderService);
 
     /**
      * @brief Implements the admin menu interface and all administrative operations

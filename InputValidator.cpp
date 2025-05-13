@@ -57,7 +57,7 @@ tuple <bool, float, Error> InputValidator::validateFloat(string prompt, float mi
 }
 
 // get a valid string input from user
-tuple <bool, string, Error> InputValidator::validateString(string prompt, vector<string> option) {
+tuple <bool, string, Error> InputValidator::validateString(string prompt) {
     Error error = {0, ""};
     string input = getInput(prompt);
     // Check if input is empty
@@ -67,15 +67,15 @@ tuple <bool, string, Error> InputValidator::validateString(string prompt, vector
         return make_tuple(false, "", error);
     }
     // If options are provided, validate that input matches one of them
-    if (option.size() > 0) {
-        for (const auto& opt : option) {
-            if (input == opt) {
-                return make_tuple(true, input, error);
-            }
-        }
-        error.code = 2;
-        error.message = "Invalid option! Please try again.";
-        return make_tuple(false, "", error);
-    }
+    // if (option.size() > 0) {
+    //     for (const auto& opt : option) {
+    //         if (input == opt) {
+    //             return make_tuple(true, input, error);
+    //         }
+    //     }
+    //     error.code = 2;
+    //     error.message = "Invalid option! Please try again.";
+    //     return make_tuple(false, "", error);
+    // }
     return make_tuple(true, input, error);
 }

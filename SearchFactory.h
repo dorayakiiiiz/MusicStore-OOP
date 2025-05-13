@@ -17,7 +17,7 @@ public:
      * @param criteria The search criteria (name, artist, genre)
      * @return shared_ptr<ISearch> A pointer to the created search strategy
      */
-    static shared_ptr<ISearch> createSearch(const string& criteria);
+    static shared_ptr<ISearch> createSearch(SearchType criteria);
 };
 
 #endif

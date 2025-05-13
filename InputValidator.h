@@ -47,7 +47,8 @@ public:
      * @param options Optional vector of valid string options
      * @return A tuple containing success flag, validated value, and error details if invalid
      */
-    static tuple<bool, string, Error> validateString(string prompt, vector<string> options = {});
+    // static tuple<bool, string, Error> validateString(string prompt, vector<string> options = {});
+    static tuple<bool, string, Error> validateString(string prompt);
 };
 
 #endif

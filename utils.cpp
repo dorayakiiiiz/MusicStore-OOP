@@ -45,6 +45,11 @@ void printDashLine() {
     cout << '\n';
 }
 
+// Prints a message for repeating the last action
+void printRepeatMessage() {
+    cout << " Press space to exit or any other key to continue...\n";
+}
+
 // Gets user input with a prompt
 // Returns the string input by the user
 string getInput(const string& prompt) {

@@ -9,6 +9,15 @@
 #ifndef _DISCOUNT_SERVICE_H_
 #define _DISCOUNT_SERVICE_H_
 
+/**
+ * @brief Enumeration for discount types
+ */
+enum DiscountType {
+    PERCENTAGE = 1,
+    FIXED_AMOUNT = 2
+};
+
+
 #include "Discount.h"
 #include <vector>
 #include <memory>
@@ -97,7 +106,7 @@ public:
      * @param discountValue Value of the discount (percentage or amount)
      */
     void createDiscount(vector<shared_ptr<Discount>>& vouchers, 
-        const string& username, int discountType, int discountValue);
+        const string& username, DiscountType type, int discountValue);
 };
 
 #endif
