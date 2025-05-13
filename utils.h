@@ -39,6 +39,11 @@ void printDashLine();
 void clearScreen();
 
 /**
+ * @brief Prints a message for repeating the last action
+ */
+void printRepeatMessage();
+
+/**
  * @brief Pauses execution until user presses a key
  */
 void pauseScreen();

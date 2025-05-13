@@ -26,7 +26,7 @@ string IUser::getPassword() const {
 
 // Convert user to string representation for display
 string IUser::toString() const {
-    return username + " - " + password + " - " + getRole();
+    return username + " - " + password + " - " + (Role::ADMIN == getRole() ? "Admin" : "Customer");
 }
 
 // Copy constructor for Customer class
@@ -36,8 +36,8 @@ Customer::Customer(const Customer& other) : IUser(other.getUsername(), other.get
 Customer::Customer(const string& uname, const string& pword) : IUser(uname, pword) {}
 
 // Implementation of getRole() for Customer, returns "Customer"
-string Customer::getRole() const {
-    return "Customer";
+Role Customer::getRole() const {
+    return Role::CUSTOMER;
 }
 
 // Constructor for Admin class
@@ -47,8 +47,8 @@ Admin::Admin(const string& uname, const string& pword) : IUser(uname, pword) {}
 Admin::Admin(const Admin& other) : IUser(other.getUsername(), other.getPassword()) {}
 
 // Implementation of getRole() for Admin, returns "Admin"
-string Admin::getRole() const {
-    return "Admin";
+Role Admin::getRole() const {
+    return Role::ADMIN;
 }
 
 // Static method to validate admin registration passkeys

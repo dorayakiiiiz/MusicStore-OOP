@@ -13,22 +13,25 @@
 
 // Constructor for ControllerFactory
 ControllerFactory::ControllerFactory(
-    MusicService& musicService,
-    CartService& cartService,
-    OrderService& orderService,
-    DiscountService& discountService,
-    UserService& userService
-) : musicService(musicService), cartService(cartService), orderService(orderService), discountService(discountService), userService(userService) {}
-
+    shared_ptr<MusicService> musicService,
+    shared_ptr<CartService> cartService,
+    shared_ptr<OrderService> orderService,
+    shared_ptr<DiscountService> discountService,
+    shared_ptr<UserService> userService
+) : musicService(musicService), 
+    cartService(cartService), 
+    orderService(orderService), 
+    discountService(discountService), 
+    userService(userService) {}
 // Create a controller based on user role
-shared_ptr<IController> ControllerFactory::createController(const string& role) {
-    if ("Admin" == role) {
+shared_ptr<IController> ControllerFactory::createController(Role role) {
+    if (Role::ADMIN == role) {
         return make_shared<AdminController>(
             musicService, 
             userService, 
             orderService
         );
-    } else if ("Customer" == role) {
+    } else if (Role::CUSTOMER == role) {
         return make_shared<CustomerController>(
             musicService, 
             cartService, 

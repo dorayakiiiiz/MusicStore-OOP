@@ -105,7 +105,7 @@ void SaveUser::saveData(const vector<shared_ptr<IUser>>& users) const {
         string username = user->getUsername();
         string pass = user->getPassword();
         // Convert role to single-character format (A for Admin, C for Customer)
-        string role = (user->getRole() == "Admin") ? "A" : "C";
+        string role = (Role::ADMIN == user->getRole()) ? "A" : "C";
 
         // Bind parameters to the prepared statement
         SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)username.c_str(), 0, NULL);

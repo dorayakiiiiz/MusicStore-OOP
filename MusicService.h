@@ -74,7 +74,7 @@ public:
      * @return vector<Music> Vector of music items matching the search criteria
      * @throws std::invalid_argument If an invalid search criteria is provided
      */
-    vector<Music> searchMusic(const vector<Music>& items, const string& criteria, const string& keyword);
+    vector<Music> searchMusic(const vector<Music>& items, SearchType criteria, const string& keyword);
 
     /**
      * @brief Remove sold-out items from the inventory

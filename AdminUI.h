@@ -67,6 +67,7 @@ public:
      * @return A new Music object with the user-provided details
      */
     static Music getNewMusicDetails();
+
 };
 
 #endif

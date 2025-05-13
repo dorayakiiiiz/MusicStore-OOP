@@ -31,28 +31,27 @@ using std::string, std::shared_ptr, std::make_shared;
 
 class ControllerFactory {
 private:
-    MusicService& musicService;  /**< Reference to the music service for inventory operations */
-    CartService& cartService;    /**< Reference to the cart service for shopping operations */
-    OrderService& orderService;  /**< Reference to the order service for order processing */
-    DiscountService& discountService;   /**< Reference to the discount service for voucher management */
-    UserService& userService;    /**< Reference to the user service for user management */
-    
+    shared_ptr<MusicService> musicService;
+    shared_ptr<CartService> cartService;
+    shared_ptr<OrderService> orderService;
+    shared_ptr<DiscountService> discountService;
+    shared_ptr<UserService> userService;
 public:
     /**
      * @brief Constructor for ControllerFactory
      * 
-     * @param musicService Reference to music service for inventory operations
-     * @param cartService Reference to cart service for shopping operations
-     * @param orderService Reference to order service for order processing
-     * @param discountService Reference to discount service for voucher management
-     * @param userService Reference to user service for user management
+     * @param musicService Music service for inventory operations
+     * @param cartService Cart service for shopping operations
+     * @param orderService Order service for order processing
+     * @param discountService Discount service for voucher management
+     * @param userService User service for user management
      */
     ControllerFactory(
-        MusicService& musicService,
-        CartService& cartService,
-        OrderService& orderService,
-        DiscountService& discountService,
-        UserService& userService
+        shared_ptr<MusicService> musicService,
+        shared_ptr<CartService> cartService,
+        shared_ptr<OrderService> orderService,
+        shared_ptr<DiscountService> discountService,
+        shared_ptr<UserService> userService
     );
     
     /**
@@ -61,7 +60,7 @@ public:
      * @param role The role of the user (Admin or Customer)
      * @return shared_ptr<IController> A controller for the specified role
      */
-    shared_ptr<IController> createController(const string& role);
+    shared_ptr<IController> createController(Role role);
 };
 
 #endif

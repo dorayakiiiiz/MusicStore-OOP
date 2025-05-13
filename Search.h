@@ -9,6 +9,12 @@
 
 #include <memory>
 
+enum SearchType {
+    NAME = 1,
+    ARTIST = 2,
+    GENRE = 3
+};
+
 using std::vector, std::string, std::shared_ptr, std::make_shared;
 
 /**

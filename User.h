@@ -15,6 +15,17 @@
 #include <iostream>
 using std::string, std::vector, std::cout;
 
+
+/**
+ * @brief Enumeration for user roles
+ * 
+ * @details Defines the roles available in the system: Admin and Customer
+ */
+enum Role {
+    ADMIN = 1,
+    CUSTOMER = 2
+};
+
 /**
  * @brief Abstract base class for all user types in the system
  */
@@ -38,10 +49,10 @@ public:
     
     /**
      * @brief Pure virtual method to get user role
-     * 
-     * @return string The role of the user
+     *
+     * @return Role The role of the user
      */
-    virtual string getRole() const = 0;
+    virtual Role getRole() const = 0;
     
     /**
      * @brief Get the username
@@ -87,10 +98,10 @@ public:
     
     /**
      * @brief Implementation of getRole() returning "Customer"
-     * 
-     * @return string The role "Customer"
+     *
+     * @return Role The role "Customer"
      */
-    string getRole() const override;
+    Role getRole() const override;
 };
 
 /**
@@ -120,10 +131,10 @@ public:
     
     /**
      * @brief Implementation of getRole() returning "Admin"
-     * 
-     * @return string The role "Admin"
+     *
+     * @return Role The role "Admin"
      */
-    string getRole() const override;
+    Role getRole() const override;
     
     /**
      * @brief Validates if a passkey is authorized for admin registration

@@ -13,11 +13,11 @@
 
 
 // Search music catalog by criteria and keyword
-vector<Music> MusicService::searchMusic(const vector<Music>& items,const string& criteria, const string& keyword) {
+vector<Music> MusicService::searchMusic(const vector<Music>& items, SearchType criteria, const string& keyword) {
     shared_ptr<ISearch> searchStrategy = SearchFactory::createSearch(criteria);
     
     if (!searchStrategy) {
-        throw std::invalid_argument("Invalid search criteria: " + criteria);
+        throw std::invalid_argument("Invalid search criteria: " + std::to_string(static_cast<int>(criteria)));
     }
     
     vector<Music> results = searchStrategy->search(items, keyword);

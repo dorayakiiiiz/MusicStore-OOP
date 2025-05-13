@@ -25,46 +25,40 @@
 
 using std::tie;
 
-// Constructor - initializes the StoreApp by loading data from files
-StoreApp::StoreApp() :
-    auth(),
-    musicService(),
-    userService(), 
-    orderService(),
-    cartService(),
-    discountService(),
-    controllerFactory(musicService, cartService, orderService, discountService, userService) {
+// Constructor - initializes the StoreApp by loading data from database
+StoreApp::StoreApp() : controllerFactory(
+    ControllerFactory(
+        musicService,
+        cartService,
+        orderService,
+        discountService,
+        userService
+    )) {
+    initServices();
     loadData();
 }
 
-// Loads all data from files
+// Initializes all services used in the application
+void StoreApp::initServices() {
+    musicService = make_shared<MusicService>();
+    userService = make_shared<UserService>();
+    orderService = make_shared<OrderService>();
+    cartService = make_shared<CartService>();
+    discountService = make_shared<DiscountService>();
+}
+
+
+
+// Loads all data from database
 void StoreApp::loadData() {
     try {
-        // Load music items from file
+        // load data from database
         items = ReadDataFactory<Music>::createReadData()->readData();
-    } catch (const char* msg) {
-        std::cerr << msg << std::endl;
-    }
-
-    try {
-        // Load user accounts from file
         users = ReadDataFactory<shared_ptr<IUser>>::createReadData()->readData();
-    } catch (const char* msg) {
-        std::cerr << msg << std::endl;
-    }
-
-    try {
-        // Load order history from file
         orders = ReadDataFactory<Order>::createReadData()->readData();
-    } catch (const char* msg) {
-        std::cerr << msg << std::endl;
-    }
-
-    try {
-        // Load discount vouchers from file
         vouchers = ReadDataFactory<shared_ptr<Discount>>::createReadData()->readData();
-    } catch (const char* msg) {
-        std::cerr << msg << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << e.what() << std::endl;
     }
 }
 
@@ -76,31 +70,13 @@ StoreApp::~StoreApp() {
 // Saves all data to files
 void StoreApp::saveData() {
     try {
-        // Save music inventory to file
+        // Save data to database
         SaveDataFactory<Music>::createSaveData()->saveData(items);
-    } catch (const char* msg) {
-        std::cerr << msg << std::endl;
-    }
-
-    try {
-        // Save user accounts to file
         SaveDataFactory<shared_ptr<IUser>>::createSaveData()->saveData(users);
-    } catch (const char* msg) {
-        std::cerr << msg << std::endl;
-    }
-
-    try {
-        // Save order history to file
         SaveDataFactory<Order>::createSaveData()->saveData(orders);
-    } catch (const char* msg) {
-        std::cerr << msg << std::endl;
-    }
-
-    try {
-        // Save discount vouchers to file
         SaveDataFactory<shared_ptr<Discount>>::createSaveData()->saveData(vouchers);
-    } catch (const char* msg) {
-        std::cerr << msg << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << e.what() << std::endl;
     }
 }
 
@@ -108,15 +84,14 @@ void StoreApp::saveData() {
 void StoreApp::handleSignUp() {
     bool isValid;
     Error error;
-    
     clearScreen();
     printHeader("SIGN UP");
-    string role, username, password;
-    vector<string> options = {"Admin", "Customer"};
+    int role;
+    string username, password;
     
     // Get role input with validation
     do {
-        std::tie(isValid, role, error) = InputValidator::validateString("Enter your role (Admin/Customer): ", options);
+        std::tie(isValid, role, error) = InputValidator::validateInt("Enter your role (1 for admin, 2 for customer): ", 1, 2);
         if (!isValid) {
             printMessage(error.message);
             sleepScreen();
@@ -145,7 +120,7 @@ void StoreApp::handleSignUp() {
     } while (!isValid);
     
     // Additional validation for admin registration
-    if ("Admin" == toLower(role)) {
+    if (Role::ADMIN == role) {
         string passkey = getInput("Input admin passkey: ");
         if (!Admin::isValidPasskey(passkey)) {
             printMessage("Invalid passkey. Please try again later!");
@@ -155,7 +130,7 @@ void StoreApp::handleSignUp() {
     }
 
     // Register the new user
-    bool success = auth.registerUser(users, username, password, role);
+    bool success = auth.registerUser(users, username, password, static_cast<Role>(role));
     if (success) {
         printMessage("Sign up successfully!");
         sleepScreen();
@@ -205,7 +180,7 @@ bool StoreApp::handleLogin(shared_ptr<IUser>& currentUser) {
 
     // create the appropriate controller based on user role
     // and call the menu function of the controller
-    string role = currentUser->getRole();
+    Role role = currentUser->getRole();
     shared_ptr<IController> controller = controllerFactory.createController(role);
 
     if (controller) {

@@ -12,26 +12,45 @@
 #include "IController.h"
 
 /**
+ * @brief Enumeration for customer menu options
+ */
+enum CustomerOption {
+    PURCHASE_HISTORY = 1,
+    CUSTOMER_MUSIC_LIST = 2,
+    SEARCH_ENGINE = 3,
+    ADD_TO_CART = 4,
+    REMOVE_FROM_CART = 5,
+    CHECKOUT = 6,
+    CUSTOMER_LOGOUT = 7
+};
+
+enum Agreement {
+    YES = 1,
+    NO = 2
+};
+
+
+/**
  * @brief Controller class for customer-specific functionality
  * 
  * @details Handles all customer operations including browsing music, managing cart, and placing orders
  */
 class CustomerController : public IController {
 private:
-    MusicService& musicService;
-    CartService& cartService;
-    OrderService& orderService;
-    DiscountService& discountService;
+    shared_ptr<MusicService> musicService; /**< Music service for inventory operations */
+    shared_ptr<CartService> cartService; /**< Cart service for shopping cart operations */
+    shared_ptr<OrderService> orderService; /**< Order service for order management */
+    shared_ptr<DiscountService> discountService; /**< Discount service for managing discounts */
 public:
     /**
      * @brief Constructor for CustomerController
      * 
-     * @param musicService Reference to the music service for inventory operations
-     * @param cartService Reference to the cart service for shopping cart operations
-     * @param orderService Reference to the order service for order management
-     * @param discountService Reference to the discount service for managing discounts
+     * @param musicService Music service for inventory operations
+     * @param cartService Cart service for shopping cart operations
+     * @param orderService Order service for order management
+     * @param discountService Discount service for managing discounts
      */
-    CustomerController(MusicService& musicService, CartService& cartService, OrderService& orderService, DiscountService& discountService);
+    CustomerController(shared_ptr<MusicService> musicService, shared_ptr<CartService> cartService, shared_ptr<OrderService> orderService, shared_ptr<DiscountService> discountService);
     
     /**
      * @brief Implements the customer menu interface and all customer operations
