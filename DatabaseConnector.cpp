@@ -41,7 +41,16 @@ bool DatabaseConnector::connect() {
     }
 
     // Step 2: Connect to the database using connection string
-    SQLCHAR connStr[] = "Driver={ODBC Driver 17 for SQL Server};Server=localhost\\SQLEXPRESS;Database=music_store;Trusted_Connection=yes;";
+    SQLCHAR connStr[] = 
+    "Driver={ODBC Driver 17 for SQL Server};"
+    "Server=tcp:musicstoredb.database.windows.net,1433;"
+    "Database=music_store;"
+    "Uid=adminuser;"
+    "Pwd=23120197_23120209#OOP_CTT3;"
+    "Encrypt=yes;"
+    "TrustServerCertificate=no;"
+    "Connection Timeout=30;";
+
     SQLRETURN ret = SQLDriverConnect(hDbc, NULL, connStr, SQL_NTS, NULL, 0, NULL, SQL_DRIVER_NOPROMPT);
 
     // Handle connection errors
