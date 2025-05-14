@@ -36,21 +36,11 @@ enum Agreement {
  * @details Handles all customer operations including browsing music, managing cart, and placing orders
  */
 class CustomerController : public IController {
-private:
-    shared_ptr<MusicService> musicService; /**< Music service for inventory operations */
-    shared_ptr<CartService> cartService; /**< Cart service for shopping cart operations */
-    shared_ptr<OrderService> orderService; /**< Order service for order management */
-    shared_ptr<DiscountService> discountService; /**< Discount service for managing discounts */
 public:
     /**
      * @brief Constructor for CustomerController
-     * 
-     * @param musicService Music service for inventory operations
-     * @param cartService Cart service for shopping cart operations
-     * @param orderService Order service for order management
-     * @param discountService Discount service for managing discounts
      */
-    CustomerController(shared_ptr<MusicService> musicService, shared_ptr<CartService> cartService, shared_ptr<OrderService> orderService, shared_ptr<DiscountService> discountService);
+    CustomerController();
     
     /**
      * @brief Implements the customer menu interface and all customer operations

@@ -15,19 +15,14 @@
 #include "windows.h"
 #include "utils.h"
 #include "InputValidator.h"
+#include "ServiceLocator.h"
 
 #include <memory>
 
 using std::to_string;
 
 // Constructor for CustomerController
-CustomerController::CustomerController(
-    shared_ptr<MusicService> musicService,
-    shared_ptr<CartService> cartService,
-    shared_ptr<OrderService> orderService,
-    shared_ptr<DiscountService> discountService
-) : musicService(musicService), cartService(cartService), orderService(orderService), discountService(discountService) {}
-
+CustomerController::CustomerController() {};
 
 // Implements the customer menu interface and all customer operations
 void CustomerController::menu(vector<Music>& items, vector<shared_ptr<User>>& users, vector<Order>& orders, 
@@ -100,6 +95,8 @@ void CustomerController::menu(vector<Music>& items, vector<shared_ptr<User>>& us
 // handle the first case of the menu: display purchase history
 void CustomerController::handlePurchaseHistory(vector<Order>& orders, Customer*& customer) {
     clearScreen();
+
+    auto orderService = ServiceLocator::getSingleton<OrderService>();
     // Get order history for the current customer
     vector<Order> orderHistory = orderService->getUserOrders(orders, customer->getUsername());
 
@@ -120,6 +117,7 @@ void CustomerController::handleMusicList(vector<Music>& items) {
 
 // handle the third case of the menu: search engine
 void CustomerController::handleSearch(vector<Music>& items) {
+    auto musicService = ServiceLocator::getSingleton<MusicService>();
     while (1) {
         clearScreen();
         printHeader("SEARCH ENGINE");
@@ -177,6 +175,8 @@ void CustomerController::handleAddToCart(vector<Music>& items, Cart& cart) {
     // Display current music list
     CustomerUI::displayMusicList(items);
     printDashLine();
+
+    auto cartService = ServiceLocator::getSingleton<CartService>();
     while (1) {
         
         // Get item ID and quantity from user
@@ -230,6 +230,8 @@ void CustomerController::handleRemoveFromCart(Cart& cart, vector<Music>& items) 
     clearScreen();
     printHeader("REMOVE ITEMS FROM CART");
 
+    auto cartService = ServiceLocator::getSingleton<CartService>();
+
     if (cart.getItems().empty()) {
         printMessage("Cart is empty!");
     } else {
@@ -275,6 +277,7 @@ void CustomerController::handleRemoveFromCart(Cart& cart, vector<Music>& items) 
             }
         }
     }
+    pauseScreen();
 }
 
 // handle the sixth case of the menu: checkout
@@ -284,6 +287,10 @@ void CustomerController::handleCheckout(vector<Order>& orders, vector<Music>& it
 
     bool isValid;
     Error error;
+
+    auto orderService = ServiceLocator::getSingleton<OrderService>();
+    auto musicService = ServiceLocator::getSingleton<MusicService>();
+    auto discountService = ServiceLocator::getSingleton<DiscountService>();
 
     if (cart.getItems().empty()) {
         CustomerUI::displayEmptyCartMessage();

@@ -14,10 +14,10 @@
 #include "windows.h"
 #include "utils.h"
 #include "InputValidator.h"
+#include "ServiceLocator.h"
 
 // Constructor for AdminController
-AdminController::AdminController(shared_ptr<MusicService> musicService, shared_ptr<UserService> userService, shared_ptr<OrderService> orderService)
-    : musicService(musicService), userService(userService), orderService(orderService) {}
+AdminController::AdminController() {}
 
 
     // Implements the admin menu interface and all administrative operations
@@ -102,6 +102,7 @@ void AdminController::handleMusicList(vector<Music>& items) {
 
 // handle the second case of the menu: add new items
 void AdminController::handleAddNewItems(vector<Music>& items) {
+    auto musicService = ServiceLocator::getSingleton<MusicService>();
     while (1) {
         clearScreen();
         printHeader("ADD NEW ITEMS");
@@ -109,12 +110,13 @@ void AdminController::handleAddNewItems(vector<Music>& items) {
         Music newItem = AdminUI::getNewMusicDetails();
         
         // Add the new item to inventory
-        if (musicService->addMusicItem(items, newItem)) {
+        bool success = musicService->addMusicItem(items, newItem);
+        if (success) {
             printMessage("Item added successfully!");
         } else {
             printMessage("Item already exists!");
         }
-        
+
         printDashLine();
         printRepeatMessage();
 
@@ -132,6 +134,7 @@ void AdminController::handleRemoveItems(vector<Music>& items) {
     bool isValid;
     Error error;
 
+    auto musicService = ServiceLocator::getSingleton<MusicService>();
     while (1) {
         clearScreen();
         printHeader("REMOVE ITEMS");
@@ -147,12 +150,13 @@ void AdminController::handleRemoveItems(vector<Music>& items) {
         } while (!isValid);
         
         // Remove the selected item
-        if (musicService->removeMusicItem(items, id - 1)) {
+        bool success = musicService->removeMusicItem(items, id - 1);
+        if (success) {
             printMessage("Item removed successfully!");
         } else {
             printMessage("Invalid ID! Item not found.");
         }
-        
+
         printDashLine();
         if (items.empty()) {
             printMessage("No items left in inventory!");
@@ -177,6 +181,7 @@ void AdminController::handleUpdatePrice(vector<Music>& items) {
     bool isValid;
     Error error;
 
+    auto musicService = ServiceLocator::getSingleton<MusicService>();
     while (1) {
         clearScreen();
         printHeader("UPDATE PRICE ITEMS");
@@ -205,12 +210,13 @@ void AdminController::handleUpdatePrice(vector<Music>& items) {
         } while (!isValid);
 
         // Update the item's price
-        if (musicService->updateMusicItemPrice(items, id - 1, newPrice)) {
+        bool success = musicService->updateMusicItemPrice(items, id - 1, newPrice);
+        if (success) {
             printMessage("Price updated successfully!");
         } else {
             printMessage("Invalid item ID!");
         }
-        
+
         printDashLine();
         printRepeatMessage();
 
@@ -236,6 +242,7 @@ void AdminController::handleViewPurchaseHistory(vector<shared_ptr<User>>& users,
     clearScreen();
     printHeader("CUSTOMER PURCHASE HISTORY");
 
+    auto orderService = ServiceLocator::getSingleton<OrderService>();
     // Display purchase history for each customer
     for (const auto& user : users) {
         // Skip admin users
@@ -265,7 +272,8 @@ void AdminController::handleViewPurchaseHistory(vector<shared_ptr<User>>& users,
 bool AdminController::handleDeleteCustomers(vector<shared_ptr<User>>& users, shared_ptr<User>& currentUser) {
     bool isValid;
     Error error;
-    
+
+    auto userService = ServiceLocator::getSingleton<UserService>();
     clearScreen();
     printHeader("DELETE USER");
     if (users.empty()) {
@@ -292,7 +300,8 @@ bool AdminController::handleDeleteCustomers(vector<shared_ptr<User>>& users, sha
         bool isCurrentUser = (currentUser->getUsername() == usernameToDelete);
         
         // Delete the selected user
-        if (userService->deleteUser(users, usernameToDelete)) {
+        bool success = userService->deleteUser(users, usernameToDelete);
+        if (success) {
             printMessage("User deleted successfully!");
             
             // If admin deleted their own account, log them out
@@ -329,6 +338,7 @@ void AdminController::handleViewSalesStatistics(vector<Order>& orders, vector<Mu
     clearScreen();
     printHeader("SALE STATISTICS");
     
+    auto orderService = ServiceLocator::getSingleton<OrderService>();
     // Generate sales statistics 
     vector<pair<string, pair<int, float>>> salesStats = 
         orderService->generateSalesStatistics(orders, items);

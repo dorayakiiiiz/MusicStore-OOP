@@ -12,30 +12,12 @@
 #include "CustomerController.h"
 
 // Constructor for ControllerFactory
-ControllerFactory::ControllerFactory(
-    shared_ptr<MusicService> musicService,
-    shared_ptr<CartService> cartService,
-    shared_ptr<OrderService> orderService,
-    shared_ptr<DiscountService> discountService,
-    shared_ptr<UserService> userService
-) : musicService(musicService), 
-    cartService(cartService), 
-    orderService(orderService), 
-    discountService(discountService), 
-    userService(userService) {
+ControllerFactory::ControllerFactory() {
     // Initialize the controller map with instances of AdminController and CustomerController
-    controllers[Role::ADMIN] = make_shared<AdminController>(
-        musicService, 
-        userService, 
-        orderService
-    );
-    controllers[Role::CUSTOMER] = make_shared<CustomerController>(
-        musicService, 
-        cartService, 
-        orderService, 
-        discountService
-    );
-    }
+    controllers[Role::ADMIN] = make_shared<AdminController>();
+    controllers[Role::CUSTOMER] = make_shared<CustomerController>();
+}
+
 // Create a controller based on user role
 shared_ptr<IController> ControllerFactory::createController(Role role) {
     // Check if the requested role exists in the controller map

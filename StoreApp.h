@@ -13,6 +13,7 @@
 #include "DiscountService.h"
 #include "CartService.h"
 #include "ControllerFactory.h"
+#include "ServiceLocator.h"
 
 #include <vector>
 #include <string>
@@ -31,18 +32,9 @@ private:
     vector<shared_ptr<User>> users; /**< Registered users */
     vector<Order> orders; /**< Order history */
     vector<shared_ptr<Discount>> vouchers; /**< Discount vouchers */
-    
-    // Services
-    AuthService auth;   /**< Authentication service for user management */
-    shared_ptr<MusicService> musicService;  /**< Music service for inventory operations */
-    shared_ptr<UserService> userService;     /**< User service for user management */
-    shared_ptr<OrderService> orderService;  /**< Order service for order processing */
-    shared_ptr<CartService> cartService;    /**< Cart service for shopping operations */
-    shared_ptr<DiscountService> discountService;     /**< Discount service for managing vouchers */
-    ControllerFactory controllerFactory;    /**< Factory for creating controllers based on user role */
 
     /**
-     * @brief Initializes all services used in the application
+     * @brief Initializes all services for the application
      */
     void initServices();
 

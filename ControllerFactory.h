@@ -32,33 +32,12 @@ using std::string, std::shared_ptr, std::make_shared, std::map;
 
 class ControllerFactory {
 private:
-    /**
-     * @brief Services 
-     */
-    shared_ptr<MusicService> musicService;
-    shared_ptr<CartService> cartService;
-    shared_ptr<OrderService> orderService;
-    shared_ptr<DiscountService> discountService;
-    shared_ptr<UserService> userService;
-
-    map<Role, shared_ptr<IController>> controllers;
+    map<Role, shared_ptr<IController>> controllers; /**< Map to store controller instances */
 public:
     /**
      * @brief Constructor for ControllerFactory
-     * 
-     * @param musicService Music service for inventory operations
-     * @param cartService Cart service for shopping operations
-     * @param orderService Order service for order processing
-     * @param discountService Discount service for voucher management
-     * @param userService User service for user management
      */
-    ControllerFactory(
-        shared_ptr<MusicService> musicService,
-        shared_ptr<CartService> cartService,
-        shared_ptr<OrderService> orderService,
-        shared_ptr<DiscountService> discountService,
-        shared_ptr<UserService> userService
-    );
+    ControllerFactory();
     
     /**
      * @brief Create a controller based on user role

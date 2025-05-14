@@ -35,19 +35,11 @@ enum AdminOption {
  * @details Handles all administrative operations including inventory management, user management, and sales reporting
  */
 class AdminController : public IController {
-private:
-    shared_ptr<MusicService> musicService; /**< Music service for inventory operations */
-    shared_ptr<UserService> userService; /**< User service for user management */
-    shared_ptr<OrderService> orderService; /**< Order service for order management */
 public:
     /**
      * @brief Constructor for AdminController
-     * 
-     * @param musicService Reference to the music service for inventory operations
-     * @param userService Reference to the user service for user management
-     * @param orderService Reference to the order service for order management
      */
-    AdminController(shared_ptr<MusicService> musicService, shared_ptr<UserService> userService, shared_ptr<OrderService> orderService);
+    AdminController();
 
     /**
      * @brief Implements the admin menu interface and all administrative operations

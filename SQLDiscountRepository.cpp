@@ -1,4 +1,7 @@
-// #include "SQLDiscountRepository.h"
+#include "SQLDiscountRepository.h"
+
+// sua cai nay
+
 // #include <memory>
 
 // using std::make_shared, std::make_unique;

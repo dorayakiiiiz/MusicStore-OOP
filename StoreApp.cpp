@@ -26,27 +26,27 @@
 using std::tie;
 
 // Constructor - initializes the StoreApp by loading data from database
-StoreApp::StoreApp() : controllerFactory(
-    ControllerFactory(
-        musicService,
-        cartService,
-        orderService,
-        discountService,
-        userService
-    )) {
-    initServices();
+StoreApp::StoreApp() {
     loadData();
 }
 
-// Initializes all services used in the application
+// Initializes all services for the application
 void StoreApp::initServices() {
-    musicService = make_shared<MusicService>();
-    userService = make_shared<UserService>();
-    orderService = make_shared<OrderService>();
-    cartService = make_shared<CartService>();
-    discountService = make_shared<DiscountService>();
-}
+    // Initialize services and register them with the ServiceLocator
+    auto musicService = make_shared<MusicService>();
+    auto userService = make_shared<UserService>();
+    auto orderService = make_shared<OrderService>();
+    auto discountService = make_shared<DiscountService>();
+    auto cartService = make_shared<CartService>();
+    auto authService = make_shared<AuthService>();
 
+    ServiceLocator::addSingleton(musicService);
+    ServiceLocator::addSingleton(userService);
+    ServiceLocator::addSingleton(orderService);
+    ServiceLocator::addSingleton(discountService);
+    ServiceLocator::addSingleton(cartService);
+    ServiceLocator::addSingleton(authService);
+}
 
 
 // Loads all data from database
@@ -130,7 +130,8 @@ void StoreApp::handleSignUp() {
     }
 
     // Register the new user
-    bool success = auth.registerUser(users, username, password, static_cast<Role>(role));
+    auto authService = ServiceLocator::getSingleton<AuthService>();
+    bool success = authService->registerUser(users, username, password, static_cast<Role>(role));
     if (success) {
         printMessage("Sign up successfully!");
         sleepScreen();
@@ -170,7 +171,8 @@ bool StoreApp::handleLogin(shared_ptr<User>& currentUser) {
     } while (!isValid);
 
     // Attempt to authenticate the user
-    currentUser = auth.loginUser(users, username, password);
+    auto authService = ServiceLocator::getSingleton<AuthService>();
+    currentUser = authService->loginUser(users, username, password);
 
     if (!currentUser) {
         printMessage("Invalid username or password. Please try again!");
@@ -181,7 +183,8 @@ bool StoreApp::handleLogin(shared_ptr<User>& currentUser) {
     // create the appropriate controller based on user role
     // and call the menu function of the controller
     Role role = currentUser->getRole();
-    shared_ptr<IController> controller = controllerFactory.createController(role);
+    ControllerFactory factory;
+    shared_ptr<IController> controller = factory.createController(role);
 
     if (controller) {
         printMessage("Login successfully! Welcome " + currentUser->getUsername() + "!");
