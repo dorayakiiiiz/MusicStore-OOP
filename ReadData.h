@@ -62,15 +62,15 @@ public:
 /**
  * @brief Class for reading user data from files
  */
-class ReadUser : public IReadData<shared_ptr<IUser>> {
+class ReadUser : public IReadData<shared_ptr<User>> {
 public:
     /**
      * @brief Read user data from a file
      * 
      * @param filename Path to the file to read data from
-     * @return vector<shared_ptr<IUser>> List of users read from the file
+     * @return vector<shared_ptr<User>> List of users read from the file
      */
-    vector<shared_ptr<IUser>> readData() const override;
+    vector<shared_ptr<User>> readData() const override;
 };
 
 /**

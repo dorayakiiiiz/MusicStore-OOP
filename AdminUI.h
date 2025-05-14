@@ -47,7 +47,7 @@ public:
      * @brief Displays a formatted list of all registered users
      * @param users Vector containing all registered users
      */
-    static void displayUserList(const vector<shared_ptr<IUser>>& users);
+    static void displayUserList(const vector<shared_ptr<User>>& users);
     
     /**
      * @brief Displays the details of a specific order

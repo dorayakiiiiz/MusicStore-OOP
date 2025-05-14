@@ -28,7 +28,7 @@ class StoreApp {
 private:
     // Data
     vector<Music> items; /**< Music inventory */
-    vector<shared_ptr<IUser>> users; /**< Registered users */
+    vector<shared_ptr<User>> users; /**< Registered users */
     vector<Order> orders; /**< Order history */
     vector<shared_ptr<Discount>> vouchers; /**< Discount vouchers */
     
@@ -57,7 +57,7 @@ private:
      * @param currentUser Reference to store the authenticated user
      * @return true if login was successful, false otherwise
      */
-    bool handleLogin(shared_ptr<IUser>& currentUser);
+    bool handleLogin(shared_ptr<User>& currentUser);
 
     /**
      * @brief Loads data from files

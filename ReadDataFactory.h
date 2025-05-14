@@ -36,10 +36,10 @@ inline shared_ptr<IReadData<Music>> ReadDataFactory<Music>::createReadData() {
 
 /**
  * @brief Specialization for User data
- * @return shared_ptr<IReadData<shared_ptr<IUser>>> Pointer to a User reader
+ * @return shared_ptr<IReadData<shared_ptr<User>>> Pointer to a User reader
  */
 template <>
-inline shared_ptr<IReadData<shared_ptr<IUser>>> ReadDataFactory<shared_ptr<IUser>>::createReadData() {
+inline shared_ptr<IReadData<shared_ptr<User>>> ReadDataFactory<shared_ptr<User>>::createReadData() {
     return make_shared<ReadUser>();
 }
 

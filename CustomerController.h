@@ -61,7 +61,7 @@ public:
      * @param discounts Reference to available discount vouchers
      * @param currentUser Reference to the currently logged-in user
      */
-    void menu(vector<Music>& items, vector<shared_ptr<IUser>>& users, vector<Order>& orders, vector<shared_ptr<Discount>>& discounts, shared_ptr<IUser>& currentUser) override;
+    void menu(vector<Music>& items, vector<shared_ptr<User>>& users, vector<Order>& orders, vector<shared_ptr<Discount>>& discounts, shared_ptr<User>& currentUser) override;
 
 
     /**
@@ -125,7 +125,7 @@ public:
      * @param currentUser Reference to the currently logged-in user
      * @return true if logout was successful, false otherwise
      */
-    bool handleLogout(Cart& cart, shared_ptr<IUser>& currentUser);
+    bool handleLogout(Cart& cart, shared_ptr<User>& currentUser);
 };
 
 #endif

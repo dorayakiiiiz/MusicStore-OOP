@@ -32,7 +32,7 @@ public:
      * @param username Username of the account to delete
      * @return bool True if successful, false if user not found
      */
-    bool deleteUser(vector<shared_ptr<IUser>>& users, const string& username);
+    bool deleteUser(vector<shared_ptr<User>>& users, const string& username);
     
     /**
      * @brief Find a user by username
@@ -41,7 +41,7 @@ public:
      * @param username Username to search for
      * @return int Index of the found user or -1 if not found
      */
-    int findUserByUsername(const vector<shared_ptr<IUser>>& users, const string& username);
+    int findUserByUsername(const vector<shared_ptr<User>>& users, const string& username);
     
 
 };

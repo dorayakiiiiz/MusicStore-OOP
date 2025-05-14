@@ -30,14 +30,14 @@ CustomerController::CustomerController(
 
 
 // Implements the customer menu interface and all customer operations
-void CustomerController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& users, vector<Order>& orders, 
-                            vector<shared_ptr<Discount>>& vouchers, shared_ptr<IUser>& currentUser) {
+void CustomerController::menu(vector<Music>& items, vector<shared_ptr<User>>& users, vector<Order>& orders, 
+                            vector<shared_ptr<Discount>>& vouchers, shared_ptr<User>& currentUser) {
     
 
     // Create a shopping cart for the current session
     Cart cart;
     
-    // Cast the IUser pointer to Customer type for customer-specific operations
+    // Cast the User pointer to Customer type for customer-specific operations
     Customer* customer = dynamic_cast<Customer*>(currentUser.get());
     
     // Main customer menu loop
@@ -385,7 +385,7 @@ void CustomerController::handleCheckout(vector<Order>& orders, vector<Music>& it
 }
 
 // handle the seventh case of the menu: logout
-bool CustomerController::handleLogout(Cart& cart, shared_ptr<IUser>& currentUser) {
+bool CustomerController::handleLogout(Cart& cart, shared_ptr<User>& currentUser) {
     // Check if cart is empty before allowing logout
     if (cart.getItems().empty()) {
         CustomerUI::displayLogoutMessage();

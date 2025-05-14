@@ -21,8 +21,8 @@ AdminController::AdminController(shared_ptr<MusicService> musicService, shared_p
 
 
     // Implements the admin menu interface and all administrative operations
-void AdminController::menu(vector<Music>& items, vector<shared_ptr<IUser>>& users, vector<Order>& orders, 
-                          vector<shared_ptr<Discount>>& vouchers, shared_ptr<IUser>& currentUser) {
+void AdminController::menu(vector<Music>& items, vector<shared_ptr<User>>& users, vector<Order>& orders, 
+                          vector<shared_ptr<Discount>>& vouchers, shared_ptr<User>& currentUser) {
     bool isValid;
     Error error;
 
@@ -223,7 +223,7 @@ void AdminController::handleUpdatePrice(vector<Music>& items) {
 }
 
 // handle the fifth case of the menu: view users list
-void AdminController::handleViewUsers(vector<shared_ptr<IUser>>& users) {
+void AdminController::handleViewUsers(vector<shared_ptr<User>>& users) {
     clearScreen();
     printHeader("USER LIST");
     AdminUI::displayUserList(users);
@@ -232,7 +232,7 @@ void AdminController::handleViewUsers(vector<shared_ptr<IUser>>& users) {
 }
 
 // handle the sixth case of the menu: view all customers purchase history
-void AdminController::handleViewPurchaseHistory(vector<shared_ptr<IUser>>& users, vector<Order>& orders) {
+void AdminController::handleViewPurchaseHistory(vector<shared_ptr<User>>& users, vector<Order>& orders) {
     clearScreen();
     printHeader("CUSTOMER PURCHASE HISTORY");
 
@@ -262,7 +262,7 @@ void AdminController::handleViewPurchaseHistory(vector<shared_ptr<IUser>>& users
 }
 
 // handle the seventh case of the menu: delete customers
-bool AdminController::handleDeleteCustomers(vector<shared_ptr<IUser>>& users, shared_ptr<IUser>& currentUser) {
+bool AdminController::handleDeleteCustomers(vector<shared_ptr<User>>& users, shared_ptr<User>& currentUser) {
     bool isValid;
     Error error;
     
@@ -339,7 +339,7 @@ void AdminController::handleViewSalesStatistics(vector<Order>& orders, vector<Mu
 }
 
 // handle the ninth case of the menu: logout
-void AdminController::handleLogout(shared_ptr<IUser>& currentUser) {
+void AdminController::handleLogout(shared_ptr<User>& currentUser) {
     printMessage("Log out successfully!");
     currentUser = nullptr;
     Sleep(1000);

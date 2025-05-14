@@ -54,7 +54,7 @@ void StoreApp::loadData() {
     try {
         // load data from database
         items = ReadDataFactory<Music>::createReadData()->readData();
-        users = ReadDataFactory<shared_ptr<IUser>>::createReadData()->readData();
+        users = ReadDataFactory<shared_ptr<User>>::createReadData()->readData();
         orders = ReadDataFactory<Order>::createReadData()->readData();
         vouchers = ReadDataFactory<shared_ptr<Discount>>::createReadData()->readData();
     } catch (const std::exception& e) {
@@ -72,7 +72,7 @@ void StoreApp::saveData() {
     try {
         // Save data to database
         SaveDataFactory<Music>::createSaveData()->saveData(items);
-        SaveDataFactory<shared_ptr<IUser>>::createSaveData()->saveData(users);
+        SaveDataFactory<shared_ptr<User>>::createSaveData()->saveData(users);
         SaveDataFactory<Order>::createSaveData()->saveData(orders);
         SaveDataFactory<shared_ptr<Discount>>::createSaveData()->saveData(vouchers);
     } catch (const std::exception& e) {
@@ -91,7 +91,7 @@ void StoreApp::handleSignUp() {
     
     // Get role input with validation
     do {
-        std::tie(isValid, role, error) = InputValidator::validateInt("Enter your role (1 for admin, 2 for customer): ", 1, 2);
+        tie(isValid, role, error) = InputValidator::validateInt("Enter your role (1 for admin, 2 for customer): ", 1, 2);
         if (!isValid) {
             printMessage(error.message);
             sleepScreen();
@@ -101,7 +101,7 @@ void StoreApp::handleSignUp() {
     
     // Get username input with validation
     do {
-        std::tie(isValid, username, error) = InputValidator::validateString("Input username: ");
+        tie(isValid, username, error) = InputValidator::validateString("Input username: ");
         if (!isValid) {
             printMessage(error.message);
             sleepScreen();
@@ -111,7 +111,7 @@ void StoreApp::handleSignUp() {
     
     // Get password input with validation
     do {
-        std::tie(isValid, password, error) = InputValidator::validateString("Input password: ");
+        tie(isValid, password, error) = InputValidator::validateString("Input password: ");
         if (!isValid) {
             printMessage(error.message);
             sleepScreen();
@@ -141,7 +141,7 @@ void StoreApp::handleSignUp() {
 }
 
 // Handles the login process
-bool StoreApp::handleLogin(shared_ptr<IUser>& currentUser) {
+bool StoreApp::handleLogin(shared_ptr<User>& currentUser) {
     bool isValid;
     Error error;
     
@@ -151,7 +151,7 @@ bool StoreApp::handleLogin(shared_ptr<IUser>& currentUser) {
     
     // Get username input with validation
     do {
-        std::tie(isValid, username, error) = InputValidator::validateString("Input username: ");
+        tie(isValid, username, error) = InputValidator::validateString("Input username: ");
         if (!isValid) {
             printMessage(error.message);
             sleepScreen();
@@ -161,7 +161,7 @@ bool StoreApp::handleLogin(shared_ptr<IUser>& currentUser) {
 
     // Get password input with validation
     do {
-        std::tie(isValid, password, error) = InputValidator::validateString("Input password: ");
+        tie(isValid, password, error) = InputValidator::validateString("Input password: ");
         if (!isValid) {
             printMessage(error.message);
             sleepScreen();
@@ -196,7 +196,7 @@ bool StoreApp::handleLogin(shared_ptr<IUser>& currentUser) {
 
 // Main application loop
 void StoreApp::run() {
-    shared_ptr<IUser> currentUser = nullptr;
+    shared_ptr<User> currentUser = nullptr;
 
     while (true) {
 

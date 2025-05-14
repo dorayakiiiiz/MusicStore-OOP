@@ -28,10 +28,10 @@ inline shared_ptr<ISaveData<Music>> SaveDataFactory<Music>::createSaveData() {
 
 /**
  * @brief Specialization for User data
- * @return shared_ptr<ISaveData<shared_ptr<IUser>>> Pointer to a User saver
+ * @return shared_ptr<ISaveData<shared_ptr<User>>> Pointer to a User saver
  */
 template <>
-inline shared_ptr<ISaveData<shared_ptr<IUser>>> SaveDataFactory<shared_ptr<IUser>>::createSaveData() {
+inline shared_ptr<ISaveData<shared_ptr<User>>> SaveDataFactory<shared_ptr<User>>::createSaveData() {
     return make_shared<SaveUser>();
 }
 

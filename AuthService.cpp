@@ -10,7 +10,7 @@
 #include "utils.h"
 
 // Register a new user with username, password, and role
-bool AuthService::registerUser(vector<shared_ptr<IUser>>& users, const string& username, const string& password, Role role) {
+bool AuthService::registerUser(vector<shared_ptr<User>>& users, const string& username, const string& password, Role role) {
     // Check if username already exists
     for (int i = 0; i < users.size(); ++i) {
         if (users[i]->getUsername() == username) {
@@ -28,7 +28,7 @@ bool AuthService::registerUser(vector<shared_ptr<IUser>>& users, const string& u
 }
 
 // Authenticate a user with username and password
-shared_ptr<IUser> AuthService::loginUser(const vector<shared_ptr<IUser>>& users, const string& username, const string& password) {
+shared_ptr<User> AuthService::loginUser(const vector<shared_ptr<User>>& users, const string& username, const string& password) {
     // Search for matching username and password
     for (int i = 0; i < users.size(); ++i) {
         if (users[i]->getUsername() == username && users[i]->getPassword() == password) {

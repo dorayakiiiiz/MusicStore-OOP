@@ -20,7 +20,8 @@
 
 #include <string>
 #include <memory>
-using std::string, std::shared_ptr, std::make_shared;
+#include <map>
+using std::string, std::shared_ptr, std::make_shared, std::map;
 
 /**
  * @brief Factory class for creating controller instances based on user role
@@ -31,11 +32,16 @@ using std::string, std::shared_ptr, std::make_shared;
 
 class ControllerFactory {
 private:
+    /**
+     * @brief Services 
+     */
     shared_ptr<MusicService> musicService;
     shared_ptr<CartService> cartService;
     shared_ptr<OrderService> orderService;
     shared_ptr<DiscountService> discountService;
     shared_ptr<UserService> userService;
+
+    map<Role, shared_ptr<IController>> controllers;
 public:
     /**
      * @brief Constructor for ControllerFactory

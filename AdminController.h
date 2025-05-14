@@ -58,7 +58,7 @@ public:
      * @param vouchers Reference to available discount vouchers
      * @param currentUser Reference to the currently logged-in admin user
      */
-    void menu(vector<Music>& items, vector<shared_ptr<IUser>>& users, vector<Order>& orders, vector<shared_ptr<Discount>>& vouchers, shared_ptr<IUser>& currentUser) override;
+    void menu(vector<Music>& items, vector<shared_ptr<User>>& users, vector<Order>& orders, vector<shared_ptr<Discount>>& vouchers, shared_ptr<User>& currentUser) override;
 
     /**
      * @brief Handles displaying the music inventory list
@@ -93,7 +93,7 @@ public:
      * 
      * @param users Reference to the system's user accounts
      */
-    void handleViewUsers(vector<shared_ptr<IUser>>& users);
+    void handleViewUsers(vector<shared_ptr<User>>& users);
     
     /**
      * @brief Handles displaying purchase history for all customers
@@ -101,7 +101,7 @@ public:
      * @param users Reference to the system's user accounts
      * @param orders Reference to the system's order history
      */
-    void handleViewPurchaseHistory(vector<shared_ptr<IUser>>& users, vector<Order>& orders);
+    void handleViewPurchaseHistory(vector<shared_ptr<User>>& users, vector<Order>& orders);
     
     /**
      * @brief Handles deleting customer accounts
@@ -110,7 +110,7 @@ public:
      * @param currentUser Reference to the currently logged-in admin user
      * @return true if admin deleted their own account and needs to logout, false otherwise
      */
-    bool handleDeleteCustomers(vector<shared_ptr<IUser>>& users, shared_ptr<IUser>& currentUser);
+    bool handleDeleteCustomers(vector<shared_ptr<User>>& users, shared_ptr<User>& currentUser);
     
     /**
      * @brief Handles displaying sales statistics
@@ -125,7 +125,7 @@ public:
      * 
      * @param currentUser Reference to the currently logged-in admin user
      */
-    void handleLogout(shared_ptr<IUser>& currentUser);
+    void handleLogout(shared_ptr<User>& currentUser);
 };
 
 #endif

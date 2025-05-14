@@ -22,23 +22,25 @@ ControllerFactory::ControllerFactory(
     cartService(cartService), 
     orderService(orderService), 
     discountService(discountService), 
-    userService(userService) {}
+    userService(userService) {
+    // Initialize the controller map with instances of AdminController and CustomerController
+    controllers[Role::ADMIN] = make_shared<AdminController>(
+        musicService, 
+        userService, 
+        orderService
+    );
+    controllers[Role::CUSTOMER] = make_shared<CustomerController>(
+        musicService, 
+        cartService, 
+        orderService, 
+        discountService
+    );
+    }
 // Create a controller based on user role
 shared_ptr<IController> ControllerFactory::createController(Role role) {
-    if (Role::ADMIN == role) {
-        return make_shared<AdminController>(
-            musicService, 
-            userService, 
-            orderService
-        );
-    } else if (Role::CUSTOMER == role) {
-        return make_shared<CustomerController>(
-            musicService, 
-            cartService, 
-            orderService, 
-            discountService
-        );
-    } else {
-        return nullptr;
+    // Check if the requested role exists in the controller map
+    if (controllers.find(role) != controllers.end()) {
+        return controllers[role]; // Return the corresponding controller instance
     }
+    return nullptr; // Return null if the role is not found
 }

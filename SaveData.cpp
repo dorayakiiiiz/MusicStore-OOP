@@ -69,7 +69,7 @@ void SaveMusic::saveData(const vector<Music>& items) const {
 
 // Implements the saveData method for User objects
 // Persists a collection of User objects to the database
-void SaveUser::saveData(const vector<shared_ptr<IUser>>& users) const {
+void SaveUser::saveData(const vector<shared_ptr<User>>& users) const {
     DatabaseConnector dbConnector; // Create a database connector instance
     SQLHSTMT hStmt = nullptr;      // SQL statement handle
     SQLRETURN ret;                 // Return value for SQL operations

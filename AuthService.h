@@ -27,7 +27,7 @@ public:
      * @param role Role of the new user (Admin or Customer)
      * @return bool True if registration successful, false if username already exists
      */
-    bool registerUser(vector<shared_ptr<IUser>>&, const string&, const string&, Role);
+    bool registerUser(vector<shared_ptr<User>>&, const string&, const string&, Role);
     
     /**
      * @brief Authenticate a user with username and password
@@ -35,9 +35,9 @@ public:
      * @param users Vector of existing users to check against
      * @param username Username to authenticate
      * @param password Password to verify
-     * @return shared_ptr<IUser> Pointer to the authenticated user or nullptr if authentication failed
+     * @return shared_ptr<User> Pointer to the authenticated user or nullptr if authentication failed
      */
-    shared_ptr<IUser> loginUser(const vector<shared_ptr<IUser>>&, const string&, const string&);
+    shared_ptr<User> loginUser(const vector<shared_ptr<User>>&, const string&, const string&);
 };
 
 #endif

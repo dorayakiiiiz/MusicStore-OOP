@@ -57,7 +57,7 @@ public:
 /**
  * @brief Class for saving user data to files
  */
-class SaveUser : public ISaveData<shared_ptr<IUser>> {
+class SaveUser : public ISaveData<shared_ptr<User>> {
 public:
     /**
      * @brief Save user data to a file
@@ -65,7 +65,7 @@ public:
      * @param filename Path to the file to save data to
      * @param users List of users to save
      */
-    void saveData(const vector<shared_ptr<IUser>>&) const override;
+    void saveData(const vector<shared_ptr<User>>&) const override;
 };
 
 /**

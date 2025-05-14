@@ -67,9 +67,9 @@ vector<Music> ReadMusic::readData() const {
 }
 
 // Implements the readData method for User class
-// Reads all user records from the database and returns as a vector of IUser pointers
-vector<shared_ptr<IUser>> ReadUser::readData() const {
-    vector<shared_ptr<IUser>> users;     // Container for user pointers
+// Reads all user records from the database and returns as a vector of User pointers
+vector<shared_ptr<User>> ReadUser::readData() const {
+    vector<shared_ptr<User>> users;     // Container for user pointers
     DatabaseConnector dbConnector;       // Database connection manager
 
     // Step 1: Connect to the database

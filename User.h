@@ -2,7 +2,7 @@
  * @file User.h
  * @brief Header file for User classes
  * 
- * @details Defines the user class hierarchy, including the IUser interface
+ * @details Defines the user class hierarchy, including the User interface
  *          and derived Admin and Customer classes
  */
 
@@ -29,7 +29,7 @@ enum Role {
 /**
  * @brief Abstract base class for all user types in the system
  */
-class IUser {
+class User {
 private:
     string username; /**< Username for authentication */
     string password; /**< Password for authentication */
@@ -37,7 +37,7 @@ public:
     /**
      * @brief Virtual destructor for proper inheritance
      */
-    virtual ~IUser();
+    virtual ~User();
     
     /**
      * @brief Constructor with username and password
@@ -45,7 +45,7 @@ public:
      * @param username Username for the user
      * @param password Password for the user
      */
-    IUser(const string&, const string&);
+    User(const string&, const string&);
     
     /**
      * @brief Pure virtual method to get user role
@@ -79,7 +79,7 @@ public:
 /**
  * @brief Customer user type - regular user with standard privileges
  */
-class Customer : public IUser {
+class Customer : public User {
 public:
     /**
      * @brief Constructor with username and password
@@ -107,7 +107,7 @@ public:
 /**
  * @brief Admin user type - privileged user with administrative capabilities
  */
-class Admin : public IUser {
+class Admin : public User {
 private:
     /**
      * @brief Static list of valid admin registration passkeys
