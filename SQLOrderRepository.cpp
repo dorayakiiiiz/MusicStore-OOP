@@ -1,165 +1,183 @@
 #include "SQLOrderRepository.h"
 
-// sua cai nay
+SqlOrderRepository::SqlOrderRepository() {}
 
-// SqlOrderRepository::SqlOrderRepository() {}
+SqlOrderRepository::~SqlOrderRepository() {}
 
-// SqlOrderRepository::~SqlOrderRepository() {}
+vector<Order> SqlOrderRepository::getAll() {
+    vector<Order> orders;
+    DatabaseConnector dbConnector;
 
-// vector<Order> SqlOrderRepository::getAll() {
-//     vector<Order> orders;
-    
-//     if (!dbConnector.connect()) {
-//         return orders;
-//     }
+    if (!dbConnector.connect()) {
+        return orders;
+    }
 
-//     SQLHSTMT hStmt = nullptr;
-    
-//     if (SQLAllocHandle(SQL_HANDLE_STMT, dbConnector.getConnection(), &hStmt) != SQL_SUCCESS) {
-//         dbConnector.disconnect();
-//         return orders;
-//     }
+    SQLHDBC hDbc = dbConnector.getConnection();
+    SQLHSTMT hStmt = nullptr;
+    SQLRETURN ret;
 
-//     // Complex query to get order header and details together
-//     std::string query = R"(
-//         SELECT o.Username, o.TotalPrice, d.NameSong, d.Artist, d.Genre, d.Price, d.Quantity, o.OrderCode
-//         FROM orders o
-//         JOIN detail_order d ON o.OrderCode = d.OrderCode
-//         ORDER BY o.OrderCode
-//     )";
-    
-//     SQLRETURN ret = SQLExecDirect(hStmt, (SQLCHAR*)query.c_str(), SQL_NTS);
+    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+        dbConnector.disconnect();
+        return orders;
+    }
 
-//     if (SQL_SUCCEEDED(ret)) {
-//         char usernameBuffer[100], nameSongBuffer[256], artistBuffer[256], genreBuffer[100];
-//         SQLLEN usernameLen, nameSongLen, artistLen, genreLen, priceLen, quantityLen, totalPriceLen, orderCodeLen;
-//         float price, totalPrice;
-//         int quantity, currentOrderCode = -1, orderCode;
-//         std::string currentUsername;
-//         vector<Music> currentItems;
-        
-//         // Bind columns
-//         SQLBindCol(hStmt, 1, SQL_C_CHAR, usernameBuffer, sizeof(usernameBuffer), &usernameLen);
-//         SQLBindCol(hStmt, 2, SQL_C_FLOAT, &totalPrice, 0, &totalPriceLen);
-//         SQLBindCol(hStmt, 3, SQL_C_CHAR, nameSongBuffer, sizeof(nameSongBuffer), &nameSongLen);
-//         SQLBindCol(hStmt, 4, SQL_C_CHAR, artistBuffer, sizeof(artistBuffer), &artistLen);
-//         SQLBindCol(hStmt, 5, SQL_C_CHAR, genreBuffer, sizeof(genreBuffer), &genreLen);
-//         SQLBindCol(hStmt, 6, SQL_C_FLOAT, &price, 0, &priceLen);
-//         SQLBindCol(hStmt, 7, SQL_C_LONG, &quantity, 0, &quantityLen);
-//         SQLBindCol(hStmt, 8, SQL_C_LONG, &orderCode, 0, &orderCodeLen);
+    string query = R"(
+        SELECT Username, TotalPrice, NameSong, Artist, Genre, Price, Quantity
+        FROM orders
+        JOIN detail_order ON orders.ID = detail_order.ID
+        ORDER BY orders.ID
+    )";
+    ret = SQLExecDirect(hStmt, (SQLCHAR*)query.c_str(), SQL_NTS);
 
-//         // Fetch rows
-//         while (SQL_SUCCEEDED(SQLFetch(hStmt))) {
-//             // If we're starting a new order
-//             if (orderCode != currentOrderCode) {
-//                 // If this isn't the first order, add the previous one to our result
-//                 if (currentOrderCode != -1) {
-//                     orders.emplace_back(currentUsername, currentItems, totalPrice);
-//                     currentItems.clear();
-//                 }
-                
-//                 currentOrderCode = orderCode;
-//                 currentUsername = std::string(usernameBuffer);
-//             }
-            
-//             // Add the current item to the current order
-//             currentItems.emplace_back(
-//                 std::string(nameSongBuffer),
-//                 std::string(artistBuffer),
-//                 std::string(genreBuffer),
-//                 price,
-//                 quantity
-//             );
-//         }
-        
-//         // Add the last order if we processed any rows
-//         if (currentOrderCode != -1) {
-//             orders.emplace_back(currentUsername, currentItems, totalPrice);
-//         }
-//     }
+    if (SQL_SUCCEEDED(ret)) {
+        char tempUsername[256], tempNameSong[256], tempArtist[256], tempGenre[100];
+        string Username, NameSong, Artist, Genre;
+        float Price, TotalPrice;
+        int Quantity;
 
-//     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-//     dbConnector.disconnect();
-    
-//     return orders;
-// }
+        string lastUsername = "";
+        float currentTotalPrice = 0.0f;
+        vector<Music> purchasedItems;
 
-// bool SqlOrderRepository::add(const Order& order) {
-//     if (!dbConnector.connect()) {
-//         return false;
-//     }
+        bool first = true;
 
-//     SQLHSTMT hStmt = nullptr;
-//     bool success = false;
-    
-//     if (SQLAllocHandle(SQL_HANDLE_STMT, dbConnector.getConnection(), &hStmt) != SQL_SUCCESS) {
-//         dbConnector.disconnect();
-//         return false;
-//     }
+        while ((ret = SQLFetch(hStmt)) == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO) {
+            SQLGetData(hStmt, 1, SQL_C_CHAR, tempUsername, sizeof(tempUsername), NULL);
+            SQLGetData(hStmt, 2, SQL_C_FLOAT, &TotalPrice, 0, NULL);
+            SQLGetData(hStmt, 3, SQL_C_CHAR, tempNameSong, sizeof(tempNameSong), NULL);
+            SQLGetData(hStmt, 4, SQL_C_CHAR, tempArtist, sizeof(tempArtist), NULL);
+            SQLGetData(hStmt, 5, SQL_C_CHAR, tempGenre, sizeof(tempGenre), NULL);
+            SQLGetData(hStmt, 6, SQL_C_FLOAT, &Price, 0, NULL);
+            SQLGetData(hStmt, 7, SQL_C_SLONG, &Quantity, 0, NULL);
 
-//     // First, insert into orders table
-//     std::string orderQuery = "INSERT INTO orders (Username, TotalPrice) VALUES (?, ?); SELECT SCOPE_IDENTITY() AS OrderId";
-//     SQLRETURN ret = SQLPrepare(hStmt, (SQLCHAR*)orderQuery.c_str(), SQL_NTS);
-    
-//     if (SQL_SUCCEEDED(ret)) {
-//         std::string username = order.getUsername();
-//         float totalPrice = order.getTotal();
-        
-//         SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, username.length(), 0, 
-//                         (SQLCHAR*)username.c_str(), username.length(), NULL);
-//         SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_FLOAT, SQL_FLOAT, 0, 0, 
-//                         (float*)&totalPrice, 0, NULL);
-        
-//         ret = SQLExecute(hStmt);
-        
-//         // Get the inserted order ID
-//         int orderId = 0;
-//         if (SQL_SUCCEEDED(ret) && SQL_SUCCEEDED(SQLFetch(hStmt))) {
-//             SQLGetData(hStmt, 1, SQL_C_LONG, &orderId, 0, NULL);
-            
-//             // Now insert order details
-//             SQLFreeStmt(hStmt, SQL_CLOSE);
-            
-//             const vector<Music>& items = order.getPurchasedItems();
-//             for (const auto& item : items) {
-//                 std::string detailQuery = "INSERT INTO detail_order (OrderCode, NameSong, Artist, Genre, Price, Quantity) VALUES (?, ?, ?, ?, ?, ?)";
-//                 ret = SQLPrepare(hStmt, (SQLCHAR*)detailQuery.c_str(), SQL_NTS);
-                
-//                 if (SQL_SUCCEEDED(ret)) {
-//                     std::string name = item.getName();
-//                     std::string artist = item.getArtist();
-//                     std::string genre = item.getGenre();
-//                     float price = item.getPrice();
-//                     int quantity = item.getQuantity();
-                    
-//                     SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, 
-//                                     &orderId, 0, NULL);
-//                     SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, name.length(), 0, 
-//                                     (SQLCHAR*)name.c_str(), name.length(), NULL);
-//                     SQLBindParameter(hStmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, artist.length(), 0, 
-//                                     (SQLCHAR*)artist.c_str(), artist.length(), NULL);
-//                     SQLBindParameter(hStmt, 4, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, genre.length(), 0, 
-//                                     (SQLCHAR*)genre.c_str(), genre.length(), NULL);
-//                     SQLBindParameter(hStmt, 5, SQL_PARAM_INPUT, SQL_C_FLOAT, SQL_FLOAT, 0, 0, 
-//                                     (float*)&price, 0, NULL);
-//                     SQLBindParameter(hStmt, 6, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, 
-//                                     (int*)&quantity, 0, NULL);
-                    
-//                     ret = SQLExecute(hStmt);
-//                     SQLFreeStmt(hStmt, SQL_CLOSE);
-                    
-//                     if (!SQL_SUCCEEDED(ret)) {
-//                         break;
-//                     }
-//                 }
-//             }
-            
-//             success = SQL_SUCCEEDED(ret);
-//         }
-//     }
-    
-//     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-//     dbConnector.disconnect();
-    
-//     return success;
-// }
+            Username = tempUsername;
+            NameSong = tempNameSong;
+            Artist = tempArtist;
+            Genre = tempGenre;
+
+            if (!first && (Username != lastUsername || TotalPrice != currentTotalPrice)) {
+                orders.emplace_back(Order(lastUsername, purchasedItems, currentTotalPrice));
+                purchasedItems.clear();
+            }
+
+            first = false;
+            lastUsername = Username;
+            currentTotalPrice = TotalPrice;
+
+            purchasedItems.emplace_back(Music(NameSong, Artist, Genre, Price, Quantity));
+        }
+
+        if (!purchasedItems.empty()) {
+            orders.emplace_back(Order(lastUsername, purchasedItems, currentTotalPrice));
+        }
+    }
+
+    SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+    dbConnector.disconnect();
+
+    return orders;
+}
+
+bool SqlOrderRepository::add(const Order& order) {
+    bool success = false;
+    DatabaseConnector dbConnector;
+    SQLHSTMT hStmt = nullptr;
+    SQLRETURN ret;
+
+    if (!dbConnector.connect()) return false;
+
+    SQLHDBC hDbc = dbConnector.getConnection();
+
+    // Tắt autocommit để sử dụng transaction
+    SQLSetConnectAttr(hDbc, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_OFF, 0);
+
+    int newOrderId = 1;
+    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) == SQL_SUCCESS) {
+        std::string getMaxIdQuery = "SELECT ISNULL(MAX(ID), 0) + 1 FROM orders";
+        ret = SQLExecDirect(hStmt, (SQLCHAR*)getMaxIdQuery.c_str(), SQL_NTS);
+        if (SQL_SUCCEEDED(ret) && SQLFetch(hStmt) == SQL_SUCCESS) {
+            SQLGetData(hStmt, 1, SQL_C_SLONG, &newOrderId, 0, NULL);
+        }
+        SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+        hStmt = nullptr;
+    }
+
+    // Thêm vào bảng orders
+    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) == SQL_SUCCESS) {
+        std::string insertOrderQuery = "INSERT INTO orders (ID, Username, TotalPrice) VALUES (?, ?, ?)";
+        ret = SQLPrepare(hStmt, (SQLCHAR*)insertOrderQuery.c_str(), SQL_NTS);
+
+        if (SQL_SUCCEEDED(ret)) {
+            string username = order.getUsername();
+            float total = order.getTotal();
+            SQLLEN lenUsername = (SQLLEN)username.length();
+
+            SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, &newOrderId, 0, NULL);
+            SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)username.c_str(), lenUsername, NULL);
+            SQLBindParameter(hStmt, 3, SQL_PARAM_INPUT, SQL_C_FLOAT, SQL_REAL, 0, 0, &total, 0, NULL);
+
+            ret = SQLExecute(hStmt);
+        }
+        SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+        hStmt = nullptr;
+    }
+
+    if (!SQL_SUCCEEDED(ret)) {
+        SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_ROLLBACK);
+        dbConnector.disconnect();
+        return false;
+    }
+
+    // Thêm vào bảng detail_order
+    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+        SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_ROLLBACK);
+        dbConnector.disconnect();
+        return false;
+    }
+
+    string detailQuery = "INSERT INTO detail_order (ID, NameSong, Artist, Genre, Price, Quantity) VALUES (?, ?, ?, ?, ?, ?)";
+    ret = SQLPrepare(hStmt, (SQLCHAR*)detailQuery.c_str(), SQL_NTS);
+
+    if (!SQL_SUCCEEDED(ret)) {
+        SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+        SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_ROLLBACK);
+        dbConnector.disconnect();
+        return false;
+    }
+
+    const vector<Music>& items = order.getPurchasedItems();
+    for (const auto& item : items) {
+        string name = item.getName();
+        string artist = item.getArtist();
+        string genre = item.getGenre();
+        float price = item.getPrice();
+        int quantity = item.getQuantity();
+
+        SQLLEN lenName = (SQLLEN)name.length();
+        SQLLEN lenArtist = (SQLLEN)artist.length();
+        SQLLEN lenGenre = (SQLLEN)genre.length();
+
+        SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, &newOrderId, 0, NULL);
+        SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)name.c_str(), lenName, NULL);
+        SQLBindParameter(hStmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)artist.c_str(), lenArtist, NULL);
+        SQLBindParameter(hStmt, 4, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 100, 0, (SQLPOINTER)genre.c_str(), lenGenre, NULL);
+        SQLBindParameter(hStmt, 5, SQL_PARAM_INPUT, SQL_C_FLOAT, SQL_REAL, 0, 0, &price, 0, NULL);
+        SQLBindParameter(hStmt, 6, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, &quantity, 0, NULL);
+
+        ret = SQLExecute(hStmt);
+        SQLFreeStmt(hStmt, SQL_RESET_PARAMS); // reset cho lần sau
+
+        if (!SQL_SUCCEEDED(ret)) {
+            SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+            SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_ROLLBACK);
+            dbConnector.disconnect();
+            return false;
+        }
+    }
+
+    SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+    SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_COMMIT);
+    dbConnector.disconnect();
+
+    return true;
+}

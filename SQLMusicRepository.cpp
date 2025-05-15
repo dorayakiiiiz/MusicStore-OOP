@@ -1,240 +1,197 @@
 #include "SqlMusicRepository.h"
 
-// sua cai nay
+SqlMusicRepository::SqlMusicRepository() {}
 
-// SqlMusicRepository::SqlMusicRepository() {}
+SqlMusicRepository::~SqlMusicRepository() {}
 
-// SqlMusicRepository::~SqlMusicRepository() {}
+std::vector<Music> SqlMusicRepository::getAll() {
+    std::vector<Music> items;
+    DatabaseConnector dbConnector;
 
-// std::vector<Music> SqlMusicRepository::getAll() {
-//     std::vector<Music> items;
-    
-//     // Connect to the database
-//     if (!dbConnector.connect()) {
-//         return items;
-//     }
+    if (!dbConnector.connect()) return items;
 
-//     SQLHSTMT hStmt = nullptr;
-    
-//     // Allocate a statement handle
-//     if (SQLAllocHandle(SQL_HANDLE_STMT, dbConnector.getConnection(), &hStmt) != SQL_SUCCESS) {
-//         dbConnector.disconnect();
-//         return items;
-//     }
+    SQLHDBC hDbc = dbConnector.getConnection();
+    SQLHSTMT hStmt = nullptr;
 
-//     // Execute query to get all music records
-//     std::string query = "SELECT NameSong, Artist, Genre, Price, Quantity FROM music_info";
-//     SQLRETURN ret = SQLExecDirect(hStmt, (SQLCHAR*)query.c_str(), SQL_NTS);
+    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+        dbConnector.disconnect();
+        return items;
+    }
 
-//     // Process query results
-//     if (SQL_SUCCEEDED(ret)) {
-//         char nameBuffer[256], artistBuffer[256], genreBuffer[100];
-//         SQLLEN nameLen, artistLen, genreLen, priceLen, quantityLen;
-//         float price;
-//         int quantity;
+    std::string query = "SELECT NameSong, Artist, Genre, Price, Quantity FROM music_info";
+    if (SQLExecDirect(hStmt, (SQLCHAR*)query.c_str(), SQL_NTS) == SQL_SUCCESS) {
+        char tempName[256], tempArtist[256], tempGenre[100];
+        float price;
+        int quantity;
 
-//         // Bind columns
-//         SQLBindCol(hStmt, 1, SQL_C_CHAR, nameBuffer, sizeof(nameBuffer), &nameLen);
-//         SQLBindCol(hStmt, 2, SQL_C_CHAR, artistBuffer, sizeof(artistBuffer), &artistLen);
-//         SQLBindCol(hStmt, 3, SQL_C_CHAR, genreBuffer, sizeof(genreBuffer), &genreLen);
-//         SQLBindCol(hStmt, 4, SQL_C_FLOAT, &price, 0, &priceLen);
-//         SQLBindCol(hStmt, 5, SQL_C_LONG, &quantity, 0, &quantityLen);
+        while (SQLFetch(hStmt) == SQL_SUCCESS) {
+            SQLGetData(hStmt, 1, SQL_C_CHAR, tempName, sizeof(tempName), nullptr);
+            SQLGetData(hStmt, 2, SQL_C_CHAR, tempArtist, sizeof(tempArtist), nullptr);
+            SQLGetData(hStmt, 3, SQL_C_CHAR, tempGenre, sizeof(tempGenre), nullptr);
+            SQLGetData(hStmt, 4, SQL_C_FLOAT, &price, 0, nullptr);
+            SQLGetData(hStmt, 5, SQL_C_SLONG, &quantity, 0, nullptr);
 
-//         // Fetch rows
-//         while (SQL_SUCCEEDED(SQLFetch(hStmt))) {
-//             items.emplace_back(
-//                 std::string(nameBuffer),
-//                 std::string(artistBuffer),
-//                 std::string(genreBuffer),
-//                 price,
-//                 quantity
-//             );
-//         }
-//     }
+            items.emplace_back(tempName, tempArtist, tempGenre, price, quantity);
+        }
+    }
 
-//     // Clean up
-//     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-//     dbConnector.disconnect();
-    
-//     return items;
-// }
+    SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+    dbConnector.disconnect();
+    return items;
+}
 
-// Music SqlMusicRepository::getById(int id) {
-//     Music music;
-    
-//     if (!dbConnector.connect()) {
-//         return music;
-//     }
+Music SqlMusicRepository::getById(int id) {
+    Music music;
+    DatabaseConnector dbConnector;
 
-//     SQLHSTMT hStmt = nullptr;
-    
-//     if (SQLAllocHandle(SQL_HANDLE_STMT, dbConnector.getConnection(), &hStmt) != SQL_SUCCESS) {
-//         dbConnector.disconnect();
-//         return music;
-//     }
+    if (!dbConnector.connect()) return music;
 
-//     std::string query = "SELECT NameSong, Artist, Genre, Price, Quantity FROM music_info WHERE Id = ?";
-//     SQLRETURN ret = SQLPrepare(hStmt, (SQLCHAR*)query.c_str(), SQL_NTS);
-    
-//     if (SQL_SUCCEEDED(ret)) {
-//         // Bind parameters
-//         SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, &id, 0, NULL);
-        
-//         ret = SQLExecute(hStmt);
-        
-//         if (SQL_SUCCEEDED(ret)) {
-//             char nameBuffer[256], artistBuffer[256], genreBuffer[100];
-//             SQLLEN nameLen, artistLen, genreLen, priceLen, quantityLen;
-//             float price;
-//             int quantity;
+    SQLHDBC hDbc = dbConnector.getConnection();
+    SQLHSTMT hStmt = nullptr;
 
-//             // Bind columns
-//             SQLBindCol(hStmt, 1, SQL_C_CHAR, nameBuffer, sizeof(nameBuffer), &nameLen);
-//             SQLBindCol(hStmt, 2, SQL_C_CHAR, artistBuffer, sizeof(artistBuffer), &artistLen);
-//             SQLBindCol(hStmt, 3, SQL_C_CHAR, genreBuffer, sizeof(genreBuffer), &genreLen);
-//             SQLBindCol(hStmt, 4, SQL_C_FLOAT, &price, 0, &priceLen);
-//             SQLBindCol(hStmt, 5, SQL_C_LONG, &quantity, 0, &quantityLen);
+    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+        dbConnector.disconnect();
+        return music;
+    }
 
-//             // Fetch the row
-//             if (SQL_SUCCEEDED(SQLFetch(hStmt))) {
-//                 music = Music(
-//                     std::string(nameBuffer),
-//                     std::string(artistBuffer),
-//                     std::string(genreBuffer),
-//                     price,
-//                     quantity
-//                 );
-//             }
-//         }
-//     }
-    
-//     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-//     dbConnector.disconnect();
-    
-//     return music;
-// }
+    std::string query = "SELECT NameSong, Artist, Genre, Price, Quantity FROM music_info WHERE ID = ?";
+    if (SQLPrepare(hStmt, (SQLCHAR*)query.c_str(), SQL_NTS) == SQL_SUCCESS) {
+        SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &id, 0, nullptr);
+        if (SQLExecute(hStmt) == SQL_SUCCESS && SQLFetch(hStmt) == SQL_SUCCESS) {
+            char name[256], artist[256], genre[100];
+            float price;
+            int quantity;
 
-// bool SqlMusicRepository::add(const Music& music) {
-//     if (!dbConnector.connect()) {
-//         return false;
-//     }
+            SQLGetData(hStmt, 1, SQL_C_CHAR, name, sizeof(name), nullptr);
+            SQLGetData(hStmt, 2, SQL_C_CHAR, artist, sizeof(artist), nullptr);
+            SQLGetData(hStmt, 3, SQL_C_CHAR, genre, sizeof(genre), nullptr);
+            SQLGetData(hStmt, 4, SQL_C_FLOAT, &price, 0, nullptr);
+            SQLGetData(hStmt, 5, SQL_C_SLONG, &quantity, 0, nullptr);
 
-//     SQLHSTMT hStmt = nullptr;
-//     bool success = false;
-    
-//     if (SQLAllocHandle(SQL_HANDLE_STMT, dbConnector.getConnection(), &hStmt) != SQL_SUCCESS) {
-//         dbConnector.disconnect();
-//         return false;
-//     }
+            music = Music(name, artist, genre, price, quantity);
+        }
+    }
 
-//     std::string query = "INSERT INTO music_info (NameSong, Artist, Genre, Price, Quantity) VALUES (?, ?, ?, ?, ?)";
-//     SQLRETURN ret = SQLPrepare(hStmt, (SQLCHAR*)query.c_str(), SQL_NTS);
-    
-//     if (SQL_SUCCEEDED(ret)) {
-//         // Get music attributes
-//         std::string name = music.getName();
-//         std::string artist = music.getArtist();
-//         std::string genre = music.getGenre();
-//         float price = music.getPrice();
-//         int quantity = music.getQuantity();
-        
-//         // Bind parameters
-//         SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, name.length(), 0, 
-//                         (SQLCHAR*)name.c_str(), name.length(), NULL);
-//         SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, artist.length(), 0, 
-//                         (SQLCHAR*)artist.c_str(), artist.length(), NULL);
-//         SQLBindParameter(hStmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, genre.length(), 0, 
-//                         (SQLCHAR*)genre.c_str(), genre.length(), NULL);
-//         SQLBindParameter(hStmt, 4, SQL_PARAM_INPUT, SQL_C_FLOAT, SQL_FLOAT, 0, 0, 
-//                         &price, 0, NULL);
-//         SQLBindParameter(hStmt, 5, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, 
-//                         &quantity, 0, NULL);
-        
-//         ret = SQLExecute(hStmt);
-//         success = SQL_SUCCEEDED(ret);
-//     }
-    
-//     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-//     dbConnector.disconnect();
-    
-//     return success;
-// }
+    SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+    dbConnector.disconnect();
+    return music;
+}
 
-// bool SqlMusicRepository::updateById(int id, const Music& music) {
-//     if (!dbConnector.connect()) {
-//         return false;
-//     }
+bool SqlMusicRepository::add(const Music& music) {
+    DatabaseConnector dbConnector;
+    if (!dbConnector.connect()) return false;
 
-//     SQLHSTMT hStmt = nullptr;
-//     bool success = false;
-    
-//     if (SQLAllocHandle(SQL_HANDLE_STMT, dbConnector.getConnection(), &hStmt) != SQL_SUCCESS) {
-//         dbConnector.disconnect();
-//         return false;
-//     }
+    SQLHDBC hDbc = dbConnector.getConnection();
+    SQLHSTMT hStmt = nullptr;
+    SQLRETURN ret;
 
-//     std::string query = "UPDATE music_info SET NameSong = ?, Artist = ?, Genre = ?, Price = ?, Quantity = ? WHERE Id = ?";
-//     SQLRETURN ret = SQLPrepare(hStmt, (SQLCHAR*)query.c_str(), SQL_NTS);
-    
-//     if (SQL_SUCCEEDED(ret)) {
-//         // Get music attributes
-//         std::string name = music.getName();
-//         std::string artist = music.getArtist();
-//         std::string genre = music.getGenre();
-//         float price = music.getPrice();
-//         int quantity = music.getQuantity();
-        
-//         // Bind parameters
-//         SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, name.length(), 0, 
-//                         (SQLCHAR*)name.c_str(), name.length(), NULL);
-//         SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, artist.length(), 0, 
-//                         (SQLCHAR*)artist.c_str(), artist.length(), NULL);
-//         SQLBindParameter(hStmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, genre.length(), 0, 
-//                         (SQLCHAR*)genre.c_str(), genre.length(), NULL);
-//         SQLBindParameter(hStmt, 4, SQL_PARAM_INPUT, SQL_C_FLOAT, SQL_FLOAT, 0, 0, 
-//                         &price, 0, NULL);
-//         SQLBindParameter(hStmt, 5, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, 
-//                         &quantity, 0, NULL);
-//         SQLBindParameter(hStmt, 6, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, 
-//                         &id, 0, NULL);
-        
-//         ret = SQLExecute(hStmt);
-//         success = SQL_SUCCEEDED(ret);
-//     }
-    
-//     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-//     dbConnector.disconnect();
-    
-//     return success;
-// }
+    std::string name = music.getName();
+    std::string artist = music.getArtist();
+    std::string genre = music.getGenre();
+    float price = music.getPrice();
+    int quantity = music.getQuantity();
 
-// bool SqlMusicRepository::deleteById(int id) {
-//     if (!dbConnector.connect()) {
-//         return false;
-//     }
+    // Step 1: Check duplicates
+    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+        dbConnector.disconnect();
+        return false;
+    }
 
-//     SQLHSTMT hStmt = nullptr;
-//     bool success = false;
-    
-//     if (SQLAllocHandle(SQL_HANDLE_STMT, dbConnector.getConnection(), &hStmt) != SQL_SUCCESS) {
-//         dbConnector.disconnect();
-//         return false;
-//     }
+    std::string checkQuery = "SELECT COUNT(*) FROM music_info WHERE NameSong = ? AND Artist = ?";
+    ret = SQLPrepare(hStmt, (SQLCHAR*)checkQuery.c_str(), SQL_NTS);
+    SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)name.c_str(), 0, nullptr);
+    SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)artist.c_str(), 0, nullptr);
 
-//     std::string query = "DELETE FROM music_info WHERE Id = ?";
-//     SQLRETURN ret = SQLPrepare(hStmt, (SQLCHAR*)query.c_str(), SQL_NTS);
-    
-//     if (SQL_SUCCEEDED(ret)) {
-//         // Bind parameter
-//         SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, &id, 0, NULL);
-        
-//         ret = SQLExecute(hStmt);
-//         success = SQL_SUCCEEDED(ret);
-//     }
-    
-//     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-//     dbConnector.disconnect();
-    
-//     return success;
-// }
+    int duplicate = 0;
+    if (SQLExecute(hStmt) == SQL_SUCCESS && SQLFetch(hStmt) == SQL_SUCCESS) {
+        SQLGetData(hStmt, 1, SQL_C_SLONG, &duplicate, 0, nullptr);
+    }
 
+    SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+
+    if (duplicate > 0) {
+        dbConnector.disconnect();
+        return false;
+    }
+
+    // Step 2: Get next ID
+    int newId = 1;
+    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) == SQL_SUCCESS) {
+        std::string idQuery = "SELECT ISNULL(MAX(ID), 0) + 1 FROM music_info";
+        if (SQLExecDirect(hStmt, (SQLCHAR*)idQuery.c_str(), SQL_NTS) == SQL_SUCCESS && SQLFetch(hStmt) == SQL_SUCCESS) {
+            SQLGetData(hStmt, 1, SQL_C_SLONG, &newId, 0, nullptr);
+        }
+        SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+    }
+
+    // Step 3: Insert
+    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+        dbConnector.disconnect();
+        return false;
+    }
+
+    std::string insertQuery = "INSERT INTO music_info (ID, NameSong, Artist, Genre, Price, Quantity) VALUES (?, ?, ?, ?, ?, ?)";
+    SQLPrepare(hStmt, (SQLCHAR*)insertQuery.c_str(), SQL_NTS);
+
+    SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &newId, 0, nullptr);
+    SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)name.c_str(), 0, nullptr);
+    SQLBindParameter(hStmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)artist.c_str(), 0, nullptr);
+    SQLBindParameter(hStmt, 4, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 100, 0, (SQLPOINTER)genre.c_str(), 0, nullptr);
+    SQLBindParameter(hStmt, 5, SQL_PARAM_INPUT, SQL_C_FLOAT, SQL_FLOAT, 0, 0, &price, 0, nullptr);
+    SQLBindParameter(hStmt, 6, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &quantity, 0, nullptr);
+
+    bool success = SQL_SUCCEEDED(SQLExecute(hStmt));
+    SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+    dbConnector.disconnect();
+    return success;
+}
+
+bool SqlMusicRepository::deleteById(int id) {
+    DatabaseConnector dbConnector;
+    if (!dbConnector.connect()) return false;
+
+    SQLHDBC hDbc = dbConnector.getConnection();
+    SQLHSTMT hStmt = nullptr;
+
+    // Step 1: Delete record
+    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+        dbConnector.disconnect();
+        return false;
+    }
+
+    std::string deleteQuery = "DELETE FROM music_info WHERE ID = ?";
+    SQLPrepare(hStmt, (SQLCHAR*)deleteQuery.c_str(), SQL_NTS);
+    SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &id, 0, nullptr);
+    bool success = SQL_SUCCEEDED(SQLExecute(hStmt));
+    SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+
+    // Step 2: Shift IDs
+    if (success && SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) == SQL_SUCCESS) {
+        std::string selectQuery = "SELECT ID FROM music_info WHERE ID > ? ORDER BY ID ASC";
+        SQLPrepare(hStmt, (SQLCHAR*)selectQuery.c_str(), SQL_NTS);
+        SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &id, 0, nullptr);
+
+        if (SQLExecute(hStmt) == SQL_SUCCESS) {
+            int currentId;
+            while (SQLFetch(hStmt) == SQL_SUCCESS) {
+                SQLGetData(hStmt, 1, SQL_C_SLONG, &currentId, 0, nullptr);
+                int newId = currentId - 1;
+
+                SQLHSTMT hUpdateStmt = nullptr;
+                if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hUpdateStmt) == SQL_SUCCESS) {
+                    std::string updateQuery = "UPDATE music_info SET ID = ? WHERE ID = ?";
+                    SQLPrepare(hUpdateStmt, (SQLCHAR*)updateQuery.c_str(), SQL_NTS);
+                    SQLBindParameter(hUpdateStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &newId, 0, nullptr);
+                    SQLBindParameter(hUpdateStmt, 2, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &currentId, 0, nullptr);
+                    SQLExecute(hUpdateStmt);
+                    SQLFreeHandle(SQL_HANDLE_STMT, hUpdateStmt);
+                }
+            }
+        }
+
+        SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+    }
+
+    dbConnector.disconnect();
+    return success;
+}

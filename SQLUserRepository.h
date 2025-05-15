@@ -32,7 +32,7 @@ public:
      *
      * @return vector<User> Collection of all user records
      */
-    vector<User> getAll() override;
+    vector<shared_ptr<User>> getAll() override;
 
     /**
      * @brief Get a user record by ID

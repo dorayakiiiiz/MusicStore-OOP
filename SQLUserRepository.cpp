@@ -1,122 +1,178 @@
 #include "SQLUserRepository.h"
+#include <memory>
 
-// sua cai nay
+SqlUserRepository::SqlUserRepository() {}
+
+SqlUserRepository::~SqlUserRepository() {}
+
+vector<shared_ptr<User>> SqlUserRepository::getAll() {
+    vector<shared_ptr<User>> users;     // Container for user pointers
+    DatabaseConnector dbConnector;       // Database connection manager
+
+    // Step 1: Connect to the database
+    if (!dbConnector.connect()) {
+        return users;  // Return empty vector if connection fails
+    }
+
+    SQLHDBC hDbc = dbConnector.getConnection();  // Get database connection handle
+    SQLHSTMT hStmt = nullptr;                    // SQL statement handle
+    SQLRETURN ret;                               // SQL operation return value
+
+    // Step 2: Allocate a statement handle
+    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+        dbConnector.disconnect();
+        return users;  // Return empty vector if handle allocation fails
+    }
+
+    // Step 3: Execute query to get all user records
+    string selectQuery = "SELECT Username, Pass, UserRole FROM user_info";
+    ret = SQLExecDirect(hStmt, (SQLCHAR*)selectQuery.c_str(), SQL_NTS);
+
+    // Step 4: Process query results
+    if (SQL_SUCCEEDED(ret)) {
+        // Temporary variables to store column data
+        char tempUsername[256], tempPass[256], tempRole[2];
+        string username, password, role;
+
+        // Fetch each row from the result set
+        while ((ret = SQLFetch(hStmt)) == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO) {
+            // Get data from each column
+            SQLGetData(hStmt, 1, SQL_C_CHAR, tempUsername, sizeof(tempUsername), NULL);
+            SQLGetData(hStmt, 2, SQL_C_CHAR, tempPass, sizeof(tempPass), NULL);
+            SQLGetData(hStmt, 3, SQL_C_CHAR, tempRole, sizeof(tempRole), NULL);
+
+            // Convert char arrays to C++ strings
+            username = tempUsername;
+            password = tempPass;
+            role = tempRole;
+
+            // Create appropriate user type based on role (C = Customer, otherwise Admin)
+            if (role == "C") {
+                users.push_back(make_shared<Customer>(username, password));
+            } else {
+                users.push_back(make_shared<Admin>(username, password));
+            }
+        }
+    }
+
+    // Step 5: Clean up resources
+    SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+    dbConnector.disconnect();
+
+    return users;  // Return the populated vector
+}
 
 
-// #include <memory>
+bool SqlUserRepository::add(const User& user) {
+    DatabaseConnector dbConnector;
+    if (!dbConnector.connect()) return false;
 
-// SqlUserRepository::SqlUserRepository() {}
+    SQLHDBC hDbc = dbConnector.getConnection();
+    SQLHSTMT hStmt = nullptr;
+    SQLRETURN ret;
 
-// SqlUserRepository::~SqlUserRepository() {}
-
-// vector<User> SqlUserRepository::getAll() {
-//     vector<User> users;
+    std::string username = user.getUsername();
+    std::string password = user.getPassword();
+    std::string role = (user.getRole() == Role::ADMIN) ? "A" : "C";
     
-//     if (!dbConnector.connect()) {
-//         return users;
-//     }
+    // Step 1: Check duplicates
+    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+        dbConnector.disconnect();
+        return false;
+    }
 
-//     SQLHSTMT hStmt = nullptr;
+    std::string checkQuery = "SELECT COUNT(*) FROM user_info WHERE Username = ?";
+    ret = SQLPrepare(hStmt, (SQLCHAR*)checkQuery.c_str(), SQL_NTS);
+    SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)username.c_str(), 0, nullptr);
+
+    int duplicate = 0;
+    if (SQLExecute(hStmt) == SQL_SUCCESS && SQLFetch(hStmt) == SQL_SUCCESS) {
+        SQLGetData(hStmt, 1, SQL_C_SLONG, &duplicate, 0, nullptr);
+    }
+
+    SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+
+    if (duplicate > 0) {
+        dbConnector.disconnect();
+        return false;
+    }
+
+    // Step 2: Get next ID
+    int newId = 1;
+    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) == SQL_SUCCESS) {
+        std::string idQuery = "SELECT ISNULL(MAX(ID), 0) + 1 FROM user_info";
+        if (SQLExecDirect(hStmt, (SQLCHAR*)idQuery.c_str(), SQL_NTS) == SQL_SUCCESS && SQLFetch(hStmt) == SQL_SUCCESS) {
+            SQLGetData(hStmt, 1, SQL_C_SLONG, &newId, 0, nullptr);
+        }
+        SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+    }
+
+    // Step 3: Insert
+    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+        dbConnector.disconnect();
+        return false;
+    }
+
+    std::string insertQuery = "INSERT INTO user_info (ID, Username, Pass, UserRole) VALUES (?, ?, ?, ?)";
+    SQLPrepare(hStmt, (SQLCHAR*)insertQuery.c_str(), SQL_NTS);
     
-//     if (SQLAllocHandle(SQL_HANDLE_STMT, dbConnector.getConnection(), &hStmt) != SQL_SUCCESS) {
-//         dbConnector.disconnect();
-//         return users;
-//     }
+    SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &newId, 0, nullptr);
+    SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)username.c_str(), 0, nullptr);
+    SQLBindParameter(hStmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)password.c_str(), 0, nullptr);
+    SQLBindParameter(hStmt, 4, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 1, 0, (SQLPOINTER)role.c_str(), 0, nullptr);
 
-//     std::string query = "SELECT Username, Pass, UserRole FROM user_info";
-//     SQLRETURN ret = SQLExecDirect(hStmt, (SQLCHAR*)query.c_str(), SQL_NTS);
+    bool success = SQL_SUCCEEDED(SQLExecute(hStmt));
+    SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+    dbConnector.disconnect();
+    return success;
+}
 
-//     if (SQL_SUCCEEDED(ret)) {
-//         char usernameBuffer[100], passwordBuffer[100], roleBuffer[20];
-//         SQLLEN usernameLen, passwordLen, roleLen;
+bool SqlUserRepository::deleteById(int id) {
+    DatabaseConnector dbConnector;
+    if (!dbConnector.connect()) return false;
 
-//         SQLBindCol(hStmt, 1, SQL_C_CHAR, usernameBuffer, sizeof(usernameBuffer), &usernameLen);
-//         SQLBindCol(hStmt, 2, SQL_C_CHAR, passwordBuffer, sizeof(passwordBuffer), &passwordLen);
-//         SQLBindCol(hStmt, 3, SQL_C_CHAR, roleBuffer, sizeof(roleBuffer), &roleLen);
+    SQLHDBC hDbc = dbConnector.getConnection();
+    SQLHSTMT hStmt = nullptr;
 
-//         while (SQL_SUCCEEDED(SQLFetch(hStmt))) {
-//             std::string username(usernameBuffer);
-//             std::string password(passwordBuffer);
-//             std::string role(roleBuffer);
-            
-//             if (role == "Admin") {
-//                 users.push_back(Admin(username, password));
-//             } else {
-//                 users.push_back(Customer(username, password));
-//             }
-//         }
-//     }
+    // Step 1: Delete record
+    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+        dbConnector.disconnect();
+        return false;
+    }
 
-//     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-//     dbConnector.disconnect();
-    
-//     return users;
-// }
+    std::string deleteQuery = "DELETE FROM user_info WHERE ID = ?";
+    SQLPrepare(hStmt, (SQLCHAR*)deleteQuery.c_str(), SQL_NTS);
+    SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &id, 0, nullptr);
+    bool success = SQL_SUCCEEDED(SQLExecute(hStmt));
+    SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 
+    // Step 2: Shift IDs
+    if (success && SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) == SQL_SUCCESS) {
+        std::string selectQuery = "SELECT ID FROM user_info WHERE ID > ? ORDER BY ID ASC";
+        SQLPrepare(hStmt, (SQLCHAR*)selectQuery.c_str(), SQL_NTS);
+        SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &id, 0, nullptr);
 
-// bool SqlUserRepository::add(const User& user) {
-//     if (!dbConnector.connect()) {
-//         return false;
-//     }
+        if (SQLExecute(hStmt) == SQL_SUCCESS) {
+            int currentId;
+            while (SQLFetch(hStmt) == SQL_SUCCESS) {
+                SQLGetData(hStmt, 1, SQL_C_SLONG, &currentId, 0, nullptr);
+                int newId = currentId - 1;
 
-//     SQLHSTMT hStmt = nullptr;
-//     bool success = false;
-    
-//     if (SQLAllocHandle(SQL_HANDLE_STMT, dbConnector.getConnection(), &hStmt) != SQL_SUCCESS) {
-//         dbConnector.disconnect();
-//         return false;
-//     }
+                SQLHSTMT hUpdateStmt = nullptr;
+                if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hUpdateStmt) == SQL_SUCCESS) {
+                    std::string updateQuery = "UPDATE user_info SET ID = ? WHERE ID = ?";
+                    SQLPrepare(hUpdateStmt, (SQLCHAR*)updateQuery.c_str(), SQL_NTS);
+                    SQLBindParameter(hUpdateStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &newId, 0, nullptr);
+                    SQLBindParameter(hUpdateStmt, 2, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &currentId, 0, nullptr);
+                    SQLExecute(hUpdateStmt);
+                    SQLFreeHandle(SQL_HANDLE_STMT, hUpdateStmt);
+                }
+            }
+        }
 
-//     std::string query = "INSERT INTO user_info (Username, Pass, UserRole) VALUES (?, ?, ?)";
-//     SQLRETURN ret = SQLPrepare(hStmt, (SQLCHAR*)query.c_str(), SQL_NTS);
-    
-//     if (SQL_SUCCEEDED(ret)) {
-//         std::string username = user.getUsername();
-//         std::string password = user.getPassword();
-//         std::string role = (user.getRole() == Role::ADMIN) ? "Admin" : "Customer";
-        
-//         SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, username.length(), 0, 
-//                         (SQLCHAR*)username.c_str(), username.length(), NULL);
-//         SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, password.length(), 0, 
-//                         (SQLCHAR*)password.c_str(), password.length(), NULL);
-//         SQLBindParameter(hStmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, role.length(), 0, 
-//                         (SQLCHAR*)role.c_str(), role.length(), NULL);
-        
-//         ret = SQLExecute(hStmt);
-//         success = SQL_SUCCEEDED(ret);
-//     }
-    
-//     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-//     dbConnector.disconnect();
-    
-//     return success;
-// }
+        SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+    }
 
-// bool SqlUserRepository::deleteById(int id) {
-//     if (!dbConnector.connect()) {
-//         return false;
-//     }
-
-//     SQLHSTMT hStmt = nullptr;
-//     bool success = false;
-    
-//     if (SQLAllocHandle(SQL_HANDLE_STMT, dbConnector.getConnection(), &hStmt) != SQL_SUCCESS) {
-//         dbConnector.disconnect();
-//         return false;
-//     }
-
-//     std::string query = "DELETE FROM user_info WHERE Id = ?";
-//     SQLRETURN ret = SQLPrepare(hStmt, (SQLCHAR*)query.c_str(), SQL_NTS);
-    
-//     if (SQL_SUCCEEDED(ret)) {
-//         SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, &id, 0, NULL);
-        
-//         ret = SQLExecute(hStmt);
-//         success = SQL_SUCCEEDED(ret);
-//     }
-    
-//     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-//     dbConnector.disconnect();
-    
-//     return success;
-// }
+    dbConnector.disconnect();
+    return success;
+}
