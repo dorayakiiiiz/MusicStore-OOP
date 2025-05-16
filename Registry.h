@@ -11,9 +11,9 @@
  * 
  * @details Provides global access to services without making them singletons
  */
-class ServiceLocator {
+class Registry {
 private:
-    static std::unordered_map<std::type_index, std::shared_ptr<void>> prototypes;
+    inline static std::unordered_map<std::type_index, std::shared_ptr<void>> prototypes;
     
 public:
     /**
@@ -43,17 +43,6 @@ public:
         return nullptr;
     }
 
-    /**
-     * @brief Check if a service is registered
-     *
-     * @tparam T The service type
-     * @return bool True if service is registered
-     */
-    template <typename T>
-    static bool hasService() {
-        return prototypes.find(typeid(T)) != prototypes.end();
-    }
-    
     /**
      * @brief Clear all registered services
      */

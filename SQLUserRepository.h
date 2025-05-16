@@ -6,16 +6,12 @@
 #include "IUserRepository.h"
 #include "DatabaseConnector.h"
 
+using std::shared_ptr, std::vector;
+
 /**
  * @brief SQL implementation of the user repository
  */
 class SqlUserRepository : public IUserRepository {
-private:
-    /**
-     * @brief Database connector for SQL operations
-     */
-    DatabaseConnector dbConnector;
-
 public:
     /**
      * @brief Constructor for SqlUserRepository
@@ -30,7 +26,7 @@ public:
     /**
      * @brief Get all user records
      *
-     * @return vector<User> Collection of all user records
+     * @return vector<shared_ptr<User>> Collection of all user records
      */
     vector<shared_ptr<User>> getAll() override;
 
@@ -38,9 +34,9 @@ public:
      * @brief Get a user record by ID
      *
      * @param id The ID of the user record
-     * @return User The user record
+     * @return shared_ptr<User> The user record
      */
-    // User getById(int id) override;
+    shared_ptr<User> getById(int id) override;
 
     /**
      * @brief Add a new user record
@@ -48,7 +44,7 @@ public:
      * @param user The user record to add
      * @return bool True if successfully added
      */
-    bool add(const User& user) override;
+    bool add(const shared_ptr<User>& user) override;
 
     /**
      * @brief Update an existing user record
@@ -57,7 +53,7 @@ public:
      * @param user The updated user record
      * @return bool True if successfully updated
      */
-    // bool updateById(int id, const User& user) override;
+    bool updateById(int id, const shared_ptr<User>& user) override;
 
     /**
      * @brief Delete a user record by ID

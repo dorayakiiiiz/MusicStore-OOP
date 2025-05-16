@@ -9,20 +9,20 @@ SqlDiscountRepository::~SqlDiscountRepository() {}
 
 vector<shared_ptr<Discount>> SqlDiscountRepository::getAll() {
     vector<shared_ptr<Discount>> vouchers;  // Container for discount vouchers
-    DatabaseConnector dbConnector;          // Database connection manager
+
+    DatabaseConnector* dbConnector = DatabaseConnector::getInstance();
 
     // Step 1: Connect to the database
-    if (!dbConnector.connect()) {
+    if (!dbConnector->ensureConnected()) {
         return vouchers;  // Return empty vector if connection fails
     }
 
-    SQLHDBC hDbc = dbConnector.getConnection();  // Get database connection handle
+    SQLHDBC hDbc = dbConnector->getConnection();  // Get database connection handle
     SQLHSTMT hStmt = nullptr;                    // SQL statement handle
     SQLRETURN ret;                               // SQL operation return value
 
     // Step 2: Allocate a statement handle
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
-        dbConnector.disconnect();
         return vouchers;  // Return empty vector if handle allocation fails
     }
 
@@ -50,24 +50,22 @@ vector<shared_ptr<Discount>> SqlDiscountRepository::getAll() {
 
     // Step 5: Clean up resources
     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-    dbConnector.disconnect();
 
     return vouchers;  // Return the populated vector
 }
 
-bool SqlDiscountRepository::add(const Discount& discount) {
-    DatabaseConnector dbConnector;
-    if (!dbConnector.connect()) return false;
+bool SqlDiscountRepository::add(const shared_ptr<Discount>& discount) {
+    DatabaseConnector* dbConnector = DatabaseConnector::getInstance();
+    if (!dbConnector->ensureConnected()) return false;
 
-    SQLHDBC hDbc = dbConnector.getConnection();
+    SQLHDBC hDbc = dbConnector->getConnection();
     SQLHSTMT hStmt = nullptr;
     SQLRETURN ret;
 
-    std::string voucherString = discount.toString();
-    
+    std::string voucherString = discount->toString();
+
     // Step 1: Check duplicates
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
-        dbConnector.disconnect();
         return false;
     }
 
@@ -83,7 +81,6 @@ bool SqlDiscountRepository::add(const Discount& discount) {
     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 
     if (duplicate > 0) {
-        dbConnector.disconnect();
         return false;
     }
 
@@ -99,7 +96,6 @@ bool SqlDiscountRepository::add(const Discount& discount) {
 
     // Step 3: Insert
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
-        dbConnector.disconnect();
         return false;
     }
 
@@ -111,20 +107,18 @@ bool SqlDiscountRepository::add(const Discount& discount) {
 
     bool success = SQL_SUCCEEDED(SQLExecute(hStmt));
     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-    dbConnector.disconnect();
     return success;
 }
 
 bool SqlDiscountRepository::deleteById(int id) {
-        DatabaseConnector dbConnector;
-    if (!dbConnector.connect()) return false;
+    DatabaseConnector* dbConnector = DatabaseConnector::getInstance();
+    if (!dbConnector->ensureConnected()) return false;
 
-    SQLHDBC hDbc = dbConnector.getConnection();
+    SQLHDBC hDbc = dbConnector->getConnection();
     SQLHSTMT hStmt = nullptr;
 
     // Step 1: Delete record
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
-        dbConnector.disconnect();
         return false;
     }
 
@@ -161,7 +155,8 @@ bool SqlDiscountRepository::deleteById(int id) {
         SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
     }
 
-    dbConnector.disconnect();
     return success;
 }
-
+// these function are not be use
+bool SqlDiscountRepository::updateById(int id, const shared_ptr<Discount>& discount) { return false; }
+shared_ptr<Discount> SqlDiscountRepository::getById(int id) { return nullptr; }

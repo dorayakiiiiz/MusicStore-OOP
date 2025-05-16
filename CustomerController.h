@@ -45,75 +45,63 @@ public:
     /**
      * @brief Implements the customer menu interface and all customer operations
      * 
-     * @param items Reference to the store's music inventory
-     * @param users Reference to the system's user accounts
-     * @param orders Reference to the system's order history
-     * @param discounts Reference to available discount vouchers
      * @param currentUser Reference to the currently logged-in user
      */
-    void menu(vector<Music>& items, vector<shared_ptr<User>>& users, vector<Order>& orders, vector<shared_ptr<Discount>>& discounts, shared_ptr<User>& currentUser) override;
+    void menu(shared_ptr<User>& currentUser) override;
 
 
     /**
      * @brief Handles the purchase history display for the customer
      * 
-     * @param orders Reference to the system's order history
      * @param currentUser Reference to the currently logged-in user
      */
-    void handlePurchaseHistory(vector<Order>& orders, Customer*& customer);
+    void handlePurchaseHistory(Customer*& customer);
 
 
     /**
-     * @brief Handles the music search functionality for the customer
+     * @brief Handles the music list display for the customer
      * 
      * @param items Reference to the store's music inventory
-     * @param currentUser Reference to the currently logged-in user
      */
-    void handleMusicList(vector<Music>& items);
+    void handleMusicList();
 
     /**
-     * @brief Handles the cart operations for the customer
+     * @brief Handles the search engine functionality for the customer
      * 
      * @param items Reference to the store's music inventory
-     * @param currentUser Reference to the currently logged-in user
      */
-    void handleSearch(vector<Music>& items);
+    void handleSearch();
+
+    /**
+     * @brief Handles adding items to the customer's shopping cart
+     * 
+     * @param items Reference to the store's music inventory
+     * @param cart Reference to the customer's shopping cart
+     */
+    void handleAddToCart(Cart& cart);
+
+    /**
+     * @brief Handles removing items from the customer's shopping cart
+     * 
+     * @param cart Reference to the customer's shopping cart
+     */
+    void handleRemoveFromCart(Cart& cart);
 
     /**
      * @brief Handles the checkout process for the customer
      * 
-     * @param orders Reference to the system's order history
-     * @param currentUser Reference to the currently logged-in user
      * @param cart Reference to the customer's shopping cart
+     * @param customer Reference to the currently logged-in customer
      */
-    void handleAddToCart(vector<Music>& item, Cart& cart);
+    void handleCheckout(Cart& cart, Customer*& customer);
 
     /**
-     * @brief Handles the checkout process for the customer
-     * 
-     * @param orders Reference to the system's order history
-     * @param currentUser Reference to the currently logged-in user
-     * @param cart Reference to the customer's shopping cart
-     */
-    void handleRemoveFromCart(Cart& cart, vector<Music>& items);
-
-    /**
-     * @brief Handles the checkout process for the customer
-     * 
-     * @param orders Reference to the system's order history
-     * @param items Reference to the store's music inventory
-     * @param cart Reference to the customer's shopping cart
-     * @param vouchers Reference to available discount vouchers
-     * @param currentUser Reference to the currently logged-in user
-     */
-    void handleCheckout(vector<Order>& orders, vector<Music>& items, Cart& cart, vector<shared_ptr<Discount>>& vouchers, Customer*& customer);
-
-    /**
-     * @brief Handles the logout process for the customer
+     * @brief Handle the log out process of the customer
      * 
      * @param cart Reference to the customer's shopping cart
-     * @param currentUser Reference to the currently logged-in user
-     * @return true if logout was successful, false otherwise
+     * @param customer Reference to the currently logged-in customer
+     * 
+     * @return true if the cart is checked out
      */
     bool handleLogout(Cart& cart, shared_ptr<User>& currentUser);
 };

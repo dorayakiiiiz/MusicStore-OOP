@@ -8,6 +8,9 @@
 
 #include "DatabaseConnector.h"
 
+// Initialize static members
+DatabaseConnector* DatabaseConnector::instance = nullptr;
+
 // handle errors that occur during database operations
 void ODBCErrorHandler::showError(SQLHANDLE handle, SQLSMALLINT type) {
     SQLCHAR sqlState[6], message[256];
@@ -20,6 +23,15 @@ void ODBCErrorHandler::showError(SQLHANDLE handle, SQLSMALLINT type) {
     } else {
         std::cerr << "Failed to retrieve error information." << std::endl;
     }
+}
+
+// Get singleton instance 
+DatabaseConnector* DatabaseConnector::getInstance() {
+    if (instance == nullptr) {
+        instance = new DatabaseConnector();
+        instance->connect();  
+    }
+    return instance;
 }
 
 // Initialize class members to default values
@@ -65,6 +77,39 @@ bool DatabaseConnector::connect() {
     return true;
 }
 
+// Ensure connection is active, reconnect if needed
+bool DatabaseConnector::ensureConnected() {
+    if (!connected) {
+        return connect();
+    }
+    
+    // Test if connection is still alive
+    if (!testConnection()) {
+        std::cout << "Database connection lost. Reconnecting..." << std::endl;
+        disconnect();
+        return connect();
+    }
+    
+    return true;
+}
+
+// Test if connection is still active
+bool DatabaseConnector::testConnection() const {
+    if (!connected) return false;
+    
+    SQLHSTMT hStmt = nullptr;
+    bool isValid = false;
+    
+    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) == SQL_SUCCESS) {
+        // Simple query to test connection
+        SQLRETURN ret = SQLExecDirect(hStmt, (SQLCHAR*)"SELECT 1", SQL_NTS);
+        isValid = SQL_SUCCEEDED(ret);
+        SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+    }
+    
+    return isValid;
+}
+
 // Retrieve the current database connection handle
 SQLHDBC DatabaseConnector::getConnection() const {
     return hDbc;
@@ -92,4 +137,13 @@ void DatabaseConnector::disconnect() {
 // Display any ODBC errors that occurred during a connection operation
 void DatabaseConnector::showError() const {
     ODBCErrorHandler::showError(hDbc, SQL_HANDLE_DBC);
+}
+
+// Static cleanup method to call at program end
+void DatabaseConnector::cleanup() {
+    if (instance) {
+        instance->disconnect();
+        delete instance;
+        instance = nullptr;
+    }
 }

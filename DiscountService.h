@@ -71,11 +71,9 @@ public:
     /**
      * @brief Remove a specific discount from the list using its string representation
      * 
-     * @param vouchers Vector of discount vouchers to modify
      * @param discountString The string representation of the voucher to remove
      */
-    void removeDiscount(vector<shared_ptr<Discount>>& vouchers, 
-                              const string& discountString);
+    void removeDiscount(const string& discountString);
     
     /**
      * @brief Create a new percentage discount
@@ -105,8 +103,7 @@ public:
      * @param discountType Type of discount (1 for percentage, 2 for fixed)
      * @param discountValue Value of the discount (percentage or amount)
      */
-    void createDiscount(vector<shared_ptr<Discount>>& vouchers, 
-        const string& username, DiscountType type, int discountValue);
+    void createDiscount(const string& username, DiscountType type, int discountValue);
 };
 
 #endif

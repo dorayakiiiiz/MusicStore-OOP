@@ -8,12 +8,6 @@
  * @brief SQL implementation of the music repository
  */
 class SqlMusicRepository : public IMusicRepository {
-private:
-    /**
-     * @brief Database connector for SQL operations
-     */
-    DatabaseConnector dbConnector;
-
 public:
     /**
      * @brief Constructor for SqlMusicRepository

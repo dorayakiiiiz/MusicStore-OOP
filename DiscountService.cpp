@@ -9,6 +9,8 @@
 #include "DiscountService.h"
 #include "Discount.h"
 #include "DiscountStrategy.h"
+#include "Registry.h"
+#include "IDiscountRepository.h"
 #include <algorithm>
 
 
@@ -37,15 +39,15 @@ vector<shared_ptr<Discount>> DiscountService::loadValidDiscounts(
     return validVouchers;
 }
 
-void DiscountService::removeDiscount(vector<shared_ptr<Discount>>& vouchers, 
-                                    const string& discountString) {
-    auto it = remove_if(vouchers.begin(), vouchers.end(),
-        [&](const shared_ptr<Discount>& voucher) {
-            return voucher->toString() == discountString;
-        });
-    
-    if (it != vouchers.end()) {
-        vouchers.erase(it, vouchers.end());
+void DiscountService::removeDiscount(const string& discountString) {
+    // get all the vouchers from the repository
+    vector<shared_ptr<Discount>> vouchers = Registry::getSingleton<IDiscountRepository>()->getAll();
+
+    for (int i = 0; i < vouchers.size(); ++i) {
+        if (vouchers[i]->toString() == discountString) {
+            Registry::getSingleton<IDiscountRepository>()->deleteById(i + 1);
+            break;
+        }
     }
 }
 
@@ -61,11 +63,14 @@ shared_ptr<Discount> DiscountService::createFixedDiscount(
         make_unique<FixedDiscountStrategy>(amount));
 }
 
-void DiscountService::createDiscount(vector<shared_ptr<Discount>>& vouchers, 
-    const string& username, DiscountType type, int discountValue) {
+void DiscountService::createDiscount(const string& username, DiscountType type, int discountValue) {
+    shared_ptr<Discount> discount;
     if (DiscountType::PERCENTAGE ==type) {
-        vouchers.push_back(createPercentageDiscount(username, discountValue));
+        discount = createPercentageDiscount(username, discountValue);
     } else if (DiscountType::FIXED_AMOUNT == type) {
-        vouchers.push_back(createFixedDiscount(username, discountValue));
+        discount = createFixedDiscount(username, discountValue);
     }
+    // Add the discount to the repository
+    bool success = Registry::getSingleton<IDiscountRepository>()->add(discount);
+    // fix heree
 }

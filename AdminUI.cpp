@@ -29,7 +29,7 @@ void AdminUI::displayMenu() {
         "Update price items",      
         "View users list",        
         "View all customers purchased history",  
-        "Delete customers",        
+        "Delete users",        
         "View sale statistics",    
         "Log out\n"                
     };

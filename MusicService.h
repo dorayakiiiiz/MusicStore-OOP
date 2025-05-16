@@ -81,7 +81,7 @@ public:
      * 
      * @param items Reference to the vector of music items
      */
-    static void removeSoldOutItems(vector<Music>& items);
+    static void removeSoldOutItems();
 };
 
 #endif

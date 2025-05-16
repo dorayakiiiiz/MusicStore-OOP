@@ -7,6 +7,8 @@
  */
 
 #include "MusicService.h"
+#include "Registry.h"
+#include "IMusicRepository.h"
 #include <stdexcept>
 
 #include <algorithm>
@@ -61,8 +63,15 @@ bool MusicService::updateMusicItemPrice(vector<Music>& items, int id, float pric
 }
 
 // Remove sold-out items from the inventory
-void MusicService::removeSoldOutItems(vector<Music>& items) {
-    items.erase(remove_if(items.begin(), items.end(), [](const Music& item) {
-        return item.getQuantity() == 0;
-    }), items.end());
+void MusicService::removeSoldOutItems() {
+    // Get all music items from the repository
+    vector<Music> items = Registry::getSingleton<IMusicRepository>()->getAll();
+
+    for (int i = 0; i < items.size(); ++i) {
+        if (items[i].getQuantity() == 0) {
+            items.erase(items.begin() + i);
+            Registry::getSingleton<IMusicRepository>()->deleteById(i + 1);
+            --i;
+        }
+    }
 }

@@ -13,10 +13,16 @@
 #include "IController.h"
 #include "ControllerFactory.h"
 
-#include "ReadData.h"
-#include "ReadDataFactory.h"
-#include "SaveData.h"
-#include "SaveDataFactory.h"
+#include "IRepository.h"
+#include "IUserRepository.h"
+#include "IMusicRepository.h"
+#include "IOrderRepository.h"
+#include "IDiscountRepository.h"
+#include "SQLDiscountRepository.h"
+#include "SQLMusicRepository.h"
+#include "SQLUserRepository.h"
+#include "SQLOrderRepository.h"
+
 #include "DatabaseConnector.h"
 #include <exception>
 
@@ -25,14 +31,9 @@
 
 using std::tie;
 
-// Constructor - initializes the StoreApp by loading data from database
+// Constructor - initializes the StoreApp
 StoreApp::StoreApp() {
-    loadData();
-}
-
-// Initializes all services for the application
-void StoreApp::initServices() {
-    // Initialize services and register them with the ServiceLocator
+    // Initialize services and register them with the Registry
     auto musicService = make_shared<MusicService>();
     auto userService = make_shared<UserService>();
     auto orderService = make_shared<OrderService>();
@@ -40,44 +41,29 @@ void StoreApp::initServices() {
     auto cartService = make_shared<CartService>();
     auto authService = make_shared<AuthService>();
 
-    ServiceLocator::addSingleton(musicService);
-    ServiceLocator::addSingleton(userService);
-    ServiceLocator::addSingleton(orderService);
-    ServiceLocator::addSingleton(discountService);
-    ServiceLocator::addSingleton(cartService);
-    ServiceLocator::addSingleton(authService);
+    Registry::addSingleton(musicService);
+    Registry::addSingleton(userService);
+    Registry::addSingleton(orderService);
+    Registry::addSingleton(discountService);
+    Registry::addSingleton(cartService);
+    Registry::addSingleton(authService);
+
+    // Initialize repositories
+    shared_ptr<IMusicRepository> musicRepo = make_shared<SqlMusicRepository>();
+    shared_ptr<IUserRepository> userRepo = make_shared<SqlUserRepository>();
+    shared_ptr<IOrderRepository> orderRepo = make_shared<SqlOrderRepository>();
+    shared_ptr<IDiscountRepository> discountRepo = make_shared<SqlDiscountRepository>();
+
+    Registry::addSingleton(musicRepo);
+    Registry::addSingleton(userRepo);
+    Registry::addSingleton(orderRepo);
+    Registry::addSingleton(discountRepo);
+
 }
 
-
-// Loads all data from database
-void StoreApp::loadData() {
-    try {
-        // load data from database
-        items = ReadDataFactory<Music>::createReadData()->readData();
-        users = ReadDataFactory<shared_ptr<User>>::createReadData()->readData();
-        orders = ReadDataFactory<Order>::createReadData()->readData();
-        vouchers = ReadDataFactory<shared_ptr<Discount>>::createReadData()->readData();
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
-    }
-}
-
-// Destructor - saves all data to files before exiting the application
+// destructor - cleans up the database connection
 StoreApp::~StoreApp() {
-    saveData();
-}
-
-// Saves all data to files
-void StoreApp::saveData() {
-    try {
-        // Save data to database
-        SaveDataFactory<Music>::createSaveData()->saveData(items);
-        SaveDataFactory<shared_ptr<User>>::createSaveData()->saveData(users);
-        SaveDataFactory<Order>::createSaveData()->saveData(orders);
-        SaveDataFactory<shared_ptr<Discount>>::createSaveData()->saveData(vouchers);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
-    }
+    DatabaseConnector::cleanup();
 }
 
 // Handles the sign up process
@@ -130,8 +116,8 @@ void StoreApp::handleSignUp() {
     }
 
     // Register the new user
-    auto authService = ServiceLocator::getSingleton<AuthService>();
-    bool success = authService->registerUser(users, username, password, static_cast<Role>(role));
+    auto authService = Registry::getSingleton<AuthService>();
+    bool success = authService->registerUser(username, password, static_cast<Role>(role));
     if (success) {
         printMessage("Sign up successfully!");
         sleepScreen();
@@ -171,8 +157,8 @@ bool StoreApp::handleLogin(shared_ptr<User>& currentUser) {
     } while (!isValid);
 
     // Attempt to authenticate the user
-    auto authService = ServiceLocator::getSingleton<AuthService>();
-    currentUser = authService->loginUser(users, username, password);
+    auto authService = Registry::getSingleton<AuthService>();
+    currentUser = authService->loginUser(username, password);
 
     if (!currentUser) {
         printMessage("Invalid username or password. Please try again!");
@@ -190,7 +176,7 @@ bool StoreApp::handleLogin(shared_ptr<User>& currentUser) {
         printMessage("Login successfully! Welcome " + currentUser->getUsername() + "!");
         sleepScreen();
         clearScreen();
-        controller->menu(items, users, orders, vouchers, currentUser);
+        controller->menu(currentUser);
         return true;
     }
     

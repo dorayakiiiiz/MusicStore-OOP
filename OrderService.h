@@ -33,7 +33,7 @@ public:
      * @param cart Reference to the customer's shopping cart
      * @param total Total price of the order after any discounts
      */
-    void checkout(vector<Order>& orders, const string& username, Cart& cart, float total);
+    void checkout(const string& username, Cart& cart, float total);
         
     /**
      * @brief Retrieve orders for a specific user

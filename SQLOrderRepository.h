@@ -11,11 +11,6 @@
  * @brief SQL implementation of the order repository
  */
 class SqlOrderRepository : public IOrderRepository {
-private:
-    /**
-     * @brief Database connector for SQL operations
-     */
-    DatabaseConnector dbConnector;
 public:
     /**
      * @brief Constructor for SqlOrderRepository
@@ -40,7 +35,7 @@ public:
      * @param id The ID of the order record
      * @return Order The order record
      */
-    // Order getById(int id) override;
+    Order getById(int id) override;
 
     /**
      * @brief Add a new order record
@@ -57,7 +52,7 @@ public:
      * @param order The updated order record
      * @return bool True if successfully updated
      */
-    // bool updateById(int id, const Order& order) override;
+    bool updateById(int id, const Order& order) override;
 
     /**
      * @brief Delete an order record by ID
@@ -65,7 +60,7 @@ public:
      * @param id The ID of the order record to delete
      * @return bool True if successfully deleted
      */
-    // bool deleteById(int id) override;
+    bool deleteById(int id) override;
 };
 
 #endif

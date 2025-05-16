@@ -36,7 +36,7 @@ public:
      * @param quantity Quantity of the item to add
      * @return bool True if successful, false if invalid ID or insufficient stock
      */
-    bool addItemToCart(Cart& cart, vector<Music>& inventory, int itemID, int quantity);
+    bool addItemToCart(Cart& cart, int itemID, int quantity);
     
     /**
      * @brief Remove an item from the shopping cart

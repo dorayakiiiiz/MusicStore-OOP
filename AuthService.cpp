@@ -7,10 +7,14 @@
  */
 
 #include "AuthService.h"
+#include "IUserRepository.h"
+#include "Registry.h"
 #include "utils.h"
 
 // Register a new user with username, password, and role
-bool AuthService::registerUser(vector<shared_ptr<User>>& users, const string& username, const string& password, Role role) {
+bool AuthService::registerUser(const string& username, const string& password, Role role) {
+    // Get all users from the repository
+    vector<shared_ptr<User>> users = Registry::getSingleton<IUserRepository>()->getAll();
     // Check if username already exists
     for (int i = 0; i < users.size(); ++i) {
         if (users[i]->getUsername() == username) {
@@ -18,17 +22,22 @@ bool AuthService::registerUser(vector<shared_ptr<User>>& users, const string& us
         }
     }
     
-    // Create appropriate user type based on role
+    shared_ptr<User> newUser;
+    // Create a new user based on the role
     if (Role::CUSTOMER == role) {
-        users.push_back(make_shared<Customer>(username, password));
+        newUser = make_shared<Customer>(username, password);
     } else {
-        users.push_back(make_shared<Admin>(username, password));
+        newUser = make_shared<Admin>(username, password);
     }
+    // Save the new user to the repository
+    bool success = Registry::getSingleton<IUserRepository>()->add(newUser);
     return true;
 }
 
 // Authenticate a user with username and password
-shared_ptr<User> AuthService::loginUser(const vector<shared_ptr<User>>& users, const string& username, const string& password) {
+shared_ptr<User> AuthService::loginUser(const string& username, const string& password) {
+    // Get all users from the repository
+    vector<shared_ptr<User>> users = Registry::getSingleton<IUserRepository>()->getAll();
     // Search for matching username and password
     for (int i = 0; i < users.size(); ++i) {
         if (users[i]->getUsername() == username && users[i]->getPassword() == password) {

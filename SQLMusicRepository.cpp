@@ -6,15 +6,15 @@ SqlMusicRepository::~SqlMusicRepository() {}
 
 std::vector<Music> SqlMusicRepository::getAll() {
     std::vector<Music> items;
-    DatabaseConnector dbConnector;
 
-    if (!dbConnector.connect()) return items;
+    DatabaseConnector* dbConnector = DatabaseConnector::getInstance();
 
-    SQLHDBC hDbc = dbConnector.getConnection();
+    if (!dbConnector->ensureConnected()) return items;
+
+    SQLHDBC hDbc = dbConnector->getConnection();
     SQLHSTMT hStmt = nullptr;
 
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
-        dbConnector.disconnect();
         return items;
     }
 
@@ -36,21 +36,20 @@ std::vector<Music> SqlMusicRepository::getAll() {
     }
 
     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-    dbConnector.disconnect();
     return items;
 }
 
 Music SqlMusicRepository::getById(int id) {
     Music music;
-    DatabaseConnector dbConnector;
 
-    if (!dbConnector.connect()) return music;
+    DatabaseConnector* dbConnector = DatabaseConnector::getInstance();
 
-    SQLHDBC hDbc = dbConnector.getConnection();
+    if (!dbConnector->ensureConnected()) return music;
+
+    SQLHDBC hDbc = dbConnector->getConnection();
     SQLHSTMT hStmt = nullptr;
 
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
-        dbConnector.disconnect();
         return music;
     }
 
@@ -73,15 +72,14 @@ Music SqlMusicRepository::getById(int id) {
     }
 
     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-    dbConnector.disconnect();
     return music;
 }
 
 bool SqlMusicRepository::add(const Music& music) {
-    DatabaseConnector dbConnector;
-    if (!dbConnector.connect()) return false;
+    DatabaseConnector* dbConnector = DatabaseConnector::getInstance();
+    if (!dbConnector->ensureConnected()) return false;
 
-    SQLHDBC hDbc = dbConnector.getConnection();
+    SQLHDBC hDbc = dbConnector->getConnection();
     SQLHSTMT hStmt = nullptr;
     SQLRETURN ret;
 
@@ -93,7 +91,6 @@ bool SqlMusicRepository::add(const Music& music) {
 
     // Step 1: Check duplicates
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
-        dbConnector.disconnect();
         return false;
     }
 
@@ -110,7 +107,6 @@ bool SqlMusicRepository::add(const Music& music) {
     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 
     if (duplicate > 0) {
-        dbConnector.disconnect();
         return false;
     }
 
@@ -126,7 +122,6 @@ bool SqlMusicRepository::add(const Music& music) {
 
     // Step 3: Insert
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
-        dbConnector.disconnect();
         return false;
     }
 
@@ -142,20 +137,59 @@ bool SqlMusicRepository::add(const Music& music) {
 
     bool success = SQL_SUCCEEDED(SQLExecute(hStmt));
     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-    dbConnector.disconnect();
+    return success;
+}
+
+bool SqlMusicRepository::updateById(int id, const Music& music) {
+    DatabaseConnector* dbConnector = DatabaseConnector::getInstance();
+
+    // Step 1: Connect to the database
+    if (!dbConnector->ensureConnected()) {
+        return false;  // Connection failed
+    }
+
+    SQLHDBC hDbc = dbConnector->getConnection();  // Get DB connection handle
+    SQLHSTMT hStmt = nullptr;                    // SQL statement handle
+    SQLRETURN ret;                               // Return code
+    bool success = false;                        // Result flag
+
+    // Step 2: Allocate statement handle
+    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+        return false;
+    }
+
+    // Step 3: Prepare update query
+    std::string updateQuery = "UPDATE music_info SET Price = ?, Quantity = ? WHERE ID = ?";
+    ret = SQLPrepare(hStmt, (SQLCHAR*)updateQuery.c_str(), SQL_NTS);
+
+    // Step 4: Bind parameters if query prepared successfully
+    if (SQL_SUCCEEDED(ret)) {
+        float price = music.getPrice();
+        int quantity = music.getQuantity();
+
+        SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_FLOAT, SQL_FLOAT, 0, 0, &price, 0, nullptr);
+        SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &quantity, 0, nullptr);
+        SQLBindParameter(hStmt, 3, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &id, 0, nullptr);
+
+        // Step 5: Execute update
+        success = SQL_SUCCEEDED(SQLExecute(hStmt));
+    }
+
+    // Step 6: Clean up
+    SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+
     return success;
 }
 
 bool SqlMusicRepository::deleteById(int id) {
-    DatabaseConnector dbConnector;
-    if (!dbConnector.connect()) return false;
+    DatabaseConnector* dbConnector = DatabaseConnector::getInstance();
+    if (!dbConnector->ensureConnected()) return false;
 
-    SQLHDBC hDbc = dbConnector.getConnection();
+    SQLHDBC hDbc = dbConnector->getConnection();
     SQLHSTMT hStmt = nullptr;
 
     // Step 1: Delete record
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
-        dbConnector.disconnect();
         return false;
     }
 
@@ -192,6 +226,5 @@ bool SqlMusicRepository::deleteById(int id) {
         SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
     }
 
-    dbConnector.disconnect();
     return success;
 }

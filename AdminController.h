@@ -44,48 +44,34 @@ public:
     /**
      * @brief Implements the admin menu interface and all administrative operations
      * 
-     * @param items Reference to the store's music inventory
-     * @param users Reference to the system's user accounts
-     * @param orders Reference to the system's order history
-     * @param vouchers Reference to available discount vouchers
      * @param currentUser Reference to the currently logged-in admin user
      */
-    void menu(vector<Music>& items, vector<shared_ptr<User>>& users, vector<Order>& orders, vector<shared_ptr<Discount>>& vouchers, shared_ptr<User>& currentUser) override;
+    void menu(shared_ptr<User>& currentUser) override;
 
     /**
      * @brief Handles displaying the music inventory list
-     * 
-     * @param items Reference to the store's music inventory
      */
-    void handleMusicList(vector<Music>& items);
+    void handleMusicList();
 
     /**
      * @brief Handles adding new music items to inventory
-     * 
-     * @param items Reference to the store's music inventory
      */
-    void handleAddNewItems(vector<Music>& items);
+    void handleAddNewItems();
     
     /**
      * @brief Handles removing music items from inventory
-     * 
-     * @param items Reference to the store's music inventory
      */
-    void handleRemoveItems(vector<Music>& items);
+    void handleRemoveItems();
     
     /**
      * @brief Handles updating price of music items
-     * 
-     * @param items Reference to the store's music inventory
      */
-    void handleUpdatePrice(vector<Music>& items);
+    void handleUpdatePrice();
     
     /**
      * @brief Handles displaying the list of users
-     * 
-     * @param users Reference to the system's user accounts
      */
-    void handleViewUsers(vector<shared_ptr<User>>& users);
+    void handleViewUsers();
     
     /**
      * @brief Handles displaying purchase history for all customers
@@ -93,7 +79,7 @@ public:
      * @param users Reference to the system's user accounts
      * @param orders Reference to the system's order history
      */
-    void handleViewPurchaseHistory(vector<shared_ptr<User>>& users, vector<Order>& orders);
+    void handleViewPurchaseHistory();
     
     /**
      * @brief Handles deleting customer accounts
@@ -102,7 +88,7 @@ public:
      * @param currentUser Reference to the currently logged-in admin user
      * @return true if admin deleted their own account and needs to logout, false otherwise
      */
-    bool handleDeleteCustomers(vector<shared_ptr<User>>& users, shared_ptr<User>& currentUser);
+    bool handleDeleteUser(shared_ptr<User>& currentUser);
     
     /**
      * @brief Handles displaying sales statistics
@@ -110,7 +96,7 @@ public:
      * @param orders Reference to the system's order history
      * @param items Reference to the store's music inventory
      */
-    void handleViewSalesStatistics(vector<Order>& orders, vector<Music>& items);
+    void handleViewSalesStatistics();
     
     /**
      * @brief Handles the admin logout process

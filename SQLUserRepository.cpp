@@ -1,26 +1,29 @@
 #include "SQLUserRepository.h"
 #include <memory>
 
+using std::make_shared, std::shared_ptr;
+
 SqlUserRepository::SqlUserRepository() {}
 
 SqlUserRepository::~SqlUserRepository() {}
 
 vector<shared_ptr<User>> SqlUserRepository::getAll() {
     vector<shared_ptr<User>> users;     // Container for user pointers
-    DatabaseConnector dbConnector;       // Database connection manager
 
+    DatabaseConnector* dbConnector = DatabaseConnector::getInstance();     // Database connection object
     // Step 1: Connect to the database
-    if (!dbConnector.connect()) {
+    if (!dbConnector->ensureConnected()) {
+        std::cerr << "Failed to connect to database" << std::endl;
         return users;  // Return empty vector if connection fails
     }
 
-    SQLHDBC hDbc = dbConnector.getConnection();  // Get database connection handle
+    SQLHDBC hDbc = dbConnector->getConnection();  // Get database connection handle
     SQLHSTMT hStmt = nullptr;                    // SQL statement handle
     SQLRETURN ret;                               // SQL operation return value
 
     // Step 2: Allocate a statement handle
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
-        dbConnector.disconnect();
+        std::cerr << "Failed to allocate statement handle" << std::endl;
         return users;  // Return empty vector if handle allocation fails
     }
 
@@ -57,27 +60,24 @@ vector<shared_ptr<User>> SqlUserRepository::getAll() {
 
     // Step 5: Clean up resources
     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-    dbConnector.disconnect();
 
     return users;  // Return the populated vector
 }
 
+bool SqlUserRepository::add(const shared_ptr<User>& user) {
+    DatabaseConnector* dbConnector = DatabaseConnector::getInstance();
+    if (!dbConnector->ensureConnected()) return false;
 
-bool SqlUserRepository::add(const User& user) {
-    DatabaseConnector dbConnector;
-    if (!dbConnector.connect()) return false;
-
-    SQLHDBC hDbc = dbConnector.getConnection();
+    SQLHDBC hDbc = dbConnector->getConnection();
     SQLHSTMT hStmt = nullptr;
     SQLRETURN ret;
 
-    std::string username = user.getUsername();
-    std::string password = user.getPassword();
-    std::string role = (user.getRole() == Role::ADMIN) ? "A" : "C";
-    
+    std::string username = user->getUsername();
+    std::string password = user->getPassword();
+    std::string role = (user->getRole() == Role::ADMIN) ? "A" : "C";
+
     // Step 1: Check duplicates
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
-        dbConnector.disconnect();
         return false;
     }
 
@@ -93,7 +93,6 @@ bool SqlUserRepository::add(const User& user) {
     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 
     if (duplicate > 0) {
-        dbConnector.disconnect();
         return false;
     }
 
@@ -109,7 +108,6 @@ bool SqlUserRepository::add(const User& user) {
 
     // Step 3: Insert
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
-        dbConnector.disconnect();
         return false;
     }
 
@@ -123,20 +121,18 @@ bool SqlUserRepository::add(const User& user) {
 
     bool success = SQL_SUCCEEDED(SQLExecute(hStmt));
     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-    dbConnector.disconnect();
     return success;
 }
 
 bool SqlUserRepository::deleteById(int id) {
-    DatabaseConnector dbConnector;
-    if (!dbConnector.connect()) return false;
+    DatabaseConnector* dbConnector = DatabaseConnector::getInstance();
+    if (!dbConnector->ensureConnected()) return false;
 
-    SQLHDBC hDbc = dbConnector.getConnection();
+    SQLHDBC hDbc = dbConnector->getConnection();
     SQLHSTMT hStmt = nullptr;
 
     // Step 1: Delete record
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
-        dbConnector.disconnect();
         return false;
     }
 
@@ -173,6 +169,10 @@ bool SqlUserRepository::deleteById(int id) {
         SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
     }
 
-    dbConnector.disconnect();
     return success;
 }
+
+
+// these methods are not implemented yet
+shared_ptr<User> SqlUserRepository::getById(int id) { return nullptr; }
+bool SqlUserRepository::updateById(int id, const shared_ptr<User>& user) { return false; }

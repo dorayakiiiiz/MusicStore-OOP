@@ -4,24 +4,28 @@
 #include "IRepository.h"
 #include "User.h"
 
-class IUserRepository : public IRepository<User> {
+#include <memory>
+
+using std::shared_ptr;
+
+class IUserRepository : public IRepository<shared_ptr<User>> {
 public:
     virtual ~IUserRepository() = default;
 
     /**
      * @brief Get all user records
      *
-     * @return std::vector<User> Collection of all user records
+     * @return std::vector<shared_ptr<User>> Collection of all user records
      */
-    virtual std::vector<User> getAll() = 0;
+    virtual vector<shared_ptr<User>> getAll() = 0;
 
     /**
      * @brief Get a user record by ID
      *
      * @param id The ID of the user record
-     * @return User The user record
+     * @return shared_ptr<User> The user record
      */
-    virtual User getById(int id) = 0;
+    virtual shared_ptr<User> getById(int id) = 0;
 
     /**
      * @brief Add a new user record
@@ -29,7 +33,7 @@ public:
      * @param user The user record to add
      * @return bool True if successfully added
      */
-    virtual bool add(const User& user) = 0;
+    virtual bool add(const shared_ptr<User>& user) = 0;
 
     /**
      * @brief Update an existing user record
@@ -38,7 +42,7 @@ public:
      * @param user The updated user record
      * @return bool True if successfully updated
      */
-    virtual bool updateById(int id, const User& user) = 0;
+    virtual bool updateById(int id, const shared_ptr<User>& user) = 0;
 
     /**
      * @brief Delete a user record by ID

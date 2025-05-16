@@ -1,16 +1,17 @@
 #include "OrderService.h"
-
+#include "Registry.h"
+#include "IOrderRepository.h"
 #include <unordered_map>
 #include <algorithm>
 
 using std::unordered_map;
 
 // Process order checkout and create a new order
-void OrderService::checkout(vector<Order>& orders, const string& username, Cart& cart, float total) {
+void OrderService::checkout( const string& username, Cart& cart, float total) {
     // Create a new order with current cart items and total
     Order order(username, cart.getItems(), total);
-    // Add to orders collection
-    orders.push_back(order);
+    // Add to orders collection in the repository
+    bool success = Registry::getSingleton<IOrderRepository>()->add(order);
     // Clear the cart after successful checkout
     cart.clear();
 }

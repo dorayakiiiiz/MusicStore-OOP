@@ -6,18 +6,18 @@ SqlOrderRepository::~SqlOrderRepository() {}
 
 vector<Order> SqlOrderRepository::getAll() {
     vector<Order> orders;
-    DatabaseConnector dbConnector;
 
-    if (!dbConnector.connect()) {
+    DatabaseConnector* dbConnector = DatabaseConnector::getInstance();
+
+    if (!dbConnector->ensureConnected()) {
         return orders;
     }
 
-    SQLHDBC hDbc = dbConnector.getConnection();
+    SQLHDBC hDbc = dbConnector->getConnection();
     SQLHSTMT hStmt = nullptr;
     SQLRETURN ret;
 
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
-        dbConnector.disconnect();
         return orders;
     }
 
@@ -73,20 +73,19 @@ vector<Order> SqlOrderRepository::getAll() {
     }
 
     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-    dbConnector.disconnect();
 
     return orders;
 }
 
 bool SqlOrderRepository::add(const Order& order) {
     bool success = false;
-    DatabaseConnector dbConnector;
+    DatabaseConnector* dbConnector = DatabaseConnector::getInstance();
     SQLHSTMT hStmt = nullptr;
     SQLRETURN ret;
 
-    if (!dbConnector.connect()) return false;
+    if (!dbConnector->ensureConnected()) return false;
 
-    SQLHDBC hDbc = dbConnector.getConnection();
+    SQLHDBC hDbc = dbConnector->getConnection();
 
     // Tắt autocommit để sử dụng transaction
     SQLSetConnectAttr(hDbc, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_OFF, 0);
@@ -124,14 +123,12 @@ bool SqlOrderRepository::add(const Order& order) {
 
     if (!SQL_SUCCEEDED(ret)) {
         SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_ROLLBACK);
-        dbConnector.disconnect();
         return false;
     }
 
     // Thêm vào bảng detail_order
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
         SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_ROLLBACK);
-        dbConnector.disconnect();
         return false;
     }
 
@@ -141,7 +138,6 @@ bool SqlOrderRepository::add(const Order& order) {
     if (!SQL_SUCCEEDED(ret)) {
         SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
         SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_ROLLBACK);
-        dbConnector.disconnect();
         return false;
     }
 
@@ -170,14 +166,20 @@ bool SqlOrderRepository::add(const Order& order) {
         if (!SQL_SUCCEEDED(ret)) {
             SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
             SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_ROLLBACK);
-            dbConnector.disconnect();
             return false;
         }
     }
 
     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
     SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_COMMIT);
-    dbConnector.disconnect();
 
     return true;
+}
+
+// these functions are not used in the project
+bool SqlOrderRepository::updateById(int id, const Order& order) { return false; }
+bool SqlOrderRepository::deleteById(int id) { return false; }
+Order SqlOrderRepository::getById(int id) {
+    Order order("", {}, 0.0f);
+    return order;
 }

@@ -14,10 +14,6 @@
 #include "Order.h"
 #include "Cart.h"
 #include "Discount.h"
-#include "ReadData.h"
-#include "ReadDataFactory.h"
-#include "SaveData.h"
-#include "SaveDataFactory.h"
 #include <vector>
 #include <string>
 #include <iostream>
@@ -53,7 +49,7 @@ public:
      * @param discounts Reference to available discount vouchers
      * @param currentUser Reference to the currently logged-in user
      */
-    virtual void menu(vector<Music>& items, vector<shared_ptr<User>>& users, vector<Order>& orders, vector<shared_ptr<Discount>>& discounts, shared_ptr<User>& currentUser) = 0;
+    virtual void menu(shared_ptr<User>& currentUser) = 0;
 };
 
 #endif

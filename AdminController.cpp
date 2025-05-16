@@ -14,15 +14,26 @@
 #include "windows.h"
 #include "utils.h"
 #include "InputValidator.h"
-#include "ServiceLocator.h"
+#include "Registry.h"
+#include "SQLDiscountRepository.h"
+#include "SQLMusicRepository.h"
+#include "SQLUserRepository.h"
+#include "SQLOrderRepository.h"
+#include "IRepository.h"
+#include "IUserRepository.h"
+#include "IMusicRepository.h"
+#include "IOrderRepository.h"
+#include "IDiscountRepository.h"
+
+using std::tie;
+
 
 // Constructor for AdminController
 AdminController::AdminController() {}
 
 
     // Implements the admin menu interface and all administrative operations
-void AdminController::menu(vector<Music>& items, vector<shared_ptr<User>>& users, vector<Order>& orders, 
-                          vector<shared_ptr<Discount>>& vouchers, shared_ptr<User>& currentUser) {
+void AdminController::menu(shared_ptr<User>& currentUser) {
     bool isValid;
     Error error;
 
@@ -45,38 +56,38 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<User>>& users
 
         switch (choice) {
             case AdminOption::ADMIN_MUSIC_LIST: // See Music List
-                handleMusicList(items);
+                handleMusicList();
                 break;
 
             case AdminOption::ADD_NEW_ITEMS: // Add New Items
-                handleAddNewItems(items);
+                handleAddNewItems();
                 break;
 
             case AdminOption::REMOVE_ITEMS: // Remove Items
-                handleRemoveItems(items);
+                handleRemoveItems();
                 break;
 
             case AdminOption::UPDATE_PRICE: // Update Price Items
-                handleUpdatePrice(items);
+                handleUpdatePrice();
                 break;
 
             case AdminOption::VIEW_USERS: // View Users List
-                handleViewUsers(users);
+                handleViewUsers();
                 break;
 
             case AdminOption::VIEW_PURCHASE_HISTORY: // View All Customers Purchase History
-                handleViewPurchaseHistory(users, orders);
+                handleViewPurchaseHistory();
                 break;
 
             case AdminOption::DELETE_CUSTOMERS: { // Delete Customers
-                if (handleDeleteCustomers(users, currentUser)) {
+                if (handleDeleteUser(currentUser)) {
                     return; // Admin deleted themselves, so exit
                 }
                 break;
             }
 
             case AdminOption::VIEW_SALES_STATISTICS: // View Sales Statistics
-                handleViewSalesStatistics(orders, items);
+                handleViewSalesStatistics();
                 break;
 
             case AdminOption::ADMIN_LOGOUT: // Logout
@@ -92,17 +103,20 @@ void AdminController::menu(vector<Music>& items, vector<shared_ptr<User>>& users
 
 
 // handle the first case of the menu: display music list
-void AdminController::handleMusicList(vector<Music>& items) {
+void AdminController::handleMusicList() {
     clearScreen();
     printHeader("MUSIC LIST");
+
+    vector<Music> items = Registry::getSingleton<IMusicRepository>()->getAll();
+
     AdminUI::displayMusicList(items);
     printDashLine();
     pauseScreen();
 }
 
 // handle the second case of the menu: add new items
-void AdminController::handleAddNewItems(vector<Music>& items) {
-    auto musicService = ServiceLocator::getSingleton<MusicService>();
+void AdminController::handleAddNewItems() {
+    auto musicService = Registry::getSingleton<MusicService>();
     while (1) {
         clearScreen();
         printHeader("ADD NEW ITEMS");
@@ -110,7 +124,7 @@ void AdminController::handleAddNewItems(vector<Music>& items) {
         Music newItem = AdminUI::getNewMusicDetails();
         
         // Add the new item to inventory
-        bool success = musicService->addMusicItem(items, newItem);
+        bool success = Registry::getSingleton<IMusicRepository>()->add(newItem);
         if (success) {
             printMessage("Item added successfully!");
         } else {
@@ -130,14 +144,15 @@ void AdminController::handleAddNewItems(vector<Music>& items) {
 }
 
 // handle the third case of the menu: remove items
-void AdminController::handleRemoveItems(vector<Music>& items) {
+void AdminController::handleRemoveItems() {
     bool isValid;
     Error error;
 
-    auto musicService = ServiceLocator::getSingleton<MusicService>();
+    auto musicService = Registry::getSingleton<MusicService>();
     while (1) {
         clearScreen();
         printHeader("REMOVE ITEMS");
+        vector<Music> items = Registry::getSingleton<IMusicRepository>()->getAll();
         AdminUI::displayMusicList(items);
         int id;
         do {
@@ -150,11 +165,11 @@ void AdminController::handleRemoveItems(vector<Music>& items) {
         } while (!isValid);
         
         // Remove the selected item
-        bool success = musicService->removeMusicItem(items, id - 1);
+        bool success = Registry::getSingleton<IMusicRepository>()->deleteById(id);
         if (success) {
             printMessage("Item removed successfully!");
         } else {
-            printMessage("Invalid ID! Item not found.");
+            printMessage("Error while removing the items!");
         }
 
         printDashLine();
@@ -177,20 +192,22 @@ void AdminController::handleRemoveItems(vector<Music>& items) {
 }
 
 // handle the fourth case of the menu: update price
-void AdminController::handleUpdatePrice(vector<Music>& items) {
+void AdminController::handleUpdatePrice() {
     bool isValid;
     Error error;
 
-    auto musicService = ServiceLocator::getSingleton<MusicService>();
+    auto musicService = Registry::getSingleton<MusicService>();
     while (1) {
         clearScreen();
         printHeader("UPDATE PRICE ITEMS");
+
+        vector<Music> items = Registry::getSingleton<IMusicRepository>()->getAll();
         AdminUI::displayMusicList(items);
 
         // Get ID of item to update with validation
         int id;
         do {
-            std::tie(isValid, id, error) = InputValidator::validateInt("Enter item ID: ", 1, items.size());
+            tie(isValid, id, error) = InputValidator::validateInt("Enter item ID: ", 1, items.size());
             if (!isValid) {
                 printMessage(error.message);
                 Sleep(1000);
@@ -201,7 +218,7 @@ void AdminController::handleUpdatePrice(vector<Music>& items) {
         // Get new price with validation
         float newPrice;
         do {
-            std::tie(isValid, newPrice, error) = InputValidator::validateFloat("Enter new price: ", 0.0f);
+            tie(isValid, newPrice, error) = InputValidator::validateFloat("Enter new price: ", 0.0f);
             if (!isValid) {
                 printMessage(error.message);
                 Sleep(1000);
@@ -209,12 +226,17 @@ void AdminController::handleUpdatePrice(vector<Music>& items) {
             }
         } while (!isValid);
 
+        Music updateItem = Registry::getSingleton<IMusicRepository>()->getById(id);
+        updateItem.updatePrice(newPrice);
+
+
         // Update the item's price
-        bool success = musicService->updateMusicItemPrice(items, id - 1, newPrice);
+        // bool success = musicService->updateMusicItemPrice(items, id - 1, newPrice);
+        bool success = Registry::getSingleton<IMusicRepository>()->updateById(id, updateItem);
         if (success) {
             printMessage("Price updated successfully!");
         } else {
-            printMessage("Invalid item ID!");
+            printMessage("Error while updating price!");
         }
 
         printDashLine();
@@ -229,20 +251,32 @@ void AdminController::handleUpdatePrice(vector<Music>& items) {
 }
 
 // handle the fifth case of the menu: view users list
-void AdminController::handleViewUsers(vector<shared_ptr<User>>& users) {
+void AdminController::handleViewUsers() {
     clearScreen();
     printHeader("USER LIST");
+
+    vector<shared_ptr<User>> users = Registry::getSingleton<IUserRepository>()->getAll();
+    if (users.empty()) {
+        printMessage("No users found!");
+        pauseScreen();
+        return;
+    }
+
     AdminUI::displayUserList(users);
     printDashLine();
     pauseScreen();
 }
 
 // handle the sixth case of the menu: view all customers purchase history
-void AdminController::handleViewPurchaseHistory(vector<shared_ptr<User>>& users, vector<Order>& orders) {
+void AdminController::handleViewPurchaseHistory() {
     clearScreen();
     printHeader("CUSTOMER PURCHASE HISTORY");
 
-    auto orderService = ServiceLocator::getSingleton<OrderService>();
+    auto orderService = Registry::getSingleton<OrderService>();
+
+    vector<shared_ptr<User>> users = Registry::getSingleton<IUserRepository>()->getAll();
+    vector<Order> orders = Registry::getSingleton<IOrderRepository>()->getAll();
+
     // Display purchase history for each customer
     for (const auto& user : users) {
         // Skip admin users
@@ -269,11 +303,14 @@ void AdminController::handleViewPurchaseHistory(vector<shared_ptr<User>>& users,
 }
 
 // handle the seventh case of the menu: delete customers
-bool AdminController::handleDeleteCustomers(vector<shared_ptr<User>>& users, shared_ptr<User>& currentUser) {
+bool AdminController::handleDeleteUser(shared_ptr<User>& currentUser) {
     bool isValid;
     Error error;
 
-    auto userService = ServiceLocator::getSingleton<UserService>();
+    auto userService = Registry::getSingleton<UserService>();
+
+    vector<shared_ptr<User>> users = Registry::getSingleton<IUserRepository>()->getAll();
+
     clearScreen();
     printHeader("DELETE USER");
     if (users.empty()) {
@@ -288,7 +325,7 @@ bool AdminController::handleDeleteCustomers(vector<shared_ptr<User>>& users, sha
         // Get username to delete
         string usernameToDelete;
         do {
-            std::tie(isValid, usernameToDelete, error) = InputValidator::validateString("Enter username to delete: ");
+            tie(isValid, usernameToDelete, error) = InputValidator::validateString("Enter username to delete: ");
             if (!isValid) {
                 printMessage(error.message);
                 Sleep(1000);
@@ -300,10 +337,11 @@ bool AdminController::handleDeleteCustomers(vector<shared_ptr<User>>& users, sha
         bool isCurrentUser = (currentUser->getUsername() == usernameToDelete);
         
         // Delete the selected user
-        bool success = userService->deleteUser(users, usernameToDelete);
+        bool success = userService->deleteUser(usernameToDelete);
+        // fix: sua goi repo tu service
         if (success) {
             printMessage("User deleted successfully!");
-            
+
             // If admin deleted their own account, log them out
             if (isCurrentUser) {
                 printMessage("You have deleted yourself! Please login again!");
@@ -334,11 +372,15 @@ bool AdminController::handleDeleteCustomers(vector<shared_ptr<User>>& users, sha
 }
 
 // handle the eighth case of the menu: view sales statistics
-void AdminController::handleViewSalesStatistics(vector<Order>& orders, vector<Music>& items) {
+void AdminController::handleViewSalesStatistics() {
     clearScreen();
     printHeader("SALE STATISTICS");
     
-    auto orderService = ServiceLocator::getSingleton<OrderService>();
+    auto orderService = Registry::getSingleton<OrderService>();
+
+    vector<Music> items = Registry::getSingleton<IMusicRepository>()->getAll();
+    vector<Order> orders = Registry::getSingleton<IOrderRepository>()->getAll();
+
     // Generate sales statistics 
     vector<pair<string, pair<int, float>>> salesStats = 
         orderService->generateSalesStatistics(orders, items);

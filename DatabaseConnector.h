@@ -45,24 +45,39 @@ class ODBCErrorHandler {
  */
 class DatabaseConnector {
 private:
+    // singleton instance
+    static DatabaseConnector* instance; ///< Singleton instance of DatabaseConnector
+
     SQLHENV hEnv;       ///< ODBC environment handle
     SQLHDBC hDbc;       ///< ODBC connection handle
     bool connected;     ///< Connection state flag
 
-public:
     /**
-     * @brief Default constructor
+     * @brief constructor (private)
      * 
      * Initializes a new DatabaseConnector instance with null handles.
      */
     DatabaseConnector();
-    
+
+public:
+    /**
+     * @brief Get the singleton instance
+     * 
+     * @return DatabaseConnector* The singleton instance
+     */
+    static DatabaseConnector* getInstance();
+
     /**
      * @brief Destructor
-     * 
-     * Ensures that any database connections are properly closed.
      */
     ~DatabaseConnector();
+
+    /**
+     * @brief Ensures the database is connected, reconnects if needed
+     * 
+     * @return true if connected or successfully reconnected
+     */
+    bool ensureConnected();
 
     /**
      * @brief Establishes a database connection
@@ -91,6 +106,18 @@ public:
      * @brief Closes the database connection and releases resources
      */
     void disconnect();
+
+    /**
+     * @brief Executes a simple query to check if connection is alive
+     *
+     * @return true if connection is working properly
+     */
+    bool testConnection() const;
+
+    /**
+     * @brief Cleanup resources before program exit
+     */
+    static void cleanup();
 
 private:
     /**

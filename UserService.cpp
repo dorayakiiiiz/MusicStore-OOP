@@ -1,11 +1,14 @@
 #include "UserService.h"
+#include "Registry.h"
+#include "IUserRepository.h"
 
 // Delete a user account by username
-bool UserService::deleteUser(vector<shared_ptr<User>>& users, const string& username) {
+bool UserService::deleteUser(const string& username) {
+    // Get all users from the repository
+    vector<shared_ptr<User>> users = Registry::getSingleton<IUserRepository>()->getAll();
     int index = findUserByUsername(users, username);
     if (index != -1) {
-        users.erase(users.begin() + index);
-        return true;
+        return Registry::getSingleton<IUserRepository>()->deleteById(index + 1);
     }
     return false;
 }
