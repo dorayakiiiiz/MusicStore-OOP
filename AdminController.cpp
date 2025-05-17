@@ -107,7 +107,12 @@ void AdminController::handleMusicList() {
     clearScreen();
     printHeader("MUSIC LIST");
 
-    vector<Music> items = Registry::getSingleton<IMusicRepository>()->getAll();
+    vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
+    if (items.empty()) {
+        printMessage("No items found!");
+        pauseScreen();
+        return;
+    }
 
     AdminUI::displayMusicList(items);
     printDashLine();
@@ -116,7 +121,6 @@ void AdminController::handleMusicList() {
 
 // handle the second case of the menu: add new items
 void AdminController::handleAddNewItems() {
-    auto musicService = Registry::getSingleton<MusicService>();
     while (1) {
         clearScreen();
         printHeader("ADD NEW ITEMS");
@@ -124,7 +128,7 @@ void AdminController::handleAddNewItems() {
         Music newItem = AdminUI::getNewMusicDetails();
         
         // Add the new item to inventory
-        bool success = Registry::getSingleton<IMusicRepository>()->add(newItem);
+        bool success = Registry::getSingleton<MusicService>()->addMusicItem(newItem);
         if (success) {
             printMessage("Item added successfully!");
         } else {
@@ -148,15 +152,17 @@ void AdminController::handleRemoveItems() {
     bool isValid;
     Error error;
 
-    auto musicService = Registry::getSingleton<MusicService>();
     while (1) {
         clearScreen();
         printHeader("REMOVE ITEMS");
-        vector<Music> items = Registry::getSingleton<IMusicRepository>()->getAll();
+
+        // Get all items from the repository
+        vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
         AdminUI::displayMusicList(items);
+
         int id;
         do {
-            std::tie(isValid, id, error) = InputValidator::validateInt("Enter item ID: ", 1, items.size());
+            tie(isValid, id, error) = InputValidator::validateInt("Enter item ID: ", 1, items.size());
             if (!isValid) {
                 printMessage(error.message);
                 Sleep(1000);
@@ -165,7 +171,7 @@ void AdminController::handleRemoveItems() {
         } while (!isValid);
         
         // Remove the selected item
-        bool success = Registry::getSingleton<IMusicRepository>()->deleteById(id);
+        bool success = Registry::getSingleton<MusicService>()->removeMusicItem(id);
         if (success) {
             printMessage("Item removed successfully!");
         } else {
@@ -173,6 +179,7 @@ void AdminController::handleRemoveItems() {
         }
 
         printDashLine();
+        items = Registry::getSingleton<MusicService>()->getAllMusic();
         if (items.empty()) {
             printMessage("No items left in inventory!");
             pauseScreen();
@@ -196,12 +203,11 @@ void AdminController::handleUpdatePrice() {
     bool isValid;
     Error error;
 
-    auto musicService = Registry::getSingleton<MusicService>();
     while (1) {
         clearScreen();
         printHeader("UPDATE PRICE ITEMS");
 
-        vector<Music> items = Registry::getSingleton<IMusicRepository>()->getAll();
+        vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
         AdminUI::displayMusicList(items);
 
         // Get ID of item to update with validation
@@ -226,13 +232,9 @@ void AdminController::handleUpdatePrice() {
             }
         } while (!isValid);
 
-        Music updateItem = Registry::getSingleton<IMusicRepository>()->getById(id);
-        updateItem.updatePrice(newPrice);
-
 
         // Update the item's price
-        // bool success = musicService->updateMusicItemPrice(items, id - 1, newPrice);
-        bool success = Registry::getSingleton<IMusicRepository>()->updateById(id, updateItem);
+        bool success = Registry::getSingleton<MusicService>()->updateMusicItemPrice(id, newPrice);
         if (success) {
             printMessage("Price updated successfully!");
         } else {
@@ -255,7 +257,7 @@ void AdminController::handleViewUsers() {
     clearScreen();
     printHeader("USER LIST");
 
-    vector<shared_ptr<User>> users = Registry::getSingleton<IUserRepository>()->getAll();
+    vector<shared_ptr<User>> users = Registry::getSingleton<UserService>()->getAllUsers();
     if (users.empty()) {
         printMessage("No users found!");
         pauseScreen();
@@ -272,10 +274,8 @@ void AdminController::handleViewPurchaseHistory() {
     clearScreen();
     printHeader("CUSTOMER PURCHASE HISTORY");
 
-    auto orderService = Registry::getSingleton<OrderService>();
-
-    vector<shared_ptr<User>> users = Registry::getSingleton<IUserRepository>()->getAll();
-    vector<Order> orders = Registry::getSingleton<IOrderRepository>()->getAll();
+    vector<shared_ptr<User>> users = Registry::getSingleton<UserService>()->getAllUsers();
+    vector<Order> orders = Registry::getSingleton<OrderService>()->getAllOrders();
 
     // Display purchase history for each customer
     for (const auto& user : users) {
@@ -284,8 +284,8 @@ void AdminController::handleViewPurchaseHistory() {
             continue;
         }
 
-        printMessage("Customer: " + user->getUsername());   
-        vector<Order> userOrders = orderService->getUserPurchaseHistory(orders, user->getUsername());
+        printMessage("Customer: " + user->getUsername());
+        vector<Order> userOrders = Registry::getSingleton<OrderService>()->getUserPurchaseHistory(orders, user->getUsername());
         
         if (userOrders.empty()) {
             printMessage("No purchase history found for this customer.");
@@ -307,9 +307,7 @@ bool AdminController::handleDeleteUser(shared_ptr<User>& currentUser) {
     bool isValid;
     Error error;
 
-    auto userService = Registry::getSingleton<UserService>();
-
-    vector<shared_ptr<User>> users = Registry::getSingleton<IUserRepository>()->getAll();
+    vector<shared_ptr<User>> users = Registry::getSingleton<UserService>()->getAllUsers();
 
     clearScreen();
     printHeader("DELETE USER");
@@ -323,9 +321,9 @@ bool AdminController::handleDeleteUser(shared_ptr<User>& currentUser) {
 
         AdminUI::displayUserList(users);
         // Get username to delete
-        string usernameToDelete;
+        string del;
         do {
-            tie(isValid, usernameToDelete, error) = InputValidator::validateString("Enter username to delete: ");
+            tie(isValid, del, error) = InputValidator::validateString("Enter username to delete: ");
             if (!isValid) {
                 printMessage(error.message);
                 Sleep(1000);
@@ -334,17 +332,16 @@ bool AdminController::handleDeleteUser(shared_ptr<User>& currentUser) {
         } while (!isValid);
 
         // Check if admin is deleting their own account
-        bool isCurrentUser = (currentUser->getUsername() == usernameToDelete);
+        bool isCurrentUser = (currentUser->getUsername() == del);
         
         // Delete the selected user
-        bool success = userService->deleteUser(usernameToDelete);
-        // fix: sua goi repo tu service
+        bool success = Registry::getSingleton<UserService>()->deleteUser(del);
         if (success) {
             printMessage("User deleted successfully!");
 
             // If admin deleted their own account, log them out
             if (isCurrentUser) {
-                printMessage("You have deleted yourself! Please login again!");
+                printMessage("You have deleted yourself. Logging out...");
                 currentUser = nullptr;
                 Sleep(1000);
                 return true;
@@ -376,14 +373,12 @@ void AdminController::handleViewSalesStatistics() {
     clearScreen();
     printHeader("SALE STATISTICS");
     
-    auto orderService = Registry::getSingleton<OrderService>();
-
-    vector<Music> items = Registry::getSingleton<IMusicRepository>()->getAll();
-    vector<Order> orders = Registry::getSingleton<IOrderRepository>()->getAll();
+    vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
+    vector<Order> orders = Registry::getSingleton<OrderService>()->getAllOrders();
 
     // Generate sales statistics 
     vector<pair<string, pair<int, float>>> salesStats = 
-        orderService->generateSalesStatistics(orders, items);
+        Registry::getSingleton<OrderService>()->generateSalesStatistics(orders, items);
     
     AdminUI::displaySaleStatistics(salesStats);
     printDashLine();

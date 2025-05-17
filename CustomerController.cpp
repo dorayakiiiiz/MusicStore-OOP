@@ -50,7 +50,7 @@ void CustomerController::menu(shared_ptr<User>& currentUser) {
         bool isValid;
         Error error;    
         do {
-            std::tie(isValid, choice, error) = InputValidator::validateInt("Enter your choice: ", 1, 7);
+            tie(isValid, choice, error) = InputValidator::validateInt("Enter your choice: ", 1, 7);
             if (!isValid) {
                 printMessage(error.message);
                 sleepScreen();
@@ -100,15 +100,14 @@ void CustomerController::menu(shared_ptr<User>& currentUser) {
 void CustomerController::handlePurchaseHistory(Customer*& customer) {
     clearScreen();
 
-    auto orderService = Registry::getSingleton<OrderService>();
-
-    vector<Order> orders = Registry::getSingleton<IOrderRepository>()->getAll();
+    vector<Order> orders = Registry::getSingleton<OrderService>()->getAllOrders();
 
     // Get order history for the current customer
-    vector<Order> orderHistory = orderService->getUserOrders(orders, customer->getUsername());
+    vector<Order> orderHistory = Registry::getSingleton<OrderService>()->getUserOrders(orders, customer->getUsername());
 
     printHeader("PURCHASE HISTORY");
     CustomerUI::displayPurchasedHistory(orderHistory, customer->getUsername());
+
     printDashLine();
     pauseScreen();
 }
@@ -118,7 +117,7 @@ void CustomerController::handleMusicList() {
     clearScreen();
     printHeader("MUSIC LIST");
 
-    vector<Music> items = Registry::getSingleton<IMusicRepository>()->getAll();
+    vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
     CustomerUI::displayMusicList(items);
 
     printDashLine();
@@ -128,10 +127,9 @@ void CustomerController::handleMusicList() {
 // handle the third case of the menu: search engine
 void CustomerController::handleSearch() {
 
-    // get the music service instance
-    auto musicService = Registry::getSingleton<MusicService>();
     // get all music items from the repository
-    vector<Music> items = Registry::getSingleton<IMusicRepository>()->getAll();
+    vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
+
     while (1) {
         clearScreen();
         printHeader("SEARCH ENGINE");
@@ -162,7 +160,7 @@ void CustomerController::handleSearch() {
         } while (!isValid);
 
         // Perform search and display results
-        vector<Music> results = musicService->searchMusic(items, static_cast<SearchType>(criteria), keyword);
+        vector<Music> results = Registry::getSingleton<MusicService>()->searchMusic(items, static_cast<SearchType>(criteria), keyword);
 
         if (results.empty()) {
             CustomerUI::displayNoResultsMessage();
@@ -187,13 +185,12 @@ void CustomerController::handleAddToCart(Cart& cart) {
     printHeader("ADD TO CART");
 
     // Get all music items from the repository
-    vector<Music> items = Registry::getSingleton<IMusicRepository>()->getAll();
+    vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
 
     // Display current music list
     CustomerUI::displayMusicList(items);
     printDashLine();
 
-    auto cartService = Registry::getSingleton<CartService>();
     while (1) {
         
         // Get item ID and quantity from user
@@ -222,10 +219,10 @@ void CustomerController::handleAddToCart(Cart& cart) {
         } while (!isValid);
 
         // Add item to cart
-        if (cartService->addItemToCart(cart, itemID - 1, quantity)) {
+        if (Registry::getSingleton<CartService>()->addItemToCart(cart, itemID, quantity)) {
             printMessage("Added " + to_string(quantity) + " " + items[itemID - 1].getName() + " to cart successfully!");
         } else {
-            printMessage("Failed to add item. Insufficient stock!");
+            printMessage("Failed to add item. Not enough stock!");
         }
 
         printHeader("YOUR CURRENT CART");
@@ -247,10 +244,8 @@ void CustomerController::handleRemoveFromCart(Cart& cart) {
     clearScreen();
     printHeader("REMOVE ITEMS FROM CART");
 
-    auto cartService = Registry::getSingleton<CartService>();
-
     // Get all music items from the repository
-    vector<Music> items = Registry::getSingleton<IMusicRepository>()->getAll();
+    vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
 
     if (cart.getItems().empty()) {
         printMessage("Cart is empty!");
@@ -273,7 +268,7 @@ void CustomerController::handleRemoveFromCart(Cart& cart) {
             } while (!isValid);
 
             // Remove item from cart
-            if (cartService->removeItemFromCart(cart, items, itemID - 1)) {
+            if (Registry::getSingleton<CartService>()->removeItemFromCart(cart, itemID - 1)) {
                 printMessage("Removed item successfully!");
                 if (cart.getItems().empty()) {
                     printMessage("Cart is empty!");
@@ -308,13 +303,9 @@ void CustomerController::handleCheckout(Cart& cart, Customer*& customer) {
     bool isValid;
     Error error;
 
-    auto orderService = Registry::getSingleton<OrderService>();
-    auto musicService = Registry::getSingleton<MusicService>();
-    auto discountService = Registry::getSingleton<DiscountService>();
-
     // Get all orders and vouchers from the repository
-    vector<Order> orders = Registry::getSingleton<IOrderRepository>()->getAll();
-    vector<shared_ptr<Discount>> vouchers = Registry::getSingleton<IDiscountRepository>()->getAll();
+    vector<Order> orders = Registry::getSingleton<OrderService>()->getAllOrders();
+    vector<shared_ptr<Discount>> vouchers = Registry::getSingleton<DiscountService>()->getAllDiscounts();
 
     if (cart.getItems().empty()) {
         CustomerUI::displayEmptyCartMessage();
@@ -325,8 +316,8 @@ void CustomerController::handleCheckout(Cart& cart, Customer*& customer) {
         
         // Handle discount vouchers if available
         vector<shared_ptr<Discount>> validVouchers = 
-            discountService->loadValidDiscounts(vouchers, customer->getUsername());
-        
+            Registry::getSingleton<DiscountService>()->loadValidDiscounts(vouchers, customer->getUsername());
+
         shared_ptr<Discount> selectedVoucher = nullptr;
 
         if (!validVouchers.empty()) {
@@ -362,12 +353,12 @@ void CustomerController::handleCheckout(Cart& cart, Customer*& customer) {
                         selectedVoucher = voucher;
                         
                         // Apply the discount to the total
-                        total = discountService->applyDiscount(selectedVoucher, total);
+                        total = Registry::getSingleton<DiscountService>()->applyDiscount(selectedVoucher, total);
                         printMessage("Voucher applied! New total: $" + 
                                                            to_string(total));
                         
                         // Remove the used voucher
-                        discountService->removeDiscount(voucherCode);
+                        Registry::getSingleton<DiscountService>()->removeDiscount(voucherCode);
                         break;
                     } 
                 }
@@ -379,7 +370,7 @@ void CustomerController::handleCheckout(Cart& cart, Customer*& customer) {
         }
         
         // Create the order with final total
-        orderService->checkout(customer->getUsername(), cart, total);
+        Registry::getSingleton<OrderService>()->checkout(customer->getUsername(), cart, total);
 
         // Give a new voucher if total is over $50
         if (total > 50) {
@@ -400,7 +391,7 @@ void CustomerController::handleCheckout(Cart& cart, Customer*& customer) {
             int discountValue = (DiscountType::PERCENTAGE == discountChoice) ? 10 : 5;
 
             // Create and add the new voucher
-            discountService->createDiscount(customer->getUsername(),
+            Registry::getSingleton<DiscountService>()->createDiscount(customer->getUsername(),
                                          static_cast<DiscountType>(discountChoice), discountValue);
             // Notify the user about the new voucher
             string notify = (static_cast<DiscountType>(discountChoice) == DiscountType::PERCENTAGE) ? "10% off" : "$5 off";
@@ -409,7 +400,7 @@ void CustomerController::handleCheckout(Cart& cart, Customer*& customer) {
 
         CustomerUI::displayOrderSuccessMessage();
         // delete the item that was sold out from the inventory
-        musicService->removeSoldOutItems();
+        Registry::getSingleton<MusicService>()->removeSoldOutItems();
 
     }
     printDashLine();

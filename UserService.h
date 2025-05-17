@@ -26,6 +26,30 @@ public:
     ~UserService() = default;
 
     /**
+     * @brief Get all user accounts
+     * 
+     * @return vector<shared_ptr<User>> Vector of all user accounts
+     */
+    vector<shared_ptr<User>> getAllUsers();
+
+    /**
+     * @brief Add a new user account
+     * 
+     * @param user User object to add
+     * @return bool True if successful, false if user already exists
+     */
+    bool addUser(const shared_ptr<User>& user);
+
+    
+    /**
+     * @brief Get a user account by ID
+     * 
+     * @param id ID of the user account to retrieve
+     * @return shared_ptr<User> Pointer to the user account, or nullptr if not found
+     */
+    shared_ptr<User> getUserById(int id);
+
+    /**
      * @brief Delete a user account by username
      * 
      * @param users Reference to the vector of user accounts

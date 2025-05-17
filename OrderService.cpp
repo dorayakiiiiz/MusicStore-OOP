@@ -6,6 +6,11 @@
 
 using std::unordered_map;
 
+// Get all orders from the repository
+vector<Order> OrderService::getAllOrders() {
+    return Registry::getSingleton<IOrderRepository>()->getAll();
+}
+
 // Process order checkout and create a new order
 void OrderService::checkout( const string& username, Cart& cart, float total) {
     // Create a new order with current cart items and total

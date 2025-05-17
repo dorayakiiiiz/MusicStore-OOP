@@ -26,6 +26,13 @@ public:
     ~OrderService() = default;
 
     /**
+     * @brief Get all orders in the system
+     * 
+     * @return vector<Order> Vector of all orders
+     */
+    vector<Order> getAllOrders();
+
+    /**
      * @brief Create a new order and add it to the order history
      * 
      * @param orders Vector of all orders in the system

@@ -13,6 +13,13 @@
 
 #include <algorithm>
 
+// Get all music items from the repository
+vector<Music> MusicService::getAllMusic() {
+    // Get all music items from the repository
+    vector<Music> items = Registry::getSingleton<IMusicRepository>()->getAll();
+    return items;
+}
+
 
 // Search music catalog by criteria and keyword
 vector<Music> MusicService::searchMusic(const vector<Music>& items, SearchType criteria, const string& keyword) {
@@ -28,38 +35,25 @@ vector<Music> MusicService::searchMusic(const vector<Music>& items, SearchType c
 }
 
 // Add a new music item to the inventory
-bool MusicService::addMusicItem(vector<Music>& items, const Music& item) {
-    // Check if item already exists
-    for (const auto& i : items) {
-        if (i == item) {
-            return false; 
-        }
-    }
-    // Add the new item
-    items.push_back(item);
-    return true;
+bool MusicService::addMusicItem(const Music& item) {
+    return Registry::getSingleton<IMusicRepository>()->add(item);
 }
 
 // Remove a music item from the inventory by ID
-bool MusicService::removeMusicItem(vector<Music>& items, int id) {
-    // Validate ID
-    if (id < 0 || id >= items.size()) {
-        return false;
-    }
-    // Remove the item
-    items.erase(items.begin() + id);
-    return true;
+bool MusicService::removeMusicItem(int id) {
+    return Registry::getSingleton<IMusicRepository>()->deleteById(id);
 }
 
 // Update the price of a music item by ID
-bool MusicService::updateMusicItemPrice(vector<Music>& items, int id, float price) {
+bool MusicService::updateMusicItemPrice(int id, float price) {
     // Validate ID
-    if (id < 0 || id >= items.size()) {
+    if (id < 0 || id >= getAllMusic().size()) {
         return false;
     }
-    // Update the price
-    items[id].updatePrice(price);
-    return true;
+    // Update the item's price
+    Music item = Registry::getSingleton<IMusicRepository>()->getById(id);
+    item.updatePrice(price);
+    return Registry::getSingleton<IMusicRepository>()->updateById(id, item);
 }
 
 // Remove sold-out items from the inventory

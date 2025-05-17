@@ -31,7 +31,7 @@ public:
      * @brief Add a music item to the shopping cart
      * 
      * @param cart Reference to the customer's shopping cart
-     * @param inventory Reference to the store's music inventory
+
      * @param itemID Index of the item to add
      * @param quantity Quantity of the item to add
      * @return bool True if successful, false if invalid ID or insufficient stock
@@ -43,10 +43,9 @@ public:
      * 
      * @param cart Reference to the customer's shopping cart
      * @param inventory Reference to the store's music inventory
-     * @param itemID Index of the item to remove from cart
      * @return bool True if successful, false if invalid item ID
      */
-    bool removeItemFromCart(Cart& cart, vector<Music>& inventory, int itemID);
+    bool removeItemFromCart(Cart& cart, int itemID);
     
     /**
      * @brief Process order checkout and create a new order

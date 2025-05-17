@@ -40,6 +40,12 @@ public:
     ~DiscountService() = default;
 
     /**
+     * @brief Get all available discount vouchers
+     * 
+     * @return vector<shared_ptr<Discount>> Vector of all discount vouchers
+     */
+    vector<shared_ptr<Discount>> getAllDiscounts();
+    /**
      * @brief Apply a discount to a total price
      * 
      * @param voucher The discount to apply

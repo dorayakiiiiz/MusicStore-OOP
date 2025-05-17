@@ -38,13 +38,21 @@ public:
 
 
     /**
+     * @brief Get all music items in the inventory
+     * 
+     * @return vector<Music> Vector of all music items
+     */
+    vector<Music> getAllMusic();
+
+    
+    /**
      * @brief Add a new music item to the inventory
      * 
      * @param items Reference to the vector of music items
      * @param item The new music item to add
      * @return bool True if successful, false if item already exists
      */
-    bool addMusicItem(vector<Music>& items, const Music& item);
+    bool addMusicItem(const Music& item);
     
     /**
      * @brief Remove a music item from the inventory by ID
@@ -53,8 +61,8 @@ public:
      * @param id Index of the item to remove
      * @return bool True if successful, false if invalid ID
      */
-    bool removeMusicItem(vector<Music>& items, int id);
-    
+    bool removeMusicItem(int id);
+
     /**
      * @brief Update the price of a music item by ID
      * 
@@ -63,7 +71,7 @@ public:
      * @param price New price for the item
      * @return bool True if successful, false if invalid ID
      */
-    bool updateMusicItemPrice(vector<Music>& items, int id, float price);
+    bool updateMusicItemPrice(int id, float price);
 
     /**
      * @brief Search music catalog by criteria (name/artist/genre) and keyword
