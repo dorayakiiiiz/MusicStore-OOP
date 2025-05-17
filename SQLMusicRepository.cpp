@@ -188,7 +188,7 @@ bool SqlMusicRepository::deleteById(int id) {
     SQLHDBC hDbc = dbConnector->getConnection();
     SQLHSTMT hStmt = nullptr;
 
-    // Step 1: Delete record
+    // Step 1: Delete the record
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
         return false;
     }
@@ -199,32 +199,41 @@ bool SqlMusicRepository::deleteById(int id) {
     bool success = SQL_SUCCEEDED(SQLExecute(hStmt));
     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 
-    // Step 2: Shift IDs
+    // Step 2: Re-number all remaining IDs from 1 to n
     if (success && SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) == SQL_SUCCESS) {
-        std::string selectQuery = "SELECT ID FROM music_info WHERE ID > ? ORDER BY ID ASC";
+        std::string selectQuery = "SELECT ID FROM music_info ORDER BY ID ASC";
         SQLPrepare(hStmt, (SQLCHAR*)selectQuery.c_str(), SQL_NTS);
-        SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &id, 0, nullptr);
+
+        std::vector<int> oldIds;
 
         if (SQLExecute(hStmt) == SQL_SUCCESS) {
             int currentId;
             while (SQLFetch(hStmt) == SQL_SUCCESS) {
                 SQLGetData(hStmt, 1, SQL_C_SLONG, &currentId, 0, nullptr);
-                int newId = currentId - 1;
-
-                SQLHSTMT hUpdateStmt = nullptr;
-                if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hUpdateStmt) == SQL_SUCCESS) {
-                    std::string updateQuery = "UPDATE music_info SET ID = ? WHERE ID = ?";
-                    SQLPrepare(hUpdateStmt, (SQLCHAR*)updateQuery.c_str(), SQL_NTS);
-                    SQLBindParameter(hUpdateStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &newId, 0, nullptr);
-                    SQLBindParameter(hUpdateStmt, 2, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &currentId, 0, nullptr);
-                    SQLExecute(hUpdateStmt);
-                    SQLFreeHandle(SQL_HANDLE_STMT, hUpdateStmt);
-                }
+                oldIds.push_back(currentId);
             }
         }
-
         SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+
+        // Update each ID to new one
+        for (int i = 0; i < oldIds.size(); ++i) {
+            int newId = i + 1;
+            int oldId = oldIds[i];
+
+            if (newId == oldId) continue; // Skip if already correct
+
+            SQLHSTMT hUpdateStmt = nullptr;
+            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hUpdateStmt) == SQL_SUCCESS) {
+                std::string updateQuery = "UPDATE music_info SET ID = ? WHERE ID = ?";
+                SQLPrepare(hUpdateStmt, (SQLCHAR*)updateQuery.c_str(), SQL_NTS);
+                SQLBindParameter(hUpdateStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &newId, 0, nullptr);
+                SQLBindParameter(hUpdateStmt, 2, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &oldId, 0, nullptr);
+                SQLExecute(hUpdateStmt);
+                SQLFreeHandle(SQL_HANDLE_STMT, hUpdateStmt);
+            }
+        }
     }
 
     return success;
 }
+
