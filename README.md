@@ -88,7 +88,7 @@ Nhóm đã phân tách ra 2 vai trò riêng biệt với 2 loại đối tượn
     + Sau đó nhấn Connect để kết nối
 - Bước 6: Biên dịch chương trình
     + Nhấn Ctrl + ` để mở Termianl
-    + Nhập lệnh: g++ *.cpp -lole32 -lodbc32 -o program/main
+    + Nhập lệnh: g++ *.cpp -lole32 -lodbc32 -o out/program
     + Trong trường hợp máy không nhận diện được *.cpp ta phải nhập tất cả file .cpp để biên dịch với lệnh: g++ main.cpp AdminController.cpp AdminUI.cpp AuthService.cpp Cart.cpp CartService.cpp ControllerFactory.cpp CustomerController.cpp CustomerUI.cpp Discount.cpp DiscountService.cpp DiscountStrategy.cpp InputValidator.cpp Music.cpp MusicService.cpp Order.cpp OrderService.cpp ReadData.cpp SaveData.cpp Search.cpp SearchFactory.cpp StoreApp.cpp User.cpp UserService.cpp utils.cpp DatabaseConnector.cpp -lole32 -lodbc32 -o program/main
     + Sau khi đã biên dịch thành công, nhập lệnh program/main để chạy chương trình
 

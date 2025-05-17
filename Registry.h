@@ -1,5 +1,5 @@
-#ifndef _SERVICE_LOCATOR_H_
-#define _SERVICE_LOCATOR_H_
+#ifndef _SINGLETON_REGISTRY_H_
+#define _SINGLETON_REGISTRY_H_
 
 #include <memory>
 #include <unordered_map>

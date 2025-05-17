@@ -117,7 +117,7 @@ bool SqlDiscountRepository::deleteById(int id) {
     SQLHDBC hDbc = dbConnector->getConnection();
     SQLHSTMT hStmt = nullptr;
 
-    // Step 1: Delete record
+    // Step 1: Delete the record
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
         return false;
     }
@@ -128,7 +128,8 @@ bool SqlDiscountRepository::deleteById(int id) {
     bool success = SQL_SUCCEEDED(SQLExecute(hStmt));
     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 
-    // Step 2: Shift IDs
+    // Step 2: Collect IDs > deleted ID
+    std::vector<int> idsToUpdate;
     if (success && SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) == SQL_SUCCESS) {
         std::string selectQuery = "SELECT ID FROM vouchers WHERE ID > ? ORDER BY ID ASC";
         SQLPrepare(hStmt, (SQLCHAR*)selectQuery.c_str(), SQL_NTS);
@@ -138,25 +139,29 @@ bool SqlDiscountRepository::deleteById(int id) {
             int currentId;
             while (SQLFetch(hStmt) == SQL_SUCCESS) {
                 SQLGetData(hStmt, 1, SQL_C_SLONG, &currentId, 0, nullptr);
-                int newId = currentId - 1;
-
-                SQLHSTMT hUpdateStmt = nullptr;
-                if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hUpdateStmt) == SQL_SUCCESS) {
-                    std::string updateQuery = "UPDATE vouchers SET ID = ? WHERE ID = ?";
-                    SQLPrepare(hUpdateStmt, (SQLCHAR*)updateQuery.c_str(), SQL_NTS);
-                    SQLBindParameter(hUpdateStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &newId, 0, nullptr);
-                    SQLBindParameter(hUpdateStmt, 2, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &currentId, 0, nullptr);
-                    SQLExecute(hUpdateStmt);
-                    SQLFreeHandle(SQL_HANDLE_STMT, hUpdateStmt);
-                }
+                idsToUpdate.push_back(currentId);
             }
         }
-
         SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+    }
+
+    // Step 3: Update IDs safely
+    for (int oldId : idsToUpdate) {
+        int newId = oldId - 1;
+        SQLHSTMT hUpdateStmt = nullptr;
+        if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hUpdateStmt) == SQL_SUCCESS) {
+            std::string updateQuery = "UPDATE vouchers SET ID = ? WHERE ID = ?";
+            SQLPrepare(hUpdateStmt, (SQLCHAR*)updateQuery.c_str(), SQL_NTS);
+            SQLBindParameter(hUpdateStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &newId, 0, nullptr);
+            SQLBindParameter(hUpdateStmt, 2, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &oldId, 0, nullptr);
+            SQLExecute(hUpdateStmt);
+            SQLFreeHandle(SQL_HANDLE_STMT, hUpdateStmt);
+        }
     }
 
     return success;
 }
+
 // these function are not be use
 bool SqlDiscountRepository::updateById(int id, const shared_ptr<Discount>& discount) { return false; }
 shared_ptr<Discount> SqlDiscountRepository::getById(int id) { return nullptr; }
