@@ -12,12 +12,12 @@ void printHeader(const string& header) {
     cout << '\n';
     // Add decorative heart symbols before the header text
     for (int i = 1; i <= 10; ++i) {
-        cout << (char)3 << ' ';
+        cout << (char)175 << ' ';
     }
     cout << header;
     // Add decorative heart symbols after the header text
     for (int i = 1; i <= 10; ++i) {
-        cout << ' ' << (char)3;
+        cout << ' ' << (char)174;
     }
     cout << '\n';
 }
@@ -25,7 +25,7 @@ void printHeader(const string& header) {
 // Prints a message with a decorative symbol prefix
 // Used for displaying information to the user
 void printMessage(const string& message) {
-    cout << (char)5 << ' ' << message << '\n';
+    cout << (char)175 << ' ' << message << '\n';
 }
 
 // Prints a numbered menu of options
