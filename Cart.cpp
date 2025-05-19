@@ -55,7 +55,7 @@ void Cart::clear() {
 // Display the contents of the cart
 void Cart::displayCart() const {
     for (int i = 0; i < items.size(); ++i) {
-        std::cout << i + 1 << " - " << items[i].getName() << " - Quantity: " << items[i].getQuantity()
+        std::cout << '\t' << i + 1 << " - " << items[i].getName() << " - Quantity: " << items[i].getQuantity()
              << " - Price per unit: $" << items[i].getPrice()
              << " - Total: $" << items[i].getPrice() * items[i].getQuantity() << '\n';
     }

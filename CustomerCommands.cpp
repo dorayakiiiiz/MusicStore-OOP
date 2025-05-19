@@ -28,14 +28,16 @@ string ViewPurchaseHistoryCommand::getName() const {
 
 bool ViewPurchaseHistoryCommand::execute() {
     clearScreen();
+    ConsoleUI::printFrame(0, 0, 120, 30);
 
     Customer* customer = dynamic_cast<Customer*>(currentUser.get());
     vector<Order> orders = Registry::getSingleton<OrderService>()->getAllOrders();
 
     // Get order history for the current customer
     vector<Order> orderHistory = Registry::getSingleton<OrderService>()->getUserOrders(orders, customer->getUsername());
-
-    printHeader("PURCHASE HISTORY");
+    
+    string header = "PURCHASE HISTORY";
+    printHeader(header, (120 - header.length()*2) / 2 - 40, 2);
     CustomerUI::displayPurchasedHistory(orderHistory, customer->getUsername());
 
     printDashLine();
@@ -50,7 +52,10 @@ std::string ViewMusicCommand::getName() const {
 
 bool ViewMusicCommand::execute() {
     clearScreen();
-    printHeader("MUSIC LIST");
+    ConsoleUI::printFrame(0, 0, 120, 30);
+
+    string header = "MUSIC LIST";
+    printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
 
     vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
     CustomerUI::displayMusicList(items);
@@ -69,9 +74,11 @@ bool SearchMusicCommand::execute() {
     // get all music items from the repository
     vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
 
+    clearScreen();
+    ConsoleUI::printFrame(0, 0, 120, 30);
     while (true) {
-        clearScreen();
-        printHeader("SEARCH ENGINE");
+        string header = "SEARCH MUSIC";
+        printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
 
         int criteria;
         string keyword;
@@ -128,7 +135,9 @@ string AddToCartCommand::getName() const {
 
 bool AddToCartCommand::execute() {
     clearScreen();
-    printHeader("ADD TO CART");
+    ConsoleUI::printFrame(0, 0, 120, 30);
+    string header = "ADD TO CART";
+    printHeader(header, (120 - header.length()*2) / 2 - 30, 2);
 
     // Get all music items from the repository
     vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
@@ -170,7 +179,7 @@ bool AddToCartCommand::execute() {
             printMessage("Failed to add item. Not enough stock!");
         }
 
-        printHeader("YOUR CURRENT CART");
+        //printHeader("YOUR CURRENT CART");
         CustomerUI::displayCart(cart.getItems());
 
         printDashLine();
@@ -194,7 +203,9 @@ std::string RemoveFromCartCommand::getName() const {
 
 bool RemoveFromCartCommand::execute() {
     clearScreen();
-    printHeader("REMOVE ITEMS FROM CART");
+    ConsoleUI::printFrame(0, 0, 120, 30);
+    string header = "REMOVE ITEMS FROM CART";
+    printHeader(header, (120 - header.length()*2) / 2 - 30, 2);
 
     // Get all music items from the repository
     vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
@@ -257,7 +268,9 @@ std::string CheckoutCommand::getName() const {
 
 bool CheckoutCommand::execute() {
     clearScreen();
-    printHeader("CHECK OUT");
+    ConsoleUI::printFrame(0, 0, 120, 30);
+    string header = "CHECK OUT";
+    printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
 
     bool isValid;
     Error error;

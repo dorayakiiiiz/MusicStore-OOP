@@ -9,24 +9,25 @@ using std::to_string;
 
 // Prints a formatted header with decorative elements
 // Used to visually separate different sections of the UI
-void printHeader(const string& header) {
-    cout << '\n';
-    // Add decorative heart symbols before the header text
-    for (int i = 1; i <= 10; ++i) {
-        cout << (char)175 << ' ';
+void printHeader(const string& header, int x, int y) {
+    string fileName = header + ".txt";
+    string line = "";
+    std::ifstream inFile;
+    inFile.open(fileName);
+    if (inFile.is_open()) {
+        while (getline(inFile, line)) {
+            ConsoleUI::gotoXY(x, y++);
+            cout << (char)92 <<line << (char)47 << '\n';
+        }
     }
-    cout << header;
-    // Add decorative heart symbols after the header text
-    for (int i = 1; i <= 10; ++i) {
-        cout << ' ' << (char)174;
-    }
     cout << '\n';
+    inFile.close();
 }
 
 // Prints a message with a decorative symbol prefix
 // Used for displaying information to the user
 void printMessage(const string& message) {
-    cout << (char)175 << ' ' << message << '\n';
+    cout << '\t' << (char)175 << ' ' << message << '\n';
 }
 
 void printASCII(const string& header, int x, int y)
@@ -41,12 +42,14 @@ void printASCII(const string& header, int x, int y)
             cout << line << '\n';
         }
     }
+    cout << '\n';
     inFile.close();
 }
 
 // Prints a horizontal line of dashes
 // Used to visually separate content sections
 void printDashLine() {
+    cout << '\t';
     for (int i = 1; i < 50; ++i) {
         cout << (char)205;
     }
@@ -55,13 +58,13 @@ void printDashLine() {
 
 // Prints a message for repeating the last action
 void printRepeatMessage() {
-    cout << " Press space to exit or any other key to continue...\n";
+    cout << "\tPress space to exit or any other key to continue...\n";
 }
 
 // Gets user input with a prompt
 // Returns the string input by the user
 string getInput(const string& prompt) {
-    cout << (char)16 << ' ' << prompt;
+    cout << '\t' << (char)16 << ' ' << prompt;
     string input; getline(cin, input);
     return input;
 }
