@@ -3,6 +3,7 @@
 
 #include "Command.h"
 #include "User.h"
+#include "ConsoleUI.h"
 #include <memory>
 #include <string>
 

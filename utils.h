@@ -7,6 +7,8 @@
 #include <iostream>
 #include <limits>
 #include <cfloat>
+#include "ConsoleUI.h"
+#include<fstream>
 using std::string, std::vector, std::tuple, std::make_tuple, std::get, std::stoi, std::cout, std::cin;
 
 
@@ -22,12 +24,7 @@ void printHeader(const string&);
  */
 void printMessage(const string&);
 
-/**
- * @brief Prints a numbered menu of options
- * @param options Vector of menu options to display
- */
-void printMenu(const vector<string>&);
-
+void printASCII(const string&, int, int);
 /**
  * @brief Prints a horizontal line of dashes
  */
@@ -42,6 +39,7 @@ void clearScreen();
  * @brief Prints a message for repeating the last action
  */
 void printRepeatMessage();
+
 
 /**
  * @brief Pauses execution until user presses a key

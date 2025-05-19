@@ -34,11 +34,6 @@ public:
      * @param username The username of the customer
      */
     static void displayWelcomeMessage(const string& username);
-    
-    /**
-     * @brief Displays the main customer menu options
-     */
-    static void displayMenu();
 
     /**
      * @brief Displays the order history for a specific customer

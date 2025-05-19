@@ -15,21 +15,6 @@ void CustomerUI::displayWelcomeMessage(const string& username) {
     printMessage("welcome " + username + " to the music store!");
 }
 
-// Displays the main customer menu options
-void CustomerUI::displayMenu() {
-    printHeader("CUSTOMER MENU");
-    vector<string> options = {
-        "See your purchased history",  
-        "See music list",            
-        "Find item",                  
-        "Add to cart",                 
-        "Remove items from cart",      
-        "Check out",                  
-        "Log out\n",                   
-    };
-    printMenu(options);
-}
-
 // Displays the order history for a specific customer
 // Shows all previous orders with details of purchased items and totals
 void CustomerUI::displayPurchasedHistory(const vector<Order>& orders, const string& username) {

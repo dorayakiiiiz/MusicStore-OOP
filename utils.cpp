@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include "fstream"
 #include <windows.h>
 using std::cout, std::cin, std::string, std::vector, std::tuple, std::make_tuple, std::get, std::stoi;
 using std::to_string;
@@ -28,12 +29,19 @@ void printMessage(const string& message) {
     cout << (char)175 << ' ' << message << '\n';
 }
 
-// Prints a numbered menu of options
-// Used to display choices to the user
-void printMenu(const vector<string>& option) {
-    for (int i = 0; i < option.size(); ++i) {
-        cout << (char)4 << ' ' << i + 1 << ". " << option[i] << "\n";
+void printASCII(const string& header, int x, int y)
+{
+    string fileName = header + ".txt";
+    string line = "";
+    std::ifstream inFile;
+    inFile.open(fileName);
+    if (inFile.is_open()) {
+        while (getline(inFile, line)) {
+            ConsoleUI::gotoXY(x, y++);
+            cout << line << '\n';
+        }
     }
+    inFile.close();
 }
 
 // Prints a horizontal line of dashes
@@ -70,7 +78,7 @@ void pauseScreen() {
 
 // Sleeps the program for a specified duration
 void sleepScreen() {
-    Sleep(1000);
+    Sleep(500);
 }
 
 string toLower(const string& str) {

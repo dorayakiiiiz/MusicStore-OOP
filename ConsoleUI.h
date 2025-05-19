@@ -1,0 +1,22 @@
+#ifndef _CONSOLEUI_H_
+#define _CONSOLEUI_H_
+#include <windows.h>
+#include <vector>
+#include <string>
+#include <iostream>
+#include <conio.h>
+#include "utils.h"
+
+class ConsoleUI {
+public:
+    static void gotoXY(short x, short y);
+
+    static void setColor(WORD color);
+
+    static void printFrame(int x, int y, int width, int height);
+
+    // Menu điều hướng bằng W/S/Enter
+    static int selectMenu(const std::vector<std::string>& options, const std::string& header = "MENU", int x = 6, int y = 6);
+};
+
+#endif // _CONSOLEUI_H_

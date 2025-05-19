@@ -30,6 +30,7 @@
 #include "AuthService.h"
 
 #include "DatabaseConnector.h"
+#include "ConsoleConfig.h"
 #include <iostream>
 #include <windows.h>
 
@@ -69,6 +70,10 @@ StoreApp::~StoreApp() {
 
 // Main application loop
 void StoreApp::run() {
+    // Set console 
+    ConsoleConfig::FixConsoleWindow();
+
+    // Print welcome message
     shared_ptr<User> currentUser = nullptr;
 
     // Create command invoker with menu title

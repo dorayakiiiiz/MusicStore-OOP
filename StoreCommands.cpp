@@ -148,5 +148,6 @@ string ExitCommand::getName() const {
 bool ExitCommand::execute() {
     printMessage("Exiting the application. Thank you for using our service!");
     sleepScreen();
+    system("cls");
     return false;
 }

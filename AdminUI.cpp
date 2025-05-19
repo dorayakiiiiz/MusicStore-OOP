@@ -18,25 +18,6 @@ void AdminUI::displayWelcomeMessage(const string& username) {
     printDashLine();
 }
 
-// Displays the main admin menu options
-void AdminUI::displayMenu() {
-    printHeader("ADMIN MENU");
-
-    vector<string> options = {
-        "See music list",          
-        "Add new items",          
-        "Remove items",            
-        "Update price items",      
-        "View users list",        
-        "View all customers purchased history",  
-        "Delete users",        
-        "View sale statistics",    
-        "Log out\n"                
-    };
-    
-    printMenu(options);
-}
-
 // Displays a formatted list of all music items in inventory
 // Shows ID, name, artist, genre, price and quantity for each item
 void AdminUI::displayMusicList(vector<Music>& items) {

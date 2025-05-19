@@ -33,11 +33,6 @@ public:
     static void displayWelcomeMessage(const string& username);
     
     /**
-     * @brief Displays the main admin menu options
-     */
-    static void displayMenu();
-    
-    /**
      * @brief Displays a formatted list of all music items in inventory
      * @param items Vector containing all music items in inventory
      */
