@@ -31,15 +31,14 @@ void ConsoleUI::printFrame(int x, int y, int width, int height) {
 
 int ConsoleUI::selectMenu(const std::vector<std::string>& options, const std::string& header, int x, int y) {
     int selected = 0;
-    int frameX = 1, frameY = 1, frameW = 119, frameH = 29;
-    int titleX = frameX + (frameW - header.length() - 30) / 2; // căn giữa tiêu đề
+    int frameX = 0, frameY = 0, frameW = 120, frameH = 30;
+    int titleX = frameX + (frameW - header.length()*2) / 2; // căn giữa tiêu đề
+    clearScreen();
+    printFrame(frameX, frameY, frameW, frameH); 
     while (true) {
-        system("cls");
-        printFrame(frameX, frameY, frameW, frameH); // Vẽ khung mỗi lần lặp
-
         // In tiêu đề căn giữa
-        gotoXY(titleX, y - 2);
-        printASCII(header, titleX, y - 2);
+        gotoXY(titleX, y + 2);
+        printASCII(header, titleX, y + 2);
 
         // In các lựa chọn menu
         for (int i = 0; i < options.size(); ++i) {

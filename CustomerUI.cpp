@@ -24,23 +24,23 @@ void CustomerUI::displayPurchasedHistory(const vector<Order>& orders, const stri
     }
     // Iterate through all orders for this customer
     for (int i = 0; i < orders.size(); ++i) {
-        cout << "Order " << i + 1 << ": \n";
+        cout << "\tOrder " << i + 1 << ": \n";
         vector<Music> items = orders[i].getPurchasedItems();
         for (const auto& item : items) {
             cout << " - " << item.getName() << " - Quantity: " << item.getQuantity()
             << " - Price per unit: $" << item.getPrice()
             << " - Total: $" << item.getPrice() * item.getQuantity() << '\n';
         }
-        cout << "Order total: $" << orders[i].getTotal() << '\n';
+        cout << "\tOrder total: $" << orders[i].getTotal() << '\n';
         printDashLine();
     }
 }
 
 // Displays a formatted list of all available music items
 void CustomerUI::displayMusicList(vector<Music>& items) {
-    cout << "ID - Name - Artist - Genre - Price - Quantity\n";
+    cout << "\tID - Name - Artist - Genre - Price - Quantity\n";
     for (int i = 0; i < items.size(); ++i) {
-        cout << i + 1 << " - " << items[i].toString() << '\n';
+        cout << '\t' <<  i + 1 << " - " << items[i].toString() << '\n';
     }
 }
 
@@ -48,7 +48,7 @@ void CustomerUI::displayMusicList(vector<Music>& items) {
 // Shows name, quantity, unit price and total price for each item
 void CustomerUI::displayCart(const vector<Music>& items) {
     for (int i = 0; i < items.size(); ++i) {
-        std::cout << i + 1 << " - " << items[i].getName() << " - Quantity: " << items[i].getQuantity()
+        std::cout << '\t' << i + 1 << " - " << items[i].getName() << " - Quantity: " << items[i].getQuantity()
              << " - Price per unit: $" << items[i].getPrice()
              << " - Total: $" << items[i].getPrice() * items[i].getQuantity() << '\n';
     }
@@ -85,7 +85,7 @@ void CustomerUI::displayOrderDetails(const string& username, const vector<Music>
 void CustomerUI::displayVoucherList(const vector<shared_ptr<Discount>>& vouchers) {
     printMessage("You have the following vouchers available: ");
     for (int i = 0; i < vouchers.size(); ++i) {
-        cout << i + 1 << ". " << vouchers[i]->toString() << '\n';
+        cout << '\t' << i + 1 << ". " << vouchers[i]->toString() << '\n';
     }
 }
 

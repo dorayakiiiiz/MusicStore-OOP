@@ -5,6 +5,7 @@
 #include "Registry.h"
 #include "IController.h"
 #include "ControllerFactory.h"
+#include "ConsoleUI.h"
 #include <iostream>
 
 using std::tie;
@@ -20,7 +21,10 @@ bool SignUpCommand::execute() {
     bool isValid;
     Error error;
     clearScreen();
-    printHeader("SIGN UP");
+    ConsoleUI::printFrame(0, 0, 120, 30);
+    
+    string header = "SIGN UP";
+    printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
     int role;
     string username, password;
     
@@ -90,7 +94,9 @@ bool LoginCommand::execute() {
     Error error;
     
     clearScreen();
-    printHeader("LOGIN");
+    ConsoleUI::printFrame(0, 0, 120, 30);
+    string header = "LOGIN";
+    printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
     string username, password;
     
     // Get username input with validation

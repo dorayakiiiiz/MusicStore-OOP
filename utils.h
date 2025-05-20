@@ -16,7 +16,7 @@ using std::string, std::vector, std::tuple, std::make_tuple, std::get, std::stoi
  * @brief Prints a formatted header with decorative elements
  * @param header The header text to display
  */
-void printHeader(const string&);
+void printHeader(const string&, int, int);
 
 /**
  * @brief Prints a message with a decorative symbol prefix

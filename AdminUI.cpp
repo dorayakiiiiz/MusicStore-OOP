@@ -21,36 +21,36 @@ void AdminUI::displayWelcomeMessage(const string& username) {
 // Displays a formatted list of all music items in inventory
 // Shows ID, name, artist, genre, price and quantity for each item
 void AdminUI::displayMusicList(vector<Music>& items) {
-    cout << "ID - Name - Artist - Genre - Price - Quantity\n";
+    cout << "\tID - Name - Artist - Genre - Price - Quantity\n";
     for (int i = 0; i < items.size(); ++i) {
-        cout << i + 1 << " - " << items[i].toString() << '\n';
+        cout << '\t' << i + 1 << " - " << items[i].toString() << '\n';
     }
 }
 
 // Displays a formatted list of all registered users
 // Shows ID, username, password, and role for each user
 void AdminUI::displayUserList(const vector<shared_ptr<User>>& users) {
-    cout << "ID - Username - Password - Role\n";
+    cout << "\tID - Username - Password - Role\n";
     for (int i = 0; i < users.size(); ++i) {
-        cout << i + 1 << " - " << users[i]->toString() << '\n';
+        cout << '\t' << i + 1 << " - " << users[i]->toString() << '\n';
     }
 }
 
 // Displays the details of a specific order
 // Shows order ID, list of purchased items, quantities, prices and total
 void AdminUI::displayPurchasedHistory(const Order& order, int id) {
-    cout << "Order " << id << ": \n";
-    cout << "Purchased items:\n";
+    cout << "\tOrder " << id << ": \n";
+    cout << "\tPurchased items:\n";
 
     const vector<Music>& purchasedItems = order.getPurchasedItems();
 
     // Display details for each item in the order
     for (const auto& item : purchasedItems) {
-        cout << "- " << item.getName() << " - Quantity: " << item.getQuantity()
-             << " - Price per unit: $" << item.getPrice()
-             << " - Total: $" << item.getPrice() * item.getQuantity() << '\n';
+        cout << "\t- " << item.getName() << " - Quantity: " << item.getQuantity()
+             << "\t- Price per unit: $" << item.getPrice()
+             << "\t- Total: $" << item.getPrice() * item.getQuantity() << '\n';
     }
-    cout << "Order total: $" << order.getTotal() << '\n';
+    cout << "\tOrder total: $" << order.getTotal() << '\n';
 }
 
 // Displays sales statistics for items sold in the store
@@ -59,11 +59,11 @@ void AdminUI::displaySaleStatistics(vector<pair<string, pair<int, float>>>& item
     float totalRevenue = 0;
     // Iterate through each item's statistics
     for (const auto& [name, stats] : itemStats) {
-        cout << "Item: " << name << " - Sold: "
+        cout << "\tItem: " << name << " - Sold: "
         << stats.first << " - Revenue: $" << stats.second << "\n";
         totalRevenue += stats.second;
     }
-    cout << "Total revenue: $" << totalRevenue << "\n";
+    cout << "\tTotal revenue: $" << totalRevenue << "\n";
 }
 
 // Collects information from the admin to create a new music item
@@ -79,7 +79,7 @@ Music AdminUI::getNewMusicDetails() {
 
     // Get item name with validation
     do {
-        std::tie(isValid, name, error) = InputValidator::validateString("Enter name: ");
+        std::tie(isValid, name, error) = InputValidator::validateString("\tEnter name: ");
         if (!isValid) {
             printMessage(error.message);
             pauseScreen();
@@ -89,7 +89,7 @@ Music AdminUI::getNewMusicDetails() {
 
     // Get artist name with validation
     do {
-        std::tie(isValid, artist, error) = InputValidator::validateString("Enter artist: ");
+        std::tie(isValid, artist, error) = InputValidator::validateString("\tEnter artist: ");
         if (!isValid) {
             printMessage(error.message);
             pauseScreen();
@@ -99,7 +99,7 @@ Music AdminUI::getNewMusicDetails() {
 
     // Get genre with validation
     do {
-        std::tie(isValid, genre, error) = InputValidator::validateString("Enter genre: ");
+        std::tie(isValid, genre, error) = InputValidator::validateString("\tEnter genre: ");
         if (!isValid) {
             printMessage(error.message);
             pauseScreen();
@@ -109,7 +109,7 @@ Music AdminUI::getNewMusicDetails() {
 
     // Get price with validation (must be non-negative)
     do {
-        std::tie(isValid, price, error) = InputValidator::validateFloat("Enter price: ", 0.0F);
+        std::tie(isValid, price, error) = InputValidator::validateFloat("\tEnter price: ", 0.0F);
         if (!isValid) {
             printMessage(error.message);
             pauseScreen();
@@ -119,7 +119,7 @@ Music AdminUI::getNewMusicDetails() {
 
     // Get quantity with validation (must be non-negative)
     do {
-        std::tie(isValid, quantity, error) = InputValidator::validateInt("Enter quantity: ", 0);
+        std::tie(isValid, quantity, error) = InputValidator::validateInt("\tEnter quantity: ", 0);
         if (!isValid) {
             printMessage(error.message);
             pauseScreen();

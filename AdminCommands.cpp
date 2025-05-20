@@ -8,6 +8,7 @@
 #include "utils.h"
 #include "InputValidator.h"
 #include "Registry.h"
+#include "ConsoleUI.h"
 #include <memory>
 #include <conio.h>
 
@@ -20,7 +21,9 @@ std::string ViewMusicListCommand::getName() const {
 
 bool ViewMusicListCommand::execute() {
     clearScreen();
-    printHeader("MUSIC LIST");
+    ConsoleUI::printFrame(0, 0, 120, 30);
+    string header = "MUSIC LIST";
+    printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
 
     vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
     if (items.empty()) {
@@ -41,9 +44,11 @@ std::string AddNewItemsCommand::getName() const {
 }
 
 bool AddNewItemsCommand::execute() {
+    clearScreen();
+    ConsoleUI::printFrame(0, 0, 120, 30); 
     while (true) {
-        clearScreen();
-        printHeader("ADD NEW ITEMS");
+        string header = "ADD NEW ITEMS";
+        printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
 
         Music newItem = AdminUI::getNewMusicDetails();
         
@@ -76,9 +81,11 @@ bool RemoveItemsCommand::execute() {
     bool isValid;
     Error error;
 
+    clearScreen();
+    ConsoleUI::printFrame(0, 0, 120, 30); 
     while (true) {
-        clearScreen();
-        printHeader("REMOVE ITEMS");
+        string header = "REMOVE ITEMS";
+        printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
 
         // Get all items from the repository
         vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
@@ -105,7 +112,7 @@ bool RemoveItemsCommand::execute() {
         printDashLine();
         items = Registry::getSingleton<MusicService>()->getAllMusic();
         if (items.empty()) {
-            printMessage("No items left in inventory!");
+            printMessage("tNo items left in inventory!");
             pauseScreen();
             break;
         }
@@ -129,9 +136,11 @@ bool UpdatePriceCommand::execute() {
     bool isValid;
     Error error;
 
+    clearScreen();
+    ConsoleUI::printFrame(0, 0, 120, 30); 
     while (true) {
-        clearScreen();
-        printHeader("UPDATE PRICE ITEMS");
+        string header = "UPDATE PRICE";
+        printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
 
         vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
         AdminUI::displayMusicList(items);
@@ -139,7 +148,7 @@ bool UpdatePriceCommand::execute() {
         // Get ID of item to update with validation
         int id;
         do {
-            tie(isValid, id, error) = InputValidator::validateInt("Enter item ID: ", 1, items.size());
+            tie(isValid, id, error) = InputValidator::validateInt("tEnter item ID: ", 1, items.size());
             if (!isValid) {
                 printMessage(error.message);
                 sleepScreen();
@@ -185,7 +194,9 @@ std::string ViewUsersCommand::getName() const {
 
 bool ViewUsersCommand::execute() {
     clearScreen();
-    printHeader("USER LIST");
+    ConsoleUI::printFrame(0, 0, 120, 30); 
+    string header = "USER LIST";
+    printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
 
     vector<shared_ptr<User>> users = Registry::getSingleton<UserService>()->getAllUsers();
     if (users.empty()) {
@@ -207,7 +218,9 @@ std::string ViewAllPurchaseHistoriesCommand::getName() const {
 
 bool ViewAllPurchaseHistoriesCommand::execute() {
     clearScreen();
-    printHeader("CUSTOMER PURCHASE HISTORY");
+    ConsoleUI::printFrame(0, 0, 120, 30); 
+    string header = "PURCHASE HISTORY";
+    printHeader(header, (120 - header.length()*2) / 2 - 30, 2);
 
     vector<shared_ptr<User>> users = Registry::getSingleton<UserService>()->getAllUsers();
     vector<Order> orders = Registry::getSingleton<OrderService>()->getAllOrders();
@@ -252,7 +265,10 @@ bool DeleteUserCommand::execute() {
     vector<shared_ptr<User>> users = Registry::getSingleton<UserService>()->getAllUsers();
 
     clearScreen();
-    printHeader("DELETE USER");
+    ConsoleUI::printFrame(0, 0, 120, 30);
+
+    string header = "DELETE CUSTOMERS";
+    printHeader(header, (120 - header.length()*2) / 2 - 30, 2);
     if (users.empty()) {
         printMessage("No users found!");
         pauseScreen();
@@ -319,7 +335,9 @@ std::string ViewSalesStatisticsCommand::getName() const {
 
 bool ViewSalesStatisticsCommand::execute() {
     clearScreen();
-    printHeader("SALE STATISTICS");
+    ConsoleUI::printFrame(0, 0, 120, 30);
+    string header = "SALE STATISTICS";
+    printHeader(header, (120 - header.length()*2) / 2 - 30, 1);
     
     vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
     vector<Order> orders = Registry::getSingleton<OrderService>()->getAllOrders();
