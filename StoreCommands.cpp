@@ -14,14 +14,14 @@ using std::tie;
 SignUpCommand::SignUpCommand(shared_ptr<User>& user) : currentUser(user) {}
 
 string SignUpCommand::getName() const {
-    return "Sign up";
+    return "SIGN UP";
 }
 
 bool SignUpCommand::execute() {
     bool isValid;
     Error error;
     clearScreen();
-    ConsoleUI::printFrame(0, 0, 120, 30);
+    printFrame(0, 0, 120, 30);
     
     string header = "SIGN UP";
     printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
@@ -86,7 +86,7 @@ bool SignUpCommand::execute() {
 LoginCommand::LoginCommand(shared_ptr<User>& user) : currentUser(user) {}
 
 string LoginCommand::getName() const {
-    return "Login";
+    return "LOGIN";
 }
 
 bool LoginCommand::execute() {
@@ -94,7 +94,7 @@ bool LoginCommand::execute() {
     Error error;
     
     clearScreen();
-    ConsoleUI::printFrame(0, 0, 120, 30);
+    printFrame(0, 0, 120, 30);
     string header = "LOGIN";
     printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
     string username, password;
@@ -148,7 +148,7 @@ bool LoginCommand::execute() {
 
 // ExitCommand implementation
 string ExitCommand::getName() const {
-    return "Exit";
+    return "EXIT";
 }
 
 bool ExitCommand::execute() {

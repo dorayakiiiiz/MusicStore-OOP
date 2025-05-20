@@ -12,11 +12,9 @@ public:
     static void gotoXY(short x, short y);
 
     static void setColor(WORD color);
-
-    static void printFrame(int x, int y, int width, int height);
-
+    
     // Menu điều hướng bằng W/S/Enter
-    static int selectMenu(const std::vector<std::string>& options, const std::string& header = "MENU", int x = 6, int y = 6);
+    static int selectMenu(const std::vector<std::string>& options, const std::string& header = "MENU");
 };
 
 #endif // _CONSOLEUI_H_

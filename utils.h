@@ -41,6 +41,25 @@ void clearScreen();
  */
 void printRepeatMessage();
 
+void printFrame(int x, int y, int width, int height);
+/**
+ * @brief Prints a frame around a specified area
+ * @param x The x-coordinate of the top-left corner
+ * @param y The y-coordinate of the top-left corner
+ * @param width The width of the frame
+ * @param height The height of the frame
+ */
+
+void printFrameOptions(int x, int y, int width, int select);
+/**
+ * @brief Prints a frame around a specified area with options
+ * @param x The x-coordinate of the top-left corner
+ * @param y The y-coordinate of the top-left corner
+ * @param width The width of the frame
+ * @param select The number of options to display
+ */
+
+ void printInstructions(const string& instructions, int x, int y);
 
 /**
  * @brief Pauses execution until user presses a key
@@ -66,5 +85,10 @@ void sleepScreen();
  */
 string toLower(const string& str);
 
-
+int getMaxOptionsLength(const vector<string>& options);
+/**
+ * @brief Prints a string with a specified color
+ * @param str The string to print
+ * @param color The color code for the text
+ */
 #endif

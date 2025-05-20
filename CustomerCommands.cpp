@@ -28,7 +28,7 @@ string ViewPurchaseHistoryCommand::getName() const {
 
 bool ViewPurchaseHistoryCommand::execute() {
     clearScreen();
-    ConsoleUI::printFrame(0, 0, 120, 30);
+    printFrame(0, 0, 120, 30);
 
     Customer* customer = dynamic_cast<Customer*>(currentUser.get());
     vector<Order> orders = Registry::getSingleton<OrderService>()->getAllOrders();
@@ -52,7 +52,7 @@ std::string ViewMusicCommand::getName() const {
 
 bool ViewMusicCommand::execute() {
     clearScreen();
-    ConsoleUI::printFrame(0, 0, 120, 30);
+    printFrame(0, 0, 120, 30);
 
     string header = "MUSIC LIST";
     printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
@@ -75,7 +75,7 @@ bool SearchMusicCommand::execute() {
     vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
 
     clearScreen();
-    ConsoleUI::printFrame(0, 0, 120, 30);
+    printFrame(0, 0, 120, 30);
     while (true) {
         string header = "SEARCH MUSIC";
         printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
@@ -135,9 +135,9 @@ string AddToCartCommand::getName() const {
 
 bool AddToCartCommand::execute() {
     clearScreen();
-    ConsoleUI::printFrame(0, 0, 120, 30);
+    printFrame(0, 0, 120, 30);
     string header = "ADD TO CART";
-    printHeader(header, (120 - header.length()*2) / 2 - 30, 2);
+    printHeader(header, (120 - header.length()*2) / 2 - 30, 1);
 
     // Get all music items from the repository
     vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
@@ -203,9 +203,9 @@ std::string RemoveFromCartCommand::getName() const {
 
 bool RemoveFromCartCommand::execute() {
     clearScreen();
-    ConsoleUI::printFrame(0, 0, 120, 30);
+    printFrame(0, 0, 120, 30);
     string header = "REMOVE ITEMS FROM CART";
-    printHeader(header, (120 - header.length()*2) / 2 - 30, 2);
+    printHeader(header, (120 - header.length()*2) / 2 - 30, 1);
 
     // Get all music items from the repository
     vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
@@ -268,7 +268,7 @@ std::string CheckoutCommand::getName() const {
 
 bool CheckoutCommand::execute() {
     clearScreen();
-    ConsoleUI::printFrame(0, 0, 120, 30);
+    printFrame(0, 0, 120, 30);
     string header = "CHECK OUT";
     printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
 
