@@ -24,6 +24,7 @@ void printHeader(const string&);
  */
 void printMessage(const string&);
 
+
 void printASCII(const string&, int, int);
 /**
  * @brief Prints a horizontal line of dashes

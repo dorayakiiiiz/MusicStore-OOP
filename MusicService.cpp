@@ -47,7 +47,7 @@ bool MusicService::removeMusicItem(int id) {
 // Update the price of a music item by ID
 bool MusicService::updateMusicItemPrice(int id, float price) {
     // Validate ID
-    if (id < 0 || id >= getAllMusic().size()) {
+    if (id <= 0 || id > getAllMusic().size()) {
         return false;
     }
     // Update the item's price

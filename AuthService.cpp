@@ -31,7 +31,7 @@ bool AuthService::registerUser(const string& username, const string& password, R
     }
     // Save the new user to the repository
     bool success = Registry::getSingleton<IUserRepository>()->add(newUser);
-    return true;
+    return success;
 }
 
 // Authenticate a user with username and password
