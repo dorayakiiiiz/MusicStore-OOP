@@ -1,14 +1,15 @@
-## Đồ án môn học: Music Store Management - Hệ thống quản lí cửa hàng âm nhạc
+## ĐỒ ÁN MÔN HỌC
+## MUSIC STORE MANAGEMENT - HỆ THỐNG QUẢN LÍ CỬA HÀNG ÂM NHẠC
 
+### Học phần: Phương pháp lập trình hướng đối tượng
 ### Lớp: 23CTT3
-### Môn: Phương pháp lập trình hướng đối tượngtượng
 ### GVHD: Trần Duy Quang
 
-## Thành viên nhóm
+## THÀNH VIÊN NHÓM
 - 23120197 - Trà Văn Sỹ (Nhóm trưởng)
 - 23120209 - Lê Hoàng Nhật Anh
 
-## Các công việc mà từng thành viên đã thực hiện cho đến hiện tại
+## CÁC CÔNG VIỆC MÀ TỪNG THÀNH VIÊN ĐÃ THỰC HIỆN
 ### Trà Văn Sỹ
 - Xây dựng các class Model (Music, Order, User,...)
 
@@ -27,27 +28,28 @@
 
 - Quay video demo
 
-## Tỉ lệ đóng góp
+## TỈ LỆ ĐÓNG GÓP
 - Trà Văn Sỹ: 100%
 - Lê Hoàng Nhật Anh: 100%
 
-## Tỉ lệ điểm: Chia đều
+## TỈ LỆ ĐIỂM
+Chia đều
 
-## Các mô tả cụ thể cho các yêu cầu trong phần "Cách thức đánh giá"
+## MÔ TẢ CỤ THỂ CÁC YÊU CẦU TRONG PHẦN "CÁCH THỨC ĐÁNH GIÁ"
 
-### Teamwork
+### TEAMWORK
 [Báo cáo tiến độ hàng tuần](https://drive.google.com/file/d/1j_GBYkdf_Ny6QiK6zzkkofdpHIZHNRND/view?usp=sharing)
 
 ### UI/UX
-### Các chức năng đã có của chương trình ban đầu:
+### CÁC CHỨC NĂNG ĐÃ CÓ TRONG CHƯƠNG TRÌNH BAN ĐẦU
 - Thêm, xóa, chỉnh sửa các bài hát trong kho.
 - Tìm nhạc theo các tiêu chí như tên, thể loại, ca sĩ...
 - Tạo đơn hàng mua/bán các bài hát.
 - Hiển thị số bài hát trong kho và các bài hát đã bán hết.  
 [Mã nguồn tham khảo](https://www.codewithc.com/music-store-management-system-c-program-with-mysql-database/)
 
-### Các chức năng mà nhóm đã cải tiến thêm
-Nhóm đã phân tách ra 2 vai trò riêng biệt với 2 loại đối tượng người dùng riêng so với chương trình gốc chỉ đơn giản là mua/bán trên chung 1 giao diện
+### CÁC CHỨC NĂNG ĐƯỢC CẢI TIẾN THÊM
+Chương trình được phân tách ra 2 vai trò riêng biệt với 2 loại đối tượng người dùng riêng so với chương trình gốc chỉ đơn giản là mua/bán trên chung 1 giao diện
 
 #### Tính năng dành cho người dùng (Customer)
 - Đăng ký tài khoản mới: Người dùng có thể tạo tài khoản để sử dụng dịch vụ
@@ -69,37 +71,36 @@ Nhóm đã phân tách ra 2 vai trò riêng biệt với 2 loại đối tượn
 - Thống kê doanh thu: Xem báo cáo doanh thu và số lượng bài hát đã bán
 - Đăng xuất: Kết thúc phiên làm việc
 
-#### Database: Áp dụng load/save data từ database với SQL Server thay vì đọc file thông thường
+#### Database: Truy xuất và lưu trữ dữ liệu từ database với SQL Server thay vì đọc file thông thường
 
-#### Hướng dẫn biên dịch chương trình
-    + Nhập lệnh sau ở terminal:   
-    ```g++ main.cpp AdminController.cpp AdminUI.cpp AuthService.cpp Cart.cpp CartService.cpp ControllerFactory.cpp CustomerController.cpp CustomerUI.cpp Discount.cpp DiscountService.cpp DiscountStrategy.cpp InputValidator.cpp Music.cpp MusicService.cpp Order.cpp OrderService.cpp ReadData.cpp SaveData.cpp Search.cpp SearchFactory.cpp StoreApp.cpp User.cpp UserService.cpp utils.cpp DatabaseConnector.cpp -lole32 -lodbc32 -o out/program```  
-    để biên dịch chương trình
-    + Nếu đã điều chỉnh trong .vscode/task.json thì chỉ cần gõ lệnh sau để biên dịch:
+### HƯỚNG DẪN BIÊN DỊCH CHƯƠNG TRÌNH
+- Nhập lệnh sau ở terminal:  ```g++ ...```  để biên dịch chương trình
+
+- Nếu đã điều chỉnh trong .vscode/task.json thì chỉ cần gõ lệnh sau để biên dịch:
     ```g++ *.cpp -lole32 -lodbc32 -o out/program```
 
-    + Nhập lệnh:
-    ```./out/program``` để chạy chương trình.
+- Nhập lệnh: ```./out/program``` để chạy chương trình.
 
-### Kiến trúc phần mềm được áp dụng
-Dự án được xây dựng theo mô hình kiến trúc nhiều lớp, có thể xem là biến thể của MVC (Model - View - Controller) kết hợp với Service Layer và Repository Pattern nhằm phân tách rõ ràng các thành phần của ứng dụng:
+### KIẾN TRÚC PHẦN MỀM
+Dự án được xây dựng theo mô hình kiến trúc nhiều lớp, có thể xem là biến thể của MVC (Model - View - Controller) kết hợp với Service Layer và Repository Layer nhằm phân tách rõ ràng các thành phần của ứng dụng
 
-#### Model: Đại diện cho các thực thể dữ liệu của ứng dụng
+#### Model
 - Các class như Music, Order, User, Voucher, Discount, Cart đại diện cho các đối tượng dữ liệu
 
-#### View: Xử lí giao diện người dùng
+#### View
 - Được tách biệt thành các class UI riêng biệt (AdminUI, CustomerUI dựa trên console-based)
 - Hiển thị thông tin và tương tác với người dùng mà không chứa logic nghiệp vụ
 
-#### Controller: Xử lý các tương tác từ người dùng
+#### Controller
 - Các class Controller riêng biệt cho từng vai trò (AdminController, CustomerController), sử dụng Command Pattern để xử lí các action cho Menu chương trình.
 
-#### Service Layer: Chứa bussiness logic
+#### Service Layer
 - Các class Music Service, UserService, OrderService, CartService, DiscountService, AuthService... chứa từng bussiness logic cụ thể cho các loại đối tượng khác nhau ở tầng Model.
 
-#### Data Access Layer: Các lớp Repository (SqlMusicRepository, SqlUserRepository...) chịu trách nhiệm truy xuất dữ liệu cho từng loại model.
+#### Data Access Layer
+- Các lớp Repository (SqlMusicRepository, SqlUserRepository...) chịu trách nhiệm truy xuất dữ liệu cho từng loại model.
 
-### Nguyên lí OOP được áp dụng
+### NGUYÊN LÍ OOP ĐƯỢC ÁP DỤNG
 #### Tính đóng gói (Encapsulation)
 - Các thuộc tính của class Model như Music, User, Order được khai báo private.
 - Cung cấp các phương thức getter/setter để truy cập và thay đổi dữ liệu khi cần.
@@ -110,7 +111,7 @@ Dự án được xây dựng theo mô hình kiến trúc nhiều lớp, có th�
 #### Tính trừu tượng (Abstraction)
 - Các interface và lớp trừu tượng giúp định nghĩa các "hợp đồng" rõ ràng, che giấu chi tiết triển khai phức tạp.
 
-### Tuân thủ các nguyên tắc SOLID
+### TUÂN THỦ CÁC NGUYÊN TẮC SOLID
 #### Single Responsibility Principle (SRP)
 Mỗi class có một trách nhiệm duy nhất
 - Các lớp Service (MusicService, UserService, OrderService, CartService,DiscountService, AuthService) chịu trách nhiệm cho các logic nghiệp vụ cụ thể.
@@ -126,12 +127,12 @@ Code được thiết kế để mở rộng mà không cần sửa đổi
 Các lớp con có thể thay thế lớp cha của chúng.
 - Ví dụ: PercentageDiscountStrategy và FixedDiscountStrategy có thể thay thế cho DiscountStrategy, hay AdminController và CustomerController có thể được sử dụng ở bất cứ đâu gọi IController.
 #### Interface Segregation Principle (ISP)
-Sử dụng nhiều interface nhỏ, chuyên biệt thay vì interface lớn, phức tạp (Interface ISearch, IController, IRepository, Command) phục vụ cho các mục đích cụ thể
+- Sử dụng nhiều interface nhỏ, chuyên biệt thay vì interface lớn, phức tạp (Interface ISearch, IController, IRepository, Command) phục vụ cho các mục đích cụ thể
 #### Dependency Inversion Principle (DIP)
 - Các module cấp cao không phụ thuộc vào module cấp thấp mà phụ thuộc vào abstraction
 - Ví dụ: sử dụng dependency injection trong các constructor của Controller và Service, lớp Discount phụ thuộc vào interface DiscountStrategy thay vì các lớp cụ thể
 
-### Các Design Pattern được sử dụng
+### DESIGN PATTERN ĐƯỢC SỬ DỤNG
 #### Factory Pattern
 - ControllerFactory: Tạo AdminController hoặc CustomerController dựa trên Role.
 - SearchFactory: Tạo các chiến lược tìm kiếm (NameSearch, ArtistSearch GenreSearch).
@@ -139,9 +140,10 @@ Sử dụng nhiều interface nhỏ, chuyên biệt thay vì interface lớn, ph
 - ISearch và các lớp con (NameSearch, ArtistSearch, GenreSearch): Cho phép thay đổi thuật toán tìm kiếm một cách linh hoạt.
 - DiscountStrategy và các lớp con: Cho phép áp dụng các loại giảm giá khác nhau.
 #### Command Pattern
-CommandInvoker và các lớp kế thừa từ Command (ViewMusicListCommand, LoginCommand, v.v.) giúp đóng gói các hành động/yêu cầu từ menu chương trình thành đối tượng, tách rời người gọi yêu cầu khỏi người thực hiện yêu cầu. Điều này làm cho AdminController và CustomerController (2 class xử lí điều phối các hoạt động trên menu chương trình) trở nên gọn gàng hơn.
+- CommandInvoker và các lớp kế thừa từ Command (ViewMusicListCommand, LoginCommand, v.v.) giúp đóng gói các hành động/yêu cầu từ menu chương trình thành đối tượng, tách rời người gọi yêu cầu khỏi người thực hiện yêu cầu. 
+- Điều này làm cho AdminController và CustomerController (2 class xử lí điều phối các hoạt động trên menu chương trình) trở nên gọn gàng hơn.
 #### Repository Pattern
-Các interface IRepository, IMusicRepository, IUserRepository, IOrderRepository, IDiscountRepository và các triển khai SQL (SqlMusicRepository,...) giúp tách biệt logic truy cập dữ liệu khỏi phần còn lại của ứng dụng.
+- Các interface IRepository, IMusicRepository, IUserRepository, IOrderRepository, IDiscountRepository và các triển khai SQL (SqlMusicRepository,...) giúp tách biệt logic truy cập dữ liệu khỏi phần còn lại của ứng dụng.
 #### Singleton Pattern
 - Registry hoạt động như một Service Locator, cung cấp quyền truy cập toàn cục vào các service và repository.
 - DatabaseConnector kết nối đến cơ sở dữ liệu SQLServer cũng được áp dụng singleton khởi tạo 1 kết nối xuyên suốt chương trình.
