@@ -18,6 +18,7 @@ public:
 
     // Thiết lập toàn bộ console: kích thước, buffer, khóa resize, ẩn con trỏ
     static void FixConsoleWindow(SHORT width = 120, SHORT height = 30);
+
 };
 
 #endif // _CONSOLECONFIG_H_
