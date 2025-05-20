@@ -21,11 +21,13 @@
 #include "SQLMusicRepository.h"
 #include "SQLUserRepository.h"
 #include "SQLOrderRepository.h"
+#include "SQLSalesRecordRepository.h"
 
 #include "MusicService.h"
 #include "UserService.h"
 #include "OrderService.h"
 #include "DiscountService.h"
+#include "SalesRecordService.h"
 #include "CartService.h"
 #include "AuthService.h"
 
@@ -43,6 +45,7 @@ void StoreApp::initializeServices() {
     auto discountService = make_shared<DiscountService>();
     auto cartService = make_shared<CartService>();
     auto authService = make_shared<AuthService>();
+    auto salesRecordService = make_shared<SalesRecordService>();
 
     Registry::addSingleton(musicService);
     Registry::addSingleton(userService);
@@ -50,6 +53,7 @@ void StoreApp::initializeServices() {
     Registry::addSingleton(discountService);
     Registry::addSingleton(cartService);
     Registry::addSingleton(authService);
+    Registry::addSingleton(salesRecordService);
 }
 
 // Initialize the repositories
@@ -59,11 +63,13 @@ void StoreApp::initializeRepositories() {
     shared_ptr<IUserRepository> userRepo = make_shared<SqlUserRepository>();
     shared_ptr<IOrderRepository> orderRepo = make_shared<SqlOrderRepository>();
     shared_ptr<IDiscountRepository> discountRepo = make_shared<SqlDiscountRepository>();
+    shared_ptr<ISalesRecordRepository> salesRecordRepo = make_shared<SqlSalesRecordRepository>();
 
     Registry::addSingleton(musicRepo);
     Registry::addSingleton(userRepo);
     Registry::addSingleton(orderRepo);
     Registry::addSingleton(discountRepo);
+    Registry::addSingleton(salesRecordRepo);
 }
 
 // Constructor - initializes the StoreApp

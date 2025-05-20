@@ -15,6 +15,7 @@
 #include "Music.h"
 #include "User.h"
 #include "Order.h"
+#include "SalesRecord.h"
 #include "Discount.h"
 #include <memory>
 using std::shared_ptr, std::pair;
@@ -55,7 +56,7 @@ public:
      * @brief Displays sales statistics for items sold in the store
      * @param itemStats Vector of pairs containing item name and sales statistics (quantity and revenue)
      */
-    static void displaySaleStatistics(vector<pair<string, pair<int, float>>>& itemStats);
+    static void displaySaleStatistics(vector<SalesRecord> salesRecords, float totalRevenue);
     
     /**
      * @brief Collects information from the admin to create a new music item

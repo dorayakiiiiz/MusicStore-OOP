@@ -5,6 +5,7 @@
 #include "DiscountService.h"
 #include "MusicService.h"
 #include "CartService.h"
+#include "SalesRecordService.h"
 #include "OrderService.h"
 #include "utils.h"
 #include "InputValidator.h"
@@ -23,7 +24,7 @@ using std::vector, std::string, std::shared_ptr, std::make_shared, std::pair, st
 ViewPurchaseHistoryCommand::ViewPurchaseHistoryCommand(shared_ptr<User>& user) : currentUser(user) {}
 
 string ViewPurchaseHistoryCommand::getName() const {
-    return "See your purchased history";
+    return "SEE PURCHASE HISTORY";
 }
 
 bool ViewPurchaseHistoryCommand::execute() {
@@ -34,7 +35,7 @@ bool ViewPurchaseHistoryCommand::execute() {
     vector<Order> orders = Registry::getSingleton<OrderService>()->getAllOrders();
 
     // Get order history for the current customer
-    vector<Order> orderHistory = Registry::getSingleton<OrderService>()->getUserOrders(orders, customer->getUsername());
+    vector<Order> orderHistory = Registry::getSingleton<OrderService>()->getUserOrders(customer->getUsername());
     
     string header = "PURCHASE HISTORY";
     printHeader(header, (120 - header.length()*2) / 2 - 40, 2);
@@ -47,7 +48,7 @@ bool ViewPurchaseHistoryCommand::execute() {
 
 // ViewMusicCommand implementation
 std::string ViewMusicCommand::getName() const {
-    return "See music list";
+    return "SEE MUSIC LIST";
 }
 
 bool ViewMusicCommand::execute() {
@@ -67,7 +68,7 @@ bool ViewMusicCommand::execute() {
 
 // SearchMusicCommand implementation
 string SearchMusicCommand::getName() const {
-    return "Find item";
+    return "FIND ITEM";
 }
 
 bool SearchMusicCommand::execute() {
@@ -130,7 +131,7 @@ bool SearchMusicCommand::execute() {
 AddToCartCommand::AddToCartCommand(Cart& c) : cart(c) {}
 
 string AddToCartCommand::getName() const {
-    return "Add to cart";
+    return "ADD TO CART";
 }
 
 bool AddToCartCommand::execute() {
@@ -198,7 +199,7 @@ bool AddToCartCommand::execute() {
 RemoveFromCartCommand::RemoveFromCartCommand(Cart& c) : cart(c) {}
 
 std::string RemoveFromCartCommand::getName() const {
-    return "Remove items from cart";
+    return "REMOVE ITEMS FROM CART";
 }
 
 bool RemoveFromCartCommand::execute() {
@@ -263,7 +264,7 @@ bool RemoveFromCartCommand::execute() {
 CheckoutCommand::CheckoutCommand(Cart& c, shared_ptr<User>& user) : cart(c), currentUser(user) {}
 
 std::string CheckoutCommand::getName() const {
-    return "Check out";
+    return "CHECK OUT";
 }
 
 bool CheckoutCommand::execute() {
@@ -371,6 +372,10 @@ bool CheckoutCommand::execute() {
         }
 
         CustomerUI::displayOrderSuccessMessage();
+
+        // add the items purchased to the sales record
+        Registry::getSingleton<SalesRecordService>()->addToRecord(cart);
+
         // delete the item that was sold out from the inventory
         Registry::getSingleton<MusicService>()->removeSoldOutItems();
     }
@@ -384,7 +389,7 @@ bool CheckoutCommand::execute() {
 CustomerLogoutCommand::CustomerLogoutCommand(Cart& c, shared_ptr<User>& user) : cart(c), currentUser(user) {}
 
 std::string CustomerLogoutCommand::getName() const {
-    return "Log out";
+    return "LOG OUT";
 }
 
 bool CustomerLogoutCommand::execute() {

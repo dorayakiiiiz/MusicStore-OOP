@@ -2,9 +2,11 @@
 #include "AdminUI.h"
 #include "Music.h"
 #include "User.h"
+#include "SalesRecord.h"
 #include "MusicService.h"
 #include "UserService.h"
 #include "OrderService.h"
+#include "SalesRecordService.h"
 #include "utils.h"
 #include "InputValidator.h"
 #include "Registry.h"
@@ -16,7 +18,7 @@ using std::vector, std::string, std::shared_ptr, std::make_shared, std::tie, std
 
 // ViewMusicListCommand implementation
 std::string ViewMusicListCommand::getName() const {
-    return "See music list";
+    return "SEE MUSIC LIST";
 }
 
 bool ViewMusicListCommand::execute() {
@@ -40,7 +42,7 @@ bool ViewMusicListCommand::execute() {
 
 // AddNewItemsCommand implementation
 std::string AddNewItemsCommand::getName() const {
-    return "Add new items";
+    return "ADD NEW ITEMS";
 }
 
 bool AddNewItemsCommand::execute() {
@@ -74,7 +76,7 @@ bool AddNewItemsCommand::execute() {
 
 // RemoveItemsCommand implementation
 std::string RemoveItemsCommand::getName() const {
-    return "Remove items";
+    return "REMOVE ITEMS";
 }
 
 bool RemoveItemsCommand::execute() {
@@ -129,7 +131,7 @@ bool RemoveItemsCommand::execute() {
 
 // UpdatePriceCommand implementation
 std::string UpdatePriceCommand::getName() const {
-    return "Update price";
+    return "UPDATE PRICE";
 }
 
 bool UpdatePriceCommand::execute() {
@@ -148,7 +150,7 @@ bool UpdatePriceCommand::execute() {
         // Get ID of item to update with validation
         int id;
         do {
-            tie(isValid, id, error) = InputValidator::validateInt("tEnter item ID: ", 1, items.size());
+            tie(isValid, id, error) = InputValidator::validateInt("Enter item ID: ", 1, items.size());
             if (!isValid) {
                 printMessage(error.message);
                 sleepScreen();
@@ -189,7 +191,7 @@ bool UpdatePriceCommand::execute() {
 
 // ViewUsersCommand implementation
 std::string ViewUsersCommand::getName() const {
-    return "View users";
+    return "VIEW USERS";
 }
 
 bool ViewUsersCommand::execute() {
@@ -213,7 +215,7 @@ bool ViewUsersCommand::execute() {
 
 // ViewAllPurchaseHistoriesCommand implementation (renamed from ViewPurchaseHistoryCommand)
 std::string ViewAllPurchaseHistoriesCommand::getName() const {
-    return "View purchase history";
+    return "VIEW PURCHASE HISTORY";
 }
 
 bool ViewAllPurchaseHistoriesCommand::execute() {
@@ -222,29 +224,36 @@ bool ViewAllPurchaseHistoriesCommand::execute() {
     string header = "PURCHASE HISTORY";
     printHeader(header, (120 - header.length()*2) / 2 - 30, 1);
 
+    // get all users from the repository
     vector<shared_ptr<User>> users = Registry::getSingleton<UserService>()->getAllUsers();
-    vector<Order> orders = Registry::getSingleton<OrderService>()->getAllOrders();
 
-    // Display purchase history for each customer
-    for (const auto& user : users) {
-        // Skip admin users
-        if (Role::ADMIN == user->getRole()) {
+    // print the list of customers
+    vector<shared_ptr<User>> customer = Registry::getSingleton<UserService>()->getAllCustomers();
+    AdminUI::displayUserList(customer);
+
+    int id;
+    bool isValid;
+    Error error;
+    do {
+        tie(isValid, id, error) = InputValidator::validateInt("Enter customer ID: ", 1, customer.size());
+        if (!isValid) {
+            printMessage(error.message);
+            sleepScreen();
             continue;
         }
+    } while (!isValid);
 
-        printMessage("Customer: " + user->getUsername());
-        vector<Order> userOrders = Registry::getSingleton<OrderService>()->getUserPurchaseHistory(orders, user->getUsername());
-        
-        if (userOrders.empty()) {
-            printMessage("No purchase history found for this customer.");
-        } else {
-            int idx = 1;
-            for (const auto& order : userOrders) {
-                AdminUI::displayPurchasedHistory(order, idx++);
-                printDashLine();
-            }
+    // Get the selected customer
+    shared_ptr<User> selectedCustomer = customer[id - 1];
+    printMessage("Customer: " + selectedCustomer->getUsername());
+
+    vector<Order> userOrders = Registry::getSingleton<OrderService>()->getUserOrders(selectedCustomer->getUsername());
+    if (userOrders.empty()) {
+        printMessage("No purchase history found for this customer.");
+    } else {
+        for (int i = 0; i < userOrders.size(); ++i) {
+            AdminUI::displayPurchasedHistory(userOrders[i], i + 1);
         }
-        printDashLine();                
     }
     
     pauseScreen();
@@ -255,7 +264,7 @@ bool ViewAllPurchaseHistoriesCommand::execute() {
 DeleteUserCommand::DeleteUserCommand(shared_ptr<User>& user) : currentUser(user) {}
 
 std::string DeleteUserCommand::getName() const {
-    return "Delete customers";
+    return "DELETE USERS";
 }
 
 bool DeleteUserCommand::execute() {
@@ -267,8 +276,9 @@ bool DeleteUserCommand::execute() {
     clearScreen();
     printFrame(0, 0, 120, 30);
 
-    string header = "DELETE CUSTOMERS";
-    printHeader(header, (120 - header.length()*2) / 2 - 30, 1);
+    string header = "DELETE USERS";
+    printHeader(header, (120 - header.length()*2) / 2 - 20, 2);
+
     if (users.empty()) {
         printMessage("No users found!");
         pauseScreen();
@@ -280,9 +290,9 @@ bool DeleteUserCommand::execute() {
         AdminUI::displayUserList(users);
         
         // Get username to delete
-        string del;
+        int id;
         do {
-            tie(isValid, del, error) = InputValidator::validateString("Enter username to delete: ");
+            tie(isValid, id, error) = InputValidator::validateInt("Enter user's id to delete: ");
             if (!isValid) {
                 printMessage(error.message);
                 sleepScreen();
@@ -291,10 +301,11 @@ bool DeleteUserCommand::execute() {
         } while (!isValid);
 
         // Check if admin is deleting their own account
-        bool isCurrentUser = (currentUser->getUsername() == del);
+        shared_ptr<User> delUser = Registry::getSingleton<UserService>()->getUserById(id);
+        bool isCurrentUser = (currentUser->getUsername() == delUser->getUsername());
         
         // Delete the selected user
-        bool success = Registry::getSingleton<UserService>()->deleteUser(del);
+        bool success = Registry::getSingleton<UserService>()->deleteUserById(id);
         if (success) {
             printMessage("User deleted successfully!");
 
@@ -308,6 +319,9 @@ bool DeleteUserCommand::execute() {
         } else {
             printMessage("User not found!");
         }
+
+        // delete the order history of the deleted user
+        Registry::getSingleton<OrderService>()->deleteOrder(delUser->getUsername());
 
         users = Registry::getSingleton<UserService>()->getAllUsers();
         if (users.empty()) {
@@ -330,7 +344,7 @@ bool DeleteUserCommand::execute() {
 
 // ViewSalesStatisticsCommand implementation
 std::string ViewSalesStatisticsCommand::getName() const {
-    return "View sales statistics";
+    return "VIEW SALES STATISTICS";
 }
 
 bool ViewSalesStatisticsCommand::execute() {
@@ -338,15 +352,11 @@ bool ViewSalesStatisticsCommand::execute() {
     printFrame(0, 0, 120, 30);
     string header = "SALE STATISTICS";
     printHeader(header, (120 - header.length()*2) / 2 - 30, 1);
-    
-    vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
-    vector<Order> orders = Registry::getSingleton<OrderService>()->getAllOrders();
 
-    // Generate sales statistics 
-    vector<pair<string, pair<int, float>>> salesStats = 
-        Registry::getSingleton<OrderService>()->generateSalesStatistics(orders, items);
-    
-    AdminUI::displaySaleStatistics(salesStats);
+    vector<SalesRecord> salesRecords = Registry::getSingleton<SalesRecordService>()->getAllSalesRecords();
+    float totalRevenue = Registry::getSingleton<SalesRecordService>()->getTotalRevenue();
+
+    AdminUI::displaySaleStatistics(salesRecords, totalRevenue);
     printDashLine();
     pauseScreen();
     return true;
@@ -356,7 +366,7 @@ bool ViewSalesStatisticsCommand::execute() {
 AdminLogoutCommand::AdminLogoutCommand(shared_ptr<User>& user) : currentUser(user) {}
 
 std::string AdminLogoutCommand::getName() const {
-    return "Log out";
+    return "LOG OUT";
 }
 
 bool AdminLogoutCommand::execute() {
