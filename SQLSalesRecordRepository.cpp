@@ -23,5 +23,10 @@ bool SqlSalesRecordRepository::add(const SalesRecord& record) {
     return true;
 }
 
+
+SalesRecord SqlSalesRecordRepository::getById(int id) {
+    SalesRecord record;
+    return record;
+}
 bool SqlSalesRecordRepository::updateById(int id, const SalesRecord& record) { return false; }
 bool SqlSalesRecordRepository::deleteById(int id) { return false; }

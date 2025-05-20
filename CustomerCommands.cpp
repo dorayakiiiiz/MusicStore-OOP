@@ -35,7 +35,7 @@ bool ViewPurchaseHistoryCommand::execute() {
     vector<Order> orders = Registry::getSingleton<OrderService>()->getAllOrders();
 
     // Get order history for the current customer
-    vector<Order> orderHistory = Registry::getSingleton<OrderService>()->getUserOrders(orders, customer->getUsername());
+    vector<Order> orderHistory = Registry::getSingleton<OrderService>()->getUserOrders(customer->getUsername());
     
     string header = "PURCHASE HISTORY";
     printHeader(header, (120 - header.length()*2) / 2 - 40, 2);

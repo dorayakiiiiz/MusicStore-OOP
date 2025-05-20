@@ -34,6 +34,14 @@ public:
     bool add(const SalesRecord& record) override;
 
     /**
+     * @brief Get a sales record by ID
+     *
+     * @param id The ID of the sales record
+     * @return SalesRecord The sales record
+     */
+    SalesRecord getById(int id) override;
+
+    /**
      * @brief Update an existing sales record
      *
      * @param id The ID of the sales record to update
