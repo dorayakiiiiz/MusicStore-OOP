@@ -28,7 +28,7 @@ int ConsoleUI::selectMenu(const std::vector<std::string>& options, const std::st
     string instructions = "Use W/S to navigate and Enter to select";
     int guideX = 70;
     int guideY = 24; // Dòng gần cuối nếu height = 30
-    int guideW = 5 + instructions.size();
+    int guideW = 4 + instructions.size();
     int guideH = 3;
     printFrame(guideX, guideY, guideW, guideH);
     printInstructions(instructions, guideX + 1, guideY + 1);
