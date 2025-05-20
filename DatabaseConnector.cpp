@@ -11,6 +11,7 @@
 // Initialize static members
 DatabaseConnector* DatabaseConnector::instance = nullptr;
 
+
 // handle errors that occur during database operations
 void ODBCErrorHandler::showError(SQLHANDLE handle, SQLSMALLINT type) {
     SQLCHAR sqlState[6], message[256];

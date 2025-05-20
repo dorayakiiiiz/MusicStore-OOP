@@ -34,8 +34,8 @@
 #include <iostream>
 #include <windows.h>
 
-// Constructor - initializes the StoreApp
-StoreApp::StoreApp() {
+// initialize the service
+void StoreApp::initializeServices() {
     // Initialize services and register them with the Registry
     auto musicService = make_shared<MusicService>();
     auto userService = make_shared<UserService>();
@@ -50,7 +50,10 @@ StoreApp::StoreApp() {
     Registry::addSingleton(discountService);
     Registry::addSingleton(cartService);
     Registry::addSingleton(authService);
+}
 
+// Initialize the repositories
+void StoreApp::initializeRepositories() {
     // Initialize repositories
     shared_ptr<IMusicRepository> musicRepo = make_shared<SqlMusicRepository>();
     shared_ptr<IUserRepository> userRepo = make_shared<SqlUserRepository>();
@@ -61,6 +64,13 @@ StoreApp::StoreApp() {
     Registry::addSingleton(userRepo);
     Registry::addSingleton(orderRepo);
     Registry::addSingleton(discountRepo);
+}
+
+// Constructor - initializes the StoreApp
+StoreApp::StoreApp() {
+    // Initialize services and repositories
+    initializeServices();
+    initializeRepositories();
 }
 
 // destructor - cleans up the database connection
