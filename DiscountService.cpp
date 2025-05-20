@@ -76,6 +76,7 @@ shared_ptr<Discount> DiscountService::createFixedDiscount(
 // Create a new discount voucher and add it to the repository
 void DiscountService::createDiscount(const string& username, DiscountType type, int discountValue) {
     shared_ptr<Discount> discount;
+
     if (DiscountType::PERCENTAGE ==type) {
         discount = createPercentageDiscount(username, discountValue);
     } else if (DiscountType::FIXED_AMOUNT == type) {

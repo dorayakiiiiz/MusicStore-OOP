@@ -148,7 +148,7 @@ bool UpdatePriceCommand::execute() {
         // Get ID of item to update with validation
         int id;
         do {
-            tie(isValid, id, error) = InputValidator::validateInt("tEnter item ID: ", 1, items.size());
+            tie(isValid, id, error) = InputValidator::validateInt("Enter item ID: ", 1, items.size());
             if (!isValid) {
                 printMessage(error.message);
                 sleepScreen();
@@ -255,7 +255,7 @@ bool ViewAllPurchaseHistoriesCommand::execute() {
 DeleteUserCommand::DeleteUserCommand(shared_ptr<User>& user) : currentUser(user) {}
 
 std::string DeleteUserCommand::getName() const {
-    return "Delete customers";
+    return "Delete users";
 }
 
 bool DeleteUserCommand::execute() {
@@ -267,7 +267,7 @@ bool DeleteUserCommand::execute() {
     clearScreen();
     ConsoleUI::printFrame(0, 0, 120, 30);
 
-    string header = "DELETE CUSTOMERS";
+    string header = "DELETE USERS";
     printHeader(header, (120 - header.length()*2) / 2 - 30, 2);
     if (users.empty()) {
         printMessage("No users found!");
@@ -280,9 +280,9 @@ bool DeleteUserCommand::execute() {
         AdminUI::displayUserList(users);
         
         // Get username to delete
-        string del;
+        int id;
         do {
-            tie(isValid, del, error) = InputValidator::validateString("Enter username to delete: ");
+            tie(isValid, id, error) = InputValidator::validateInt("Enter user's id to delete: ");
             if (!isValid) {
                 printMessage(error.message);
                 sleepScreen();
@@ -291,10 +291,11 @@ bool DeleteUserCommand::execute() {
         } while (!isValid);
 
         // Check if admin is deleting their own account
-        bool isCurrentUser = (currentUser->getUsername() == del);
+        shared_ptr<User> delUser = Registry::getSingleton<UserService>()->getUserById(id);
+        bool isCurrentUser = (currentUser->getUsername() == delUser->getUsername());
         
         // Delete the selected user
-        bool success = Registry::getSingleton<UserService>()->deleteUser(del);
+        bool success = Registry::getSingleton<UserService>()->deleteUserById(id);
         if (success) {
             printMessage("User deleted successfully!");
 

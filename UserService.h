@@ -56,7 +56,7 @@ public:
      * @param username Username of the account to delete
      * @return bool True if successful, false if user not found
      */
-    bool deleteUser(const string& username);
+    bool deleteUserById(int id);
     
     /**
      * @brief Find a user by username
