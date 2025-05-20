@@ -55,13 +55,11 @@ void AdminUI::displayPurchasedHistory(const Order& order, int id) {
 
 // Displays sales statistics for items sold in the store
 // Shows name, quantity sold, and revenue for each item, plus total revenue
-void AdminUI::displaySaleStatistics(vector<pair<string, pair<int, float>>>& itemStats) {
-    float totalRevenue = 0;
-    // Iterate through each item's statistics
-    for (const auto& [name, stats] : itemStats) {
-        cout << "\tItem: " << name << " - Sold: "
-        << stats.first << " - Revenue: $" << stats.second << "\n";
-        totalRevenue += stats.second;
+void AdminUI::displaySaleStatistics(vector<SalesRecord> salesRecords, float totalRevenue) {
+    // Iterate through each sales record
+    for (const auto& record : salesRecords) {
+        cout << "\tItem: " << record.getName() << " - Sold: "
+             << record.getSold() << " - Revenue: $" << record.getRevenue() << "\n";
     }
     cout << "\tTotal revenue: $" << totalRevenue << "\n";
 }

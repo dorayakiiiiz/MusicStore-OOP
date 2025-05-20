@@ -23,12 +23,5 @@ bool SqlSalesRecordRepository::add(const SalesRecord& record) {
     return true;
 }
 
-bool SqlSalesRecordRepository::updateById(int id, const SalesRecord& record) {
-    // Implement here
-    return true;
-}
-
-bool SqlSalesRecordRepository::deleteById(int id) {
-    // Implement here
-    return true;
-}
+bool SqlSalesRecordRepository::updateById(int id, const SalesRecord& record) { return false; }
+bool SqlSalesRecordRepository::deleteById(int id) { return false; }

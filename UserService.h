@@ -38,7 +38,7 @@ public:
      * @param user User object to add
      * @return bool True if successful, false if user already exists
      */
-    bool addUser(const shared_ptr<User>& user);
+    // bool addUser(const shared_ptr<User>& user);
 
     
     /**
@@ -57,17 +57,13 @@ public:
      * @return bool True if successful, false if user not found
      */
     bool deleteUserById(int id);
-    
-    /**
-     * @brief Find a user by username
-     * 
-     * @param users Vector of user accounts to search in
-     * @param username Username to search for
-     * @return int Index of the found user or -1 if not found
-     */
-    int findUserByUsername(const vector<shared_ptr<User>>& users, const string& username);
-    
 
+    /**
+     * @brief Get all customer accounts
+     * 
+     * @return vector<shared_ptr<User>> Vector of all customer accounts
+     */
+    vector<shared_ptr<User>> getAllCustomers();
 };
 
 #endif

@@ -19,12 +19,15 @@ bool UserService::deleteUserById(int id) {
     return Registry::getSingleton<IUserRepository>()->deleteById(id);
 }
 
-// Find a user by username, returns the index or -1 if not found
-int UserService::findUserByUsername(const vector<shared_ptr<User>>& users, const string& username) {
-    for (int i = 0; i < users.size(); ++i) {
-        if (users[i]->getUsername() == username) {
-            return i;
+// Get all customer accounts from the repository
+vector<shared_ptr<User>> UserService::getAllCustomers() {
+    // Get all users from the repository
+    vector<shared_ptr<User>> users = Registry::getSingleton<IUserRepository>()->getAll();
+    vector<shared_ptr<User>> customers;
+    for (const auto& user : users) {
+        if (user->getRole() == Role::CUSTOMER) {
+            customers.push_back(user);
         }
     }
-    return -1;
+    return customers;
 }

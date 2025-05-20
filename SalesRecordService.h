@@ -6,6 +6,9 @@
 #include "SalesRecord.h"
 #include "Cart.h"
 
+#include <vector>
+using std::vector;
+
 /**
  * @brief Service class for managing sales records
  * 
@@ -25,9 +28,19 @@ public:
     ~SalesRecordService() = default;
 
     /**
-     * @brief Get all sales records in the system
+     * @brief Get all sales records
+     * 
+     * @return vector<SalesRecord> Collection of all sales records
      */
-    void trackingRevenue();
+    vector<SalesRecord> getAllSalesRecords();
+
+
+    /**
+     * @brief Get total revenue generated from all sales records
+     * 
+     * @return float Total revenue
+     */
+    float getTotalRevenue();
 
     /**
      * @brief add the items purchased to the sales record
