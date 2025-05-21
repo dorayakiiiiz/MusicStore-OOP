@@ -16,7 +16,7 @@
 // Get the singleton instance of MusicService
 shared_ptr<MusicService> MusicService::getInstance() {
     if (instance == nullptr) {
-        instance = make_shared<MusicService>();
+        instance = shared_ptr<MusicService>(new MusicService());
     }
     return instance;
 }

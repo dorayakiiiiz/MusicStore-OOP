@@ -14,7 +14,7 @@
 // get the singleton instance of AuthService
 shared_ptr<AuthService> AuthService::getInstance() {
     if (instance == nullptr) {
-        instance = make_shared<AuthService>();
+        instance = shared_ptr<AuthService>(new AuthService());
     }
     return instance;
 }

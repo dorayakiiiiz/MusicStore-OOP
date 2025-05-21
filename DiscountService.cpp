@@ -16,7 +16,7 @@
 // Get the singleton instance of DiscountService
 shared_ptr<DiscountService> DiscountService::getInstance() {
     if (instance == nullptr) {
-        instance = make_shared<DiscountService>();
+        instance = shared_ptr<DiscountService>(new DiscountService());
     }
     return instance;
 }

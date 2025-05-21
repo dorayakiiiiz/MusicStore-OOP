@@ -7,7 +7,7 @@ using std::make_shared, std::vector, std::shared_ptr;
 // Get the singleton instance of SalesRecordService
 shared_ptr<SalesRecordService> SalesRecordService::getInstance() {
     if (instance == nullptr) {
-        instance = make_shared<SalesRecordService>();
+        instance = shared_ptr<SalesRecordService>(new SalesRecordService());
     }
     return instance;
 }

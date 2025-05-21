@@ -5,7 +5,7 @@
 // Get the singleton instance of UserService
 shared_ptr<UserService> UserService::getInstance() {
     if (instance == nullptr) {
-        instance = make_shared<UserService>();
+        instance = shared_ptr<UserService>(new UserService());
     }
     return instance;
 }

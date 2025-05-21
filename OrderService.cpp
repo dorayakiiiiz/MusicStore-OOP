@@ -9,7 +9,7 @@ using std::unordered_map;
 // Get the singleton instance of OrderService
 shared_ptr<OrderService> OrderService::getInstance() {
     if (instance == nullptr) {
-        instance = make_shared<OrderService>();
+        instance = shared_ptr<OrderService>(new OrderService());
     }
     return instance;
 }

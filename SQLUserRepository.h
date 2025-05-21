@@ -2,12 +2,13 @@
 #define SQL_USER_REPOSITORY_H
 #include <vector>
 #include <string>
+#include <memory>
 
 #include "IRepository.h"
 #include "User.h"
 #include "DatabaseConnector.h"
 
-using std::shared_ptr, std::vector;
+using std::vector, std::shared_ptr, std::make_shared;
 
 /**
  * @brief SQL implementation of the user repository

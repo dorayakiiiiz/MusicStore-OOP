@@ -5,7 +5,7 @@
 // Get the singleton instance of CartService
 shared_ptr<CartService> CartService::getInstance() {
     if (instance == nullptr) {
-        instance = make_shared<CartService>();
+        instance = shared_ptr<CartService>(new CartService());
     }
     return instance;
 }
