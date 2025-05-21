@@ -130,52 +130,123 @@ bool SqlUserRepository::deleteById(int id) {
 
     SQLHDBC hDbc = dbConnector->getConnection();
     SQLHSTMT hStmt = nullptr;
+    bool success = false;
 
-    // Step 1: Delete record
-    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
-        return false;
-    }
+    // Tắt autocommit để dùng transaction
+    SQLSetConnectAttr(hDbc, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_OFF, 0);
 
-    std::string deleteQuery = "DELETE FROM user_info WHERE ID = ?";
-    SQLPrepare(hStmt, (SQLCHAR*)deleteQuery.c_str(), SQL_NTS);
-    SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &id, 0, nullptr);
-    bool success = SQL_SUCCEEDED(SQLExecute(hStmt));
-    SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+    do {
+        // Bước 1: Xóa bản ghi
+        if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
 
-    // Step 2: Collect IDs > deleted ID
-    std::vector<int> idsToUpdate;
-    if (success && SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) == SQL_SUCCESS) {
+        std::string deleteQuery = "DELETE FROM user_info WHERE ID = ?";
+        if (SQLPrepare(hStmt, (SQLCHAR*)deleteQuery.c_str(), SQL_NTS) != SQL_SUCCESS) {
+            SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+            break;
+        }
+        if (SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &id, 0, nullptr) != SQL_SUCCESS) {
+            SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+            break;
+        }
+        if (!SQL_SUCCEEDED(SQLExecute(hStmt))) {
+            SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+            break;
+        }
+        SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+
+        // Bước 2: Lấy các ID lớn hơn ID bị xóa
+        if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
+
         std::string selectQuery = "SELECT ID FROM user_info WHERE ID > ? ORDER BY ID ASC";
-        SQLPrepare(hStmt, (SQLCHAR*)selectQuery.c_str(), SQL_NTS);
-        SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &id, 0, nullptr);
+        if (SQLPrepare(hStmt, (SQLCHAR*)selectQuery.c_str(), SQL_NTS) != SQL_SUCCESS) {
+            SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+            break;
+        }
+        if (SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &id, 0, nullptr) != SQL_SUCCESS) {
+            SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+            break;
+        }
+        if (SQLExecute(hStmt) != SQL_SUCCESS) {
+            SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+            break;
+        }
 
-        if (SQLExecute(hStmt) == SQL_SUCCESS) {
-            int currentId;
-            while (SQLFetch(hStmt) == SQL_SUCCESS) {
-                SQLGetData(hStmt, 1, SQL_C_SLONG, &currentId, 0, nullptr);
+        std::vector<int> idsToUpdate;
+        int currentId;
+        while (SQLFetch(hStmt) == SQL_SUCCESS) {
+            if (SQLGetData(hStmt, 1, SQL_C_SLONG, &currentId, 0, nullptr) == SQL_SUCCESS) {
                 idsToUpdate.push_back(currentId);
             }
         }
-
         SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+
+        // Bước 3: Cập nhật ID giảm đi 1 theo thứ tự, tránh trùng bằng cách chuyển sang âm tạm
+        for (int oldId : idsToUpdate) {
+            int tmpId = -oldId;    // tạm đổi sang âm
+            int newId = oldId - 1;
+
+            // Cập nhật sang tmpId âm
+            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
+
+            std::string updateTmpQuery = "UPDATE user_info SET ID = ? WHERE ID = ?";
+            if (SQLPrepare(hStmt, (SQLCHAR*)updateTmpQuery.c_str(), SQL_NTS) != SQL_SUCCESS) {
+                SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+                break;
+            }
+            if (SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &tmpId, 0, nullptr) != SQL_SUCCESS) {
+                SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+                break;
+            }
+            if (SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &oldId, 0, nullptr) != SQL_SUCCESS) {
+                SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+                break;
+            }
+            if (!SQL_SUCCEEDED(SQLExecute(hStmt))) {
+                SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+                break;
+            }
+            SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+
+            // Cập nhật từ tmpId âm sang newId dương
+            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
+
+            std::string updateNewQuery = "UPDATE user_info SET ID = ? WHERE ID = ?";
+            if (SQLPrepare(hStmt, (SQLCHAR*)updateNewQuery.c_str(), SQL_NTS) != SQL_SUCCESS) {
+                SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+                break;
+            }
+            if (SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &newId, 0, nullptr) != SQL_SUCCESS) {
+                SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+                break;
+            }
+            if (SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &tmpId, 0, nullptr) != SQL_SUCCESS) {
+                SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+                break;
+            }
+            if (!SQL_SUCCEEDED(SQLExecute(hStmt))) {
+                SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+                break;
+            }
+            SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+        }
+
+        success = true;
+
+    } while(false);
+
+    // Commit hoặc rollback transaction
+    if (success) {
+        SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_COMMIT);
+    } else {
+        SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_ROLLBACK);
     }
 
-    // Step 3: Update IDs (decrease by 1)
-    for (int oldId : idsToUpdate) {
-        int newId = oldId - 1;
-        SQLHSTMT hUpdateStmt = nullptr;
-        if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hUpdateStmt) == SQL_SUCCESS) {
-            std::string updateQuery = "UPDATE user_info SET ID = ? WHERE ID = ?";
-            SQLPrepare(hUpdateStmt, (SQLCHAR*)updateQuery.c_str(), SQL_NTS);
-            SQLBindParameter(hUpdateStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &newId, 0, nullptr);
-            SQLBindParameter(hUpdateStmt, 2, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &oldId, 0, nullptr);
-            SQLExecute(hUpdateStmt);
-            SQLFreeHandle(SQL_HANDLE_STMT, hUpdateStmt);
-        }
-    }
+    // Bật lại autocommit
+    SQLSetConnectAttr(hDbc, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_ON, 0);
 
     return success;
 }
+
 
 
 // these methods are not implemented yet
