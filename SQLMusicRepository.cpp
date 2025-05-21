@@ -187,52 +187,116 @@ bool SqlMusicRepository::deleteById(int id) {
 
     SQLHDBC hDbc = dbConnector->getConnection();
     SQLHSTMT hStmt = nullptr;
+    bool success = false;
 
-    // Step 1: Delete the record
-    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
-        return false;
-    }
+    // Tắt autocommit để dùng transaction
+    SQLSetConnectAttr(hDbc, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_OFF, 0);
 
-    std::string deleteQuery = "DELETE FROM music_info WHERE ID = ?";
-    SQLPrepare(hStmt, (SQLCHAR*)deleteQuery.c_str(), SQL_NTS);
-    SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &id, 0, nullptr);
-    bool success = SQL_SUCCEEDED(SQLExecute(hStmt));
-    SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+    do {
+        // Bước 1: Xóa bản ghi
+        if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
 
-    // Step 2: Re-number all remaining IDs from 1 to n
-    if (success && SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) == SQL_SUCCESS) {
+        std::string deleteQuery = "DELETE FROM music_info WHERE ID = ?";
+        if (SQLPrepare(hStmt, (SQLCHAR*)deleteQuery.c_str(), SQL_NTS) != SQL_SUCCESS) {
+            SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+            break;
+        }
+        if (SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &id, 0, nullptr) != SQL_SUCCESS) {
+            SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+            break;
+        }
+        if (!SQL_SUCCEEDED(SQLExecute(hStmt))) {
+            SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+            break;
+        }
+        SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+
+        // Bước 2: Lấy tất cả ID còn lại
+        if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
+
         std::string selectQuery = "SELECT ID FROM music_info ORDER BY ID ASC";
-        SQLPrepare(hStmt, (SQLCHAR*)selectQuery.c_str(), SQL_NTS);
+        if (SQLPrepare(hStmt, (SQLCHAR*)selectQuery.c_str(), SQL_NTS) != SQL_SUCCESS) {
+            SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+            break;
+        }
+        if (SQLExecute(hStmt) != SQL_SUCCESS) {
+            SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+            break;
+        }
 
         std::vector<int> oldIds;
-
-        if (SQLExecute(hStmt) == SQL_SUCCESS) {
-            int currentId;
-            while (SQLFetch(hStmt) == SQL_SUCCESS) {
-                SQLGetData(hStmt, 1, SQL_C_SLONG, &currentId, 0, nullptr);
+        int currentId;
+        while (SQLFetch(hStmt) == SQL_SUCCESS) {
+            if (SQLGetData(hStmt, 1, SQL_C_SLONG, &currentId, 0, nullptr) == SQL_SUCCESS) {
                 oldIds.push_back(currentId);
             }
         }
         SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 
-        // Update each ID to new one
-        for (int i = 0; i < oldIds.size(); ++i) {
-            int newId = i + 1;
+        // Bước 3: Cập nhật ID theo thứ tự mới
+        for (int i = 0; i < (int)oldIds.size(); ++i) {
             int oldId = oldIds[i];
+            int newId = i + 1;
 
-            if (newId == oldId) continue; // Skip if already correct
+            if (oldId == newId) continue;
 
-            SQLHSTMT hUpdateStmt = nullptr;
-            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hUpdateStmt) == SQL_SUCCESS) {
-                std::string updateQuery = "UPDATE music_info SET ID = ? WHERE ID = ?";
-                SQLPrepare(hUpdateStmt, (SQLCHAR*)updateQuery.c_str(), SQL_NTS);
-                SQLBindParameter(hUpdateStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &newId, 0, nullptr);
-                SQLBindParameter(hUpdateStmt, 2, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &oldId, 0, nullptr);
-                SQLExecute(hUpdateStmt);
-                SQLFreeHandle(SQL_HANDLE_STMT, hUpdateStmt);
+            // Chuyển tạm sang ID âm để tránh trùng
+            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
+            std::string tmpUpdate = "UPDATE music_info SET ID = ? WHERE ID = ?";
+            int tmpId = -oldId;
+            if (SQLPrepare(hStmt, (SQLCHAR*)tmpUpdate.c_str(), SQL_NTS) != SQL_SUCCESS) {
+                SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+                break;
             }
+            if (SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &tmpId, 0, nullptr) != SQL_SUCCESS) {
+                SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+                break;
+            }
+            if (SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &oldId, 0, nullptr) != SQL_SUCCESS) {
+                SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+                break;
+            }
+            if (!SQL_SUCCEEDED(SQLExecute(hStmt))) {
+                SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+                break;
+            }
+            SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+
+            // Update sang newId
+            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
+            std::string updateNewId = "UPDATE music_info SET ID = ? WHERE ID = ?";
+            if (SQLPrepare(hStmt, (SQLCHAR*)updateNewId.c_str(), SQL_NTS) != SQL_SUCCESS) {
+                SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+                break;
+            }
+            if (SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &newId, 0, nullptr) != SQL_SUCCESS) {
+                SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+                break;
+            }
+            if (SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &tmpId, 0, nullptr) != SQL_SUCCESS) {
+                SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+                break;
+            }
+            if (!SQL_SUCCEEDED(SQLExecute(hStmt))) {
+                SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+                break;
+            }
+            SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
         }
+
+        success = true;
+
+    } while(false);
+
+    // Commit hoặc rollback
+    if (success) {
+        SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_COMMIT);
+    } else {
+        SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_ROLLBACK);
     }
+
+    // Bật lại autocommit
+    SQLSetConnectAttr(hDbc, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_ON, 0);
 
     return success;
 }

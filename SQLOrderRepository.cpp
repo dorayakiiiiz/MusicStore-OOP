@@ -176,9 +176,107 @@ bool SqlOrderRepository::add(const Order& order) {
     return true;
 }
 
+bool SqlOrderRepository::deleteById(int id) {
+    DatabaseConnector* dbConnector = DatabaseConnector::getInstance();
+    if (!dbConnector->ensureConnected()) return false;
+
+    SQLHDBC hDbc = dbConnector->getConnection();
+    SQLHSTMT hStmt = nullptr;
+    bool success = false;
+
+    // Disable autocommit for transaction
+    SQLSetConnectAttr(hDbc, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_OFF, 0);
+
+    do {
+        // Step 1: Delete the record from orders
+        if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
+
+        std::string deleteQuery = "DELETE FROM orders WHERE ID = ?";
+        SQLPrepare(hStmt, (SQLCHAR*)deleteQuery.c_str(), SQL_NTS);
+        SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &id, 0, nullptr);
+
+        if (!SQL_SUCCEEDED(SQLExecute(hStmt))) {
+            SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+            break;
+        }
+        SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+
+        // Step 2: Re-number IDs
+        if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
+
+        std::string selectQuery = "SELECT ID FROM orders ORDER BY ID ASC";
+        SQLPrepare(hStmt, (SQLCHAR*)selectQuery.c_str(), SQL_NTS);
+
+        std::vector<int> oldIds;
+        if (SQLExecute(hStmt) == SQL_SUCCESS) {
+            int currentId;
+            while (SQLFetch(hStmt) == SQL_SUCCESS) {
+                SQLGetData(hStmt, 1, SQL_C_SLONG, &currentId, 0, nullptr);
+                oldIds.push_back(currentId);
+            }
+        }
+        SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+
+                /// Trong vòng for update lại ID:
+        for (int i = 0; i < oldIds.size(); ++i) {
+            int oldId = oldIds[i];
+            int newId = i + 1;
+            if (oldId == newId) continue;
+
+            // B1: Chuyển tạm detail_order về ID âm tránh trùng
+            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) == SQL_SUCCESS) {
+                std::string tmpUpdate = "UPDATE detail_order SET ID = ? WHERE ID = ?";
+                int tmpId = -oldId;
+                SQLPrepare(hStmt, (SQLCHAR*)tmpUpdate.c_str(), SQL_NTS);
+                SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &tmpId, 0, nullptr);
+                SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &oldId, 0, nullptr);
+                SQLExecute(hStmt);
+                SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+            }
+
+            // B2: Update orders
+            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) == SQL_SUCCESS) {
+                std::string updateOrders = "UPDATE orders SET ID = ? WHERE ID = ?";
+                SQLPrepare(hStmt, (SQLCHAR*)updateOrders.c_str(), SQL_NTS);
+                SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &newId, 0, nullptr);
+                SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &oldId, 0, nullptr);
+                SQLExecute(hStmt);
+                SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+            }
+
+            // B3: Chuyển detail_order từ tmp về newId
+            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) == SQL_SUCCESS) {
+                std::string restoreDetail = "UPDATE detail_order SET ID = ? WHERE ID = ?";
+                int tmpId = -oldId;
+                SQLPrepare(hStmt, (SQLCHAR*)restoreDetail.c_str(), SQL_NTS);
+                SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &newId, 0, nullptr);
+                SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &tmpId, 0, nullptr);
+                SQLExecute(hStmt);
+                SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+            }
+        }
+        
+        success = true;
+
+    } while (false);
+
+    // Commit or rollback transaction
+    if (success) {
+        SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_COMMIT);
+    } else {
+        SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_ROLLBACK);
+    }
+
+    // Re-enable autocommit
+    SQLSetConnectAttr(hDbc, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_ON, 0);
+
+    return success;
+}
+
+
 // these functions are not used in the project
 bool SqlOrderRepository::updateById(int id, const Order& order) { return false; }
-bool SqlOrderRepository::deleteById(int id) { return false; }
+
 Order SqlOrderRepository::getById(int id) {
     Order order("", {}, 0.0f);
     return order;
