@@ -19,6 +19,7 @@ enum DiscountType {
 
 
 #include "Discount.h"
+#include "IDataProvider.h"
 #include <vector>
 #include <memory>
 #include <string>
@@ -31,7 +32,9 @@ class DiscountService {
 private:
     inline static shared_ptr<DiscountService> instance = nullptr; /**< Singleton instance of DiscountService */
 
-    DiscountService() = default; /**< Private constructor for singleton pattern */
+    shared_ptr<IDataProvider> dataProvider; /**< Data provider for accessing discount data */
+
+    DiscountService(); /**< Private constructor for singleton pattern */
 public:
 
     /**

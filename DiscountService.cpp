@@ -13,6 +13,11 @@
 #include "SQLDao.h"
 #include <algorithm>
 
+// Constructor
+DiscountService::DiscountService() {
+    dataProvider = make_shared<SqlDao>();
+}
+
 // Get the singleton instance of DiscountService
 shared_ptr<DiscountService> DiscountService::getInstance() {
     if (instance == nullptr) {
@@ -23,7 +28,6 @@ shared_ptr<DiscountService> DiscountService::getInstance() {
 
 // Get all discount vouchers from the repository
 vector<shared_ptr<Discount>> DiscountService::getAllDiscounts() {
-    auto dataProvider = make_shared<SqlDao>();
     return dataProvider->discount()->getAll();
 }
 
@@ -58,7 +62,6 @@ vector<shared_ptr<Discount>> DiscountService::loadValidDiscounts(
 // Remove a discount voucher from the repository
 void DiscountService::removeDiscount(const string& discountString) {
     // get all the vouchers from the repository
-    auto dataProvider = make_shared<SqlDao>();
     vector<shared_ptr<Discount>> vouchers = dataProvider->discount()->getAll();
 
     for (int i = 0; i < vouchers.size(); ++i) {
@@ -94,7 +97,6 @@ void DiscountService::createDiscount(const string& username, DiscountType type, 
     }
 
     // Add the discount to the repository
-    auto dataProvider = make_shared<SqlDao>();
     bool success = dataProvider->discount()->add(discount);
     // fix heree
 }

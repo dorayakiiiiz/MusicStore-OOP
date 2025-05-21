@@ -68,8 +68,7 @@ bool SignUpCommand::execute() {
     }
 
     // Register the new user
-    auto authService = AuthService::getInstance();
-    bool success = authService->registerUser(username, password, static_cast<Role>(role));
+    bool success = AuthService::getInstance()->registerUser(username, password, static_cast<Role>(role));
     if (success) {
         printMessage("Sign up successfully!");
         sleepScreen();
@@ -119,8 +118,7 @@ bool LoginCommand::execute() {
     } while (!isValid);
 
     // Attempt to authenticate the user
-    auto authService = AuthService::getInstance();
-    currentUser = authService->loginUser(username, password);
+    currentUser = AuthService::getInstance()->loginUser(username, password);
 
     if (!currentUser) {
         printMessage("Invalid username or password. Please try again!");

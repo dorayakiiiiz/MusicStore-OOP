@@ -6,6 +6,11 @@
 
 using std::unordered_map;
 
+// Constructor
+OrderService::OrderService() {
+    dataProvider = make_shared<SqlDao>();
+}
+
 // Get the singleton instance of OrderService
 shared_ptr<OrderService> OrderService::getInstance() {
     if (instance == nullptr) {
@@ -16,7 +21,6 @@ shared_ptr<OrderService> OrderService::getInstance() {
 
 // Get all orders from the repository
 vector<Order> OrderService::getAllOrders() {
-    auto dataProvider = make_shared<SqlDao>();
     return dataProvider->order()->getAll();
 }
 
@@ -26,7 +30,6 @@ void OrderService::checkout( const string& username, Cart& cart, float total) {
     Order order(username, cart.getItems(), total);
 
     // Save the order to the repository
-    auto dataProvider = make_shared<SqlDao>();
     dataProvider->order()->add(order);
 
     // Clear the cart after successful checkout
@@ -36,7 +39,6 @@ void OrderService::checkout( const string& username, Cart& cart, float total) {
 // Delete an order from the repository
 void OrderService::deleteOrder(const string& username) {
     // Get all orders
-    auto dataProvider = make_shared<SqlDao>();
     auto orders = dataProvider->order()->getAll();
     // Find and delete the order for the specified user
     for (int i = 0; i < orders.size(); ++i) {
@@ -51,7 +53,6 @@ void OrderService::deleteOrder(const string& username) {
 // Retrieve orders for a specific user
 vector<Order> OrderService::getUserOrders(const string& username) {
     // Get all orders from the repository
-    auto dataProvider = make_shared<SqlDao>();
     auto orders = dataProvider->order()->getAll();
 
     vector<Order> userOrders;

@@ -13,6 +13,11 @@
 
 #include <algorithm>
 
+// Constructor
+MusicService::MusicService() {
+    dataProvider = make_shared<SqlDao>();
+}
+
 // Get the singleton instance of MusicService
 shared_ptr<MusicService> MusicService::getInstance() {
     if (instance == nullptr) {

@@ -3,7 +3,7 @@
 
 #include "Cart.h"
 #include "Music.h"
-
+#include "IDataProvider.h"
 #include <vector>
 #include <string>
 #include <memory>
@@ -19,8 +19,10 @@ using std::vector, std::string, std::make_shared, std::shared_ptr;
 class CartService {
 private:
     inline static shared_ptr<CartService> instance = nullptr; /**< Singleton instance of CartService */
-
-    CartService() = default; /**< Private constructor for singleton pattern */
+    
+    shared_ptr<IDataProvider> dataProvider; /**< Data provider for accessing repositories */
+    
+    CartService(); /**< Private constructor for singleton pattern */
 public:
 
     /**
