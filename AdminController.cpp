@@ -11,7 +11,6 @@
 #include "CommandInvoker.h"
 #include "utils.h"
 #include "AdminCommands.h"
-#include "Registry.h"
 
 // Constructor for AdminController
 AdminController::AdminController() {}

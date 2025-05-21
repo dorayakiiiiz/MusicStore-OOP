@@ -9,7 +9,6 @@
 #include "SalesRecordService.h"
 #include "utils.h"
 #include "InputValidator.h"
-#include "Registry.h"
 #include "ConsoleUI.h"
 #include <memory>
 #include <conio.h>
@@ -27,7 +26,7 @@ bool ViewMusicListCommand::execute() {
     string header = "MUSIC LIST";
     printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
 
-    vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
+    vector<Music> items = MusicService::getInstance()->getAllMusic();
     if (items.empty()) {
         printMessage("No items found!");
         pauseScreen();
@@ -55,7 +54,7 @@ bool AddNewItemsCommand::execute() {
         Music newItem = AdminUI::getNewMusicDetails();
         
         // Add the new item to inventory
-        bool success = Registry::getSingleton<MusicService>()->addMusicItem(newItem);
+        bool success = MusicService::getInstance()->addMusicItem(newItem);
         if (success) {
             printMessage("Item added successfully!");
         } else {
@@ -90,7 +89,7 @@ bool RemoveItemsCommand::execute() {
         printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
 
         // Get all items from the repository
-        vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
+        vector<Music> items = MusicService::getInstance()->getAllMusic();
         AdminUI::displayMusicList(items);
 
         int id;
@@ -104,7 +103,7 @@ bool RemoveItemsCommand::execute() {
         } while (!isValid);
         
         // Remove the selected item
-        bool success = Registry::getSingleton<MusicService>()->removeMusicItem(id);
+        bool success = MusicService::getInstance()->removeMusicItem(id);
         if (success) {
             printMessage("Item removed successfully!");
         } else {
@@ -112,7 +111,7 @@ bool RemoveItemsCommand::execute() {
         }
 
         printDashLine();
-        items = Registry::getSingleton<MusicService>()->getAllMusic();
+        items = MusicService::getInstance()->getAllMusic();
         if (items.empty()) {
             printMessage("tNo items left in inventory!");
             pauseScreen();
@@ -144,7 +143,7 @@ bool UpdatePriceCommand::execute() {
         string header = "UPDATE PRICE";
         printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
 
-        vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
+        vector<Music> items = MusicService::getInstance()->getAllMusic();
         AdminUI::displayMusicList(items);
 
         // Get ID of item to update with validation
@@ -170,7 +169,7 @@ bool UpdatePriceCommand::execute() {
         } while (!isValid);
 
         // Update the item's price
-        bool success = Registry::getSingleton<MusicService>()->updateMusicItemPrice(id, newPrice);
+        bool success = MusicService::getInstance()->updateMusicItemPrice(id, newPrice);
         if (success) {
             printMessage("Price updated successfully!");
         } else {
@@ -200,7 +199,7 @@ bool ViewUsersCommand::execute() {
     string header = "USER LIST";
     printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
 
-    vector<shared_ptr<User>> users = Registry::getSingleton<UserService>()->getAllUsers();
+    vector<shared_ptr<User>> users = UserService::getInstance()->getAllUsers();
     if (users.empty()) {
         printMessage("No users found!");
         pauseScreen();
@@ -215,7 +214,7 @@ bool ViewUsersCommand::execute() {
 
 // ViewAllPurchaseHistoriesCommand implementation (renamed from ViewPurchaseHistoryCommand)
 std::string ViewAllPurchaseHistoriesCommand::getName() const {
-    return "VIEW PURCHASE HISTORY";
+    return "VIEW USER PURCHASE HISTORY";
 }
 
 bool ViewAllPurchaseHistoriesCommand::execute() {
@@ -225,10 +224,10 @@ bool ViewAllPurchaseHistoriesCommand::execute() {
     printHeader(header, (120 - header.length()*2) / 2 - 30, 1);
 
     // get all users from the repository
-    vector<shared_ptr<User>> users = Registry::getSingleton<UserService>()->getAllUsers();
+    vector<shared_ptr<User>> users = UserService::getInstance()->getAllUsers();
 
     // print the list of customers
-    vector<shared_ptr<User>> customer = Registry::getSingleton<UserService>()->getAllCustomers();
+    vector<shared_ptr<User>> customer = UserService::getInstance()->getAllCustomers();
     AdminUI::displayUserList(customer);
 
     int id;
@@ -247,7 +246,7 @@ bool ViewAllPurchaseHistoriesCommand::execute() {
     shared_ptr<User> selectedCustomer = customer[id - 1];
     printMessage("Customer: " + selectedCustomer->getUsername());
 
-    vector<Order> userOrders = Registry::getSingleton<OrderService>()->getUserOrders(selectedCustomer->getUsername());
+    vector<Order> userOrders = OrderService::getInstance()->getUserOrders(selectedCustomer->getUsername());
     if (userOrders.empty()) {
         printMessage("No purchase history found for this customer.");
     } else {
@@ -271,7 +270,7 @@ bool DeleteUserCommand::execute() {
     bool isValid;
     Error error;
 
-    vector<shared_ptr<User>> users = Registry::getSingleton<UserService>()->getAllUsers();
+    vector<shared_ptr<User>> users = UserService::getInstance()->getAllUsers();
 
     clearScreen();
     printFrame(0, 0, 120, 30);
@@ -301,11 +300,11 @@ bool DeleteUserCommand::execute() {
         } while (!isValid);
 
         // Check if admin is deleting their own account
-        shared_ptr<User> delUser = Registry::getSingleton<UserService>()->getUserById(id);
+        shared_ptr<User> delUser = UserService::getInstance()->getUserById(id);
         bool isCurrentUser = (currentUser->getUsername() == delUser->getUsername());
         
         // Delete the selected user
-        bool success = Registry::getSingleton<UserService>()->deleteUserById(id);
+        bool success = UserService::getInstance()->deleteUserById(id);
         if (success) {
             printMessage("User deleted successfully!");
 
@@ -321,9 +320,9 @@ bool DeleteUserCommand::execute() {
         }
 
         // delete the order history of the deleted user
-        Registry::getSingleton<OrderService>()->deleteOrder(delUser->getUsername());
+        OrderService::getInstance()->deleteOrder(delUser->getUsername());
 
-        users = Registry::getSingleton<UserService>()->getAllUsers();
+        users = UserService::getInstance()->getAllUsers();
         if (users.empty()) {
             printMessage("No users left in the system!");
             pauseScreen();
@@ -353,8 +352,8 @@ bool ViewSalesStatisticsCommand::execute() {
     string header = "SALE STATISTICS";
     printHeader(header, (120 - header.length()*2) / 2 - 30, 1);
 
-    vector<SalesRecord> salesRecords = Registry::getSingleton<SalesRecordService>()->getAllSalesRecords();
-    float totalRevenue = Registry::getSingleton<SalesRecordService>()->getTotalRevenue();
+    vector<SalesRecord> salesRecords = SalesRecordService::getInstance()->getAllSalesRecords();
+    float totalRevenue = SalesRecordService::getInstance()->getTotalRevenue();
 
     AdminUI::displaySaleStatistics(salesRecords, totalRevenue);
     printDashLine();

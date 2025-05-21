@@ -1,8 +1,9 @@
 #ifndef _SALES_RECORD_SERVICE_H_
 #define _SALES_RECORD_SERVICE_H_
 #include <vector>
-#include "ISalesRecordRepository.h"
-#include "Registry.h"
+#include "IDataProvider.h"
+#include "IRepository.h"
+#include "SQLDao.h"
 #include "SalesRecord.h"
 #include "Cart.h"
 
@@ -15,12 +16,18 @@ using std::vector;
  * @details Provides methods for adding, removing, and retrieving sales records
  */
 class SalesRecordService {
+private:
+    inline static shared_ptr<SalesRecordService> instance = nullptr; /**< Singleton instance of SalesRecordService */
+
+    SalesRecordService() = default; /**< Private constructor for singleton pattern */
 public:
 
     /**
-     * @brief Default constructor
+     * @brief Get the singleton instance of OrderService
+     * 
+     * @return shared_ptr<SalesRecordService> Pointer to the singleton instance
      */
-    SalesRecordService() = default;
+    static shared_ptr<SalesRecordService> getInstance();
 
     /**
      * @brief Default destructor

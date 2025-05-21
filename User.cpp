@@ -26,7 +26,7 @@ string User::getPassword() const {
 
 // Convert user to string representation for display
 string User::toString() const {
-    return username + " - " + password + " - " + (Role::ADMIN == getRole() ? "Admin" : "Customer");
+    return username + " - " + (Role::ADMIN == getRole() ? "Admin" : "Customer");
 }
 
 // Copy constructor for Customer class

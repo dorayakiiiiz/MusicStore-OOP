@@ -7,17 +7,25 @@
  */
 
 #include "MusicService.h"
-#include "Registry.h"
-#include "IMusicRepository.h"
+#include "IDataProvider.h"
+#include "SQLDao.h"
 #include <stdexcept>
 
 #include <algorithm>
 
+// Get the singleton instance of MusicService
+shared_ptr<MusicService> MusicService::getInstance() {
+    if (instance == nullptr) {
+        instance = shared_ptr<MusicService>(new MusicService());
+    }
+    return instance;
+}
+
 // Get all music items from the repository
 vector<Music> MusicService::getAllMusic() {
     // Get all music items from the repository
-    vector<Music> items = Registry::getSingleton<IMusicRepository>()->getAll();
-    return items;
+    auto dataProvider = make_shared<SqlDao>();
+    return dataProvider->music()->getAll();
 }
 
 
@@ -36,12 +44,14 @@ vector<Music> MusicService::searchMusic(const vector<Music>& items, SearchType c
 
 // Add a new music item to the inventory
 bool MusicService::addMusicItem(const Music& item) {
-    return Registry::getSingleton<IMusicRepository>()->add(item);
+    auto dataProvider = make_shared<SqlDao>();
+    return dataProvider->music()->add(item);
 }
 
 // Remove a music item from the inventory by ID
 bool MusicService::removeMusicItem(int id) {
-    return Registry::getSingleton<IMusicRepository>()->deleteById(id);
+    auto dataProvider = make_shared<SqlDao>();
+    return dataProvider->music()->deleteById(id);
 }
 
 // Update the price of a music item by ID
@@ -51,20 +61,22 @@ bool MusicService::updateMusicItemPrice(int id, float price) {
         return false;
     }
     // Update the item's price
-    Music item = Registry::getSingleton<IMusicRepository>()->getById(id);
+    auto dataProvider = make_shared<SqlDao>();
+    Music item = dataProvider->music()->getById(id);
     item.updatePrice(price);
-    return Registry::getSingleton<IMusicRepository>()->updateById(id, item);
+    return dataProvider->music()->updateById(id, item);
 }
 
 // Remove sold-out items from the inventory
 void MusicService::removeSoldOutItems() {
     // Get all music items from the repository
-    vector<Music> items = Registry::getSingleton<IMusicRepository>()->getAll();
+    auto dataProvider = make_shared<SqlDao>();
+    vector<Music> items = dataProvider->music()->getAll();
 
     for (int i = 0; i < items.size(); ++i) {
         if (items[i].getQuantity() == 0) {
             items.erase(items.begin() + i);
-            Registry::getSingleton<IMusicRepository>()->deleteById(i + 1);
+            dataProvider->music()->deleteById(i + 1);
             --i;
         }
     }

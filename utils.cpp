@@ -11,7 +11,7 @@ using std::to_string;
 // Prints a formatted header with decorative elements
 // Used to visually separate different sections of the UI
 void printHeader(const string& header, int x, int y) {
-    string fileName = header + ".txt";
+    string fileName = "ascii/" + header + ".txt";
     string line = "";
     std::ifstream inFile;
     inFile.open(fileName);
@@ -33,7 +33,7 @@ void printMessage(const string& message) {
 
 void printASCII(const string& header, int x, int y)
 {
-    string fileName = header + ".txt";
+    string fileName = "ascii/" + header + ".txt";
     string line = "";
     std::ifstream inFile;
     inFile.open(fileName);

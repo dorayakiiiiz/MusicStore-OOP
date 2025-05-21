@@ -15,13 +15,7 @@
 #include "windows.h"
 #include "utils.h"
 #include "InputValidator.h"
-#include "Registry.h"
 #include "IRepository.h"
-#include "IMusicRepository.h"
-#include "IOrderRepository.h"
-#include "IDiscountRepository.h"
-#include "IUserRepository.h"
-
 #include <memory>
 
 using std::to_string, std::tie;
