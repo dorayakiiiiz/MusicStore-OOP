@@ -214,7 +214,7 @@ bool ViewUsersCommand::execute() {
 
 // ViewAllPurchaseHistoriesCommand implementation (renamed from ViewPurchaseHistoryCommand)
 std::string ViewAllPurchaseHistoriesCommand::getName() const {
-    return "VIEW PURCHASE HISTORY";
+    return "VIEW USER PURCHASE HISTORY";
 }
 
 bool ViewAllPurchaseHistoriesCommand::execute() {
