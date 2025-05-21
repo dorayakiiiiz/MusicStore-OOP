@@ -143,9 +143,10 @@ Các lớp con có thể thay thế lớp cha của chúng.
 - CommandInvoker và các lớp kế thừa từ Command (ViewMusicListCommand, LoginCommand, v.v.) giúp đóng gói các hành động/yêu cầu từ menu chương trình thành đối tượng, tách rời người gọi yêu cầu khỏi người thực hiện yêu cầu. 
 - Điều này làm cho AdminController và CustomerController (2 class xử lí điều phối các hoạt động trên menu chương trình) trở nên gọn gàng hơn.
 #### Repository Pattern
-- Các interface IRepository, IMusicRepository, IUserRepository, IOrderRepository, IDiscountRepository và các triển khai SQL (SqlMusicRepository,...) giúp tách biệt logic truy cập dữ liệu khỏi phần còn lại của ứng dụng.
+- Tạo interface IRepository<T> định nghĩa các thao tác CRUD (getAll, getById, add, updateById, deleteById) và các lớp triển khai cụ thể (SqlUserRepository, SqlMusicRepository...)
+- Giúp tách biệt logic nghiệp vụ khỏi logic truy xuất dữ liệu, cho phép thay đổi nguồn dữ liệu mà không ảnh hưởng đến business logic
 #### Singleton Pattern
-- Registry hoạt động như một Service Locator, cung cấp quyền truy cập toàn cục vào các service và repository.
+- Áp dụng singleton cho các Service như MusicSerive, AuthService... nhằm chỉ sử dụng 1 đối tượng cho mỗi loại dịch vụ trong cả chương trình.
 - DatabaseConnector kết nối đến cơ sở dữ liệu SQLServer cũng được áp dụng singleton khởi tạo 1 kết nối xuyên suốt chương trình.
 
 ### Đảm bảo chất lượng (sẽ hoàn thành ở đợt nộp chính thức)
