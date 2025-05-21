@@ -6,7 +6,7 @@
 
 using std::vector;
 
-#include "IDiscountRepository.h"
+#include "IRepository.h"
 #include "DatabaseConnector.h"
 #include "Discount.h"
 #include "DiscountStrategy.h"
@@ -14,7 +14,7 @@ using std::vector;
 /**
  * @brief SQL implementation of the discount repository
  */
-class SqlDiscountRepository : public IDiscountRepository {
+class SqlDiscountRepository : public IRepository<shared_ptr<Discount>> {
 public:
     /**
      * @brief Constructor for SqlDiscountRepository

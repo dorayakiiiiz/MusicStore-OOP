@@ -28,11 +28,18 @@ using std::vector, std::shared_ptr, std::string, std::make_shared, std::make_uni
  * @brief Service class for managing discounts in the system
  */
 class DiscountService {
+private:
+    inline static shared_ptr<DiscountService> instance = nullptr; /**< Singleton instance of DiscountService */
+
+    DiscountService() = default; /**< Private constructor for singleton pattern */
 public:
+
     /**
-     * @brief Default constructor
+     * @brief Get the singleton instance of DiscountService
+     * 
+     * @return shared_ptr<DiscountService> Pointer to the singleton instance
      */
-    DiscountService() = default;
+    static shared_ptr<DiscountService> getInstance();
 
     /**
      * @brief Default destructor

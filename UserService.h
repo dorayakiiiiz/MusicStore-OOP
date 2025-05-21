@@ -6,7 +6,7 @@
 #include <string>
 #include <memory>
 
-using std::vector, std::string, std::shared_ptr;
+using std::vector, std::string, std::shared_ptr, std::make_shared;
 
 /**
  * @brief Service class for user-related operations
@@ -14,11 +14,18 @@ using std::vector, std::string, std::shared_ptr;
  * @details Provides methods to manage user accounts, including deletion and searching by username
  */
 class UserService {
+private:
+    inline static shared_ptr<UserService> instance = nullptr; /**< Singleton instance of UserService */
+
+    UserService() = default; /**< Private constructor for singleton pattern */
 public:
+
     /**
-     * @brief Default constructor
+     * @brief Get the singleton instance of UserService
+     * 
+     * @return shared_ptr<UserService> Pointer to the singleton instance
      */
-    UserService() = default;
+    static shared_ptr<UserService> getInstance();
 
     /**
      * @brief Default destructor

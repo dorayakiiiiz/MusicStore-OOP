@@ -1,12 +1,13 @@
 #ifndef _SQL_SALES_RECORD_REPOSITORY_H_
 #define _SQL_SALES_RECORD_REPOSITORY_H_
-#include "ISalesRecordRepository.h"
+#include "IRepository.h"
+#include "SalesRecord.h"
 #include "DatabaseConnector.h"
 
 /**
  * @brief SQL implementation of the sales record repository
  */
-class SqlSalesRecordRepository : public ISalesRecordRepository {
+class SqlSalesRecordRepository : public IRepository<SalesRecord> {
 public:
     /**
      * @brief Constructor for SqlSalesRecordRepository

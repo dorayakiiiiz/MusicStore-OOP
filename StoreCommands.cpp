@@ -2,7 +2,6 @@
 #include "AuthService.h"
 #include "utils.h"
 #include "InputValidator.h"
-#include "Registry.h"
 #include "IController.h"
 #include "ControllerFactory.h"
 #include "ConsoleUI.h"
@@ -69,7 +68,7 @@ bool SignUpCommand::execute() {
     }
 
     // Register the new user
-    auto authService = Registry::getSingleton<AuthService>();
+    auto authService = AuthService::getInstance();
     bool success = authService->registerUser(username, password, static_cast<Role>(role));
     if (success) {
         printMessage("Sign up successfully!");
@@ -120,7 +119,7 @@ bool LoginCommand::execute() {
     } while (!isValid);
 
     // Attempt to authenticate the user
-    auto authService = Registry::getSingleton<AuthService>();
+    auto authService = AuthService::getInstance();
     currentUser = authService->loginUser(username, password);
 
     if (!currentUser) {

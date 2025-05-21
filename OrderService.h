@@ -4,9 +4,10 @@
 #include "Order.h"
 #include "Cart.h"
 #include <vector>
+#include <memory>
 #include <string>
 
-using std::vector, std::string;
+using std::vector, std::string, std::make_shared;
 
 /**
  * @brief Service class for managing order-related operations
@@ -14,16 +15,18 @@ using std::vector, std::string;
  * @details Provides methods to create new orders and retrieve order history for users
  */
 class OrderService {
+private:
+    inline static shared_ptr<OrderService> instance = nullptr; /**< Singleton instance of OrderService */
+
+    OrderService() = default; /**< Private constructor for singleton pattern */
 public:
-    /**
-     * @brief Default constructor
-     */
-    OrderService() = default;
 
     /**
-     * @brief Default destructor
+     * @brief Get the singleton instance of OrderService
+     * 
+     * @return shared_ptr<OrderService> Pointer to the singleton instance
      */
-    ~OrderService() = default;
+    static shared_ptr<OrderService> getInstance();
 
     /**
      * @brief Get all orders in the system

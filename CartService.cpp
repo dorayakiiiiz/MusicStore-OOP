@@ -1,11 +1,20 @@
 #include "CartService.h"
-#include "Registry.h"
-#include "IMusicRepository.h"
+#include "IDataProvider.h"
+#include "SQLDao.h"
+
+// Get the singleton instance of CartService
+shared_ptr<CartService> CartService::getInstance() {
+    if (instance == nullptr) {
+        instance = make_shared<CartService>();
+    }
+    return instance;
+}
 
 // Add a music item to the shopping cart
 bool CartService::addItemToCart(Cart& cart, int itemID, int quantity) {
 
-    Music item = Registry::getSingleton<IMusicRepository>()->getById(itemID);
+    auto dataProvider = make_shared<SqlDao>();
+    Music item = dataProvider->music()->getById(itemID);
 
     if (item.getQuantity() < quantity) {
         return false; // Not enough stock
@@ -15,7 +24,7 @@ bool CartService::addItemToCart(Cart& cart, int itemID, int quantity) {
     cart.addItems(item, quantity);
 
     item.updateQuantity(item.getQuantity() - quantity);
-    Registry::getSingleton<IMusicRepository>()->updateById(itemID, item);
+    dataProvider->music()->updateById(itemID, item);
 
     return true;
 }
@@ -29,12 +38,13 @@ bool CartService::removeItemFromCart(Cart& cart, int itemID) {
     }
 
     // get all items from the repository
-    vector<Music> inventory = Registry::getSingleton<IMusicRepository>()->getAll();
+    auto dataProvider = make_shared<SqlDao>();
+    vector<Music> inventory = dataProvider->music()->getAll();
     for (int i = 0; i < inventory.size(); i++) {
         if (inventory[i] == cart.getItems()[itemID]) {
             // add the item back to inventory
             inventory[i].updateQuantity(inventory[i].getQuantity() + cart.getItems()[itemID].getQuantity());
-            Registry::getSingleton<IMusicRepository>()->updateById(i + 1, inventory[i]);
+            dataProvider->music()->updateById(i + 1, inventory[i]);
             break;
         }
     }

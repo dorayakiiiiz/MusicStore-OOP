@@ -9,7 +9,6 @@
 #include "OrderService.h"
 #include "utils.h"
 #include "InputValidator.h"
-#include "Registry.h"
 #include <memory>
 #include <conio.h>
 
@@ -32,10 +31,10 @@ bool ViewPurchaseHistoryCommand::execute() {
     ConsoleUI::printFrame(0, 0, 120, 30);
 
     Customer* customer = dynamic_cast<Customer*>(currentUser.get());
-    vector<Order> orders = Registry::getSingleton<OrderService>()->getAllOrders();
+    vector<Order> orders = OrderService::getInstance()->getAllOrders();
 
     // Get order history for the current customer
-    vector<Order> orderHistory = Registry::getSingleton<OrderService>()->getUserOrders(customer->getUsername());
+    vector<Order> orderHistory = OrderService::getInstance()->getUserOrders(customer->getUsername());
     
     string header = "PURCHASE HISTORY";
     printHeader(header, (120 - header.length()*2) / 2 - 40, 2);
@@ -58,7 +57,7 @@ bool ViewMusicCommand::execute() {
     string header = "MUSIC LIST";
     printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
 
-    vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
+    vector<Music> items = MusicService::getInstance()->getAllMusic();
     CustomerUI::displayMusicList(items);
 
     printDashLine();
@@ -73,7 +72,7 @@ string SearchMusicCommand::getName() const {
 
 bool SearchMusicCommand::execute() {
     // get all music items from the repository
-    vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
+    vector<Music> items = MusicService::getInstance()->getAllMusic();
 
     clearScreen();
     ConsoleUI::printFrame(0, 0, 120, 30);
@@ -107,7 +106,7 @@ bool SearchMusicCommand::execute() {
         } while (!isValid);
 
         // Perform search and display results
-        vector<Music> results = Registry::getSingleton<MusicService>()->searchMusic(items, static_cast<SearchType>(criteria), keyword);
+        vector<Music> results = MusicService::getInstance()->searchMusic(items, static_cast<SearchType>(criteria), keyword);
 
         if (results.empty()) {
             CustomerUI::displayNoResultsMessage();
@@ -141,7 +140,7 @@ bool AddToCartCommand::execute() {
     printHeader(header, (120 - header.length()*2) / 2 - 30, 2);
 
     // Get all music items from the repository
-    vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
+    vector<Music> items = MusicService::getInstance()->getAllMusic();
 
     // Display current music list
     CustomerUI::displayMusicList(items);
@@ -174,7 +173,7 @@ bool AddToCartCommand::execute() {
         } while (!isValid);
 
         // Add item to cart
-        if (Registry::getSingleton<CartService>()->addItemToCart(cart, itemID, quantity)) {
+        if (CartService::getInstance()->addItemToCart(cart, itemID, quantity)) {
             printMessage("Added " + to_string(quantity) + " " + items[itemID - 1].getName() + " to cart successfully!");
         } else {
             printMessage("Failed to add item. Not enough stock!");
@@ -209,7 +208,7 @@ bool RemoveFromCartCommand::execute() {
     printHeader(header, (120 - header.length()*2) / 2 - 30, 2);
 
     // Get all music items from the repository
-    vector<Music> items = Registry::getSingleton<MusicService>()->getAllMusic();
+    vector<Music> items = MusicService::getInstance()->getAllMusic();
 
     if (cart.getItems().empty()) {
         printMessage("Cart is empty!");
@@ -232,7 +231,7 @@ bool RemoveFromCartCommand::execute() {
             } while (!isValid);
 
             // Remove item from cart
-            if (Registry::getSingleton<CartService>()->removeItemFromCart(cart, itemID - 1)) {
+            if (CartService::getInstance()->removeItemFromCart(cart, itemID - 1)) {
                 printMessage("Removed item successfully!");
                 if (cart.getItems().empty()) {
                     printMessage("Cart is empty!");
@@ -278,8 +277,8 @@ bool CheckoutCommand::execute() {
     Customer* customer = dynamic_cast<Customer*>(currentUser.get());
 
     // Get all orders and vouchers from the repository
-    vector<Order> orders = Registry::getSingleton<OrderService>()->getAllOrders();
-    vector<shared_ptr<Discount>> vouchers = Registry::getSingleton<DiscountService>()->getAllDiscounts();
+    vector<Order> orders = OrderService::getInstance()->getAllOrders();
+    vector<shared_ptr<Discount>> vouchers = DiscountService::getInstance()->getAllDiscounts();
 
     if (cart.getItems().empty()) {
         CustomerUI::displayEmptyCartMessage();
@@ -290,7 +289,7 @@ bool CheckoutCommand::execute() {
         
         // Handle discount vouchers if available
         vector<shared_ptr<Discount>> validVouchers = 
-            Registry::getSingleton<DiscountService>()->loadValidDiscounts(vouchers, customer->getUsername());
+            DiscountService::getInstance()->loadValidDiscounts(vouchers, customer->getUsername());
 
         shared_ptr<Discount> selectedVoucher = nullptr;
 
@@ -327,11 +326,11 @@ bool CheckoutCommand::execute() {
                         selectedVoucher = voucher;
                         
                         // Apply the discount to the total
-                        total = Registry::getSingleton<DiscountService>()->applyDiscount(selectedVoucher, total);
+                        total = DiscountService::getInstance()->applyDiscount(selectedVoucher, total);
                         printMessage("Voucher applied! New total: $" + to_string(total));
                         
                         // Remove the used voucher
-                        Registry::getSingleton<DiscountService>()->removeDiscount(voucherCode);
+                        DiscountService::getInstance()->removeDiscount(voucherCode);
                         break;
                     } 
                 }
@@ -343,7 +342,7 @@ bool CheckoutCommand::execute() {
         }
         
         // Create the order with final total
-        Registry::getSingleton<OrderService>()->checkout(customer->getUsername(), cart, total);
+        OrderService::getInstance()->checkout(customer->getUsername(), cart, total);
 
         // Give a new voucher if total is over $50
         if (total > 50) {
@@ -364,7 +363,7 @@ bool CheckoutCommand::execute() {
             int discountValue = (DiscountType::PERCENTAGE == discountChoice) ? 10 : 5;
 
             // Create and add the new voucher
-            Registry::getSingleton<DiscountService>()->createDiscount(customer->getUsername(),
+            DiscountService::getInstance()->createDiscount(customer->getUsername(),
                                          static_cast<DiscountType>(discountChoice), discountValue);
             // Notify the user about the new voucher
             string notify = (static_cast<DiscountType>(discountChoice) == DiscountType::PERCENTAGE) ? "10% off" : "$5 off";
@@ -374,10 +373,10 @@ bool CheckoutCommand::execute() {
         CustomerUI::displayOrderSuccessMessage();
 
         // add the items purchased to the sales record
-        Registry::getSingleton<SalesRecordService>()->addToRecord(cart);
+        SalesRecordService::getInstance()->addToRecord(cart);
 
         // delete the item that was sold out from the inventory
-        Registry::getSingleton<MusicService>()->removeSoldOutItems();
+        MusicService::getInstance()->removeSoldOutItems();
     }
     
     printDashLine();

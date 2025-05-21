@@ -6,8 +6,9 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 
-using std::vector, std::string;
+using std::vector, std::string, std::make_shared, std::shared_ptr;
 
 /**
  * @brief Service class for managing shopping cart operations
@@ -16,16 +17,18 @@ using std::vector, std::string;
  */
 
 class CartService {
+private:
+    inline static shared_ptr<CartService> instance = nullptr; /**< Singleton instance of CartService */
+
+    CartService() = default; /**< Private constructor for singleton pattern */
 public:
-    /**
-     * @brief Default constructor
-     */
-    CartService() = default;
 
     /**
-     * @brief Default destructor
+     * @brief Get the singleton instance of AuthService
+     * 
+     * @return shared_ptr<CartService> Pointer to the singleton instance
      */
-    ~CartService() = default;
+    static shared_ptr<CartService> getInstance();
 
     /**
      * @brief Add a music item to the shopping cart

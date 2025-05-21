@@ -28,9 +28,9 @@ void AdminUI::displayMusicList(vector<Music>& items) {
 }
 
 // Displays a formatted list of all registered users
-// Shows ID, username, password, and role for each user
+// Shows ID, username, and role for each user
 void AdminUI::displayUserList(const vector<shared_ptr<User>>& users) {
-    cout << "\tID - Username - Password - Role\n";
+    cout << "\tID - Username - Role\n";
     for (int i = 0; i < users.size(); ++i) {
         cout << '\t' << i + 1 << " - " << users[i]->toString() << '\n';
     }

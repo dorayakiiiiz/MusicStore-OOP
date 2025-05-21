@@ -10,13 +10,8 @@
 #include "utils.h"
 #include "CommandInvoker.h"
 #include "StoreCommands.h"
-#include "Registry.h"
 
 #include "IRepository.h"
-#include "IUserRepository.h"
-#include "IMusicRepository.h"
-#include "IOrderRepository.h"
-#include "IDiscountRepository.h"
 #include "SQLDiscountRepository.h"
 #include "SQLMusicRepository.h"
 #include "SQLUserRepository.h"
@@ -36,48 +31,10 @@
 #include <iostream>
 #include <windows.h>
 
-// initialize the service
-void StoreApp::initializeServices() {
-    // Initialize services and register them with the Registry
-    auto musicService = make_shared<MusicService>();
-    auto userService = make_shared<UserService>();
-    auto orderService = make_shared<OrderService>();
-    auto discountService = make_shared<DiscountService>();
-    auto cartService = make_shared<CartService>();
-    auto authService = make_shared<AuthService>();
-    auto salesRecordService = make_shared<SalesRecordService>();
 
-    Registry::addSingleton(musicService);
-    Registry::addSingleton(userService);
-    Registry::addSingleton(orderService);
-    Registry::addSingleton(discountService);
-    Registry::addSingleton(cartService);
-    Registry::addSingleton(authService);
-    Registry::addSingleton(salesRecordService);
-}
 
-// Initialize the repositories
-void StoreApp::initializeRepositories() {
-    // Initialize repositories
-    shared_ptr<IMusicRepository> musicRepo = make_shared<SqlMusicRepository>();
-    shared_ptr<IUserRepository> userRepo = make_shared<SqlUserRepository>();
-    shared_ptr<IOrderRepository> orderRepo = make_shared<SqlOrderRepository>();
-    shared_ptr<IDiscountRepository> discountRepo = make_shared<SqlDiscountRepository>();
-    shared_ptr<ISalesRecordRepository> salesRecordRepo = make_shared<SqlSalesRecordRepository>();
-
-    Registry::addSingleton(musicRepo);
-    Registry::addSingleton(userRepo);
-    Registry::addSingleton(orderRepo);
-    Registry::addSingleton(discountRepo);
-    Registry::addSingleton(salesRecordRepo);
-}
-
-// Constructor - initializes the StoreApp
-StoreApp::StoreApp() {
-    // Initialize services and repositories
-    initializeServices();
-    initializeRepositories();
-}
+// Constructor 
+StoreApp::StoreApp() {}
 
 // destructor - cleans up the database connection
 StoreApp::~StoreApp() {

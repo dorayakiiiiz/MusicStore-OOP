@@ -9,13 +9,22 @@
 #include "DiscountService.h"
 #include "Discount.h"
 #include "DiscountStrategy.h"
-#include "Registry.h"
-#include "IDiscountRepository.h"
+#include "IDataProvider.h"
+#include "SQLDao.h"
 #include <algorithm>
+
+// Get the singleton instance of DiscountService
+shared_ptr<DiscountService> DiscountService::getInstance() {
+    if (instance == nullptr) {
+        instance = make_shared<DiscountService>();
+    }
+    return instance;
+}
 
 // Get all discount vouchers from the repository
 vector<shared_ptr<Discount>> DiscountService::getAllDiscounts() {
-    return Registry::getSingleton<IDiscountRepository>()->getAll();
+    auto dataProvider = make_shared<SqlDao>();
+    return dataProvider->discount()->getAll();
 }
 
 // Apply a discount to a total price
@@ -49,11 +58,12 @@ vector<shared_ptr<Discount>> DiscountService::loadValidDiscounts(
 // Remove a discount voucher from the repository
 void DiscountService::removeDiscount(const string& discountString) {
     // get all the vouchers from the repository
-    vector<shared_ptr<Discount>> vouchers = Registry::getSingleton<IDiscountRepository>()->getAll();
+    auto dataProvider = make_shared<SqlDao>();
+    vector<shared_ptr<Discount>> vouchers = dataProvider->discount()->getAll();
 
     for (int i = 0; i < vouchers.size(); ++i) {
         if (vouchers[i]->toString() == discountString) {
-            Registry::getSingleton<IDiscountRepository>()->deleteById(i + 1);
+            dataProvider->discount()->deleteById(i + 1);
             break;
         }
     }
@@ -82,7 +92,9 @@ void DiscountService::createDiscount(const string& username, DiscountType type, 
     } else if (DiscountType::FIXED_AMOUNT == type) {
         discount = createFixedDiscount(username, discountValue);
     }
+
     // Add the discount to the repository
-    bool success = Registry::getSingleton<IDiscountRepository>()->add(discount);
+    auto dataProvider = make_shared<SqlDao>();
+    bool success = dataProvider->discount()->add(discount);
     // fix heree
 }

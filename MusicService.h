@@ -24,18 +24,18 @@ using std::vector, std::string, std::shared_ptr, std::make_shared;
  * @details Provides methods for adding, removing, updating, and searching music items in the inventory
  */
 class MusicService {
+private:
+    inline static shared_ptr<MusicService> instance = nullptr; /**< Singleton instance of MusicService */
+
+    MusicService() = default; /**< Private constructor for singleton pattern */
 public:
 
     /**
-     * @brief Default constructor
+     * @brief Get the singleton instance of MusicService
+     * 
+     * @return shared_ptr<MusicService> Pointer to the singleton instance
      */
-    MusicService() = default;
-
-    /**
-     * @brief Default destructor
-     */
-    ~MusicService() = default;
-
+    static shared_ptr<MusicService> getInstance();
 
     /**
      * @brief Get all music items in the inventory
@@ -44,7 +44,6 @@ public:
      */
     vector<Music> getAllMusic();
 
-    
     /**
      * @brief Add a new music item to the inventory
      * 

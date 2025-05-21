@@ -7,14 +7,23 @@
  */
 
 #include "AuthService.h"
-#include "IUserRepository.h"
-#include "Registry.h"
+#include "IDataProvider.h"
+#include "SQLDao.h"
 #include "utils.h"
+
+// get the singleton instance of AuthService
+shared_ptr<AuthService> AuthService::getInstance() {
+    if (instance == nullptr) {
+        instance = make_shared<AuthService>();
+    }
+    return instance;
+}
 
 // Register a new user with username, password, and role
 bool AuthService::registerUser(const string& username, const string& password, Role role) {
     // Get all users from the repository
-    vector<shared_ptr<User>> users = Registry::getSingleton<IUserRepository>()->getAll();
+    auto dataProvider = make_shared<SqlDao>();
+    vector<shared_ptr<User>> users = dataProvider->user()->getAll();
     // Check if username already exists
     for (int i = 0; i < users.size(); ++i) {
         if (users[i]->getUsername() == username) {
@@ -30,14 +39,15 @@ bool AuthService::registerUser(const string& username, const string& password, R
         newUser = make_shared<Admin>(username, password);
     }
     // Save the new user to the repository
-    bool success = Registry::getSingleton<IUserRepository>()->add(newUser);
+    bool success = dataProvider->user()->add(newUser);
     return success;
 }
 
 // Authenticate a user with username and password
 shared_ptr<User> AuthService::loginUser(const string& username, const string& password) {
     // Get all users from the repository
-    vector<shared_ptr<User>> users = Registry::getSingleton<IUserRepository>()->getAll();
+    auto dataProvider = make_shared<SqlDao>();
+    vector<shared_ptr<User>> users = dataProvider->user()->getAll();
     // Search for matching username and password
     for (int i = 0; i < users.size(); ++i) {
         if (users[i]->getUsername() == username && users[i]->getPassword() == password) {

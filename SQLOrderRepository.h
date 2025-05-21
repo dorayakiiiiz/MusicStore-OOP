@@ -4,13 +4,14 @@
 #include <vector>
 #include <string>
 
-#include "IOrderRepository.h"
+#include "IRepository.h"
+#include "Order.h"
 #include "DatabaseConnector.h"
 
 /**
  * @brief SQL implementation of the order repository
  */
-class SqlOrderRepository : public IOrderRepository {
+class SqlOrderRepository : public IRepository<Order> {
 public:
     /**
      * @brief Constructor for SqlOrderRepository

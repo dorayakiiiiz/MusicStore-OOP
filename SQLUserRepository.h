@@ -3,7 +3,8 @@
 #include <vector>
 #include <string>
 
-#include "IUserRepository.h"
+#include "IRepository.h"
+#include "User.h"
 #include "DatabaseConnector.h"
 
 using std::shared_ptr, std::vector;
@@ -11,7 +12,7 @@ using std::shared_ptr, std::vector;
 /**
  * @brief SQL implementation of the user repository
  */
-class SqlUserRepository : public IUserRepository {
+class SqlUserRepository : public IRepository<shared_ptr<User>> {
 public:
     /**
      * @brief Constructor for SqlUserRepository

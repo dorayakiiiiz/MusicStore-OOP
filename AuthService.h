@@ -17,7 +17,19 @@ using std::vector, std::shared_ptr, std::make_shared;
  * @brief Service class for user authentication operations
  */
 class AuthService {
+private:
+    inline static shared_ptr<AuthService> instance = nullptr; /**< Singleton instance of AuthService */
+
+    AuthService() = default; /**< Private constructor for singleton pattern */
 public:
+
+    /**
+     * @brief Get the singleton instance of AuthService
+     * 
+     * @return shared_ptr<AuthService> Pointer to the singleton instance
+     */
+    static shared_ptr<AuthService> getInstance();
+
     /**
      * @brief Register a new user with username, password and role
      * 

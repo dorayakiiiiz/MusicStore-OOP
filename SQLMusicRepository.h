@@ -1,13 +1,14 @@
 #ifndef _SQL_MUSIC_REPOSITORY_H_
 #define _SQL_MUSIC_REPOSITORY_H_
 
-#include "IMusicRepository.h"
+#include "IRepository.h"
+#include "Music.h"
 #include "DatabaseConnector.h"
 
 /**
  * @brief SQL implementation of the music repository
  */
-class SqlMusicRepository : public IMusicRepository {
+class SqlMusicRepository : public IRepository<Music> {
 public:
     /**
      * @brief Constructor for SqlMusicRepository
