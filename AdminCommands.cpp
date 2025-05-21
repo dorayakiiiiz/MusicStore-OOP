@@ -22,7 +22,7 @@ std::string ViewMusicListCommand::getName() const {
 
 bool ViewMusicListCommand::execute() {
     clearScreen();
-    ConsoleUI::printFrame(0, 0, 120, 30);
+    printFrame(0, 0, 120, 30);
     string header = "MUSIC LIST";
     printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
 
@@ -46,7 +46,7 @@ std::string AddNewItemsCommand::getName() const {
 
 bool AddNewItemsCommand::execute() {
     clearScreen();
-    ConsoleUI::printFrame(0, 0, 120, 30); 
+    printFrame(0, 0, 120, 30); 
     while (true) {
         string header = "ADD NEW ITEMS";
         printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
@@ -83,7 +83,7 @@ bool RemoveItemsCommand::execute() {
     Error error;
 
     clearScreen();
-    ConsoleUI::printFrame(0, 0, 120, 30); 
+    printFrame(0, 0, 120, 30); 
     while (true) {
         string header = "REMOVE ITEMS";
         printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
@@ -138,7 +138,7 @@ bool UpdatePriceCommand::execute() {
     Error error;
 
     clearScreen();
-    ConsoleUI::printFrame(0, 0, 120, 30); 
+    printFrame(0, 0, 120, 30); 
     while (true) {
         string header = "UPDATE PRICE";
         printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
@@ -195,7 +195,7 @@ std::string ViewUsersCommand::getName() const {
 
 bool ViewUsersCommand::execute() {
     clearScreen();
-    ConsoleUI::printFrame(0, 0, 120, 30); 
+    printFrame(0, 0, 120, 30); 
     string header = "USER LIST";
     printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
 
@@ -219,9 +219,9 @@ std::string ViewAllPurchaseHistoriesCommand::getName() const {
 
 bool ViewAllPurchaseHistoriesCommand::execute() {
     clearScreen();
-    ConsoleUI::printFrame(0, 0, 120, 30); 
+    printFrame(0, 0, 120, 30); 
     string header = "PURCHASE HISTORY";
-    printHeader(header, (120 - header.length()*2) / 2 - 30, 2);
+    printHeader(header, (120 - header.length()*2) / 2 - 30, 1);
 
     // get all users from the repository
     vector<shared_ptr<User>> users = UserService::getInstance()->getAllUsers();
@@ -273,10 +273,11 @@ bool DeleteUserCommand::execute() {
     vector<shared_ptr<User>> users = UserService::getInstance()->getAllUsers();
 
     clearScreen();
-    ConsoleUI::printFrame(0, 0, 120, 30);
+    printFrame(0, 0, 120, 30);
 
     string header = "DELETE USERS";
-    printHeader(header, (120 - header.length()*2) / 2 - 30, 2);
+    printHeader(header, (120 - header.length()*2) / 2 - 20, 2);
+
     if (users.empty()) {
         printMessage("No users found!");
         pauseScreen();
@@ -347,7 +348,7 @@ std::string ViewSalesStatisticsCommand::getName() const {
 
 bool ViewSalesStatisticsCommand::execute() {
     clearScreen();
-    ConsoleUI::printFrame(0, 0, 120, 30);
+    printFrame(0, 0, 120, 30);
     string header = "SALE STATISTICS";
     printHeader(header, (120 - header.length()*2) / 2 - 30, 1);
 
