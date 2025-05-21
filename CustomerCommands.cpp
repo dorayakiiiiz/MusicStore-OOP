@@ -340,9 +340,15 @@ bool CheckoutCommand::execute() {
                 }
             }
         }
+
+        // add the items purchased to the sales record
+        SalesRecordService::getInstance()->addToRecord(cart);
         
         // Create the order with final total
         OrderService::getInstance()->checkout(customer->getUsername(), cart, total);
+
+        // delete the item that was sold out from the inventory
+        MusicService::getInstance()->removeSoldOutItems();
 
         // Give a new voucher if total is over $50
         if (total > 50) {
@@ -372,11 +378,6 @@ bool CheckoutCommand::execute() {
 
         CustomerUI::displayOrderSuccessMessage();
 
-        // add the items purchased to the sales record
-        SalesRecordService::getInstance()->addToRecord(cart);
-
-        // delete the item that was sold out from the inventory
-        MusicService::getInstance()->removeSoldOutItems();
     }
     
     printDashLine();

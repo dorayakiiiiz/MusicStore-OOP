@@ -31,7 +31,8 @@ void OrderService::checkout( const string& username, Cart& cart, float total) {
 
     // Save the order to the repository
     dataProvider->order()->add(order);
-
+    
+    
     // Clear the cart after successful checkout
     cart.clear();
 }

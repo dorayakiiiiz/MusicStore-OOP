@@ -26,6 +26,7 @@ bool CartService::addItemToCart(Cart& cart, int itemID, int quantity) {
 
     // Add to cart and reduce inventory
     cart.addItems(item, quantity);
+    
 
     item.updateQuantity(item.getQuantity() - quantity);
     dataProvider->music()->updateById(itemID, item);
