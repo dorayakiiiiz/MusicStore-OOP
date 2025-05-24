@@ -21,17 +21,21 @@ std::string ViewMusicListCommand::getName() const {
 }
 
 bool ViewMusicListCommand::execute() {
-    clearScreen();
-    printFrame(0, 0, 120, 30);
     while(true){
+        clearScreen();
+        printFrame(0, 0, 120, 30);
         string header = "musicList";
         printHeader(header, (120 - header.length()*2) / 2 - 19, 1);
 
         vector<Music> items = MusicService::getInstance()->getAllMusic();
         if (items.empty()) {
             printMessage("No items found!");
-            pauseScreen();
-            return true;
+            printRepeatMessage();
+
+            char repeat = _getch();
+            if (repeat == ' ') {
+                return true;
+            }
         }
 
         printRepeatMessage();
@@ -51,9 +55,9 @@ std::string AddNewItemsCommand::getName() const {
 }
 
 bool AddNewItemsCommand::execute() {
-    clearScreen();
-    printFrame(0, 0, 120, 30); 
     while (true) {
+        clearScreen();
+        printFrame(0, 0, 120, 30); 
         string header = "addNewItems";
         printHeader(header, (120 - header.length()*2) / 2 - 29, 1);
 
@@ -86,9 +90,9 @@ bool RemoveItemsCommand::execute() {
     bool isValid;
     Error error;
 
-    clearScreen();
-    printFrame(0, 0, 120, 30); 
     while (true) {
+        clearScreen();
+        printFrame(0, 0, 120, 30); 
         string header = "removeItems";
         printHeader(header, (120 - header.length()*2) / 2 - 24, 1);
 
@@ -117,8 +121,6 @@ bool RemoveItemsCommand::execute() {
         items = MusicService::getInstance()->getAllMusic();
         if (items.empty()) {
             printMessage("tNo items left in inventory!");
-            pauseScreen();
-            break;
         }
         printRepeatMessage();
 
@@ -139,9 +141,9 @@ bool UpdatePriceCommand::execute() {
     bool isValid;
     Error error;
 
-    clearScreen();
-    printFrame(0, 0, 120, 30); 
     while (true) {
+        clearScreen();
+        printFrame(0, 0, 120, 30); 
         string header = "updatePrice";
         printHeader(header, (120 - header.length()*2) / 2 - 22, 1);
 
@@ -194,20 +196,32 @@ std::string ViewUsersCommand::getName() const {
 }
 
 bool ViewUsersCommand::execute() {
-    clearScreen();
-    printFrame(0, 0, 120, 30); 
-    string header = "userList";
-    printHeader(header, (120 - header.length()*2) / 2 - 18, 1);
+    while(true){
+        clearScreen();
+        printFrame(0, 0, 120, 30); 
+        string header = "userList";
+        printHeader(header, (120 - header.length()*2) / 2 - 18, 1);
 
-    vector<shared_ptr<User>> users = UserService::getInstance()->getAllUsers();
-    if (users.empty()) {
-        printMessage("No users found!");
-        pauseScreen();
-        return true;
+        vector<shared_ptr<User>> users = UserService::getInstance()->getAllUsers();
+        if (users.empty()) {
+            printMessage("No users found!");
+            printRepeatMessage();
+
+            char repeat = _getch();
+            if (repeat == ' ') {
+                return true;
+            }
+            return true;
+        }
+
+        AdminUI::displayUserList(users);
+        printRepeatMessage();
+
+        char repeat = _getch();
+        if (repeat == ' ') {
+            break;
+        }
     }
-
-    AdminUI::displayUserList(users);
-    pauseScreen();
     return true;
 }
 
@@ -217,11 +231,6 @@ std::string ViewAllPurchaseHistoriesCommand::getName() const {
 }
 
 bool ViewAllPurchaseHistoriesCommand::execute() {
-    clearScreen();
-    printFrame(0, 0, 120, 30); 
-    string header = "purchaseHistory";
-    printHeader(header, (120 - header.length()*2) / 2 - 31, 1);
-
     // get all users from the repository
     vector<shared_ptr<User>> users = UserService::getInstance()->getAllUsers();
 
@@ -232,29 +241,41 @@ bool ViewAllPurchaseHistoriesCommand::execute() {
     int id;
     bool isValid;
     Error error;
-    do {
-        tie(isValid, id, error) = InputValidator::validateInt("Enter customer ID: ", 1, customer.size());
-        if (!isValid) {
-            printMessage(error.message);
-            sleepScreen();
-            continue;
+    while(true){
+        clearScreen();
+        printFrame(0, 0, 120, 30); 
+        string header = "purchaseHistory";
+        printHeader(header, (120 - header.length()*2) / 2 - 31, 1);
+
+
+        do {
+            tie(isValid, id, error) = InputValidator::validateInt("Enter customer ID: ", 1, customer.size());
+            if (!isValid) {
+                printMessage(error.message);
+                sleepScreen();
+                clearScreen();
+                continue;
+            }
+        } while (!isValid);
+
+        // Get the selected customer
+        shared_ptr<User> selectedCustomer = customer[id - 1];
+        printMessage("Customer: " + selectedCustomer->getUsername());
+
+        vector<Order> userOrders = OrderService::getInstance()->getUserOrders(selectedCustomer->getUsername());
+        if (userOrders.empty()) {
+            printMessage("No purchase history found for this customer.");
+        } else {
+            for (int i = 0; i < userOrders.size(); ++i) {
+                AdminUI::displayPurchasedHistory(userOrders[i], i + 1);
+            }
         }
-    } while (!isValid);
-
-    // Get the selected customer
-    shared_ptr<User> selectedCustomer = customer[id - 1];
-    printMessage("Customer: " + selectedCustomer->getUsername());
-
-    vector<Order> userOrders = OrderService::getInstance()->getUserOrders(selectedCustomer->getUsername());
-    if (userOrders.empty()) {
-        printMessage("No purchase history found for this customer.");
-    } else {
-        for (int i = 0; i < userOrders.size(); ++i) {
-            AdminUI::displayPurchasedHistory(userOrders[i], i + 1);
+        
+        char repeat = _getch();
+        if (repeat == ' ') {
+            break;
         }
     }
-    
-    pauseScreen();
     return true;
 }
 
@@ -271,20 +292,22 @@ bool DeleteUserCommand::execute() {
 
     vector<shared_ptr<User>> users = UserService::getInstance()->getAllUsers();
 
-    clearScreen();
-    printFrame(0, 0, 120, 30);
-
     string header = "deleteUsers";
     printHeader(header, (120 - header.length()*2) / 2 - 24, 1);
 
     if (users.empty()) {
         printMessage("No users found!");
-        pauseScreen();
-        return true;
+        printRepeatMessage();
+
+        char repeat = _getch();
+        if (repeat == ' ') {
+            return true;
+        }
     }
     
     while (true) {
-        printMessage("User list:");
+        clearScreen();
+        printFrame(0, 0, 120, 30);
         AdminUI::displayUserList(users);
         
         // Get username to delete
@@ -319,15 +342,18 @@ bool DeleteUserCommand::execute() {
             printMessage("User not found!");
         }
 
-        cout << "flag3\n";
-
         // delete the order history of the deleted user
         OrderService::getInstance()->deleteOrder(delUser->getUsername());
 
         users = UserService::getInstance()->getAllUsers();
         if (users.empty()) {
             printMessage("No users left in the system!");
-            pauseScreen();
+            printRepeatMessage();
+
+            char repeat = _getch();
+            if (repeat == ' ') {
+                return true;
+            }
             break;
         }
 
@@ -347,16 +373,23 @@ std::string ViewSalesStatisticsCommand::getName() const {
 }
 
 bool ViewSalesStatisticsCommand::execute() {
-    clearScreen();
-    printFrame(0, 0, 120, 30);
-    string header = "saleStatistics";
-    printHeader(header, (120 - header.length()*2) / 2 - 27, 1);
+    while(true){
+        clearScreen();
+        printFrame(0, 0, 120, 30);
+        string header = "saleStatistics";
+        printHeader(header, (120 - header.length()*2) / 2 - 27, 1);
 
-    vector<SalesRecord> salesRecords = SalesRecordService::getInstance()->getAllSalesRecords();
-    float totalRevenue = SalesRecordService::getInstance()->getTotalRevenue();
+        vector<SalesRecord> salesRecords = SalesRecordService::getInstance()->getAllSalesRecords();
+        float totalRevenue = SalesRecordService::getInstance()->getTotalRevenue();
 
-    AdminUI::displaySaleStatistics(salesRecords, totalRevenue);
-    pauseScreen();
+        AdminUI::displaySaleStatistics(salesRecords, totalRevenue);
+        printRepeatMessage();
+
+        char repeat = _getch();
+        if (repeat == ' ') {
+            break;
+        }
+    }
     return true;
 }
 
