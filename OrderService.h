@@ -3,6 +3,7 @@
 
 #include "Order.h"
 #include "Cart.h"
+#include "IDataProvider.h"
 #include <vector>
 #include <memory>
 #include <string>
@@ -18,7 +19,9 @@ class OrderService {
 private:
     inline static shared_ptr<OrderService> instance = nullptr; /**< Singleton instance of OrderService */
 
-    OrderService() = default; /**< Private constructor for singleton pattern */
+    OrderService(); /**< Private constructor for singleton pattern */
+
+    shared_ptr<IDataProvider> dataProvider; /**< Data provider for accessing order data */
 public:
 
     /**

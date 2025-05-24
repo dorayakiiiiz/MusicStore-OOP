@@ -23,8 +23,8 @@ std::string ViewMusicListCommand::getName() const {
 bool ViewMusicListCommand::execute() {
     clearScreen();
     printFrame(0, 0, 120, 30);
-    string header = "MUSIC LIST";
-    printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
+    string header = "musicList";
+    printHeader(header, (120 - header.length()*2) / 2 - 25, 1);
 
     vector<Music> items = MusicService::getInstance()->getAllMusic();
     if (items.empty()) {
@@ -48,8 +48,8 @@ bool AddNewItemsCommand::execute() {
     clearScreen();
     printFrame(0, 0, 120, 30); 
     while (true) {
-        string header = "ADD NEW ITEMS";
-        printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
+        string header = "addNewItems";
+        printHeader(header, (120 - header.length()*2) / 2 - 28, 1);
 
         Music newItem = AdminUI::getNewMusicDetails();
         
@@ -85,8 +85,8 @@ bool RemoveItemsCommand::execute() {
     clearScreen();
     printFrame(0, 0, 120, 30); 
     while (true) {
-        string header = "REMOVE ITEMS";
-        printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
+        string header = "removeItems";
+        printHeader(header, (120 - header.length()*2) / 2 - 24, 1);
 
         // Get all items from the repository
         vector<Music> items = MusicService::getInstance()->getAllMusic();
@@ -140,8 +140,8 @@ bool UpdatePriceCommand::execute() {
     clearScreen();
     printFrame(0, 0, 120, 30); 
     while (true) {
-        string header = "UPDATE PRICE";
-        printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
+        string header = "updatePrice";
+        printHeader(header, (120 - header.length()*2) / 2 - 22, 1);
 
         vector<Music> items = MusicService::getInstance()->getAllMusic();
         AdminUI::displayMusicList(items);
@@ -196,8 +196,8 @@ std::string ViewUsersCommand::getName() const {
 bool ViewUsersCommand::execute() {
     clearScreen();
     printFrame(0, 0, 120, 30); 
-    string header = "USER LIST";
-    printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
+    string header = "userList";
+    printHeader(header, (120 - header.length()*2) / 2 - 26, 1);
 
     vector<shared_ptr<User>> users = UserService::getInstance()->getAllUsers();
     if (users.empty()) {
@@ -220,8 +220,8 @@ std::string ViewAllPurchaseHistoriesCommand::getName() const {
 bool ViewAllPurchaseHistoriesCommand::execute() {
     clearScreen();
     printFrame(0, 0, 120, 30); 
-    string header = "PURCHASE HISTORY";
-    printHeader(header, (120 - header.length()*2) / 2 - 30, 1);
+    string header = "purchaseHistory";
+    printHeader(header, (120 - header.length()*2) / 2 - 31, 1);
 
     // get all users from the repository
     vector<shared_ptr<User>> users = UserService::getInstance()->getAllUsers();
@@ -275,8 +275,8 @@ bool DeleteUserCommand::execute() {
     clearScreen();
     printFrame(0, 0, 120, 30);
 
-    string header = "DELETE USERS";
-    printHeader(header, (120 - header.length()*2) / 2 - 20, 2);
+    string header = "deleteUsers";
+    printHeader(header, (120 - header.length()*2) / 2 - 24, 1);
 
     if (users.empty()) {
         printMessage("No users found!");
@@ -349,8 +349,8 @@ std::string ViewSalesStatisticsCommand::getName() const {
 bool ViewSalesStatisticsCommand::execute() {
     clearScreen();
     printFrame(0, 0, 120, 30);
-    string header = "SALE STATISTICS";
-    printHeader(header, (120 - header.length()*2) / 2 - 30, 1);
+    string header = "saleStatistics";
+    printHeader(header, (120 - header.length()*2) / 2 - 33, 1);
 
     vector<SalesRecord> salesRecords = SalesRecordService::getInstance()->getAllSalesRecords();
     float totalRevenue = SalesRecordService::getInstance()->getTotalRevenue();

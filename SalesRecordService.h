@@ -19,7 +19,9 @@ class SalesRecordService {
 private:
     inline static shared_ptr<SalesRecordService> instance = nullptr; /**< Singleton instance of SalesRecordService */
 
-    SalesRecordService() = default; /**< Private constructor for singleton pattern */
+    shared_ptr<IDataProvider> dataProvider; /**< Data provider for accessing sales record data */
+    
+    SalesRecordService(); /**< Private constructor for singleton pattern */
 public:
 
     /**

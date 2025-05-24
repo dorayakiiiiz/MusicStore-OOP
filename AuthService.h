@@ -9,6 +9,7 @@
 #ifndef _AUTH_SERVICE_H_
 #define _AUTH_SERVICE_H_
 #include "User.h"
+#include "IDataProvider.h"
 #include <vector>
 #include <memory>
 using std::vector, std::shared_ptr, std::make_shared;
@@ -20,7 +21,9 @@ class AuthService {
 private:
     inline static shared_ptr<AuthService> instance = nullptr; /**< Singleton instance of AuthService */
 
-    AuthService() = default; /**< Private constructor for singleton pattern */
+    shared_ptr<IDataProvider> dataProvider; /**< Data provider for accessing user data */
+
+    AuthService(); /**< Private constructor for singleton pattern */
 public:
 
     /**

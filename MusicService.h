@@ -12,6 +12,7 @@
 #include "Music.h"
 #include "Search.h"
 #include "SearchFactory.h"
+#include "IDataProvider.h"
 #include <vector>
 #include <string>
 #include <memory>
@@ -27,7 +28,9 @@ class MusicService {
 private:
     inline static shared_ptr<MusicService> instance = nullptr; /**< Singleton instance of MusicService */
 
-    MusicService() = default; /**< Private constructor for singleton pattern */
+    shared_ptr<IDataProvider> dataProvider; /**< Data provider for accessing music data */
+
+    MusicService(); /**< Private constructor for singleton pattern */
 public:
 
     /**
@@ -88,7 +91,7 @@ public:
      * 
      * @param items Reference to the vector of music items
      */
-    static void removeSoldOutItems();
+    void removeSoldOutItems();
 };
 
 #endif

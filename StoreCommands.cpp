@@ -22,8 +22,8 @@ bool SignUpCommand::execute() {
     clearScreen();
     printFrame(0, 0, 120, 30);
     
-    string header = "SIGN UP";
-    printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
+    string header = "signUp";
+    printHeader(header, (120 - header.length()*2) / 2 - 15, 1);
     int role;
     string username, password;
     
@@ -68,8 +68,7 @@ bool SignUpCommand::execute() {
     }
 
     // Register the new user
-    auto authService = AuthService::getInstance();
-    bool success = authService->registerUser(username, password, static_cast<Role>(role));
+    bool success = AuthService::getInstance()->registerUser(username, password, static_cast<Role>(role));
     if (success) {
         printMessage("Sign up successfully!");
         sleepScreen();
@@ -94,8 +93,8 @@ bool LoginCommand::execute() {
     
     clearScreen();
     printFrame(0, 0, 120, 30);
-    string header = "LOGIN";
-    printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
+    string header = "login";
+    printHeader(header, (120 - header.length()*2) / 2 - 11, 1);
     string username, password;
     
     // Get username input with validation
@@ -119,8 +118,7 @@ bool LoginCommand::execute() {
     } while (!isValid);
 
     // Attempt to authenticate the user
-    auto authService = AuthService::getInstance();
-    currentUser = authService->loginUser(username, password);
+    currentUser = AuthService::getInstance()->loginUser(username, password);
 
     if (!currentUser) {
         printMessage("Invalid username or password. Please try again!");

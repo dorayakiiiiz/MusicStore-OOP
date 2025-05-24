@@ -11,6 +11,11 @@
 #include "SQLDao.h"
 #include "utils.h"
 
+// Constructor
+AuthService::AuthService() {
+    dataProvider = make_shared<SqlDao>();
+}
+
 // get the singleton instance of AuthService
 shared_ptr<AuthService> AuthService::getInstance() {
     if (instance == nullptr) {
@@ -22,7 +27,6 @@ shared_ptr<AuthService> AuthService::getInstance() {
 // Register a new user with username, password, and role
 bool AuthService::registerUser(const string& username, const string& password, Role role) {
     // Get all users from the repository
-    auto dataProvider = make_shared<SqlDao>();
     vector<shared_ptr<User>> users = dataProvider->user()->getAll();
     // Check if username already exists
     for (int i = 0; i < users.size(); ++i) {
@@ -46,7 +50,6 @@ bool AuthService::registerUser(const string& username, const string& password, R
 // Authenticate a user with username and password
 shared_ptr<User> AuthService::loginUser(const string& username, const string& password) {
     // Get all users from the repository
-    auto dataProvider = make_shared<SqlDao>();
     vector<shared_ptr<User>> users = dataProvider->user()->getAll();
     // Search for matching username and password
     for (int i = 0; i < users.size(); ++i) {

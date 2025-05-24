@@ -10,7 +10,7 @@
 #include <iostream>
 
 // Add a music item to the cart with specified quantity
-void Cart::addItems(Music& item, int& quantity) {
+void Cart::addItems(Music item, int quantity) {
     item.updateQuantity(quantity);
     
     // Check if the item already exists in the cart

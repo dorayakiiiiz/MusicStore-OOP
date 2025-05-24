@@ -31,9 +31,22 @@ void printMessage(const string& message) {
     cout << '\t' << char(175) << ' ' << message << '\n';
 }
 
-void printASCII(const string& header, int x, int y)
+void printMenu(const string& header, int x, int y)
 {
-    string fileName = "ascii/" + header + ".txt";
+    string fileName = "";
+    if(header == "WELCOME TO THE MUSIC STORE"){
+        fileName = "ascii/musicStore.txt";
+        x -= 4;
+    }
+    else if (header == "ADMIN MENU"){
+        fileName = "ascii/adminMenu.txt";
+        x += 14;
+    }
+    else{
+        fileName = "ascii/customerMenu.txt";
+        x += 0;
+    }
+
     string line = "";
     std::ifstream inFile;
     inFile.open(fileName);

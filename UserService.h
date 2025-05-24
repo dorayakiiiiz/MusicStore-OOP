@@ -2,6 +2,7 @@
 #define _USER_SERVICE_H_
 
 #include "User.h"
+#include "IDataProvider.h"
 #include <vector>
 #include <string>
 #include <memory>
@@ -17,7 +18,9 @@ class UserService {
 private:
     inline static shared_ptr<UserService> instance = nullptr; /**< Singleton instance of UserService */
 
-    UserService() = default; /**< Private constructor for singleton pattern */
+    shared_ptr<IDataProvider> dataProvider; /**< Data provider for accessing user data */
+
+    UserService(); /**< Private constructor for singleton pattern */
 public:
 
     /**

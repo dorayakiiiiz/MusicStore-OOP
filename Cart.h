@@ -28,7 +28,7 @@ public:
      * @param item The music item to add
      * @param quantity The quantity of the item to add
      */
-    void addItems(Music&, int&);
+    void addItems(Music, int);
     
     /**
      * @brief Remove an item from the cart by index

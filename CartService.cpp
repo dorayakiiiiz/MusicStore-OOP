@@ -2,6 +2,11 @@
 #include "IDataProvider.h"
 #include "SQLDao.h"
 
+// Constructor
+CartService::CartService() {
+    dataProvider = make_shared<SqlDao>();
+}
+
 // Get the singleton instance of CartService
 shared_ptr<CartService> CartService::getInstance() {
     if (instance == nullptr) {
@@ -13,7 +18,6 @@ shared_ptr<CartService> CartService::getInstance() {
 // Add a music item to the shopping cart
 bool CartService::addItemToCart(Cart& cart, int itemID, int quantity) {
 
-    auto dataProvider = make_shared<SqlDao>();
     Music item = dataProvider->music()->getById(itemID);
 
     if (item.getQuantity() < quantity) {
@@ -22,6 +26,7 @@ bool CartService::addItemToCart(Cart& cart, int itemID, int quantity) {
 
     // Add to cart and reduce inventory
     cart.addItems(item, quantity);
+    
 
     item.updateQuantity(item.getQuantity() - quantity);
     dataProvider->music()->updateById(itemID, item);
@@ -38,7 +43,6 @@ bool CartService::removeItemFromCart(Cart& cart, int itemID) {
     }
 
     // get all items from the repository
-    auto dataProvider = make_shared<SqlDao>();
     vector<Music> inventory = dataProvider->music()->getAll();
     for (int i = 0; i < inventory.size(); i++) {
         if (inventory[i] == cart.getItems()[itemID]) {

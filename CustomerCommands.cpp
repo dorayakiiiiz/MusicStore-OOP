@@ -36,7 +36,7 @@ bool ViewPurchaseHistoryCommand::execute() {
     // Get order history for the current customer
     vector<Order> orderHistory = OrderService::getInstance()->getUserOrders(customer->getUsername());
     
-    string header = "PURCHASE HISTORY";
+    string header = "purchaseHistory";
     printHeader(header, (120 - header.length()*2) / 2 - 40, 2);
     CustomerUI::displayPurchasedHistory(orderHistory, customer->getUsername());
 
@@ -54,7 +54,7 @@ bool ViewMusicCommand::execute() {
     clearScreen();
     printFrame(0, 0, 120, 30);
 
-    string header = "MUSIC LIST";
+    string header = "musicList";
     printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
 
     vector<Music> items = MusicService::getInstance()->getAllMusic();
@@ -77,7 +77,7 @@ bool SearchMusicCommand::execute() {
     clearScreen();
     printFrame(0, 0, 120, 30);
     while (true) {
-        string header = "SEARCH MUSIC";
+        string header = "searchMusic";
         printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
 
         int criteria;
@@ -136,7 +136,7 @@ string AddToCartCommand::getName() const {
 bool AddToCartCommand::execute() {
     clearScreen();
     printFrame(0, 0, 120, 30);
-    string header = "ADD TO CART";
+    string header = "addToCart";
     printHeader(header, (120 - header.length()*2) / 2 - 30, 1);
 
     // Get all music items from the repository
@@ -204,7 +204,7 @@ std::string RemoveFromCartCommand::getName() const {
 bool RemoveFromCartCommand::execute() {
     clearScreen();
     printFrame(0, 0, 120, 30);
-    string header = "REMOVE ITEMS FROM CART";
+    string header = "removeItemsFromCart";
     printHeader(header, (120 - header.length()*2) / 2 - 30, 1);
 
     // Get all music items from the repository
@@ -269,7 +269,7 @@ std::string CheckoutCommand::getName() const {
 bool CheckoutCommand::execute() {
     clearScreen();
     printFrame(0, 0, 120, 30);
-    string header = "CHECK OUT";
+    string header = "checkOut";
     printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
 
     bool isValid;
@@ -340,9 +340,15 @@ bool CheckoutCommand::execute() {
                 }
             }
         }
+
+        // add the items purchased to the sales record
+        SalesRecordService::getInstance()->addToRecord(cart);
         
         // Create the order with final total
         OrderService::getInstance()->checkout(customer->getUsername(), cart, total);
+
+        // delete the item that was sold out from the inventory
+        MusicService::getInstance()->removeSoldOutItems();
 
         // Give a new voucher if total is over $50
         if (total > 50) {
@@ -372,11 +378,6 @@ bool CheckoutCommand::execute() {
 
         CustomerUI::displayOrderSuccessMessage();
 
-        // add the items purchased to the sales record
-        SalesRecordService::getInstance()->addToRecord(cart);
-
-        // delete the item that was sold out from the inventory
-        MusicService::getInstance()->removeSoldOutItems();
     }
     
     printDashLine();

@@ -4,6 +4,11 @@
 
 using std::make_shared, std::vector, std::shared_ptr;
 
+// Constructor
+SalesRecordService::SalesRecordService() {
+    dataProvider = make_shared<SqlDao>();
+}
+
 // Get the singleton instance of SalesRecordService
 shared_ptr<SalesRecordService> SalesRecordService::getInstance() {
     if (instance == nullptr) {
@@ -14,15 +19,11 @@ shared_ptr<SalesRecordService> SalesRecordService::getInstance() {
 
 // Get all sales records from the repository
 vector<SalesRecord> SalesRecordService::getAllSalesRecords() {
-    // Get all sales records from the repository
-    auto dataProvider = make_shared<SqlDao>();
     return dataProvider->salesRecord()->getAll();
 }
 
-// add the items purchased to the sales record
+// Add the items purchased to the sales record
 void SalesRecordService::addToRecord(const Cart& cart) {
-    auto dataProvider = make_shared<SqlDao>();
-    // Add the items purchased to the sales record
     vector<Music> items = cart.getItems();
     for (int i = 0; i < items.size(); ++i) {
         SalesRecord salesRecord(items[i].getName(), items[i].getArtist(),
@@ -33,8 +34,6 @@ void SalesRecordService::addToRecord(const Cart& cart) {
 
 // Get total revenue generated from all sales records
 float SalesRecordService::getTotalRevenue() {
-    // Get all sales records from the repository
-    auto dataProvider = make_shared<SqlDao>();
     vector<SalesRecord> salesRecord = dataProvider->salesRecord()->getAll();
     // Calculate the total revenue
     float total = 0.0f;

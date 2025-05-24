@@ -13,6 +13,11 @@
 
 #include <algorithm>
 
+// Constructor
+MusicService::MusicService() {
+    dataProvider = make_shared<SqlDao>();
+}
+
 // Get the singleton instance of MusicService
 shared_ptr<MusicService> MusicService::getInstance() {
     if (instance == nullptr) {
@@ -24,7 +29,6 @@ shared_ptr<MusicService> MusicService::getInstance() {
 // Get all music items from the repository
 vector<Music> MusicService::getAllMusic() {
     // Get all music items from the repository
-    auto dataProvider = make_shared<SqlDao>();
     return dataProvider->music()->getAll();
 }
 
@@ -44,13 +48,11 @@ vector<Music> MusicService::searchMusic(const vector<Music>& items, SearchType c
 
 // Add a new music item to the inventory
 bool MusicService::addMusicItem(const Music& item) {
-    auto dataProvider = make_shared<SqlDao>();
     return dataProvider->music()->add(item);
 }
 
 // Remove a music item from the inventory by ID
 bool MusicService::removeMusicItem(int id) {
-    auto dataProvider = make_shared<SqlDao>();
     return dataProvider->music()->deleteById(id);
 }
 
@@ -61,7 +63,6 @@ bool MusicService::updateMusicItemPrice(int id, float price) {
         return false;
     }
     // Update the item's price
-    auto dataProvider = make_shared<SqlDao>();
     Music item = dataProvider->music()->getById(id);
     item.updatePrice(price);
     return dataProvider->music()->updateById(id, item);
@@ -70,7 +71,6 @@ bool MusicService::updateMusicItemPrice(int id, float price) {
 // Remove sold-out items from the inventory
 void MusicService::removeSoldOutItems() {
     // Get all music items from the repository
-    auto dataProvider = make_shared<SqlDao>();
     vector<Music> items = dataProvider->music()->getAll();
 
     for (int i = 0; i < items.size(); ++i) {

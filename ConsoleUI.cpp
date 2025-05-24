@@ -22,7 +22,7 @@ int ConsoleUI::selectMenu(const std::vector<std::string>& options, const std::st
 
     // In tiêu đề căn giữa
     gotoXY(titleX, 6);
-    printASCII(header, titleX, 6);
+    printMenu(header, titleX, 6);
 
     // In hướng dẫn
     string instructions = "Use W/S to navigate and Enter to select";
