@@ -9,6 +9,8 @@
 #include "DiscountStrategy.h"
 #include <algorithm>
 
+using std::to_string;
+
 
 // Forward declarations of strategy implementations
 
@@ -18,16 +20,16 @@ float PercentageDiscountStrategy::calculateDiscount(float total) const {
     return total * percentage / 100.0f;
 }
 
-std::string PercentageDiscountStrategy::getType() const {
+string PercentageDiscountStrategy::getType() const {
     return "Percentage";
 }
 
-float PercentageDiscountStrategy::getValue() const {
-    return static_cast<float>(percentage);
+int PercentageDiscountStrategy::getValue() const {
+    return percentage;
 }
 
-std::string PercentageDiscountStrategy::valueToString() const {
-    return "P" + std::to_string(percentage);
+string PercentageDiscountStrategy::toString() const {
+    return " Percentage discount: " + to_string(percentage) + "%";
 }
 
 
@@ -37,14 +39,14 @@ float FixedDiscountStrategy::calculateDiscount(float total) const {
     return total < amount ? total : amount;
 }
 
-std::string FixedDiscountStrategy::getType() const {
-    return "Fixed";
+string FixedDiscountStrategy::getType() const {
+    return "Fixed Amount";
 }
 
-float FixedDiscountStrategy::getValue() const {
+int FixedDiscountStrategy::getValue() const {
     return amount;
 }
 
-std::string FixedDiscountStrategy::valueToString() const {
-    return "F" + std::to_string(amount);
+string FixedDiscountStrategy::toString() const {
+    return " Fixed discount: " + to_string(amount) + "$";
 }

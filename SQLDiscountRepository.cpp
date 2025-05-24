@@ -26,27 +26,25 @@ vector<shared_ptr<Discount>> SqlDiscountRepository::getAll() {
         return vouchers;  // Return empty vector if handle allocation fails
     }
 
-    // Step 3: Execute query to get all voucher records
-    string selectQuery = "SELECT Vouchername FROM vouchers";
-    ret = SQLExecDirect(hStmt, (SQLCHAR*)selectQuery.c_str(), SQL_NTS);
+    // gồm id, code, username, type (char(1): P hoặc F), value
+    // id và type để xét trong database chứ ko có lưu vô biến Discount
+    char type; string code, username; int value;
+    // sửa tại đây-------------------
 
-    // Step 4: Process query results
-    if (SQL_SUCCEEDED(ret)) {
-        // Temporary variable to store voucher string
-        char tempVoucher[256];
-        string Voucher;
+    
+    // tới đây-----------------
 
-        // Fetch each row from the result set
-        while ((ret = SQLFetch(hStmt)) == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO) {
-            SQLGetData(hStmt, 1, SQL_C_CHAR, tempVoucher, sizeof(tempVoucher), NULL);
-
-            Voucher = tempVoucher;
-
-            // Deserialize the voucher string back to a Discount object
-            shared_ptr<Discount> voucher = Discount::fromString(Voucher);
-            vouchers.push_back(voucher);
-        }
+    // dòng này cho m hiểu cấu trúc
+    shared_ptr<Discount> voucher;
+    if (type == 'F') {
+        voucher = std::make_shared<Discount>(code, username, make_unique<FixedDiscountStrategy>(value));
+    } else {
+        voucher = std::make_shared<Discount>(code, username, make_unique<PercentageDiscountStrategy>(value));
     }
+    vouchers.push_back(voucher);
+    // đoạn code nài phải sửa lại chèn đúng vô code m
+
+
 
     // Step 5: Clean up resources
     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
@@ -62,52 +60,16 @@ bool SqlDiscountRepository::add(const shared_ptr<Discount>& discount) {
     SQLHSTMT hStmt = nullptr;
     SQLRETURN ret;
 
-    std::string voucherString = discount->toString();
+    // cài lại ở đây
+    // tự tạo id như cũ
+    // lấy các thông tin code, username, type, value như sau:
+    string username = discount->getUsername();
+    char type = discount->getType()[0]; 
+    string code = discount->getCode();
+    int value = discount->getValue();
+    // sửa lại rồi add vào
 
-    // Step 1: Check duplicates
-    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
-        return false;
-    }
-
-    std::string checkQuery = "SELECT COUNT(*) FROM vouchers WHERE Vouchername = ?";
-    ret = SQLPrepare(hStmt, (SQLCHAR*)checkQuery.c_str(), SQL_NTS);
-    SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)voucherString.c_str(), 0, nullptr);
-
-    int duplicate = 0;
-    if (SQLExecute(hStmt) == SQL_SUCCESS && SQLFetch(hStmt) == SQL_SUCCESS) {
-        SQLGetData(hStmt, 1, SQL_C_SLONG, &duplicate, 0, nullptr);
-    }
-
-    SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-
-    if (duplicate > 0) {
-        return false;
-    }
-
-    // Step 2: Get next ID
-    int newId = 1;
-    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) == SQL_SUCCESS) {
-        std::string idQuery = "SELECT ISNULL(MAX(ID), 0) + 1 FROM vouchers";
-        if (SQLExecDirect(hStmt, (SQLCHAR*)idQuery.c_str(), SQL_NTS) == SQL_SUCCESS && SQLFetch(hStmt) == SQL_SUCCESS) {
-            SQLGetData(hStmt, 1, SQL_C_SLONG, &newId, 0, nullptr);
-        }
-        SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-    }
-
-    // Step 3: Insert
-    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
-        return false;
-    }
-
-    std::string insertQuery = "INSERT INTO vouchers (ID, Vouchername) VALUES (?, ?)";
-    SQLPrepare(hStmt, (SQLCHAR*)insertQuery.c_str(), SQL_NTS);
-    
-    SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &newId, 0, nullptr);
-    SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)voucherString.c_str(), 0, nullptr);
-
-    bool success = SQL_SUCCEEDED(SQLExecute(hStmt));
-    SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-    return success;
+    return true;
 }
 
 bool SqlDiscountRepository::deleteById(int id) {

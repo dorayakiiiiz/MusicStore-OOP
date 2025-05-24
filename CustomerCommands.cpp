@@ -322,7 +322,7 @@ bool CheckoutCommand::execute() {
                 
                 // Find and apply the selected voucher
                 for (const auto& voucher : validVouchers) {
-                    if (voucher->toString() == voucherCode) {
+                    if (voucher->getCode() == voucherCode) {
                         selectedVoucher = voucher;
                         
                         // Apply the discount to the total
@@ -330,7 +330,7 @@ bool CheckoutCommand::execute() {
                         printMessage("Voucher applied! New total: $" + to_string(total));
                         
                         // Remove the used voucher
-                        DiscountService::getInstance()->removeDiscount(voucherCode);
+                        DiscountService::getInstance()->removeDiscount(selectedVoucher);
                         break;
                     } 
                 }

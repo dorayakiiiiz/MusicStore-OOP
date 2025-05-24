@@ -83,33 +83,20 @@ public:
      */
     vector<shared_ptr<Discount>> loadValidDiscounts(
         const vector<shared_ptr<Discount>>& vouchers, const string& username);
-    
+        
     /**
-     * @brief Remove a specific discount from the list using its string representation
+     * @brief Remove a discount voucher from the repository
      * 
-     * @param discountString The string representation of the voucher to remove
-     */
-    void removeDiscount(const string& discountString);
-    
+     * @param shared_ptr<Discount> discount The discount voucher to remove
+     */    
+    void removeDiscount(const shared_ptr<Discount>& discount);
+
     /**
-     * @brief Create a new percentage discount
+     * @brief Generate a random discount code
      * 
-     * @param username Username associated with the discount
-     * @param percentage Percentage value of the discount
-     * @return shared_ptr<Discount> New percentage discount
+     * @return string A randomly generated discount code
      */
-    shared_ptr<Discount> createPercentageDiscount(
-        const string& username, int percentage);
-    
-    /**
-     * @brief Create a new fixed amount discount
-     * 
-     * @param username Username associated with the discount
-     * @param amount Fixed amount value of the discount
-     * @return shared_ptr<Discount> New fixed amount discount
-     */
-    shared_ptr<Discount> createFixedDiscount(
-        const string& username, float amount);
+    string generateRandomCode();
 
     /**
      * @brief Create a new discount voucher for a user

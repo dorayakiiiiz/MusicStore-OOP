@@ -19,6 +19,7 @@
 using std::string, std::unique_ptr, std::shared_ptr;
 class Discount {
 private:
+    string code;
     string username;
     unique_ptr<DiscountStrategy> strategy;
     
@@ -26,10 +27,18 @@ public:
     /**
      * @brief Constructor for a discount
      * 
+     * @param code The discount code
      * @param username The username associated with this discount
      * @param strategy The strategy for calculating the discount
      */
-    Discount(const string& username, unique_ptr<DiscountStrategy> strategy);
+    Discount(const string& code, const string& username, unique_ptr<DiscountStrategy> strategy);
+
+    /**
+     * @brief Get the discount code
+     * 
+     * @return string The discount code
+     */
+    string getCode() const;
     
     /**
      * @brief Apply this discount to a total price
@@ -66,14 +75,6 @@ public:
      * @return string String representation of the discount
      */
     string toString() const;
-    
-    /**
-     * @brief Factory method to create a discount object from string
-     * 
-     * @param str The string representation of a discount
-     * @return shared_ptr<Discount> A new discount object
-     */
-    static shared_ptr<Discount> fromString(const string& str);
 };
 
 #endif
