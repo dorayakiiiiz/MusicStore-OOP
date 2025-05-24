@@ -28,6 +28,10 @@ int PercentageDiscountStrategy::getValue() const {
     return percentage;
 }
 
+void PercentageDiscountStrategy::setValue(int value) {
+    percentage = value; 
+}
+
 string PercentageDiscountStrategy::toString() const {
     return " Percentage discount: " + to_string(percentage) + "%";
 }
@@ -40,13 +44,18 @@ float FixedDiscountStrategy::calculateDiscount(float total) const {
 }
 
 string FixedDiscountStrategy::getType() const {
-    return "Fixed Amount";
+    return "Fixed";
 }
 
 int FixedDiscountStrategy::getValue() const {
     return amount;
 }
 
+void FixedDiscountStrategy::setValue(int value) {
+    amount = value; 
+}
+
 string FixedDiscountStrategy::toString() const {
     return " Fixed discount: " + to_string(amount) + "$";
 }
+

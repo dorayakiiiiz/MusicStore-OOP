@@ -8,20 +8,26 @@
 
 #ifndef _DISCOUNT_H_
 #define _DISCOUNT_H_
-
 #include "DiscountStrategy.h"
+
 #include <memory>
 #include <string>
+
+enum DiscountType {
+    PERCENTAGE = 1,
+    FIXED_AMOUNT = 2
+};
+
 
 /**
  * @brief Represents a discount that can be applied to a purchase
  */
-using std::string, std::unique_ptr, std::shared_ptr;
+using std::string, std::shared_ptr;
 class Discount {
 private:
     string code;
     string username;
-    unique_ptr<DiscountStrategy> strategy;
+    shared_ptr<DiscountStrategy> strategy;
     
 public:
     /**
@@ -31,7 +37,7 @@ public:
      * @param username The username associated with this discount
      * @param strategy The strategy for calculating the discount
      */
-    Discount(const string& code, const string& username, unique_ptr<DiscountStrategy> strategy);
+    Discount(const string& code, const string& username, shared_ptr<DiscountStrategy> strategy);
 
     /**
      * @brief Get the discount code

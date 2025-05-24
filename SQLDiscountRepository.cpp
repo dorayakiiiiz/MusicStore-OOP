@@ -52,9 +52,9 @@ vector<shared_ptr<Discount>> SqlDiscountRepository::getAll() {
 
             // Create appropriate user type based on role (C = Customer, otherwise Admin)
             if (type == "F") {
-                vouchers.push_back(make_shared<Discount>(code, username, make_unique<FixedDiscountStrategy>(value)));
+                vouchers.push_back(make_shared<Discount>(code, username, make_shared<FixedDiscountStrategy>(value)));
             } else {
-                vouchers.push_back(make_shared<Discount>(code, username, make_unique<PercentageDiscountStrategy>(value)));
+                vouchers.push_back(make_shared<Discount>(code, username, make_shared<PercentageDiscountStrategy>(value)));
             }
         }
     }
@@ -113,19 +113,19 @@ bool SqlDiscountRepository::add(const shared_ptr<Discount>& discount) {
         return false;
     }
 
-    std::string insertQuery = "INSERT INTO vouchers (ID, Code, Username, TypeV, ValueV) VALUES (?, ?, ?, ?)";
+    std::string insertQuery = "INSERT INTO vouchers (ID, Code, Username, TypeV, ValueV) VALUES (?, ?, ?, ?, ?)";
     SQLPrepare(hStmt, (SQLCHAR*)insertQuery.c_str(), SQL_NTS);
     
     SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &newId, 0, nullptr);
     SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)code.c_str(), 0, nullptr);
     SQLBindParameter(hStmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)username.c_str(), 0, nullptr);
     SQLBindParameter(hStmt, 4, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_CHAR, 1, 0, &type, 0, nullptr);
-    SQLBindParameter(hStmt, 55, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &value, 0, nullptr);
+    SQLBindParameter(hStmt, 5, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &value, 0, nullptr);
 
     bool success = SQL_SUCCEEDED(SQLExecute(hStmt));
     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 
-    return true;
+    return success;
 }
 
 bool SqlDiscountRepository::deleteById(int id) {
