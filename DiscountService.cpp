@@ -60,40 +60,41 @@ vector<shared_ptr<Discount>> DiscountService::loadValidDiscounts(
 }
 
 // Remove a discount voucher from the repository
-void DiscountService::removeDiscount(const string& discountString) {
+void DiscountService::removeDiscount(const shared_ptr<Discount>& discount) {
     // get all the vouchers from the repository
     vector<shared_ptr<Discount>> vouchers = dataProvider->discount()->getAll();
 
     for (int i = 0; i < vouchers.size(); ++i) {
-        if (vouchers[i]->toString() == discountString) {
+        if (vouchers[i]->getCode() == discount->getCode()) {
             dataProvider->discount()->deleteById(i + 1);
             break;
         }
     }
 }
 
-// Create a percentage discount voucher
-shared_ptr<Discount> DiscountService::createPercentageDiscount(
-    const string& username, int percentage) {
-    return make_shared<Discount>(username, 
-        make_unique<PercentageDiscountStrategy>(percentage));
+// Generate a random discount code
+string DiscountService::generateRandomCode() {
+    const string characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    string code;
+    srand(time(NULL));
+    for (int i = 0; i < 6; ++i) {
+        int index = rand() % characters.size();
+        code += characters[index];
+    }
+    return code;
 }
 
-// Create a fixed amount discount voucher
-shared_ptr<Discount> DiscountService::createFixedDiscount(
-    const string& username, float amount) {
-    return make_shared<Discount>(username, 
-        make_unique<FixedDiscountStrategy>(amount));
-}
 
 // Create a new discount voucher and add it to the repository
 void DiscountService::createDiscount(const string& username, DiscountType type, int discountValue) {
     shared_ptr<Discount> discount;
 
-    if (DiscountType::PERCENTAGE ==type) {
-        discount = createPercentageDiscount(username, discountValue);
+    string code = generateRandomCode();
+
+    if (DiscountType::PERCENTAGE == type) {
+        discount = make_shared<Discount>(code, username, make_unique<PercentageDiscountStrategy>(discountValue));
     } else if (DiscountType::FIXED_AMOUNT == type) {
-        discount = createFixedDiscount(username, discountValue);
+        discount = make_shared<Discount>(code, username,  make_unique<FixedDiscountStrategy>(discountValue));
     }
 
     // Add the discount to the repository

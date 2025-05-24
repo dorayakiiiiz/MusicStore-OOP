@@ -26,25 +26,36 @@ vector<shared_ptr<Discount>> SqlDiscountRepository::getAll() {
         return vouchers;  // Return empty vector if handle allocation fails
     }
 
-    // Step 3: Execute query to get all voucher records
-    string selectQuery = "SELECT Vouchername FROM vouchers";
+    // Step 3: Execute query to get all user records
+    string selectQuery = "SELECT Code, Username, TypeV, ValueV FROM vouchers";
     ret = SQLExecDirect(hStmt, (SQLCHAR*)selectQuery.c_str(), SQL_NTS);
 
     // Step 4: Process query results
     if (SQL_SUCCEEDED(ret)) {
-        // Temporary variable to store voucher string
-        char tempVoucher[256];
-        string Voucher;
+        // Temporary variables to store column data
+        char tempCode[101], tempUsername[256], tempType[2];
+        string code, username, type;
+        int value;
 
         // Fetch each row from the result set
         while ((ret = SQLFetch(hStmt)) == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO) {
-            SQLGetData(hStmt, 1, SQL_C_CHAR, tempVoucher, sizeof(tempVoucher), NULL);
+            // Get data from each column
+            SQLGetData(hStmt, 1, SQL_C_CHAR, tempCode, sizeof(tempCode), NULL);
+            SQLGetData(hStmt, 2, SQL_C_CHAR, tempUsername, sizeof(tempUsername), NULL);
+            SQLGetData(hStmt, 3, SQL_C_CHAR, tempType, sizeof(tempType), NULL);
+            SQLGetData(hStmt, 4, SQL_C_SLONG, &value, 0, nullptr);
 
-            Voucher = tempVoucher;
+            // Convert char arrays to C++ strings
+            username = tempUsername;
+            code = tempCode;
+            type = tempType;
 
-            // Deserialize the voucher string back to a Discount object
-            shared_ptr<Discount> voucher = Discount::fromString(Voucher);
-            vouchers.push_back(voucher);
+            // Create appropriate user type based on role (C = Customer, otherwise Admin)
+            if (type == "F") {
+                vouchers.push_back(make_shared<Discount>(code, username, make_unique<FixedDiscountStrategy>(value)));
+            } else {
+                vouchers.push_back(make_shared<Discount>(code, username, make_unique<PercentageDiscountStrategy>(value)));
+            }
         }
     }
 
@@ -62,16 +73,19 @@ bool SqlDiscountRepository::add(const shared_ptr<Discount>& discount) {
     SQLHSTMT hStmt = nullptr;
     SQLRETURN ret;
 
-    std::string voucherString = discount->toString();
-
+    std::string username = discount->getUsername();
+    char type = discount->getType()[0]; 
+    std::string code = discount->getCode();
+    int value = discount->getValue();
+    
     // Step 1: Check duplicates
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
         return false;
     }
 
-    std::string checkQuery = "SELECT COUNT(*) FROM vouchers WHERE Vouchername = ?";
+    std::string checkQuery = "SELECT COUNT(*) FROM vouchers WHERE Code = ?";
     ret = SQLPrepare(hStmt, (SQLCHAR*)checkQuery.c_str(), SQL_NTS);
-    SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)voucherString.c_str(), 0, nullptr);
+    SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)code.c_str(), 0, nullptr);
 
     int duplicate = 0;
     if (SQLExecute(hStmt) == SQL_SUCCESS && SQLFetch(hStmt) == SQL_SUCCESS) {
@@ -99,15 +113,19 @@ bool SqlDiscountRepository::add(const shared_ptr<Discount>& discount) {
         return false;
     }
 
-    std::string insertQuery = "INSERT INTO vouchers (ID, Vouchername) VALUES (?, ?)";
+    std::string insertQuery = "INSERT INTO vouchers (ID, Code, Username, TypeV, ValueV) VALUES (?, ?, ?, ?)";
     SQLPrepare(hStmt, (SQLCHAR*)insertQuery.c_str(), SQL_NTS);
     
     SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &newId, 0, nullptr);
-    SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)voucherString.c_str(), 0, nullptr);
+    SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)code.c_str(), 0, nullptr);
+    SQLBindParameter(hStmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)username.c_str(), 0, nullptr);
+    SQLBindParameter(hStmt, 4, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_CHAR, 1, 0, &type, 0, nullptr);
+    SQLBindParameter(hStmt, 55, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &value, 0, nullptr);
 
     bool success = SQL_SUCCEEDED(SQLExecute(hStmt));
     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-    return success;
+
+    return true;
 }
 
 bool SqlDiscountRepository::deleteById(int id) {

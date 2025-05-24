@@ -11,6 +11,8 @@
 
 #include <string>
 
+using std::string;
+
 /**
  * @brief Interface for different discount calculation strategies
  */
@@ -29,23 +31,23 @@ public:
     /**
      * @brief Get the type name of this strategy
      * 
-     * @return std::string The strategy type name
+     * @return string The strategy type name
      */
-    virtual std::string getType() const = 0;
+    virtual string getType() const = 0;
     
     /**
      * @brief Get the value of this discount strategy (percentage or fixed amount)
      * 
-     * @return float The discount value
+     * @return int The discount value
      */
-    virtual float getValue() const = 0;
+    virtual int getValue() const = 0;
     
     /**
      * @brief Create a string representation of the strategy value
      * 
-     * @return std::string String representation of the value
+     * @return string String representation of the value
      */
-    virtual std::string valueToString() const = 0;
+    virtual string toString() const = 0;
 };
 
 /**
@@ -74,24 +76,24 @@ public:
     /**
      * @brief Get the type name of this strategy
      * 
-     * @return std::string The strategy type name
+     * @return string The strategy type name
      */
-    std::string getType() const override;
+    string getType() const override;
     
     /**
      * @brief Get the value of this discount strategy (percentage or fixed amount)
      * 
-     * @return float The discount value
+     * @return int The discount value
      */
-    float getValue() const override;
+    int getValue() const override;
 
     /**
      * @brief Create a string representation of the strategy value
      * 
-     * @return std::string String representation of the value
+     * @return string String representation of the value
      */
     
-    std::string valueToString() const override;
+    string toString() const override;
 };
 
 /**
@@ -120,23 +122,23 @@ public:
     /**
      * @brief Get the type name of this strategy
      * 
-     * @return std::string The strategy type name
+     * @return string The strategy type name
      */
-    std::string getType() const override;
+    string getType() const override;
     
     /**
      * @brief Get the value of this discount strategy (percentage or fixed amount)
      * 
      * @return float The discount value
      */
-    float getValue() const override;
+    int getValue() const override;
     
     /**
      * @brief Create a string representation of the strategy value
      * 
-     * @return std::string String representation of the value
+     * @return string String representation of the value
      */
-    std::string valueToString() const override;
+    string toString() const override;
 };
 
 #endif

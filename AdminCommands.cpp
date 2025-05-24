@@ -301,6 +301,7 @@ bool DeleteUserCommand::execute() {
 
         // Check if admin is deleting their own account
         shared_ptr<User> delUser = UserService::getInstance()->getUserById(id);
+
         bool isCurrentUser = (currentUser->getUsername() == delUser->getUsername());
         
         // Delete the selected user
@@ -318,6 +319,8 @@ bool DeleteUserCommand::execute() {
         } else {
             printMessage("User not found!");
         }
+
+        cout << "flag3\n";
 
         // delete the order history of the deleted user
         OrderService::getInstance()->deleteOrder(delUser->getUsername());

@@ -13,7 +13,6 @@ vector<shared_ptr<User>> SqlUserRepository::getAll() {
     DatabaseConnector* dbConnector = DatabaseConnector::getInstance();     // Database connection object
     // Step 1: Connect to the database
     if (!dbConnector->ensureConnected()) {
-        std::cerr << "Failed to connect to database" << std::endl;
         return users;  // Return empty vector if connection fails
     }
 
@@ -23,7 +22,6 @@ vector<shared_ptr<User>> SqlUserRepository::getAll() {
 
     // Step 2: Allocate a statement handle
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
-        std::cerr << "Failed to allocate statement handle" << std::endl;
         return users;  // Return empty vector if handle allocation fails
     }
 
@@ -250,5 +248,46 @@ bool SqlUserRepository::deleteById(int id) {
 
 
 // these methods are not implemented yet
-shared_ptr<User> SqlUserRepository::getById(int id) { return nullptr; }
+shared_ptr<User> SqlUserRepository::getById(int id) { 
+    shared_ptr<User> user;
+
+    DatabaseConnector* dbConnector = DatabaseConnector::getInstance();
+
+    if (!dbConnector->ensureConnected()) return user;
+
+    SQLHDBC hDbc = dbConnector->getConnection();
+    SQLHSTMT hStmt = nullptr;
+
+    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+        return user;
+    }
+
+    std::string query = "SELECT Username, Pass, UserRole FROM user_info WHERE ID = ?";
+    if (SQLPrepare(hStmt, (SQLCHAR*)query.c_str(), SQL_NTS) == SQL_SUCCESS) {
+        SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &id, 0, nullptr);
+        if (SQLExecute(hStmt) == SQL_SUCCESS && SQLFetch(hStmt) == SQL_SUCCESS) {
+            char tempUsername[256], tempPass[256], tempRole[2];
+            string username, password, role;
+
+            SQLGetData(hStmt, 1, SQL_C_CHAR, tempUsername, sizeof(tempUsername), nullptr);
+            SQLGetData(hStmt, 2, SQL_C_CHAR, tempPass, sizeof(tempPass), nullptr);
+            SQLGetData(hStmt, 3, SQL_C_CHAR, tempRole, sizeof(tempRole), nullptr);
+
+            // Convert char arrays to C++ strings
+            username = tempUsername;
+            password = tempPass;
+            role = tempRole;
+
+            if (role == "C") {
+                user = make_shared<Customer>(username, password);
+            } else {
+                user = make_shared<Admin>(username, password);
+            }
+        }
+    }
+
+    SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+    return user;
+}
+
 bool SqlUserRepository::updateById(int id, const shared_ptr<User>& user) { return false; }
