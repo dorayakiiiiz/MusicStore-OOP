@@ -8,6 +8,7 @@
 
 #include "AdminUI.h"
 #include "utils.h"
+#include "ConsoleUI.h"
 #include "InputValidator.h"
 
 using std::cout, std::cin, std::vector, std::string;
@@ -20,16 +21,142 @@ void AdminUI::displayWelcomeMessage(const string& username) {
 // Displays a formatted list of all music items in inventory
 // Shows ID, name, artist, genre, price and quantity for each item
 void AdminUI::displayMusicList(vector<Music>& items) {
-    printFrameMusicList(items);
+    int x = 5;
+    int y = 7;
+    int width = 110;
+    int rows = items.size() + 1;
+
+    printFrameOptions(x, y, width, rows);
+
+    vector<int> cols = {5, 50, 70, 84, 97};
+
+    for (int col : cols) {
+        ConsoleUI::gotoXY(x + col, y + 1);
+        std::cout << char(179); // │
+        ConsoleUI::gotoXY(x + col, y);
+        std::cout << char(194); 
+        ConsoleUI::gotoXY(x + col, y + 2);
+        std::cout << char(197); 
+    }
+        //In header
+    ConsoleUI::gotoXY(x + 1, y + 1);
+    std::cout << "ID";
+    ConsoleUI::gotoXY(x + cols[0] + 1, y + 1);
+    std::cout << "Song name";
+    ConsoleUI::gotoXY(x + cols[1] + 1, y + 1);
+    std::cout << "Artist";
+    ConsoleUI::gotoXY(x + cols[2] + 1, y + 1);
+    std::cout << "Genre";
+    ConsoleUI::gotoXY(x + cols[3] + 1, y + 1);
+    std::cout << "Price";
+    ConsoleUI::gotoXY(x + cols[4] + 1, y + 1);
+    std::cout << "Quantity";
+
+    for (int i = 1; i < rows; ++i) {
+        int curY = y + i * 2 + 1;
+        // Kẻ cột dọc
+        for (int col : cols) {
+            ConsoleUI::gotoXY(x + col, curY);
+            std::cout << char(179); // │
+            ConsoleUI::gotoXY(x + col, curY + 1);
+            std::cout << char(197); 
+        }
+
+        //In
+        ConsoleUI::gotoXY(x + 1, curY);
+        std::cout << i;
+        ConsoleUI::gotoXY(x + cols[0] + 1, curY);
+        std::cout << items[i - 1].getName();
+        ConsoleUI::gotoXY(x + cols[1] + 1, curY);
+        std::cout << items[i - 1].getArtist();
+        ConsoleUI::gotoXY(x + cols[2] + 1, curY);
+        std::cout << items[i - 1].getGenre();
+        ConsoleUI::gotoXY(x + cols[3] + 1, curY);
+        std::cout << items[i - 1].getPrice();
+        ConsoleUI::gotoXY(x + cols[4] + 1, curY);
+        std::cout << items[i - 1].getQuantity();
+        
+    }
+
+    for (int col : cols) {
+        ConsoleUI::gotoXY(x + col, y + rows*2 - 1);
+        std::cout << char(179); // │
+        ConsoleUI::gotoXY(x + col, y + rows*2);
+        std::cout << char(193); 
+    }
+    ConsoleUI::gotoXY(x + 1, y + rows*2 - 1);
+    std::cout << rows - 1;
+    ConsoleUI::gotoXY(x + cols[0] + 1, y + rows*2 - 1);
+    std::cout << items[rows - 2].getName();
+    ConsoleUI::gotoXY(x + cols[1] + 1, y + rows*2 - 1);
+    std::cout << items[rows - 2].getArtist();
+    ConsoleUI::gotoXY(x + cols[2] + 1, y + rows*2 - 1);
+    std::cout << items[rows - 2].getGenre();
+    ConsoleUI::gotoXY(x + cols[3] + 1, y + rows*2 - 1);
+    std::cout << items[rows - 2].getPrice();
+    ConsoleUI::gotoXY(x + cols[4] + 1, y + rows*2 - 1);
+    std::cout << items[rows - 2].getQuantity();
 }
 
 // Displays a formatted list of all registered users
 // Shows ID, username, and role for each user
 void AdminUI::displayUserList(const vector<shared_ptr<User>>& users) {
-    cout << "\tID - Username - Role\n";
-    for (int i = 0; i < users.size(); ++i) {
-        cout << '\t' << i + 1 << " - " << users[i]->toString() << '\n';
+    int x = 20;
+    int y = 7;
+    int width = 80;
+    int rows = users.size() + 1;
+
+    printFrameOptions(x, y, width, rows);
+
+    vector<int> cols = {5, 50};
+
+    for (int col : cols) {
+        ConsoleUI::gotoXY(x + col, y + 1);
+        std::cout << char(179); // │
+        ConsoleUI::gotoXY(x + col, y);
+        std::cout << char(194); 
+        ConsoleUI::gotoXY(x + col, y + 2);
+        std::cout << char(197); 
     }
+        //In header
+    ConsoleUI::gotoXY(x + 1, y + 1);
+    std::cout << "ID";
+    ConsoleUI::gotoXY(x + cols[0] + 1, y + 1);
+    std::cout << "Username";
+    ConsoleUI::gotoXY(x + cols[1] + 1, y + 1);
+    std::cout << "Role";
+
+    for (int i = 1; i < rows; ++i) {
+        int curY = y + i * 2 + 1;
+        // Kẻ cột dọc
+        for (int col : cols) {
+            ConsoleUI::gotoXY(x + col, curY);
+            std::cout << char(179); // │
+            ConsoleUI::gotoXY(x + col, curY + 1);
+            std::cout << char(197); 
+        }
+
+        //In
+        ConsoleUI::gotoXY(x + 1, curY);
+        std::cout << i;
+        ConsoleUI::gotoXY(x + cols[0] + 1, curY);
+        std::cout << users[i - 1]->getUsername();
+        ConsoleUI::gotoXY(x + cols[1] + 1, curY);
+        std::cout << (Role::ADMIN == users[i - 1]->getRole() ? "Admin" : "Customer");
+    }
+
+    for (int col : cols) {
+        ConsoleUI::gotoXY(x + col, y + rows*2 - 1);
+        std::cout << char(179); // │
+        ConsoleUI::gotoXY(x + col, y + rows*2);
+        std::cout << char(193); 
+    }
+    ConsoleUI::gotoXY(x + 1, y + rows*2 - 1);
+    std::cout << rows - 1;
+    ConsoleUI::gotoXY(x + cols[0] + 1, y + rows*2 - 1);
+    std::cout << users[rows - 2]->getUsername();
+    ConsoleUI::gotoXY(x + cols[1] + 1, y + rows*2 - 1);
+    std::cout << (Role::ADMIN == users[rows - 2]->getRole() ? "Admin" : "Customer");
 }
 
 // Displays the details of a specific order

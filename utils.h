@@ -53,7 +53,6 @@ void printFrame(int x, int y, int width, int height);
 
 void printFrameOptions(int x, int y, int width, int select);
 
-void printFrameMusicList(vector<Music> items);
 
 /**
  * @brief Prints a frame around a specified area with options
