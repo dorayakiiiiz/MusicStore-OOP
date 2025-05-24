@@ -15,16 +15,12 @@ using std::cout, std::cin, std::vector, std::string;
 // Displays a welcome message for the admin with their username
 void AdminUI::displayWelcomeMessage(const string& username) {
     printMessage("welcome " + username + " to the admin menu!");
-    printDashLine();
 }
 
 // Displays a formatted list of all music items in inventory
 // Shows ID, name, artist, genre, price and quantity for each item
 void AdminUI::displayMusicList(vector<Music>& items) {
-    cout << "\tID - Name - Artist - Genre - Price - Quantity\n";
-    for (int i = 0; i < items.size(); ++i) {
-        cout << '\t' << i + 1 << " - " << items[i].toString() << '\n';
-    }
+    printFrameMusicList(items);
 }
 
 // Displays a formatted list of all registered users

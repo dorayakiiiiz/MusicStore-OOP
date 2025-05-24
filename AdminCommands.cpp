@@ -23,19 +23,25 @@ std::string ViewMusicListCommand::getName() const {
 bool ViewMusicListCommand::execute() {
     clearScreen();
     printFrame(0, 0, 120, 30);
-    string header = "musicList";
-    printHeader(header, (120 - header.length()*2) / 2 - 19, 1);
+    while(true){
+        string header = "musicList";
+        printHeader(header, (120 - header.length()*2) / 2 - 19, 1);
 
-    vector<Music> items = MusicService::getInstance()->getAllMusic();
-    if (items.empty()) {
-        printMessage("No items found!");
-        pauseScreen();
-        return true;
+        vector<Music> items = MusicService::getInstance()->getAllMusic();
+        if (items.empty()) {
+            printMessage("No items found!");
+            pauseScreen();
+            return true;
+        }
+
+        printRepeatMessage();
+        AdminUI::displayMusicList(items);
+        char repeat = _getch();
+        if (repeat == ' ') {
+            break;
+        }
+        
     }
-
-    AdminUI::displayMusicList(items);
-    printDashLine();
-    pauseScreen();
     return true;
 }
 
@@ -61,14 +67,12 @@ bool AddNewItemsCommand::execute() {
             printMessage("Item already exists!");
         }
 
-        printDashLine();
         printRepeatMessage();
 
         char repeat = _getch();
         if (repeat == ' ') {
             break;
         }
-        printDashLine();
     }
     return true;
 }
@@ -110,7 +114,6 @@ bool RemoveItemsCommand::execute() {
             printMessage("Error while removing the items!");
         }
 
-        printDashLine();
         items = MusicService::getInstance()->getAllMusic();
         if (items.empty()) {
             printMessage("tNo items left in inventory!");
@@ -123,7 +126,6 @@ bool RemoveItemsCommand::execute() {
         if (repeat == ' ') {
             break;
         }
-        printDashLine();
     }
     return true;
 }
@@ -176,14 +178,12 @@ bool UpdatePriceCommand::execute() {
             printMessage("Error while updating price!");
         }
 
-        printDashLine();
         printRepeatMessage();
 
         char repeat = _getch();
         if (repeat == ' ') {
             break;
         }
-        printDashLine();
     }
     return true;
 }
@@ -207,7 +207,6 @@ bool ViewUsersCommand::execute() {
     }
 
     AdminUI::displayUserList(users);
-    printDashLine();
     pauseScreen();
     return true;
 }
@@ -332,14 +331,12 @@ bool DeleteUserCommand::execute() {
             break;
         }
 
-        printDashLine();
         printRepeatMessage();
 
         char repeat = _getch();
         if (repeat == ' ') {
             break;
         }
-        printDashLine();
     }
     return true;
 }
@@ -359,7 +356,6 @@ bool ViewSalesStatisticsCommand::execute() {
     float totalRevenue = SalesRecordService::getInstance()->getTotalRevenue();
 
     AdminUI::displaySaleStatistics(salesRecords, totalRevenue);
-    printDashLine();
     pauseScreen();
     return true;
 }

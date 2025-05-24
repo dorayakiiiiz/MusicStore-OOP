@@ -8,6 +8,7 @@
 #include <limits>
 #include <cfloat>
 #include "ConsoleUI.h"
+#include "Music.h"
 #include<fstream>
 using std::string, std::vector, std::tuple, std::make_tuple, std::get, std::stoi, std::cout, std::cin;
 
@@ -29,7 +30,7 @@ void printMenu(const string&, int, int);
 /**
  * @brief Prints a horizontal line of dashes
  */
-void printDashLine();
+
 
 /**
  * @brief Clears the console screen
@@ -51,6 +52,9 @@ void printFrame(int x, int y, int width, int height);
  */
 
 void printFrameOptions(int x, int y, int width, int select);
+
+void printFrameMusicList(vector<Music> items);
+
 /**
  * @brief Prints a frame around a specified area with options
  * @param x The x-coordinate of the top-left corner

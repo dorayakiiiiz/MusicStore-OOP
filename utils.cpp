@@ -62,17 +62,16 @@ void printMenu(const string& header, int x, int y)
 
 // Prints a horizontal line of dashes
 // Used to visually separate content sections
-void printDashLine() {
-    cout << '\t';
-    for (int i = 1; i < 50; ++i) {
-        cout << char(205);
-    }
-    cout << '\n';
-}
 
 // Prints a message for repeating the last action
 void printRepeatMessage() {
-    cout << "\tPress space to exit or any other key to continue...\n";
+    string instructions = "Press space to exit or any other key to continue...";
+    int guideX = 64;
+    int guideY = 26; 
+    int guideW = 4 + instructions.size();
+    int guideH = 3;
+    printFrame(guideX, guideY, guideW, guideH);
+    printInstructions(instructions, guideX + 1, guideY + 1);
 }
 
 void printFrame(int x, int y, int width, int height) {
@@ -129,6 +128,85 @@ void printFrameOptions(int x, int y, int width, int select) {
 
     ConsoleUI::setColor(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE); // Trả lại màu mặc định
 }
+
+void printFrameMusicList(vector<Music> items){
+    int x = 5;
+    int y = 7;
+    int width = 110;
+    int rows = items.size() + 1;
+
+    printFrameOptions(x, y, width, rows);
+
+    vector<int> cols = {5, 50, 70, 84, 97};
+
+    for (int col : cols) {
+        ConsoleUI::gotoXY(x + col, y + 1);
+        std::cout << char(179); // │
+        ConsoleUI::gotoXY(x + col, y);
+        std::cout << char(194); 
+        ConsoleUI::gotoXY(x + col, y + 2);
+        std::cout << char(197); 
+    }
+        //In header
+    ConsoleUI::gotoXY(x + 1, y + 1);
+    std::cout << "ID";
+    ConsoleUI::gotoXY(x + cols[0] + 1, y + 1);
+    std::cout << "Song name";
+    ConsoleUI::gotoXY(x + cols[1] + 1, y + 1);
+    std::cout << "Artist";
+    ConsoleUI::gotoXY(x + cols[2] + 1, y + 1);
+    std::cout << "Genre";
+    ConsoleUI::gotoXY(x + cols[3] + 1, y + 1);
+    std::cout << "Price";
+    ConsoleUI::gotoXY(x + cols[4] + 1, y + 1);
+    std::cout << "Quantity";
+
+    for (int i = 1; i < rows; ++i) {
+        int curY = y + i * 2 + 1;
+        // Kẻ cột dọc
+        for (int col : cols) {
+            ConsoleUI::gotoXY(x + col, curY);
+            std::cout << char(179); // │
+            ConsoleUI::gotoXY(x + col, curY + 1);
+            std::cout << char(197); 
+        }
+
+        //In
+        ConsoleUI::gotoXY(x + 1, curY);
+        std::cout << i;
+        ConsoleUI::gotoXY(x + cols[0] + 1, curY);
+        std::cout << items[i - 1].getName();
+        ConsoleUI::gotoXY(x + cols[1] + 1, curY);
+        std::cout << items[i - 1].getArtist();
+        ConsoleUI::gotoXY(x + cols[2] + 1, curY);
+        std::cout << items[i - 1].getGenre();
+        ConsoleUI::gotoXY(x + cols[3] + 1, curY);
+        std::cout << items[i - 1].getPrice();
+        ConsoleUI::gotoXY(x + cols[4] + 1, curY);
+        std::cout << items[i - 1].getQuantity();
+        
+    }
+
+    for (int col : cols) {
+        ConsoleUI::gotoXY(x + col, y + rows*2 - 1);
+        std::cout << char(179); // │
+        ConsoleUI::gotoXY(x + col, y + rows*2);
+        std::cout << char(193); 
+    }
+    ConsoleUI::gotoXY(x + 1, y + rows*2 - 1);
+    std::cout << rows;
+    ConsoleUI::gotoXY(x + cols[0] + 1, y + rows*2 - 1);
+    std::cout << items[rows - 2].getName();
+    ConsoleUI::gotoXY(x + cols[1] + 1, y + rows*2 - 1);
+    std::cout << items[rows - 2].getArtist();
+    ConsoleUI::gotoXY(x + cols[2] + 1, y + rows*2 - 1);
+    std::cout << items[rows - 2].getGenre();
+    ConsoleUI::gotoXY(x + cols[3] + 1, y + rows*2 - 1);
+    std::cout << items[rows - 2].getPrice();
+    ConsoleUI::gotoXY(x + cols[4] + 1, y + rows*2 - 1);
+    std::cout << items[rows - 2].getQuantity();
+    
+};
 
  void printInstructions(const string& instructions, int x, int y) {
     ConsoleUI::gotoXY(x, y);

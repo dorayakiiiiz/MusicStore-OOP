@@ -40,7 +40,6 @@ bool ViewPurchaseHistoryCommand::execute() {
     printHeader(header, (120 - header.length()*2) / 2 - 31, 2);
     CustomerUI::displayPurchasedHistory(orderHistory, customer->getUsername());
 
-    printDashLine();
     pauseScreen();
     return true;
 }
@@ -60,7 +59,6 @@ bool ViewMusicCommand::execute() {
     vector<Music> items = MusicService::getInstance()->getAllMusic();
     CustomerUI::displayMusicList(items);
 
-    printDashLine();
     pauseScreen();
     return true;
 }
@@ -114,14 +112,12 @@ bool SearchMusicCommand::execute() {
             CustomerUI::displaySearchResults(results);
         }
 
-        printDashLine();
         printRepeatMessage();
 
         char repeat = _getch();
         if (repeat == ' ') {
             break;
         }
-        printDashLine();
     }
     return true;
 }
@@ -144,7 +140,6 @@ bool AddToCartCommand::execute() {
 
     // Display current music list
     CustomerUI::displayMusicList(items);
-    printDashLine();
 
     while (true) {
         // Get item ID and quantity from user
@@ -182,14 +177,12 @@ bool AddToCartCommand::execute() {
         //printHeader("YOUR CURRENT CART");
         CustomerUI::displayCart(cart.getItems());
 
-        printDashLine();
         printRepeatMessage();
 
         char repeat = _getch();
         if (repeat == ' ') {
             break;
         }
-        printDashLine();
     }
     return true;
 }
@@ -242,7 +235,6 @@ bool RemoveFromCartCommand::execute() {
             } else {
                 printMessage("Invalid item ID!");
             }
-            printDashLine();
             if (cart.getItems().empty()) {
                 pauseScreen();
                 break;
@@ -379,8 +371,7 @@ bool CheckoutCommand::execute() {
         CustomerUI::displayOrderSuccessMessage();
 
     }
-    
-    printDashLine();
+
     pauseScreen();
     return true;
 }

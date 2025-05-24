@@ -32,7 +32,6 @@ void CustomerUI::displayPurchasedHistory(const vector<Order>& orders, const stri
             << " - Total: $" << item.getPrice() * item.getQuantity() << '\n';
         }
         cout << "\tOrder total: $" << orders[i].getTotal() << '\n';
-        printDashLine();
     }
 }
 
@@ -78,7 +77,6 @@ void CustomerUI::displayOrderDetails(const string& username, const vector<Music>
     printMessage("Purchased items: ");
     displayCart(items);
     printMessage("Total: $" + std::to_string(total));
-    printDashLine();
 }
 
 // Displays the list of available discount vouchers for the customer
