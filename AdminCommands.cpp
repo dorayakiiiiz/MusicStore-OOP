@@ -319,8 +319,6 @@ bool DeleteUserCommand::execute() {
             printMessage("User not found!");
         }
 
-        cout << "flag3\n";
-
         // delete the order history of the deleted user
         OrderService::getInstance()->deleteOrder(delUser->getUsername());
 
