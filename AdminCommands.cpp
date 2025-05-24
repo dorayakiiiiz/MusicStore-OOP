@@ -24,7 +24,7 @@ bool ViewMusicListCommand::execute() {
     clearScreen();
     printFrame(0, 0, 120, 30);
     string header = "musicList";
-    printHeader(header, (120 - header.length()*2) / 2 - 25, 1);
+    printHeader(header, (120 - header.length()*2) / 2 - 19, 1);
 
     vector<Music> items = MusicService::getInstance()->getAllMusic();
     if (items.empty()) {
@@ -49,7 +49,7 @@ bool AddNewItemsCommand::execute() {
     printFrame(0, 0, 120, 30); 
     while (true) {
         string header = "addNewItems";
-        printHeader(header, (120 - header.length()*2) / 2 - 28, 1);
+        printHeader(header, (120 - header.length()*2) / 2 - 29, 1);
 
         Music newItem = AdminUI::getNewMusicDetails();
         
@@ -86,7 +86,7 @@ bool RemoveItemsCommand::execute() {
     printFrame(0, 0, 120, 30); 
     while (true) {
         string header = "removeItems";
-        printHeader(header, (120 - header.length()*2) / 2 - 24, 1);
+        printHeader(header, (120 - header.length()*2) / 2 - 16, 1);
 
         // Get all items from the repository
         vector<Music> items = MusicService::getInstance()->getAllMusic();
@@ -197,7 +197,7 @@ bool ViewUsersCommand::execute() {
     clearScreen();
     printFrame(0, 0, 120, 30); 
     string header = "userList";
-    printHeader(header, (120 - header.length()*2) / 2 - 26, 1);
+    printHeader(header, (120 - header.length()*2) / 2 - 18, 1);
 
     vector<shared_ptr<User>> users = UserService::getInstance()->getAllUsers();
     if (users.empty()) {
@@ -350,7 +350,7 @@ bool ViewSalesStatisticsCommand::execute() {
     clearScreen();
     printFrame(0, 0, 120, 30);
     string header = "saleStatistics";
-    printHeader(header, (120 - header.length()*2) / 2 - 33, 1);
+    printHeader(header, (120 - header.length()*2) / 2 - 28, 1);
 
     vector<SalesRecord> salesRecords = SalesRecordService::getInstance()->getAllSalesRecords();
     float totalRevenue = SalesRecordService::getInstance()->getTotalRevenue();

@@ -44,7 +44,7 @@ void printMenu(const string& header, int x, int y)
     }
     else{
         fileName = "ascii/customerMenu.txt";
-        x += 0;
+        x += 5;
     }
 
     string line = "";

@@ -37,7 +37,7 @@ bool ViewPurchaseHistoryCommand::execute() {
     vector<Order> orderHistory = OrderService::getInstance()->getUserOrders(customer->getUsername());
     
     string header = "purchaseHistory";
-    printHeader(header, (120 - header.length()*2) / 2 - 40, 2);
+    printHeader(header, (120 - header.length()*2) / 2 - 31, 2);
     CustomerUI::displayPurchasedHistory(orderHistory, customer->getUsername());
 
     printDashLine();
@@ -55,7 +55,7 @@ bool ViewMusicCommand::execute() {
     printFrame(0, 0, 120, 30);
 
     string header = "musicList";
-    printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
+    printHeader(header, (120 - header.length()*2) / 2 - 19, 1);
 
     vector<Music> items = MusicService::getInstance()->getAllMusic();
     CustomerUI::displayMusicList(items);
@@ -78,7 +78,7 @@ bool SearchMusicCommand::execute() {
     printFrame(0, 0, 120, 30);
     while (true) {
         string header = "searchMusic";
-        printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
+        printHeader(header, (120 - header.length()*2) / 2 - 23, 1);
 
         int criteria;
         string keyword;
@@ -137,7 +137,7 @@ bool AddToCartCommand::execute() {
     clearScreen();
     printFrame(0, 0, 120, 30);
     string header = "addToCart";
-    printHeader(header, (120 - header.length()*2) / 2 - 30, 1);
+    printHeader(header, (120 - header.length()*2) / 2 - 24, 1);
 
     // Get all music items from the repository
     vector<Music> items = MusicService::getInstance()->getAllMusic();
@@ -204,8 +204,8 @@ std::string RemoveFromCartCommand::getName() const {
 bool RemoveFromCartCommand::execute() {
     clearScreen();
     printFrame(0, 0, 120, 30);
-    string header = "removeItemsFromCart";
-    printHeader(header, (120 - header.length()*2) / 2 - 30, 1);
+    string header = "removeItems";
+    printHeader(header, (120 - header.length()*2) / 2 - 16, 1);
 
     // Get all music items from the repository
     vector<Music> items = MusicService::getInstance()->getAllMusic();
@@ -270,7 +270,7 @@ bool CheckoutCommand::execute() {
     clearScreen();
     printFrame(0, 0, 120, 30);
     string header = "checkOut";
-    printHeader(header, (120 - header.length()*2) / 2 - 20, 1);
+    printHeader(header, (120 - header.length()*2) / 2 - 19, 1);
 
     bool isValid;
     Error error;
