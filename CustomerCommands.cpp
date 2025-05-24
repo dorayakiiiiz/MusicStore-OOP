@@ -205,7 +205,7 @@ bool RemoveFromCartCommand::execute() {
     clearScreen();
     printFrame(0, 0, 120, 30);
     string header = "removeItems";
-    printHeader(header, (120 - header.length()*2) / 2 - 16, 1);
+    printHeader(header, (120 - header.length()*2) / 2 - 24, 1);
 
     // Get all music items from the repository
     vector<Music> items = MusicService::getInstance()->getAllMusic();
