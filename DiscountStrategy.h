@@ -10,8 +10,10 @@
 #define _DISCOUNT_STRATEGY_H_
 
 #include <string>
+#include <map>
+#include <memory>
 
-using std::string;
+using std::string, std::map, std::shared_ptr, std::make_shared;
 
 /**
  * @brief Interface for different discount calculation strategies
@@ -41,6 +43,13 @@ public:
      * @return int The discount value
      */
     virtual int getValue() const = 0;
+
+    /**
+     * @brief Set the value of this discount strategy (percentage or fixed amount)
+     * 
+     * @param value The new discount value
+     */
+    virtual void setValue(int value) = 0; 
     
     /**
      * @brief Create a string representation of the strategy value
@@ -88,6 +97,13 @@ public:
     int getValue() const override;
 
     /**
+     * @brief Set the value of this discount strategy (percentage or fixed amount)
+     * 
+     * @param value The new discount value
+     */ 
+    void setValue(int value) override;
+
+    /**
      * @brief Create a string representation of the strategy value
      * 
      * @return string String representation of the value
@@ -132,6 +148,13 @@ public:
      * @return float The discount value
      */
     int getValue() const override;
+
+    /**
+     * @brief Set the value of this discount strategy (percentage or fixed amount)
+     * 
+     * @param value The new discount value
+     */
+    void setValue(int value) override;
     
     /**
      * @brief Create a string representation of the strategy value
@@ -140,5 +163,7 @@ public:
      */
     string toString() const override;
 };
+
+
 
 #endif

@@ -361,11 +361,11 @@ bool CheckoutCommand::execute() {
             int discountValue = (DiscountType::PERCENTAGE == discountChoice) ? 10 : 5;
 
             // Create and add the new voucher
-            DiscountService::getInstance()->createDiscount(customer->getUsername(),
+            shared_ptr<Discount> discount = DiscountService::getInstance()->createDiscount(customer->getUsername(),
                                          static_cast<DiscountType>(discountChoice), discountValue);
             // Notify the user about the new voucher
             string notify = (static_cast<DiscountType>(discountChoice) == DiscountType::PERCENTAGE) ? "10% off" : "$5 off";
-            printMessage("New voucher created! " + notify + " on your next purchase.");
+            printMessage("New voucher created! Voucher code: " + discount->getCode() + ". " + notify + " on your next purchase.");
         }
 
         CustomerUI::displayOrderSuccessMessage();

@@ -12,10 +12,6 @@
 /**
  * @brief Enumeration for discount types
  */
-enum DiscountType {
-    PERCENTAGE = 1,
-    FIXED_AMOUNT = 2
-};
 
 
 #include "Discount.h"
@@ -99,14 +95,14 @@ public:
     string generateRandomCode();
 
     /**
-     * @brief Create a new discount voucher for a user
+     * @brief Create a new discount voucher
      * 
-     * @param vouchers Vector of existing discount vouchers
-     * @param username Username associated with the discount
-     * @param discountType Type of discount (1 for percentage, 2 for fixed)
-     * @param discountValue Value of the discount (percentage or amount)
+     * @param username The username associated with the discount
+     * @param type The type of discount (percentage or fixed amount)
+     * @param discountValue The value of the discount
+     * @return shared_ptr<Discount> Pointer to the created discount voucher
      */
-    void createDiscount(const string& username, DiscountType type, int discountValue);
+    shared_ptr<Discount> createDiscount(const string& username, DiscountType type, int discountValue);
 };
 
 #endif

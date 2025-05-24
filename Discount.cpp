@@ -14,7 +14,7 @@
 using std::string, std::unique_ptr, std::shared_ptr, std::move, std::exception, std::make_shared, std::make_unique;
 
 // Constructor - creates a discount with a username and strategy
-Discount::Discount(const string& code, const string& username, unique_ptr<DiscountStrategy> strategy)
+Discount::Discount(const string& code, const string& username, shared_ptr<DiscountStrategy> strategy)
     : code(code), username(username), strategy(move(strategy)) {}
 
 // Get the discount code 

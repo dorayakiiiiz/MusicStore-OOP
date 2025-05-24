@@ -10,6 +10,7 @@ using std::vector;
 #include "DatabaseConnector.h"
 #include "Discount.h"
 #include "DiscountStrategy.h"
+#include "DiscountFactory.h"
 
 /**
  * @brief SQL implementation of the discount repository

@@ -52,9 +52,9 @@ vector<shared_ptr<Discount>> SqlDiscountRepository::getAll() {
 
             // Create appropriate user type based on role (C = Customer, otherwise Admin)
             if (type == "F") {
-                vouchers.push_back(make_shared<Discount>(code, username, make_unique<FixedDiscountStrategy>(value)));
+                vouchers.push_back(make_shared<Discount>(code, username, make_shared<FixedDiscountStrategy>(value)));
             } else {
-                vouchers.push_back(make_shared<Discount>(code, username, make_unique<PercentageDiscountStrategy>(value)));
+                vouchers.push_back(make_shared<Discount>(code, username, make_shared<PercentageDiscountStrategy>(value)));
             }
         }
     }
@@ -67,16 +67,19 @@ vector<shared_ptr<Discount>> SqlDiscountRepository::getAll() {
 
 bool SqlDiscountRepository::add(const shared_ptr<Discount>& discount) {
     DatabaseConnector* dbConnector = DatabaseConnector::getInstance();
-    if (!dbConnector->ensureConnected()) return false;
+    if (!dbConnector->ensureConnected()) {
+        return false;
+    }
 
     SQLHDBC hDbc = dbConnector->getConnection();
     SQLHSTMT hStmt = nullptr;
     SQLRETURN ret;
 
     std::string username = discount->getUsername();
-    char type = discount->getType()[0]; 
+    char typeV = discount->getType()[0]; 
     std::string code = discount->getCode();
     int value = discount->getValue();
+    string type = (typeV == 'F') ? "F" : "P";
     
     // Step 1: Check duplicates
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
@@ -88,7 +91,7 @@ bool SqlDiscountRepository::add(const shared_ptr<Discount>& discount) {
     SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)code.c_str(), 0, nullptr);
 
     int duplicate = 0;
-    if (SQLExecute(hStmt) == SQL_SUCCESS && SQLFetch(hStmt) == SQL_SUCCESS) {
+    if (SQLExecute(hStmt) == SQL_SUCCESS &&SQLFetch(hStmt) == SQL_SUCCESS) {
         SQLGetData(hStmt, 1, SQL_C_SLONG, &duplicate, 0, nullptr);
     }
 
@@ -119,13 +122,15 @@ bool SqlDiscountRepository::add(const shared_ptr<Discount>& discount) {
     SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &newId, 0, nullptr);
     SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)code.c_str(), 0, nullptr);
     SQLBindParameter(hStmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)username.c_str(), 0, nullptr);
-    SQLBindParameter(hStmt, 4, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_CHAR, 1, 0, &type, 0, nullptr);
+    SQLBindParameter(hStmt, 4, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 1, 0, (SQLPOINTER)type.c_str(), 0, nullptr);
     SQLBindParameter(hStmt, 5, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &value, 0, nullptr);
 
     bool success = SQL_SUCCEEDED(SQLExecute(hStmt));
+    if(!success)
+       std::cout << "hehe6\n";
     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 
-    return true;
+    return success;
 }
 
 bool SqlDiscountRepository::deleteById(int id) {

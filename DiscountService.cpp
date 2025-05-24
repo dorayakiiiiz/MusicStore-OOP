@@ -7,8 +7,8 @@
  */
 
 #include "DiscountService.h"
-#include "Discount.h"
 #include "DiscountStrategy.h"
+#include "DiscountFactory.h"
 #include "IDataProvider.h"
 #include "SQLDao.h"
 #include <algorithm>
@@ -86,18 +86,20 @@ string DiscountService::generateRandomCode() {
 
 
 // Create a new discount voucher and add it to the repository
-void DiscountService::createDiscount(const string& username, DiscountType type, int discountValue) {
+shared_ptr<Discount> DiscountService::createDiscount(const string& username, DiscountType type, int discountValue) {
     shared_ptr<Discount> discount;
+    string code;
+    DiscountFactory factory;
 
-    string code = generateRandomCode();
+    shared_ptr<DiscountStrategy> strategy = factory.getStrategy(type);
+    strategy->setValue(discountValue);
 
-    if (DiscountType::PERCENTAGE == type) {
-        discount = make_shared<Discount>(code, username, make_unique<PercentageDiscountStrategy>(discountValue));
-    } else if (DiscountType::FIXED_AMOUNT == type) {
-        discount = make_shared<Discount>(code, username,  make_unique<FixedDiscountStrategy>(discountValue));
+    while (true) {
+        code = generateRandomCode();
+        discount = make_shared<Discount>(code, username, strategy);
+        if (dataProvider->discount()->add(discount)) {
+            break; // Successfully added the discount, exit loop
+        };
     }
-
-    // Add the discount to the repository
-    bool success = dataProvider->discount()->add(discount);
-    // fix heree
+    return discount;
 }
