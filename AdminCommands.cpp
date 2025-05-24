@@ -236,7 +236,6 @@ bool ViewAllPurchaseHistoriesCommand::execute() {
 
     // print the list of customers
     vector<shared_ptr<User>> customer = UserService::getInstance()->getAllCustomers();
-    AdminUI::displayUserList(customer);
 
     int id;
     bool isValid;
@@ -246,7 +245,7 @@ bool ViewAllPurchaseHistoriesCommand::execute() {
         printFrame(0, 0, 120, 30); 
         string header = "purchaseHistory";
         printHeader(header, (120 - header.length()*2) / 2 - 31, 1);
-
+        AdminUI::displayUserList(customer);
 
         do {
             tie(isValid, id, error) = InputValidator::validateInt("Enter customer ID: ", 1, customer.size());
@@ -254,8 +253,16 @@ bool ViewAllPurchaseHistoriesCommand::execute() {
                 printMessage(error.message);
                 sleepScreen();
                 clearScreen();
+                // printFrame(0, 0, 120, 30); 
+                // string header = "purchaseHistory";
+                // printHeader(header, (120 - header.length()*2) / 2 - 31, 1);
+                // AdminUI::displayUserList(customer);
                 continue;
             }
+            clearScreen();
+            printFrame(0, 0, 120, 30); 
+            string header = "purchaseHistory";
+            printHeader(header, (120 - header.length()*2) / 2 - 31, 1);
         } while (!isValid);
 
         // Get the selected customer
@@ -271,6 +278,7 @@ bool ViewAllPurchaseHistoriesCommand::execute() {
             }
         }
         
+        printRepeatMessage();
         char repeat = _getch();
         if (repeat == ' ') {
             break;
@@ -292,9 +300,6 @@ bool DeleteUserCommand::execute() {
 
     vector<shared_ptr<User>> users = UserService::getInstance()->getAllUsers();
 
-    string header = "deleteUsers";
-    printHeader(header, (120 - header.length()*2) / 2 - 24, 1);
-
     if (users.empty()) {
         printMessage("No users found!");
         printRepeatMessage();
@@ -308,6 +313,8 @@ bool DeleteUserCommand::execute() {
     while (true) {
         clearScreen();
         printFrame(0, 0, 120, 30);
+        string header = "deleteUsers";
+        printHeader(header, (120 - header.length()*2) / 2 - 24, 1);
         AdminUI::displayUserList(users);
         
         // Get username to delete
