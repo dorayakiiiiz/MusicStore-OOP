@@ -28,9 +28,11 @@ class DiscountService {
 private:
     inline static shared_ptr<DiscountService> instance = nullptr; /**< Singleton instance of DiscountService */
 
-    shared_ptr<IDataProvider> dataProvider; /**< Data provider for accessing discount data */
+protected:
 
-    DiscountService(); /**< Private constructor for singleton pattern */
+    DiscountService(shared_ptr<IDataProvider> provider); /**< Constructor for singleton pattern */
+
+    shared_ptr<IDataProvider> dataProvider; /**< Data provider for accessing discount data */
 public:
 
     /**
@@ -38,7 +40,7 @@ public:
      * 
      * @return shared_ptr<DiscountService> Pointer to the singleton instance
      */
-    static shared_ptr<DiscountService> getInstance();
+    static shared_ptr<DiscountService> getInstance(shared_ptr<IDataProvider> provider = nullptr);
 
     /**
      * @brief Default destructor

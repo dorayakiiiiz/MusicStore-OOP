@@ -21,17 +21,19 @@ class AuthService {
 private:
     inline static shared_ptr<AuthService> instance = nullptr; /**< Singleton instance of AuthService */
 
-    shared_ptr<IDataProvider> dataProvider; /**< Data provider for accessing user data */
+protected:
+    AuthService(shared_ptr<IDataProvider> provider); /**< Constructor for singleton pattern */
 
-    AuthService(); /**< Private constructor for singleton pattern */
+    shared_ptr<IDataProvider> dataProvider; /**< Data provider for accessing user data */
 public:
 
     /**
      * @brief Get the singleton instance of AuthService
      * 
+     * @param provider Optional data provider to use
      * @return shared_ptr<AuthService> Pointer to the singleton instance
      */
-    static shared_ptr<AuthService> getInstance();
+    static shared_ptr<AuthService> getInstance(shared_ptr<IDataProvider> provider = nullptr);
 
     /**
      * @brief Register a new user with username, password and role

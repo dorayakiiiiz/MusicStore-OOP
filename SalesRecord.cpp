@@ -1,7 +1,7 @@
 #include "SalesRecord.h"
 
 // Default constructor
-SalesRecord::SalesRecord() {}
+SalesRecord::SalesRecord() : name(""), artist(""), genre(""), sold(0), revenue(0.0f) {}
 
 // Parameterized constructor
 SalesRecord::SalesRecord(const string& name, const string& artist, const string& genre, int sold, float revenue)

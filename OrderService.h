@@ -8,7 +8,7 @@
 #include <memory>
 #include <string>
 
-using std::vector, std::string, std::make_shared;
+using std::vector, std::string, std::make_shared, std::shared_ptr;
 
 /**
  * @brief Service class for managing order-related operations
@@ -19,7 +19,8 @@ class OrderService {
 private:
     inline static shared_ptr<OrderService> instance = nullptr; /**< Singleton instance of OrderService */
 
-    OrderService(); /**< Private constructor for singleton pattern */
+protected:
+    OrderService(shared_ptr<IDataProvider> provider); /**< Private constructor for singleton pattern */
 
     shared_ptr<IDataProvider> dataProvider; /**< Data provider for accessing order data */
 public:
@@ -27,9 +28,10 @@ public:
     /**
      * @brief Get the singleton instance of OrderService
      * 
-     * @return shared_ptr<OrderService> Pointer to the singleton instance
+     * @param provider Optional data provider to use
+     * @return shared_ptr<OrderService> Singleton instance of OrderService
      */
-    static shared_ptr<OrderService> getInstance();
+    static shared_ptr<OrderService> getInstance(shared_ptr<IDataProvider> provider = nullptr);
 
     /**
      * @brief Get all orders in the system

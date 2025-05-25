@@ -12,18 +12,21 @@
 #include "utils.h"
 
 // Constructor
-AuthService::AuthService() {
-    dataProvider = make_shared<SqlDao>();
+AuthService::AuthService(shared_ptr<IDataProvider> provider) {
+    this->dataProvider = provider;
 }
 
-// get the singleton instance of AuthService
-shared_ptr<AuthService> AuthService::getInstance() {
+// Get the singleton instance of AuthService
+shared_ptr<AuthService> AuthService::getInstance(shared_ptr<IDataProvider> provider) {
     if (instance == nullptr) {
-        instance = shared_ptr<AuthService>(new AuthService());
+        // If no provider is passed, use the default SqlDao
+        if (!provider) {
+            provider = make_shared<SqlDao>();
+        }
+        instance = shared_ptr<AuthService>(new AuthService(provider));
     }
     return instance;
 }
-
 // Register a new user with username, password, and role
 bool AuthService::registerUser(const string& username, const string& password, Role role) {
     // Get all users from the repository

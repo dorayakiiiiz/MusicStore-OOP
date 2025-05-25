@@ -7,14 +7,18 @@
 using std::unordered_map;
 
 // Constructor
-OrderService::OrderService() {
-    dataProvider = make_shared<SqlDao>();
+OrderService::OrderService(shared_ptr<IDataProvider> provider) {
+    this->dataProvider = provider;
 }
 
 // Get the singleton instance of OrderService
-shared_ptr<OrderService> OrderService::getInstance() {
+shared_ptr<OrderService> OrderService::getInstance(shared_ptr<IDataProvider> provider) {
     if (instance == nullptr) {
-        instance = shared_ptr<OrderService>(new OrderService());
+        // If no provider is passed, use the default SqlDao
+        if (!provider) {
+            provider = make_shared<SqlDao>();
+        }
+        instance = shared_ptr<OrderService>(new OrderService(provider));
     }
     return instance;
 }

@@ -18,17 +18,20 @@ class UserService {
 private:
     inline static shared_ptr<UserService> instance = nullptr; /**< Singleton instance of UserService */
 
+protected:
+    UserService(shared_ptr<IDataProvider> provider); /**< Constructor for singleton pattern */
+    
     shared_ptr<IDataProvider> dataProvider; /**< Data provider for accessing user data */
 
-    UserService(); /**< Private constructor for singleton pattern */
 public:
 
     /**
      * @brief Get the singleton instance of UserService
      * 
+     * @param provider Optional data provider to use
      * @return shared_ptr<UserService> Pointer to the singleton instance
      */
-    static shared_ptr<UserService> getInstance();
+    static shared_ptr<UserService> getInstance(shared_ptr<IDataProvider> provider = nullptr);
 
     /**
      * @brief Default destructor

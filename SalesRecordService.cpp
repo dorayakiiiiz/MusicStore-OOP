@@ -5,14 +5,18 @@
 using std::make_shared, std::vector, std::shared_ptr;
 
 // Constructor
-SalesRecordService::SalesRecordService() {
-    dataProvider = make_shared<SqlDao>();
+SalesRecordService::SalesRecordService(shared_ptr<IDataProvider> provider) {
+    this->dataProvider = provider;
 }
 
 // Get the singleton instance of SalesRecordService
-shared_ptr<SalesRecordService> SalesRecordService::getInstance() {
+shared_ptr<SalesRecordService> SalesRecordService::getInstance(shared_ptr<IDataProvider> provider) {
     if (instance == nullptr) {
-        instance = shared_ptr<SalesRecordService>(new SalesRecordService());
+        // If no provider is passed, use the default SqlDao
+        if (!provider) {
+            provider = make_shared<SqlDao>();
+        }
+        instance = shared_ptr<SalesRecordService>(new SalesRecordService(provider));
     }
     return instance;
 }

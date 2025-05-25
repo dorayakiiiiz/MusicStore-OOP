@@ -3,14 +3,18 @@
 #include "SQLDao.h"
 
 // Constructor
-UserService::UserService() {
-    dataProvider = make_shared<SqlDao>();
+UserService::UserService(shared_ptr<IDataProvider> provider) {
+    this->dataProvider = provider;
 }
 
 // Get the singleton instance of UserService
-shared_ptr<UserService> UserService::getInstance() {
+shared_ptr<UserService> UserService::getInstance(shared_ptr<IDataProvider> provider) {
     if (instance == nullptr) {
-        instance = shared_ptr<UserService>(new UserService());
+        // If no provider is passed, use the default SqlDao
+        if (!provider) {
+            provider = make_shared<SqlDao>();
+        }
+        instance = shared_ptr<UserService>(new UserService(provider));
     }
     return instance;
 }

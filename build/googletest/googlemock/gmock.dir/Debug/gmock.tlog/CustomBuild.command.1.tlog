@@ -1,0 +1,10 @@
+^E:\PPLTHDT\PROJECT\MUSICSTORE\MUSICSTORE-OOP\GOOGLETEST\GOOGLEMOCK\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SE:/PPLTHDT/Project/MusicStore/MusicStore-OOP -BE:/PPLTHDT/Project/MusicStore/MusicStore-OOP/build --check-stamp-file E:/PPLTHDT/Project/MusicStore/MusicStore-OOP/build/googletest/googlemock/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

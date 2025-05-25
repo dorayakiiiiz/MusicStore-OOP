@@ -28,17 +28,19 @@ class MusicService {
 private:
     inline static shared_ptr<MusicService> instance = nullptr; /**< Singleton instance of MusicService */
 
-    shared_ptr<IDataProvider> dataProvider; /**< Data provider for accessing music data */
+protected:
+    MusicService(shared_ptr<IDataProvider> provider); /**< Constructor for singleton pattern */
 
-    MusicService(); /**< Private constructor for singleton pattern */
+    shared_ptr<IDataProvider> dataProvider; /**< Data provider for accessing music data */
 public:
 
     /**
      * @brief Get the singleton instance of MusicService
      * 
+     * @param provider Optional data provider to use
      * @return shared_ptr<MusicService> Pointer to the singleton instance
      */
-    static shared_ptr<MusicService> getInstance();
+    static shared_ptr<MusicService> getInstance(shared_ptr<IDataProvider> provider = nullptr);
 
     /**
      * @brief Get all music items in the inventory
