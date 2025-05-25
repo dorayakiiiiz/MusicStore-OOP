@@ -103,8 +103,22 @@ void AdminUI::displayMusicList(vector<Music>& items, int maxPerPage) {
         std::cout << "D";
 
         // Đợi người dùng nhập phím
+        if(8 == maxPerPage){
+            printRepeatMessage(1, 1, "EXIT");    
+        }
+        else if (7 == maxPerPage){
+            printRepeatMessage(115, 1, "DELETE");
+        }
+        else{
+            printRepeatMessage(115, 1, "UPDATE");
+        }
+
         char key = _getch();
-        if (27 == key || 17 == key) {
+
+        if (27 == key && 8 == maxPerPage) {
+            break;
+        }
+        else if (13 == key && 8 != maxPerPage){
             break;
         }
         else if ((key == 'a' || key == 'A') && currentPage > 0) {

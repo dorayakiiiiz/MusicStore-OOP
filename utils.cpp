@@ -64,14 +64,19 @@ void printMenu(const string& header, int x, int y)
 // Used to visually separate content sections
 
 // Prints a message for repeating the last action
-void printRepeatMessage() {
-    string instructions = "Press space to exit or any other key to continue...";
-    int guideX = 64;
-    int guideY = 26; 
+void printRepeatMessage(int x, int y, string instructions) {
     int guideW = 4 + instructions.size();
-    int guideH = 3;
-    printFrame(guideX, guideY, guideW, guideH);
-    printInstructions(instructions, guideX + 1, guideY + 1);
+    int guideH = 5;
+    printFrame(x, x, guideW, guideH);
+    printInstructions(instructions, x + 1, x + 1);
+    if(instructions == "EXIT"){
+        ConsoleUI::gotoXY(x + 2, x + 2);
+        cout << "(Esc)";
+    }
+    else{
+        ConsoleUI::gotoXY(x + 2, x + 2);
+        cout << "(Enter)";
+    }
 }
 
 void printFrame(int x, int y, int width, int height) {

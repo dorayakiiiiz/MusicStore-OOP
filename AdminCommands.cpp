@@ -29,7 +29,7 @@ bool ViewMusicListCommand::execute() {
     vector<Music> items = MusicService::getInstance()->getAllMusic();
     if (items.empty()) {
         printMessage("No items found!");
-        printRepeatMessage();
+        printRepeatMessage(1, 1, "EXIT");
 
         char repeat = _getch();
 
@@ -64,7 +64,7 @@ bool AddNewItemsCommand::execute() {
             printMessage("Item already exists!");
         }
 
-        printRepeatMessage();
+        printRepeatMessage(1, 1, "EXIT");
 
         char repeat = _getch();
         if (27 == repeat) {
@@ -112,11 +112,15 @@ bool RemoveItemsCommand::execute() {
         if (items.empty()) {
             printMessage("tNo items left in inventory!");
         }
-        printRepeatMessage();
+        printRepeatMessage(1, 1, "EXIT");
+        printRepeatMessage(115, 1, "DELETE");
 
         char repeat = _getch();
         if (27 == repeat) {
             break;
+        }
+        else if (13 == repeat){
+            continue;
         }
     }
     return true;
@@ -164,7 +168,7 @@ bool UpdatePriceCommand::execute() {
             printMessage("Error while updating price!");
         }
 
-        printRepeatMessage();
+        printRepeatMessage(1, 1, "EXIT");
 
         char repeat = _getch();
         if (27 == repeat) {
@@ -189,7 +193,7 @@ bool ViewUsersCommand::execute() {
         vector<shared_ptr<User>> users = UserService::getInstance()->getAllUsers();
         if (users.empty()) {
             printMessage("No users found!");
-            printRepeatMessage();
+            printRepeatMessage(1, 1, "EXIT");
 
             char repeat = _getch();
             if (27 == repeat) {
@@ -199,7 +203,7 @@ bool ViewUsersCommand::execute() {
         }
 
         AdminUI::displayUserList(users);
-        printRepeatMessage();
+        printRepeatMessage(1, 1, "EXIT");
 
         char repeat = _getch();
         if (27 == repeat) {
@@ -248,7 +252,7 @@ bool ViewAllPurchaseHistoriesCommand::execute() {
             }
         }
         
-        printRepeatMessage();
+        printRepeatMessage(1, 1, "EXIT");
         char repeat = _getch();
         if (27 == repeat) {
             break;
@@ -270,7 +274,7 @@ bool DeleteUserCommand::execute() {
 
     if (users.empty()) {
         printMessage("No users found!");
-        printRepeatMessage();
+        printRepeatMessage(1, 1, "EXIT");
 
         char repeat = _getch();
         if (27 == repeat) {
@@ -320,7 +324,7 @@ bool DeleteUserCommand::execute() {
         users = UserService::getInstance()->getAllUsers();
         if (users.empty()) {
             printMessage("No users left in the system!");
-            printRepeatMessage();
+            printRepeatMessage(1, 1, "EXIT");
 
             char repeat = _getch();
             if (27 == repeat) {
@@ -329,7 +333,7 @@ bool DeleteUserCommand::execute() {
             break;
         }
 
-        printRepeatMessage();
+        printRepeatMessage(1, 1, "EXIT");
 
         char repeat = _getch();
         if (27 == repeat) {
@@ -355,7 +359,7 @@ bool ViewSalesStatisticsCommand::execute() {
         float totalRevenue = SalesRecordService::getInstance()->getTotalRevenue();
 
         AdminUI::displaySaleStatistics(salesRecords, totalRevenue);
-        printRepeatMessage();
+        printRepeatMessage(1, 1, "EXIT");
 
         char repeat = _getch();
         if (27 == repeat) {

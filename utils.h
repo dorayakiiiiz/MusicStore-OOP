@@ -44,7 +44,7 @@ void clearScreen(int x, int y, int width, int height);
 /**
  * @brief Prints a message for repeating the last action
  */
-void printRepeatMessage();
+void printRepeatMessage(int x, int y, string instructions);
 
 void printFrame(int x, int y, int width, int height);
 /**

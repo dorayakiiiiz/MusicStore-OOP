@@ -104,7 +104,7 @@ bool SearchMusicCommand::execute() {
             CustomerUI::displaySearchResults(results);
         }
 
-        printRepeatMessage();
+        //printRepeatMessage();
 
         char repeat = _getch();
         if (27 == repeat) {
@@ -162,7 +162,7 @@ bool AddToCartCommand::execute() {
         //printHeader("YOUR CURRENT CART");
         CustomerUI::displayCart(cart.getItems());
 
-        printRepeatMessage();
+        //printRepeatMessage();
 
         char repeat = _getch();
         if (27 == repeat) {
@@ -219,7 +219,7 @@ bool RemoveFromCartCommand::execute() {
                 pauseScreen();
                 break;
             }
-            printRepeatMessage();
+            //printRepeatMessage();
 
             char repeat = _getch();
             if (27 == repeat) {
