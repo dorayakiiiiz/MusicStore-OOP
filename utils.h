@@ -78,6 +78,8 @@ string getInput(const string&, int, int);
 /**
  * @brief Sleeps the program for a specified duration
  */
+void sleepScreen(int time);
+
 void sleepScreen();
 
 /**
@@ -108,19 +110,20 @@ T getValidatedInput(const string& prompt, function<tuple<bool, T, Error>(const s
     Error error;
 
     do {
-        clearScreen(promptX, promptY, prompt.size() + 5, 1);
+        clearScreen(promptX, promptY, prompt.size() + 8, 1);
         tie(isValid, value, error) = validatorFunc(prompt);
         if (!isValid) {
-            printMessage(error.message, promptX, promptY + 1);
+            printFrame(30, 25, error.message.size() + 2, 3);
+            printMessage(error.message, 32, 26);
+            printRepeatMessage(2, 1, "EXIT");
             printRepeatMessage(108, 1, "CONTINUE");
             char repeat = _getch();
             if (repeat == 27) { // ESC
+                clearScreen(32, 26, error.message.size() + 2, 3);
                 break;
             }
         }
     } while (!isValid);
-
-    clearScreen(promptX, promptY + 1, error.message.size() + 5, 1);
 
     return value;
 }

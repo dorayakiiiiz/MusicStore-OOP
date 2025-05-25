@@ -162,6 +162,10 @@ void clearScreen(int x, int y, int width, int height) {
 }
 
 // Sleeps the program for a specified duration
+void sleepScreen(int time = 500) {
+    Sleep(time);
+}
+
 void sleepScreen() {
     Sleep(500);
 }
