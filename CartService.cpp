@@ -3,14 +3,18 @@
 #include "SQLDao.h"
 
 // Constructor
-CartService::CartService() {
-    dataProvider = make_shared<SqlDao>();
+CartService::CartService(shared_ptr<IDataProvider> provider) {
+    this->dataProvider = provider;
 }
 
 // Get the singleton instance of CartService
-shared_ptr<CartService> CartService::getInstance() {
+shared_ptr<CartService> CartService::getInstance(shared_ptr<IDataProvider> provider) {
     if (instance == nullptr) {
-        instance = shared_ptr<CartService>(new CartService());
+        // If no provider is passed, use the default SqlDao
+        if (!provider) {
+            provider = make_shared<SqlDao>();
+        }
+        instance = shared_ptr<CartService>(new CartService(provider));
     }
     return instance;
 }

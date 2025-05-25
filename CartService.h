@@ -19,18 +19,20 @@ using std::vector, std::string, std::make_shared, std::shared_ptr;
 class CartService {
 private:
     inline static shared_ptr<CartService> instance = nullptr; /**< Singleton instance of CartService */
-    
+
+protected:
+    CartService(shared_ptr<IDataProvider> provider); /**< Constructor for singleton pattern */
+
     shared_ptr<IDataProvider> dataProvider; /**< Data provider for accessing repositories */
-    
-    CartService(); /**< Private constructor for singleton pattern */
 public:
 
     /**
-     * @brief Get the singleton instance of AuthService
+     * @brief Get the singleton instance of CartService
      * 
+     * @param provider Optional data provider to use
      * @return shared_ptr<CartService> Pointer to the singleton instance
      */
-    static shared_ptr<CartService> getInstance();
+    static shared_ptr<CartService> getInstance(shared_ptr<IDataProvider> provider = nullptr);
 
     /**
      * @brief Add a music item to the shopping cart

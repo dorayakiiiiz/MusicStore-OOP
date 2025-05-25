@@ -14,18 +14,21 @@
 #include <algorithm>
 
 // Constructor
-DiscountService::DiscountService() {
-    dataProvider = make_shared<SqlDao>();
+DiscountService::DiscountService(shared_ptr<IDataProvider> provider) {
+    this->dataProvider = provider;
 }
 
 // Get the singleton instance of DiscountService
-shared_ptr<DiscountService> DiscountService::getInstance() {
+shared_ptr<DiscountService> DiscountService::getInstance(shared_ptr<IDataProvider> provider) {
     if (instance == nullptr) {
-        instance = shared_ptr<DiscountService>(new DiscountService());
+        // If no provider is passed, use the default SqlDao
+        if (!provider) {
+            provider = make_shared<SqlDao>();
+        }
+        instance = shared_ptr<DiscountService>(new DiscountService(provider));
     }
     return instance;
 }
-
 // Get all discount vouchers from the repository
 vector<shared_ptr<Discount>> DiscountService::getAllDiscounts() {
     return dataProvider->discount()->getAll();
@@ -87,19 +90,25 @@ string DiscountService::generateRandomCode() {
 
 // Create a new discount voucher and add it to the repository
 shared_ptr<Discount> DiscountService::createDiscount(const string& username, DiscountType type, int discountValue) {
-    shared_ptr<Discount> discount;
-    string code;
+
     DiscountFactory factory;
 
     shared_ptr<DiscountStrategy> strategy = factory.getStrategy(type);
     strategy->setValue(discountValue);
 
+    // Ensure the discount code is unique
+    vector<shared_ptr<Discount>> vouchers = dataProvider->discount()->getAll();
+    string code;
     while (true) {
         code = generateRandomCode();
-        discount = make_shared<Discount>(code, username, strategy);
-        if (dataProvider->discount()->add(discount)) {
-            break; // Successfully added the discount, exit loop
-        };
+        for (int i = 0; i < vouchers.size(); ++i) {
+            if (code == vouchers[i]->getCode()) {
+                continue;
+            }
+        }
+        break;
     }
+    shared_ptr<Discount> discount = make_shared<Discount>(code, username, strategy);
+    dataProvider->discount()->add(discount);
     return discount;
 }

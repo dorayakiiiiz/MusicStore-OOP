@@ -1,0 +1,483 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\AuthServiceTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\CartServiceTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\CartTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\CommandTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\ControllerFactoryTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\ControllerPatternTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\DatabaseConnectorTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\DiscountFactoryTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\DiscountServiceTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\DiscountStrategyTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\DiscountTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\MusicServiceTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\MusicTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\OrderServiceTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\OrderTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\SalesRecordServiceTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\SalesRecordTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\SearchFactoryTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\SearchTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\ServiceIntegrationTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\StoreAppTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\UserServiceTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\UserTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\UtilsTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\AdminCommands.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\AdminController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\AdminUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\AuthService.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\Cart.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\CartService.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\CommandInvoker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\ConsoleConfig.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\ConsoleUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\ControllerFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\CustomerCommands.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\CustomerController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\CustomerUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\DatabaseConnector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\Discount.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\DiscountFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\DiscountService.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\DiscountStrategy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\InputChecker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\Music.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\MusicService.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\Order.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\OrderService.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\SQLDao.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\SQLDiscountRepository.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\SQLMusicRepository.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\SQLOrderRepository.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\SQLSalesRecordRepository.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\SQLUserRepository.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\SalesRecord.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\SalesRecordService.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\Search.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\SearchFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\StoreApp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\StoreCommands.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\User.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\UserService.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\AdminCommands.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\AdminController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\AdminUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\AuthService.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\Cart.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\CartService.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\Command.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\CommandInvoker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\ConsoleConfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\ConsoleUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\ControllerFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\CustomerCommands.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\CustomerController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\CustomerUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\DatabaseConnector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\Discount.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\DiscountFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\DiscountService.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\DiscountStrategy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\IController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\IDataProvider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\IRepository.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\InputChecker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\Music.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\MusicService.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\Order.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\OrderService.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\SQLDao.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\SQLDiscountRepository.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\SQLMusicRepository.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\SQLOrderRepository.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\SQLSalesRecordRepository.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\SQLUserRepository.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\SalesRecord.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\SalesRecordService.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\Search.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\SearchFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\StoreApp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\StoreCommands.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\User.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\UserService.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googlemock\include\gmock\gmock-actions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googlemock\include\gmock\gmock-cardinalities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googlemock\include\gmock\gmock-function-mocker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googlemock\include\gmock\gmock-matchers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googlemock\include\gmock\gmock-more-actions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googlemock\include\gmock\gmock-more-matchers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googlemock\include\gmock\gmock-nice-strict.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googlemock\include\gmock\gmock-spec-builders.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googlemock\include\gmock\gmock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googlemock\include\gmock\internal\custom\gmock-generated-actions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googlemock\include\gmock\internal\custom\gmock-matchers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googlemock\include\gmock\internal\custom\gmock-port.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googlemock\include\gmock\internal\gmock-internal-utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googlemock\include\gmock\internal\gmock-port.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googlemock\include\gmock\internal\gmock-pp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googlemock\test\gmock-matchers_test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googlemock\test\gmock_link_test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\include\gtest\gtest-assertion-result.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\include\gtest\gtest-death-test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\include\gtest\gtest-matchers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\include\gtest\gtest-message.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\include\gtest\gtest-param-test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\include\gtest\gtest-printers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\include\gtest\gtest-spi.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\include\gtest\gtest-test-part.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\include\gtest\gtest-typed-test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\include\gtest\gtest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\include\gtest\gtest_pred_impl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\include\gtest\gtest_prod.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\include\gtest\internal\custom\gtest-port.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\include\gtest\internal\custom\gtest-printers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\include\gtest\internal\custom\gtest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\include\gtest\internal\gtest-death-test-internal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\include\gtest\internal\gtest-filepath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\include\gtest\internal\gtest-internal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\include\gtest\internal\gtest-param-util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\include\gtest\internal\gtest-port-arch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\include\gtest\internal\gtest-port.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\include\gtest\internal\gtest-string.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\include\gtest\internal\gtest-type-util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\samples\prime_tables.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\samples\sample1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\samples\sample2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\samples\sample3-inl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\samples\sample4.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\src\gtest-internal-inl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\test\googletest-param-test-test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\test\gtest-typed-test_test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\test\production.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\MockConsole.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\MockDao.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{3FD91427-1D98-3A95-AA19-5D2DB2479ED4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{027206E0-A11E-3E83-ADC2-0C23E16003BD}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

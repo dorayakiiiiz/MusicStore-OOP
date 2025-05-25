@@ -1,0 +1,10 @@
+{
+	"InstallScripts" : 
+	[
+		"E:/PPLTHDT/Project/MusicStore/MusicStore-OOP/build/cmake_install.cmake",
+		"E:/PPLTHDT/Project/MusicStore/MusicStore-OOP/build/googletest/cmake_install.cmake",
+		"E:/PPLTHDT/Project/MusicStore/MusicStore-OOP/build/googletest/googlemock/cmake_install.cmake",
+		"E:/PPLTHDT/Project/MusicStore/MusicStore-OOP/build/googletest/googletest/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
