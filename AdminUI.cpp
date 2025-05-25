@@ -223,48 +223,61 @@ void AdminUI::displaySaleStatistics(vector<SalesRecord> salesRecords, float tota
 // Returns a Music object with the user-provided details
 Music AdminUI::getNewMusicDetails() {
 
+    printFrameOptions(30, 10, 60, 5);
+
+    ConsoleUI::gotoXY(32, 11);
+    cout << "Enter music name  : ";
+    ConsoleUI::gotoXY(32, 13);
+    cout << "Enter artist      : ";
+    ConsoleUI::gotoXY(32, 15);
+    cout << "Enter genre       : ";
+    ConsoleUI::gotoXY(32, 17);
+    cout << "Enter price       : ";
+    ConsoleUI::gotoXY(32, 19);
+    cout << "Enter quantity    : ";
+
     // Variables to store new music item details
 
     // Get item name with validation
     string name = getValidatedInput<string>("Enter music name: ",
         [](const string& prompt) {
-            return InputChecker::validateString(prompt, 10, 10);
+            return InputChecker::validateString(prompt, 32, 11);
         },
-        10, 10
+        32, 11
     );
 
     // Get artist name with validation
-    string artist = getValidatedInput<string>("Enter artist: ",
+    string artist = getValidatedInput<string>("Enter artist    : ",
         [](const string& prompt) {
-            return InputChecker::validateString(prompt, 10, 11);
+            return InputChecker::validateString(prompt, 32, 13);
         },
-        10, 11
+        32, 13
     );
 
     // Get genre with validation
-    string genre = getValidatedInput<string>("Enter genre: ",
+    string genre = getValidatedInput<string>("Enter genre     : ",
         [](const string& prompt) {
-            return InputChecker::validateString(prompt, 10, 12);
+            return InputChecker::validateString(prompt, 32, 15);
         },
-        10, 12
+        32, 15
     );
 
     // Get price with validation (must be non-negative)
     float price = getValidatedInput<float>(
-        "Enter price: ",
+        "Enter price     : ",
         [](const std::string& p) { 
-            return InputChecker::validateFloat(p, 10, 13, 0.0F); 
+            return InputChecker::validateFloat(p, 32, 17, 0.0F); 
         },
-        10, 13
+        32, 17
     );
 
     // Get quantity with validation (must be non-negative)
     int quantity = getValidatedInput<int>(
-        "Enter quantity: ",
+        "Enter quantity  : ",
         [](const std::string& p) { 
-            return InputChecker::validateInt(p, 10, 14, 0); 
+            return InputChecker::validateInt(p, 32, 19, 0); 
         },
-        10, 14
+        32, 19
     );
 
     // Create and return a new Music object with the collected data

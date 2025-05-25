@@ -28,7 +28,8 @@ bool ViewMusicListCommand::execute() {
 
     vector<Music> items = MusicService::getInstance()->getAllMusic();
     if (items.empty()) {
-        printMessage("No items found!", 10, 15);
+        printFrame(30, 14, 60, 3); 
+        printMessage("NO ITEMS FOUND!", 50, 15);
         printRepeatMessage(2, 1, "EXIT");
 
         char repeat = _getch();
@@ -52,20 +53,22 @@ bool AddNewItemsCommand::execute() {
         clearScreen();
         printFrame(0, 0, 120, 30); 
         string header = "addNewItems";
-        printHeader(header, (120 - header.length()*2) / 2 - 29, 1);
+        printHeader(header, (120 - header.length()*2) / 2 - 26, 1);
 
         Music newItem = AdminUI::getNewMusicDetails();
         
         // Add the new item to inventory
         bool success = MusicService::getInstance()->addMusicItem(newItem);
         if (success) {
-            printMessage("Item added successfully!", 10, 15);
+            printFrame(30, 22, 60, 3); 
+            printMessage("ITEM ADDED SUCCESSFULLY!", 47, 23);
         } else {
-            printMessage("Item already exists!", 10, 15);
+            printFrame(30, 22, 60, 3); 
+            printMessage("Item already exists!", 50, 23);
         }
 
         printRepeatMessage(2, 1, "EXIT");
-        printRepeatMessage(110, 1, "CONTINUE");
+        printRepeatMessage(107, 1, "CONTINUE");
 
         char repeat = _getch();
         if (27 == repeat) {
@@ -259,7 +262,7 @@ bool ViewAllPurchaseHistoriesCommand::execute() {
             }
         }
 
-        printRepeatMessage(110, 1, "CONTINUE");
+        printRepeatMessage(108, 1, "CONTINUE");
         printRepeatMessage(2, 1, "EXIT");
         char repeat = _getch();
         if (27 == repeat) {
@@ -342,7 +345,7 @@ bool DeleteUserCommand::execute() {
             break;
         }
 
-        printRepeatMessage(110, 1, "CONTINUE");
+        printRepeatMessage(108, 1, "CONTINUE");
         printRepeatMessage(2, 1, "EXIT");
 
         char repeat = _getch();
@@ -369,7 +372,7 @@ bool ViewSalesStatisticsCommand::execute() {
         float totalRevenue = SalesRecordService::getInstance()->getTotalRevenue();
 
         AdminUI::displaySaleStatistics(salesRecords, totalRevenue);
-        printRepeatMessage(110, 1, "CONTINUE");
+        printRepeatMessage(108, 1, "CONTINUE");
         printRepeatMessage(2, 1, "EXIT");
 
         char repeat = _getch();
