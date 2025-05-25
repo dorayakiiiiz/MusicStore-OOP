@@ -6,12 +6,14 @@
 #include <tuple>
 #include <iostream>
 #include <limits>
+#include <functional>
 #include <cfloat>
 #include "ConsoleUI.h"
+#include "InputValidator.h"
 #include "Music.h"
 #include<fstream>
-using std::string, std::vector, std::tuple, std::make_tuple, std::get, std::stoi, std::cout, std::cin;
-
+using std::string, std::vector, std::tuple, std::make_tuple, std::get;
+using std::stoi, std::cout, std::cin, std::function, std::tie;
 
 /**
  * @brief Prints a formatted header with decorative elements
@@ -88,10 +90,38 @@ void sleepScreen();
  */
 string toLower(const string& str);
 
-int getMaxOptionsLength(const vector<string>& options);
 /**
- * @brief Prints a string with a specified color
- * @param str The string to print
- * @param color The color code for the text
+ * @brief Gets the maximum length of options in a vector
+ * @param options The vector of options to check
+ * @return The length of the longest option
  */
+int getMaxOptionsLength(const vector<string>& options);
+
+
+/**
+ * @brief Validates user input based on a provided validation function
+ * @param prompt The prompt to display to the user
+ * @param validatorFunc The validation function to use
+ * @return The validated input value
+ */
+template<typename T>
+T getValidatedInput(const string& prompt, function<tuple<bool, T, Error>(const string&)> validatorFunc) {
+    bool isValid;
+    T value;
+    Error error; 
+
+    do {
+        tie(isValid, value, error) = validatorFunc(prompt);
+        if (!isValid) {
+            printMessage(error.message); 
+            pauseScreen();               
+        }
+    } while (!isValid);
+    
+    return value;
+}
+
+
+
+
 #endif

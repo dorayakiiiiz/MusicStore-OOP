@@ -1,4 +1,5 @@
 #include "InputValidator.h"
+#include "utils.h"
 
 // get a valid int input from user
 tuple <bool, int, Error> InputValidator::validateInt(string prompt, int min, int max) {

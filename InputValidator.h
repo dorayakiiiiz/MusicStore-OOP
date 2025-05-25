@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 #include <tuple>
-#include "utils.h"
 #include <cfloat>
 
 using std::string, std::vector, std::tuple, std::make_tuple;

@@ -100,15 +100,13 @@ bool RemoveItemsCommand::execute() {
         vector<Music> items = MusicService::getInstance()->getAllMusic();
         AdminUI::displayMusicList(items);
 
-        int id;
-        do {
-            tie(isValid, id, error) = InputValidator::validateInt("Enter item ID: ", 1, items.size());
-            if (!isValid) {
-                printMessage(error.message);
-                sleepScreen();
-                continue;
+        int id = getValidatedInput<int>(
+            "Enter item ID to remove: ",
+            [](const string& prompt) {
+                vector<Music> items = MusicService::getInstance()->getAllMusic();
+                return InputValidator::validateInt(prompt, 1, items.size());
             }
-        } while (!isValid);
+        );
         
         // Remove the selected item
         bool success = MusicService::getInstance()->removeMusicItem(id);
@@ -151,26 +149,21 @@ bool UpdatePriceCommand::execute() {
         AdminUI::displayMusicList(items);
 
         // Get ID of item to update with validation
-        int id;
-        do {
-            tie(isValid, id, error) = InputValidator::validateInt("Enter item ID: ", 1, items.size());
-            if (!isValid) {
-                printMessage(error.message);
-                sleepScreen();
-                continue;
+        int id = getValidatedInput<int>(
+            "Enter item ID to update: ",
+            [](const string& prompt) {
+                vector<Music> items = MusicService::getInstance()->getAllMusic();
+                return InputValidator::validateInt(prompt, 1, items.size());
             }
-        } while (!isValid);
+        );
 
         // Get new price with validation
-        float newPrice;
-        do {
-            tie(isValid, newPrice, error) = InputValidator::validateFloat("Enter new price: ", 0.0f);
-            if (!isValid) {
-                printMessage(error.message);
-                sleepScreen();
-                continue;
+        float newPrice = getValidatedInput<float>(
+            "Enter new price: ",
+            [](const string& prompt) {
+                return InputValidator::validateFloat(prompt, 0.0f);
             }
-        } while (!isValid);
+        );
 
         // Update the item's price
         bool success = MusicService::getInstance()->updateMusicItemPrice(id, newPrice);
@@ -237,9 +230,6 @@ bool ViewAllPurchaseHistoriesCommand::execute() {
     // print the list of customers
     vector<shared_ptr<User>> customer = UserService::getInstance()->getAllCustomers();
 
-    int id;
-    bool isValid;
-    Error error;
     while(true){
         clearScreen();
         printFrame(0, 0, 120, 30); 
@@ -247,23 +237,12 @@ bool ViewAllPurchaseHistoriesCommand::execute() {
         printHeader(header, (120 - header.length()*2) / 2 - 31, 1);
         AdminUI::displayUserList(customer);
 
-        do {
-            tie(isValid, id, error) = InputValidator::validateInt("Enter customer ID: ", 1, customer.size());
-            if (!isValid) {
-                printMessage(error.message);
-                sleepScreen();
-                clearScreen();
-                // printFrame(0, 0, 120, 30); 
-                // string header = "purchaseHistory";
-                // printHeader(header, (120 - header.length()*2) / 2 - 31, 1);
-                // AdminUI::displayUserList(customer);
-                continue;
+        int id = getValidatedInput<int>(
+            "Enter customer ID to view purchase history: ",
+            [&customer](const string& prompt_input) {
+                return InputValidator::validateInt(prompt_input, 1, customer.size());
             }
-            clearScreen();
-            printFrame(0, 0, 120, 30); 
-            string header = "purchaseHistory";
-            printHeader(header, (120 - header.length()*2) / 2 - 31, 1);
-        } while (!isValid);
+        );
 
         // Get the selected customer
         shared_ptr<User> selectedCustomer = customer[id - 1];
@@ -295,8 +274,6 @@ std::string DeleteUserCommand::getName() const {
 }
 
 bool DeleteUserCommand::execute() {
-    bool isValid;
-    Error error;
 
     vector<shared_ptr<User>> users = UserService::getInstance()->getAllUsers();
 
@@ -318,15 +295,12 @@ bool DeleteUserCommand::execute() {
         AdminUI::displayUserList(users);
         
         // Get username to delete
-        int id;
-        do {
-            tie(isValid, id, error) = InputValidator::validateInt("Enter user's id to delete: ");
-            if (!isValid) {
-                printMessage(error.message);
-                sleepScreen();
-                continue;
+        int id = getValidatedInput<int>(
+            "Enter user ID to delete: ",
+            [&users](const string& prompt_input) {
+                return InputValidator::validateInt(prompt_input, 1, users.size());
             }
-        } while (!isValid);
+        );
 
         // Check if admin is deleting their own account
         shared_ptr<User> delUser = UserService::getInstance()->getUserById(id);
