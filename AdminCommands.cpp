@@ -102,8 +102,7 @@ bool RemoveItemsCommand::execute() {
 
         int id = getValidatedInput<int>(
             "Enter item ID to remove: ",
-            [](const string& prompt) {
-                vector<Music> items = MusicService::getInstance()->getAllMusic();
+            [&items](const string& prompt) {
                 return InputValidator::validateInt(prompt, 1, items.size());
             }
         );
@@ -151,8 +150,7 @@ bool UpdatePriceCommand::execute() {
         // Get ID of item to update with validation
         int id = getValidatedInput<int>(
             "Enter item ID to update: ",
-            [](const string& prompt) {
-                vector<Music> items = MusicService::getInstance()->getAllMusic();
+            [&items](const string& prompt) {
                 return InputValidator::validateInt(prompt, 1, items.size());
             }
         );

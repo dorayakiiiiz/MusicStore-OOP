@@ -21,29 +21,29 @@ bool SignUpCommand::execute() {
     printFrame(0, 0, 120, 30);
     
     string header = "signUp";
-    printHeader(header, (120 - header.length()*2) / 2 - 15, 1);
+    printHeader(header, (120 - header.length() * 2) / 2 - 15, 1);
     
     // Get role input with validation
     int role = getValidatedInput<int>(
         "Enter your role (1 for admin, 2 for customer): ",
-        [](const string& prompt_input) {
-            return InputValidator::validateInt(prompt_input, 1, 2);
+        [](const string& prompt) {
+            return InputValidator::validateInt(prompt, 1, 2);
         }
     );
     
     // Get username input with validation
     string username = getValidatedInput<string>(
         "Input username: ",
-        [](const string& prompt_input) {
-            return InputValidator::validateString(prompt_input);
+        [](const string& prompt) {
+            return InputValidator::validateString(prompt);
         }
     );
     
     // Get password input with validation
     string password = getValidatedInput<string>(
         "Input password: ",
-        [](const string& prompt_input) {
-            return InputValidator::validateString(prompt_input);
+        [](const string& prompt) {
+            return InputValidator::validateString(prompt);
         }
     );
     
@@ -87,16 +87,16 @@ bool LoginCommand::execute() {
     // Get username input with validation
     string username = getValidatedInput<string>(
         "Input username: ",
-        [](const string& prompt_input) {
-            return InputValidator::validateString(prompt_input);
+        [](const string& prompt) {
+            return InputValidator::validateString(prompt);
         }
     );
 
     // Get password input with validation
     string password = getValidatedInput<string>(
         "Input password: ",
-        [](const string& prompt_input) {
-            return InputValidator::validateString(prompt_input);
+        [](const string& prompt) {
+            return InputValidator::validateString(prompt);
         }
     );
 

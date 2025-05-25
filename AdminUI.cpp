@@ -194,13 +194,25 @@ Music AdminUI::getNewMusicDetails() {
     // Variables to store new music item details
 
     // Get item name with validation
-    string name = getValidatedInput<string>("Enter music name: ", InputValidator::validateString);
+    string name = getValidatedInput<string>("Enter music name: ",
+        [](const string& prompt) {
+            return InputValidator::validateString(prompt);
+        }
+    );
 
     // Get artist name with validation
-    string artist = getValidatedInput<string>("Enter artist: ", InputValidator::validateString);
+    string artist = getValidatedInput<string>("Enter artist: ",
+        [](const string& prompt) {
+            return InputValidator::validateString(prompt);
+        }
+    );
 
     // Get genre with validation
-    string genre = getValidatedInput<string>("Enter genre: ", InputValidator::validateString);
+    string genre = getValidatedInput<string>("Enter genre: ",
+        [](const string& prompt) {
+            return InputValidator::validateString(prompt);
+        }
+    );
 
     // Get price with validation (must be non-negative)
     float price = getValidatedInput<float>(

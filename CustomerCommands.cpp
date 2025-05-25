@@ -81,16 +81,16 @@ bool SearchMusicCommand::execute() {
         // Get search criteria with validation
         int criteria = getValidatedInput<int>(
             "Enter search criteria (1 for name, 2 for artist, 3 for genre): ",
-            [](const string& prompt_input) {
-                return InputValidator::validateInt(prompt_input, 1, 3);
+            [](const string& prompt) {
+                return InputValidator::validateInt(prompt, 1, 3);
             }
         );
 
         // Get search keyword with validation
         string keyword = getValidatedInput<string>(
             "Enter keyword: ",
-            [](const string& prompt_input) {
-                return InputValidator::validateString(prompt_input);
+            [](const string& prompt) {
+                return InputValidator::validateString(prompt);
             }
         );
 
@@ -139,17 +139,16 @@ bool AddToCartCommand::execute() {
         // Get item ID with validation
         int itemID = getValidatedInput<int>(
             "Enter item ID: ",
-            [](const string& prompt_input) {
-                vector<Music> items = MusicService::getInstance()->getAllMusic();
-                return InputValidator::validateInt(prompt_input, 1, items.size());
+            [&items](const string& prompt) {
+                return InputValidator::validateInt(prompt, 1, items.size());
             }
         );
 
         // Get quantity with validation
         int quantity = getValidatedInput<int>(
             "Enter quantity: ",
-            [](const string& prompt_input) {
-                return InputValidator::validateInt(prompt_input, 1, INT_MAX);
+            [](const string& prompt) {
+                return InputValidator::validateInt(prompt, 1, INT_MAX);
             }
         );
 
@@ -199,8 +198,8 @@ bool RemoveFromCartCommand::execute() {
             // Get item ID to remove with validation
             int itemID = getValidatedInput<int>(
                 "Enter item ID to remove: ",
-                [this](const string& prompt_input) {
-                    return InputValidator::validateInt(prompt_input, 1, cart.getItems().size());
+                [this](const string& prompt) {
+                    return InputValidator::validateInt(prompt, 1, cart.getItems().size());
                 }
             );
 
@@ -269,8 +268,8 @@ bool CheckoutCommand::execute() {
             CustomerUI::displayVoucherList(validVouchers);
             int useVoucher = getValidatedInput<int>(
                 "Do you want to use a voucher? (1 for yes, 2 for no): ",
-                [](const string& prompt_input) {
-                    return InputValidator::validateInt(prompt_input, 1, 2);
+                [](const string& prompt) {
+                    return InputValidator::validateInt(prompt, 1, 2);
                 }
             );
 
@@ -278,8 +277,8 @@ bool CheckoutCommand::execute() {
                 // Get voucher code
                 string voucherCode = getValidatedInput<string>(
                     "Enter voucher code: ",
-                    [](const string& prompt_input) {
-                        return InputValidator::validateString(prompt_input);
+                    [](const string& prompt) {
+                        return InputValidator::validateString(prompt);
                     }
                 );
                 
@@ -320,8 +319,8 @@ bool CheckoutCommand::execute() {
             // Get discount type choice
             int discountChoice = getValidatedInput<int>(
                 "Choose a discount type (1 for 10% off, 2 for $5 off): ",
-                [](const string& prompt_input) {
-                    return InputValidator::validateInt(prompt_input, 1, 2);
+                [](const string& prompt) {
+                    return InputValidator::validateInt(prompt, 1, 2);
                 }
             );
             
