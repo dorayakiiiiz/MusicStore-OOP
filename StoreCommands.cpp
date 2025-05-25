@@ -24,32 +24,32 @@ bool SignUpCommand::execute() {
         string header = "signUp";
         printHeader(header, (120 - header.length() * 2) / 2 - 15, 1);
         
-        printFrame(25, 7, 65, 3);
+        printFrame(27, 7, 66, 3);
         // Get role input with validation
         int role = getValidatedInput<int>(
-            "Enter your role (1 for admin, 2 for customer): ",
+            "ENTER YOUR ROLE (1 FOR ADMIN, 2 FOR CUSTOMER): ",
             [](const string& prompt) {
-                return InputChecker::validateInt(prompt, 27, 8, 1, 2);
+                return InputChecker::validateInt(prompt, 34, 8, 1, 2);
             },
-            27, 8
+            34, 8
         );
 
         
         printFrameOptions(30, 11, 60, 4 - role);
 
         ConsoleUI::gotoXY(32, 12);
-        cout << "Input username       : ";
+        cout << "INPUT USERNAME       : ";
         ConsoleUI::gotoXY(32, 14);
-        cout << "Input password       : ";
+        cout << "INPUT PASSWORD       : ";
 
         if(role == 1){
             ConsoleUI::gotoXY(32, 16);
-            cout << "Input admin passkey  : ";
+            cout << "INPUT ADMIN PASSKEY  : ";
         }
         
         // Get username input with validation
         string username = getValidatedInput<string>(
-            "Input username     : ",
+            "INPUT USERNAME     : ",
             [](const string& prompt) {
                 return InputChecker::validateString(prompt, 32, 12);
             },
@@ -58,7 +58,7 @@ bool SignUpCommand::execute() {
         
         // Get password input with validation
         string password = getValidatedInput<string>(
-            "Input password     : ",
+            "INPUT PASSWORD     : ",
             [](const string& prompt) {
                 return InputChecker::validateString(prompt, 32, 14);
             },
@@ -67,10 +67,10 @@ bool SignUpCommand::execute() {
         
         // Additional validation for admin registration
         if (Role::ADMIN == role) {
-            string passkey = getInput("Input admin passkey: ", 32, 16);
+            string passkey = getInput("INPUT ADMIN PASSKEY: ", 32, 16);
             if (!Admin::isValidPasskey(passkey)) {
                 printFrame(30, 20, 60, 3);
-                printMessage("Invalid passkey. Please try again later!", 38, 21);
+                printMessage("INVALID PASSKEY. PLEASE TRY AGAIN LATER!", 38, 21);
                 printRepeatMessage(108, 1, "CONTINUE");
                 printRepeatMessage(2, 1, "EXIT");
                 char repeat = _getch();
@@ -88,11 +88,11 @@ bool SignUpCommand::execute() {
         if (success) {
             printFrame(40, 20, 40, 5);
             printMessage("SIGN UP SUCCESSFULLY", 48, 22);
-            sleepScreen(1500);
+            sleepScreen(1200);
             return true;
         } else {
             printFrame(30, 20, 60, 3);
-            printMessage("Username already exists. Please try again later!", 36, 21);
+            printMessage("USERNAME ALREADY EXISTS. PLEASE TRY AGAIN LATER!", 34, 21);
             printRepeatMessage(108, 1, "CONTINUE");
             printRepeatMessage(2, 1, "EXIT");
             char repeat = _getch();
@@ -124,13 +124,13 @@ bool LoginCommand::execute() {
 
         printFrameOptions(30, 10, 60, 2);
         ConsoleUI::gotoXY(32, 11);
-        cout << "Input username  : ";
+        cout << "INPUT USERNAME  : ";
         ConsoleUI::gotoXY(32, 13);
-        cout << "Input password  : ";
+        cout << "INPUT PASSWORD  : ";
 
         // Get username input with validation
         string username = getValidatedInput<string>(
-            "Input username: ",
+            "INPUT USERNAME: ",
             [](const string& prompt) {
                 return InputChecker::validateString(prompt, 32, 11);
             },
@@ -139,7 +139,7 @@ bool LoginCommand::execute() {
 
         // Get password input with validation
         string password = getValidatedInput<string>(
-            "Input password: ",
+            "INPUT PASSWORD: ",
             [](const string& prompt) {
                 return InputChecker::validateString(prompt, 32, 13);
             },
@@ -151,7 +151,7 @@ bool LoginCommand::execute() {
 
         if (!currentUser) {
             printFrame(30, 16, 60, 3);
-            printMessage("Invalid username or password. Please try again!", 36, 17);
+            printMessage("INVALID USERNAME OR PASSWORD. PLEASE TRY AGAIN!", 36, 17);
             printRepeatMessage(108, 1, "CONTINUE");
             printRepeatMessage(2, 1, "EXIT");
             char repeat = _getch();
@@ -172,7 +172,7 @@ bool LoginCommand::execute() {
         if (controller) {
             printFrame(30, 16, 60, 5);
             printMessage("LOGIN SUCCESSFULLY! WELCOME " + currentUser->getUsername() + "!", 40, 18);
-            sleepScreen(1500);
+            sleepScreen(1200);
             clearScreen();
             controller->menu(currentUser);
             return true;
@@ -188,9 +188,9 @@ string ExitCommand::getName() const {
 
 bool ExitCommand::execute() {
     printFrame(5, 22, 40, 6);
-    ConsoleUI::gotoXY(7, 24);
+    ConsoleUI::gotoXY(9, 24);
     cout << "    EXITING THE APPLICATION\n";
-    ConsoleUI::gotoXY(7, 25);
+    ConsoleUI::gotoXY(9, 25);
     cout << "THANK YOU FOR USING OUR SERVICE!";
     sleepScreen(1500);
     system("cls");

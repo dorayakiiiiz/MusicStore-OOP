@@ -43,14 +43,14 @@ public:
      * @brief Displays a formatted list of all registered users
      * @param users Vector containing all registered users
      */
-    static void displayUserList(const vector<shared_ptr<User>>& users);
+    static void displayUserList(const vector<shared_ptr<User>>& users, int maxPerPage);
     
     /**
      * @brief Displays the details of a specific order
      * @param order The order object containing purchase information
      * @param id The order identifier
      */
-    static void displayPurchasedHistory(const Order& order, int id);
+    static void displayPurchasedHistory(vector<Order> order);
     
     /**
      * @brief Displays sales statistics for items sold in the store
