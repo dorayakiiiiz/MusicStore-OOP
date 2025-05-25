@@ -27,8 +27,9 @@ void printHeader(const string& header, int x, int y) {
 
 // Prints a message with a decorative symbol prefix
 // Used for displaying information to the user
-void printMessage(const string& message) {
-    cout << '\t' << char(175) << ' ' << message << '\n';
+void printMessage(const string& message, int x, int y) {
+    ConsoleUI::gotoXY(x, y);
+    cout << char(175) << ' ' << message << '\n';
 }
 
 void printMenu(const string& header, int x, int y)
@@ -36,7 +37,7 @@ void printMenu(const string& header, int x, int y)
     string fileName = "";
     if(header == "WELCOME TO THE MUSIC STORE"){
         fileName = "ascii/musicStore.txt";
-        x -= 4;
+        x += 18;
     }
     else if (header == "ADMIN MENU"){
         fileName = "ascii/adminMenu.txt";
@@ -64,14 +65,19 @@ void printMenu(const string& header, int x, int y)
 // Used to visually separate content sections
 
 // Prints a message for repeating the last action
-void printRepeatMessage() {
-    string instructions = "Press esc to exit or any other key to continue...";
-    int guideX = 64;
-    int guideY = 26; 
-    int guideW = 4 + instructions.size();
-    int guideH = 3;
-    printFrame(guideX, guideY, guideW, guideH);
-    printInstructions(instructions, guideX + 1, guideY + 1);
+void printRepeatMessage(int x, int y, string instructions) {
+    int guideW = 3 + instructions.size();
+    int guideH = 4;
+    printFrame(x, y, guideW, guideH);
+    printInstructions(instructions, x + 1, y + 1);
+    if(instructions == "EXIT"){
+        ConsoleUI::gotoXY(x + 1, y + 2);
+        cout << "(Esc)";
+    }
+    else{
+        ConsoleUI::gotoXY(x + 1, y + 2);
+        cout << "(Enter)";
+    }
 }
 
 void printFrame(int x, int y, int width, int height) {
@@ -131,13 +137,14 @@ void printFrameOptions(int x, int y, int width, int select) {
 
  void printInstructions(const string& instructions, int x, int y) {
     ConsoleUI::gotoXY(x, y);
-    std::cout << char(94) << instructions << char(94);
+    std::cout << instructions;
  }
 
 // Gets user input with a prompt
 // Returns the string input by the user
-string getInput(const string& prompt) {
-    cout << '\t' << (char)16 << ' ' << prompt;
+string getInput(const string& prompt, int x, int y) {
+    ConsoleUI::gotoXY(x, y);
+    cout << (char)175 << ' ' << prompt;
     string input; getline(cin, input);
     return input;
 }
@@ -147,9 +154,11 @@ void clearScreen() {
     system("cls");
 }
 
-// Pauses execution until user presses a key
-void pauseScreen() {
-    system("pause");
+void clearScreen(int x, int y, int width, int height) {
+    for (int i = 0; i < height; ++i) {
+        ConsoleUI::gotoXY(x, y + i);
+        std::cout << std::string(width, ' ');
+    }
 }
 
 // Sleeps the program for a specified duration

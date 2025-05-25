@@ -21,31 +21,24 @@ std::string ViewMusicListCommand::getName() const {
 }
 
 bool ViewMusicListCommand::execute() {
-    while(true){
-        clearScreen();
-        printFrame(0, 0, 120, 30);
-        string header = "musicList";
-        printHeader(header, (120 - header.length()*2) / 2 - 19, 1);
+    clearScreen();
+    printFrame(0, 0, 120, 30);
+    string header = "musicList";
+    printHeader(header, (120 - header.length()*2) / 2 - 19, 1);
 
-        vector<Music> items = MusicService::getInstance()->getAllMusic();
-        if (items.empty()) {
-            printMessage("No items found!");
-            printRepeatMessage();
+    vector<Music> items = MusicService::getInstance()->getAllMusic();
+    if (items.empty()) {
+        printMessage("No items found!", 10, 15);
+        printRepeatMessage(2, 1, "EXIT");
 
-            char repeat = _getch();
-            if (27 == repeat) {
-                return true;
-            }
-        }
-
-        printRepeatMessage();
-        AdminUI::displayMusicList(items);
         char repeat = _getch();
+
         if (27 == repeat) {
-            break;
+            return true;
         }
-        
     }
+
+    AdminUI::displayMusicList(items, 8);
     return true;
 }
 
@@ -66,12 +59,13 @@ bool AddNewItemsCommand::execute() {
         // Add the new item to inventory
         bool success = MusicService::getInstance()->addMusicItem(newItem);
         if (success) {
-            printMessage("Item added successfully!");
+            printMessage("Item added successfully!", 10, 15);
         } else {
-            printMessage("Item already exists!");
+            printMessage("Item already exists!", 10, 15);
         }
 
-        printRepeatMessage();
+        printRepeatMessage(2, 1, "EXIT");
+        printRepeatMessage(110, 1, "CONTINUE");
 
         char repeat = _getch();
         if (27 == repeat) {
@@ -98,32 +92,38 @@ bool RemoveItemsCommand::execute() {
 
         // Get all items from the repository
         vector<Music> items = MusicService::getInstance()->getAllMusic();
-        AdminUI::displayMusicList(items);
+        AdminUI::displayMusicList(items, 7);
 
         int id = getValidatedInput<int>(
             "Enter item ID to remove: ",
             [&items](const string& prompt) {
-                return InputChecker::validateInt(prompt, 1, items.size());
-            }
+                return InputChecker::validateInt(prompt, 10, 26, 1, items.size());
+            },
+            10, 26
         );
         
         // Remove the selected item
         bool success = MusicService::getInstance()->removeMusicItem(id);
         if (success) {
-            printMessage("Item removed successfully!");
+            printMessage("Item removed successfully!", 10, 27);
         } else {
-            printMessage("Error while removing the items!");
+            printMessage("Error while removing the items!", 10, 27);
         }
 
         items = MusicService::getInstance()->getAllMusic();
         if (items.empty()) {
-            printMessage("tNo items left in inventory!");
+            printMessage("No items left in inventory!", 10, 15);
         }
-        printRepeatMessage();
+
+        printRepeatMessage(2, 1, "EXIT");
+        printRepeatMessage(110, 1, "DELETE");
 
         char repeat = _getch();
         if (27 == repeat) {
             break;
+        }
+        else if (13 == repeat){
+            continue;
         }
     }
     return true;
@@ -145,33 +145,35 @@ bool UpdatePriceCommand::execute() {
         printHeader(header, (120 - header.length()*2) / 2 - 22, 1);
 
         vector<Music> items = MusicService::getInstance()->getAllMusic();
-        AdminUI::displayMusicList(items);
+        AdminUI::displayMusicList(items, 6);
 
         // Get ID of item to update with validation
         int id = getValidatedInput<int>(
             "Enter item ID to update: ",
             [&items](const string& prompt) {
-                return InputChecker::validateInt(prompt, 1, items.size());
-            }
+                return InputChecker::validateInt(prompt, 10, 25, 1, items.size());
+            },
+            10, 25
         );
 
         // Get new price with validation
         float newPrice = getValidatedInput<float>(
             "Enter new price: ",
             [](const string& prompt) {
-                return InputChecker::validateFloat(prompt, 0.0f);
-            }
+                return InputChecker::validateFloat(prompt, 10, 26, 0.0f);
+            },
+            10, 26
         );
 
         // Update the item's price
         bool success = MusicService::getInstance()->updateMusicItemPrice(id, newPrice);
         if (success) {
-            printMessage("Price updated successfully!");
+            printMessage("Price updated successfully!", 10, 27);
         } else {
-            printMessage("Error while updating price!");
+            printMessage("Error while updating price!", 10, 27);
         }
 
-        printRepeatMessage();
+        printRepeatMessage(2, 1, "EXIT");
 
         char repeat = _getch();
         if (27 == repeat) {
@@ -195,8 +197,8 @@ bool ViewUsersCommand::execute() {
 
         vector<shared_ptr<User>> users = UserService::getInstance()->getAllUsers();
         if (users.empty()) {
-            printMessage("No users found!");
-            printRepeatMessage();
+            printMessage("No users found!", 10, 15);
+            printRepeatMessage(2, 1, "EXIT");
 
             char repeat = _getch();
             if (27 == repeat) {
@@ -206,7 +208,7 @@ bool ViewUsersCommand::execute() {
         }
 
         AdminUI::displayUserList(users);
-        printRepeatMessage();
+        printRepeatMessage(2, 1, "EXIT");
 
         char repeat = _getch();
         if (27 == repeat) {
@@ -238,24 +240,27 @@ bool ViewAllPurchaseHistoriesCommand::execute() {
         int id = getValidatedInput<int>(
             "Enter customer ID to view purchase history: ",
             [&customer](const string& prompt_input) {
-                return InputChecker::validateInt(prompt_input, 1, customer.size());
-            }
+                return InputChecker::validateInt(prompt_input, 10, 24, 1, customer.size());
+            },
+            10, 24
         );
 
         // Get the selected customer
         shared_ptr<User> selectedCustomer = customer[id - 1];
-        printMessage("Customer: " + selectedCustomer->getUsername());
+        printMessage("Customer: " + selectedCustomer->getUsername(), 10, 15);
 
         vector<Order> userOrders = OrderService::getInstance()->getUserOrders(selectedCustomer->getUsername());
         if (userOrders.empty()) {
-            printMessage("No purchase history found for this customer.");
+            printMessage("No purchase history found for this customer.", 10, 16);
         } else {
             for (int i = 0; i < userOrders.size(); ++i) {
+                ConsoleUI::gotoXY(10, 17);
                 AdminUI::displayPurchasedHistory(userOrders[i], i + 1);
             }
         }
-        
-        printRepeatMessage();
+
+        printRepeatMessage(110, 1, "CONTINUE");
+        printRepeatMessage(2, 1, "EXIT");
         char repeat = _getch();
         if (27 == repeat) {
             break;
@@ -276,8 +281,8 @@ bool DeleteUserCommand::execute() {
     vector<shared_ptr<User>> users = UserService::getInstance()->getAllUsers();
 
     if (users.empty()) {
-        printMessage("No users found!");
-        printRepeatMessage();
+        printMessage("No users found!", 10, 15);
+        printRepeatMessage(2, 1, "EXIT");
 
         char repeat = _getch();
         if (27 == repeat) {
@@ -296,8 +301,9 @@ bool DeleteUserCommand::execute() {
         int id = getValidatedInput<int>(
             "Enter user ID to delete: ",
             [&users](const string& prompt_input) {
-                return InputChecker::validateInt(prompt_input, 1, users.size());
-            }
+                return InputChecker::validateInt(prompt_input, 10, 25, 1, users.size());
+            },
+            10, 25
         );
 
         // Check if admin is deleting their own account
@@ -308,17 +314,17 @@ bool DeleteUserCommand::execute() {
         // Delete the selected user
         bool success = UserService::getInstance()->deleteUserById(id);
         if (success) {
-            printMessage("User deleted successfully!");
+            printMessage("User deleted successfully!", 10, 26);
 
             // If admin deleted their own account, log them out
             if (isCurrentUser) {
-                printMessage("You have deleted yourself. Logging out...");
+                printMessage("You have deleted yourself. Logging out...", 10, 27);
                 currentUser = nullptr;
                 sleepScreen();
                 return false; // Exit menu loop
             }
         } else {
-            printMessage("User not found!");
+            printMessage("User not found!", 10, 26);
         }
 
         // delete the order history of the deleted user
@@ -326,8 +332,8 @@ bool DeleteUserCommand::execute() {
 
         users = UserService::getInstance()->getAllUsers();
         if (users.empty()) {
-            printMessage("No users left in the system!");
-            printRepeatMessage();
+            printMessage("No users left in the system!", 10, 27);
+            printRepeatMessage(2, 1, "EXIT");
 
             char repeat = _getch();
             if (27 == repeat) {
@@ -336,7 +342,8 @@ bool DeleteUserCommand::execute() {
             break;
         }
 
-        printRepeatMessage();
+        printRepeatMessage(110, 1, "CONTINUE");
+        printRepeatMessage(2, 1, "EXIT");
 
         char repeat = _getch();
         if (27 == repeat) {
@@ -362,7 +369,8 @@ bool ViewSalesStatisticsCommand::execute() {
         float totalRevenue = SalesRecordService::getInstance()->getTotalRevenue();
 
         AdminUI::displaySaleStatistics(salesRecords, totalRevenue);
-        printRepeatMessage();
+        printRepeatMessage(110, 1, "CONTINUE");
+        printRepeatMessage(2, 1, "EXIT");
 
         char repeat = _getch();
         if (27 == repeat) {
@@ -380,7 +388,7 @@ std::string AdminLogoutCommand::getName() const {
 }
 
 bool AdminLogoutCommand::execute() {
-    printMessage("Log out successfully!");
+    printMessage("Log out successfully!", 10, 25);
     currentUser = nullptr;
     sleepScreen();
     return false; // Exit menu loop

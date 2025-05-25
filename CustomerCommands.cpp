@@ -40,7 +40,7 @@ bool ViewPurchaseHistoryCommand::execute() {
     printHeader(header, (120 - header.length()*2) / 2 - 31, 2);
     CustomerUI::displayPurchasedHistory(orderHistory, customer->getUsername());
 
-    pauseScreen();
+    //pauseScreen();
     return true;
 }
 
@@ -59,7 +59,7 @@ bool ViewMusicCommand::execute() {
     vector<Music> items = MusicService::getInstance()->getAllMusic();
     CustomerUI::displayMusicList(items);
 
-    pauseScreen();
+    //pauseScreen();
     return true;
 }
 
@@ -82,16 +82,18 @@ bool SearchMusicCommand::execute() {
         int criteria = getValidatedInput<int>(
             "Enter search criteria (1 for name, 2 for artist, 3 for genre): ",
             [](const string& prompt) {
-                return InputChecker::validateInt(prompt, 1, 3);
-            }
+                return InputChecker::validateInt(prompt, 10, 10, 1, 3);
+            },
+            10, 10
         );
 
         // Get search keyword with validation
         string keyword = getValidatedInput<string>(
             "Enter keyword: ",
             [](const string& prompt) {
-                return InputChecker::validateString(prompt);
-            }
+                return InputChecker::validateString(prompt, 10, 11);
+            },
+            10, 11
         );
 
 
@@ -104,7 +106,7 @@ bool SearchMusicCommand::execute() {
             CustomerUI::displaySearchResults(results);
         }
 
-        printRepeatMessage();
+        //printRepeatMessage();
 
         char repeat = _getch();
         if (27 == repeat) {
@@ -140,29 +142,31 @@ bool AddToCartCommand::execute() {
         int itemID = getValidatedInput<int>(
             "Enter item ID: ",
             [&items](const string& prompt) {
-                return InputChecker::validateInt(prompt, 1, items.size());
-            }
+                return InputChecker::validateInt(prompt, 10, 25, 1, items.size());
+            },
+            10, 25
         );
 
         // Get quantity with validation
         int quantity = getValidatedInput<int>(
             "Enter quantity: ",
             [](const string& prompt) {
-                return InputChecker::validateInt(prompt, 1, INT_MAX);
-            }
+                return InputChecker::validateInt(prompt, 10, 26, 1, INT_MAX);
+            },
+            10, 26
         );
 
         // Add item to cart
         if (CartService::getInstance()->addItemToCart(cart, itemID, quantity)) {
-            printMessage("Added " + to_string(quantity) + " " + items[itemID - 1].getName() + " to cart successfully!");
+            printMessage("Added " + to_string(quantity) + " " + items[itemID - 1].getName() + " to cart successfully!", 10, 20);
         } else {
-            printMessage("Failed to add item. Not enough stock!");
+            printMessage("Failed to add item. Not enough stock!", 10, 21);
         }
 
         //printHeader("YOUR CURRENT CART");
         CustomerUI::displayCart(cart.getItems());
 
-        printRepeatMessage();
+        //printRepeatMessage();
 
         char repeat = _getch();
         if (27 == repeat) {
@@ -189,9 +193,9 @@ bool RemoveFromCartCommand::execute() {
     vector<Music> items = MusicService::getInstance()->getAllMusic();
 
     if (cart.getItems().empty()) {
-        printMessage("Cart is empty!");
+        printMessage("Cart is empty!", 10, 15);
     } else {
-        printMessage("Your current cart: ");
+        printMessage("Your current cart: ", 10, 15);
         CustomerUI::displayCart(cart.getItems());
 
         while (true) {
@@ -199,27 +203,28 @@ bool RemoveFromCartCommand::execute() {
             int itemID = getValidatedInput<int>(
                 "Enter item ID to remove: ",
                 [this](const string& prompt) {
-                    return InputChecker::validateInt(prompt, 1, cart.getItems().size());
-                }
+                    return InputChecker::validateInt(prompt, 10, 20, 1, cart.getItems().size());
+                },
+                10, 20
             );
 
             // Remove item from cart
             if (CartService::getInstance()->removeItemFromCart(cart, itemID - 1)) {
-                printMessage("Removed item successfully!");
+                printMessage("Removed item successfully!", 10, 21);
                 if (cart.getItems().empty()) {
-                    printMessage("Cart is empty!");
+                    printMessage("Cart is empty!", 10, 22);
                 } else {
-                    printMessage("YOUR CURRENT CART: ");
+                    printMessage("YOUR CURRENT CART: ", 10, 23);
                     CustomerUI::displayCart(cart.getItems());
                 }
             } else {
-                printMessage("Invalid item ID!");
+                printMessage("Invalid item ID!", 10, 21);
             }
             if (cart.getItems().empty()) {
-                pauseScreen();
+                //pauseScreen();
                 break;
             }
-            printRepeatMessage();
+            //printRepeatMessage();
 
             char repeat = _getch();
             if (27 == repeat) {
@@ -227,7 +232,7 @@ bool RemoveFromCartCommand::execute() {
             }
         }
     }
-    pauseScreen();
+   // pauseScreen();
     return true;
 }
 
@@ -269,8 +274,9 @@ bool CheckoutCommand::execute() {
             int useVoucher = getValidatedInput<int>(
                 "Do you want to use a voucher? (1 for yes, 2 for no): ",
                 [](const string& prompt) {
-                    return InputChecker::validateInt(prompt, 1, 2);
-                }
+                    return InputChecker::validateInt(prompt, 10, 24, 1, 2);
+                },
+                10, 24
             );
 
             if (Agreement::YES == useVoucher) {
@@ -278,8 +284,9 @@ bool CheckoutCommand::execute() {
                 string voucherCode = getValidatedInput<string>(
                     "Enter voucher code: ",
                     [](const string& prompt) {
-                        return InputChecker::validateString(prompt);
-                    }
+                        return InputChecker::validateString(prompt, 10, 25);
+                    },
+                    10, 25
                 );
                 
                 // Find and apply the selected voucher
@@ -289,7 +296,7 @@ bool CheckoutCommand::execute() {
                         
                         // Apply the discount to the total
                         total = DiscountService::getInstance()->applyDiscount(selectedVoucher, total);
-                        printMessage("Voucher applied! New total: $" + to_string(total));
+                        printMessage("Voucher applied! New total: $" + to_string(total), 10, 26);
                         
                         // Remove the used voucher
                         DiscountService::getInstance()->removeDiscount(selectedVoucher);
@@ -298,7 +305,7 @@ bool CheckoutCommand::execute() {
                 }
                 
                 if (!selectedVoucher) {
-                    printMessage("Invalid voucher code!");
+                    printMessage("Invalid voucher code!", 10, 27);
                 }
             }
         }
@@ -320,8 +327,9 @@ bool CheckoutCommand::execute() {
             int discountChoice = getValidatedInput<int>(
                 "Choose a discount type (1 for 10% off, 2 for $5 off): ",
                 [](const string& prompt) {
-                    return InputChecker::validateInt(prompt, 1, 2);
-                }
+                    return InputChecker::validateInt(prompt, 10, 28, 1, 2);
+                },
+                10, 28
             );
             
             // Set discount value based on choice (10% for percentage, $5 for fixed amount)
@@ -332,14 +340,14 @@ bool CheckoutCommand::execute() {
                                          static_cast<DiscountType>(discountChoice), discountValue);
             // Notify the user about the new voucher
             string notify = (static_cast<DiscountType>(discountChoice) == DiscountType::PERCENTAGE) ? "10% off" : "$5 off";
-            printMessage("New voucher created! Voucher code: " + discount->getCode() + ". " + notify + " on your next purchase.");
+            printMessage("New voucher created! Voucher code: " + discount->getCode() + ". " + notify + " on your next purchase.", 10, 29);
         }
 
         CustomerUI::displayOrderSuccessMessage();
 
     }
 
-    pauseScreen();
+    //pauseScreen();
     return true;
 }
 
