@@ -21,31 +21,23 @@ std::string ViewMusicListCommand::getName() const {
 }
 
 bool ViewMusicListCommand::execute() {
-    while(true){
-        clearScreen();
-        printFrame(0, 0, 120, 30);
-        string header = "musicList";
-        printHeader(header, (120 - header.length()*2) / 2 - 19, 1);
+    clearScreen();
+    printFrame(0, 0, 120, 30);
+    string header = "musicList";
+    printHeader(header, (120 - header.length()*2) / 2 - 19, 1);
 
-        vector<Music> items = MusicService::getInstance()->getAllMusic();
-        if (items.empty()) {
-            printMessage("No items found!");
-            printRepeatMessage();
-
-            char repeat = _getch();
-            if (repeat == ' ') {
-                return true;
-            }
-        }
-
+    vector<Music> items = MusicService::getInstance()->getAllMusic();
+    if (items.empty()) {
+        printMessage("No items found!");
         printRepeatMessage();
-        AdminUI::displayMusicList(items);
+
         char repeat = _getch();
         if (repeat == ' ') {
-            break;
+            return true;
         }
-        
     }
+
+    AdminUI::displayMusicList(items, 8);
     return true;
 }
 
@@ -98,7 +90,7 @@ bool RemoveItemsCommand::execute() {
 
         // Get all items from the repository
         vector<Music> items = MusicService::getInstance()->getAllMusic();
-        AdminUI::displayMusicList(items);
+        AdminUI::displayMusicList(items, 7);
 
         int id;
         do {
@@ -148,7 +140,7 @@ bool UpdatePriceCommand::execute() {
         printHeader(header, (120 - header.length()*2) / 2 - 22, 1);
 
         vector<Music> items = MusicService::getInstance()->getAllMusic();
-        AdminUI::displayMusicList(items);
+        AdminUI::displayMusicList(items, 6);
 
         // Get ID of item to update with validation
         int id;
@@ -320,7 +312,7 @@ bool DeleteUserCommand::execute() {
         // Get username to delete
         int id;
         do {
-            tie(isValid, id, error) = InputValidator::validateInt("Enter user's id to delete: ");
+            tie(isValid, id, error) = InputValidator::validateInt("Enter user's id to delete: ", 1, users.size());
             if (!isValid) {
                 printMessage(error.message);
                 sleepScreen();

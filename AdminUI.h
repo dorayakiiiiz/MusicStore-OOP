@@ -37,7 +37,7 @@ public:
      * @brief Displays a formatted list of all music items in inventory
      * @param items Vector containing all music items in inventory
      */
-    static void displayMusicList(vector<Music>& items);
+    static void displayMusicList(vector<Music>& items, int maxPerPage);
     
     /**
      * @brief Displays a formatted list of all registered users
