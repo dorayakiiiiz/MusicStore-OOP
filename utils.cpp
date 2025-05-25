@@ -18,7 +18,7 @@ void printHeader(const string& header, int x, int y) {
     if (inFile.is_open()) {
         while (getline(inFile, line)) {
             ConsoleUI::gotoXY(x, y++);
-            cout << char(92) <<line << char(47) << '\n';
+            cout << line << '\n';
         }
     }
     cout << '\n';
@@ -65,7 +65,7 @@ void printMenu(const string& header, int x, int y)
 
 // Prints a message for repeating the last action
 void printRepeatMessage() {
-    string instructions = "Press space to exit or any other key to continue...";
+    string instructions = "Press esc to exit or any other key to continue...";
     int guideX = 64;
     int guideY = 26; 
     int guideW = 4 + instructions.size();
