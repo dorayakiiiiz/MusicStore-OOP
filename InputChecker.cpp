@@ -1,7 +1,8 @@
-#include "InputValidator.h"
+#include "InputChecker.h"
+#include "utils.h"
 
 // get a valid int input from user
-tuple <bool, int, Error> InputValidator::validateInt(string prompt, int min, int max) {
+tuple <bool, int, Error> InputChecker::validateInt(string prompt, int min, int max) {
     Error error = {0, ""};
     string input = getInput(prompt);
     // Check if input is empty
@@ -29,7 +30,7 @@ tuple <bool, int, Error> InputValidator::validateInt(string prompt, int min, int
 }
 
 // get a valid float input from user
-tuple <bool, float, Error> InputValidator::validateFloat(string prompt, float min, float max) {
+tuple <bool, float, Error> InputChecker::validateFloat(string prompt, float min, float max) {
     Error error = {0, ""};
     string input = getInput(prompt);
     // Check if input is empty
@@ -57,7 +58,7 @@ tuple <bool, float, Error> InputValidator::validateFloat(string prompt, float mi
 }
 
 // get a valid string input from user
-tuple <bool, string, Error> InputValidator::validateString(string prompt) {
+tuple <bool, string, Error> InputChecker::validateString(string prompt) {
     Error error = {0, ""};
     string input = getInput(prompt);
     // Check if input is empty
@@ -66,16 +67,5 @@ tuple <bool, string, Error> InputValidator::validateString(string prompt) {
         error.message = "Input cannot be empty!";
         return make_tuple(false, "", error);
     }
-    // If options are provided, validate that input matches one of them
-    // if (option.size() > 0) {
-    //     for (const auto& opt : option) {
-    //         if (input == opt) {
-    //             return make_tuple(true, input, error);
-    //         }
-    //     }
-    //     error.code = 2;
-    //     error.message = "Invalid option! Please try again.";
-    //     return make_tuple(false, "", error);
-    // }
     return make_tuple(true, input, error);
 }

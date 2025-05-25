@@ -1,7 +1,7 @@
 #include "StoreCommands.h"
 #include "AuthService.h"
 #include "utils.h"
-#include "InputValidator.h"
+#include "InputChecker.h"
 #include "IController.h"
 #include "ControllerFactory.h"
 #include "ConsoleUI.h"
@@ -17,45 +17,35 @@ string SignUpCommand::getName() const {
 }
 
 bool SignUpCommand::execute() {
-    bool isValid;
-    Error error;
     clearScreen();
     printFrame(0, 0, 120, 30);
     
     string header = "signUp";
-    printHeader(header, (120 - header.length()*2) / 2 - 15, 1);
-    int role;
-    string username, password;
+    printHeader(header, (120 - header.length() * 2) / 2 - 15, 1);
     
     // Get role input with validation
-    do {
-        tie(isValid, role, error) = InputValidator::validateInt("Enter your role (1 for admin, 2 for customer): ", 1, 2);
-        if (!isValid) {
-            printMessage(error.message);
-            sleepScreen();
-            continue;
+    int role = getValidatedInput<int>(
+        "Enter your role (1 for admin, 2 for customer): ",
+        [](const string& prompt) {
+            return InputChecker::validateInt(prompt, 1, 2);
         }
-    } while (!isValid);
+    );
     
     // Get username input with validation
-    do {
-        tie(isValid, username, error) = InputValidator::validateString("Input username: ");
-        if (!isValid) {
-            printMessage(error.message);
-            sleepScreen();
-            continue;
+    string username = getValidatedInput<string>(
+        "Input username: ",
+        [](const string& prompt) {
+            return InputChecker::validateString(prompt);
         }
-    } while (!isValid);
+    );
     
     // Get password input with validation
-    do {
-        tie(isValid, password, error) = InputValidator::validateString("Input password: ");
-        if (!isValid) {
-            printMessage(error.message);
-            sleepScreen();
-            continue;
+    string password = getValidatedInput<string>(
+        "Input password: ",
+        [](const string& prompt) {
+            return InputChecker::validateString(prompt);
         }
-    } while (!isValid);
+    );
     
     // Additional validation for admin registration
     if (Role::ADMIN == role) {
@@ -88,34 +78,27 @@ string LoginCommand::getName() const {
 }
 
 bool LoginCommand::execute() {
-    bool isValid;
-    Error error;
-    
+
     clearScreen();
     printFrame(0, 0, 120, 30);
     string header = "login";
     printHeader(header, (120 - header.length()*2) / 2 - 11, 1);
-    string username, password;
-    
+
     // Get username input with validation
-    do {
-        tie(isValid, username, error) = InputValidator::validateString("Input username: ");
-        if (!isValid) {
-            printMessage(error.message);
-            sleepScreen();
-            continue;
+    string username = getValidatedInput<string>(
+        "Input username: ",
+        [](const string& prompt) {
+            return InputChecker::validateString(prompt);
         }
-    } while (!isValid);
+    );
 
     // Get password input with validation
-    do {
-        tie(isValid, password, error) = InputValidator::validateString("Input password: ");
-        if (!isValid) {
-            printMessage(error.message);
-            sleepScreen();
-            continue;
+    string password = getValidatedInput<string>(
+        "Input password: ",
+        [](const string& prompt) {
+            return InputChecker::validateString(prompt);
         }
-    } while (!isValid);
+    );
 
     // Attempt to authenticate the user
     currentUser = AuthService::getInstance()->loginUser(username, password);

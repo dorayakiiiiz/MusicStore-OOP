@@ -1,10 +1,9 @@
-#ifndef _INPUT_VALIDATOR_H_
-#define _INPUT_VALIDATOR_H_
+#ifndef _INPUT_CHECKER_H_
+#define _INPUT_CHECKER_H_
 
 #include <string>
 #include <vector>
 #include <tuple>
-#include "utils.h"
 #include <cfloat>
 
 using std::string, std::vector, std::tuple, std::make_tuple;
@@ -21,7 +20,7 @@ struct Error {
 /**
  * @brief Class for validating user input
  */
-class InputValidator {
+class InputChecker {
 public:
     /**
      * @brief Validate integer input

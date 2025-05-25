@@ -147,6 +147,13 @@ void clearScreen() {
     system("cls");
 }
 
+void clearScreen(int x, int y, int width, int height) {
+    for (int i = 0; i < height; ++i) {
+        ConsoleUI::gotoXY(x, y + i);
+        std::cout << std::string(width, ' ');
+    }
+}
+
 // Pauses execution until user presses a key
 void pauseScreen() {
     system("pause");

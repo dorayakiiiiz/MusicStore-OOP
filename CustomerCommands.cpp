@@ -8,7 +8,7 @@
 #include "SalesRecordService.h"
 #include "OrderService.h"
 #include "utils.h"
-#include "InputValidator.h"
+#include "InputChecker.h"
 #include <memory>
 #include <conio.h>
 
@@ -77,31 +77,23 @@ bool SearchMusicCommand::execute() {
     while (true) {
         string header = "searchMusic";
         printHeader(header, (120 - header.length()*2) / 2 - 23, 1);
-
-        int criteria;
-        string keyword;
         
         // Get search criteria with validation
-        bool isValid;
-        Error error;
-        do {
-            tie(isValid, criteria, error) = InputValidator::validateInt("Enter search criteria (1 for name, 2 for artist, 3 for genre): ", 1, 3);
-            if (!isValid) {
-                printMessage(error.message);
-                sleepScreen();
-                continue;
+        int criteria = getValidatedInput<int>(
+            "Enter search criteria (1 for name, 2 for artist, 3 for genre): ",
+            [](const string& prompt) {
+                return InputChecker::validateInt(prompt, 1, 3);
             }
-        } while (!isValid);
+        );
 
         // Get search keyword with validation
-        do {
-            tie(isValid, keyword, error) = InputValidator::validateString("Enter keyword: ");
-            if (!isValid) {
-                printMessage(error.message);
-                sleepScreen();
-                continue;
+        string keyword = getValidatedInput<string>(
+            "Enter keyword: ",
+            [](const string& prompt) {
+                return InputChecker::validateString(prompt);
             }
-        } while (!isValid);
+        );
+
 
         // Perform search and display results
         vector<Music> results = MusicService::getInstance()->searchMusic(items, static_cast<SearchType>(criteria), keyword);
@@ -115,7 +107,7 @@ bool SearchMusicCommand::execute() {
         printRepeatMessage();
 
         char repeat = _getch();
-        if (repeat == ' ') {
+        if (27 == repeat) {
             break;
         }
     }
@@ -143,29 +135,22 @@ bool AddToCartCommand::execute() {
 
     while (true) {
         // Get item ID and quantity from user
-        int itemID, quantity;
-        bool isValid;
-        Error error;
 
         // Get item ID with validation
-        do {
-            tie(isValid, itemID, error) = InputValidator::validateInt("Enter item ID: ", 1, items.size());
-            if (!isValid) {
-                printMessage(error.message);
-                sleepScreen();
-                continue;
+        int itemID = getValidatedInput<int>(
+            "Enter item ID: ",
+            [&items](const string& prompt) {
+                return InputChecker::validateInt(prompt, 1, items.size());
             }
-        } while (!isValid);
+        );
 
         // Get quantity with validation
-        do {
-            tie(isValid, quantity, error) = InputValidator::validateInt("Enter quantity: ", 1, INT_MAX);
-            if (!isValid) {
-                printMessage(error.message);
-                sleepScreen();
-                continue;
+        int quantity = getValidatedInput<int>(
+            "Enter quantity: ",
+            [](const string& prompt) {
+                return InputChecker::validateInt(prompt, 1, INT_MAX);
             }
-        } while (!isValid);
+        );
 
         // Add item to cart
         if (CartService::getInstance()->addItemToCart(cart, itemID, quantity)) {
@@ -180,7 +165,7 @@ bool AddToCartCommand::execute() {
         printRepeatMessage();
 
         char repeat = _getch();
-        if (repeat == ' ') {
+        if (27 == repeat) {
             break;
         }
     }
@@ -211,17 +196,12 @@ bool RemoveFromCartCommand::execute() {
 
         while (true) {
             // Get item ID to remove with validation
-            int itemID;
-            bool isValid;
-            Error error;
-            do {
-                tie(isValid, itemID, error) = InputValidator::validateInt("Enter item ID to remove: ", 1, cart.getItems().size());
-                if (!isValid) {
-                    printMessage(error.message);
-                    sleepScreen();
-                    continue;
+            int itemID = getValidatedInput<int>(
+                "Enter item ID to remove: ",
+                [this](const string& prompt) {
+                    return InputChecker::validateInt(prompt, 1, cart.getItems().size());
                 }
-            } while (!isValid);
+            );
 
             // Remove item from cart
             if (CartService::getInstance()->removeItemFromCart(cart, itemID - 1)) {
@@ -242,7 +222,7 @@ bool RemoveFromCartCommand::execute() {
             printRepeatMessage();
 
             char repeat = _getch();
-            if (repeat == ' ') {
+            if (27 == repeat) {
                 break;
             }
         }
@@ -264,8 +244,6 @@ bool CheckoutCommand::execute() {
     string header = "checkOut";
     printHeader(header, (120 - header.length()*2) / 2 - 19, 1);
 
-    bool isValid;
-    Error error;
     Customer* customer = dynamic_cast<Customer*>(currentUser.get());
 
     // Get all orders and vouchers from the repository
@@ -288,29 +266,21 @@ bool CheckoutCommand::execute() {
         if (!validVouchers.empty()) {
             // Display available vouchers
             CustomerUI::displayVoucherList(validVouchers);
-            int useVoucher;
-
-            // Ask if user wants to apply a voucher
-            do {
-                tie(isValid, useVoucher, error) = InputValidator::validateInt("Do you want to use a voucher? (1 for yes, 2 for no): ", 1, 2);
-                if (!isValid) {
-                    printMessage(error.message);
-                    sleepScreen();
-                    continue;
+            int useVoucher = getValidatedInput<int>(
+                "Do you want to use a voucher? (1 for yes, 2 for no): ",
+                [](const string& prompt) {
+                    return InputChecker::validateInt(prompt, 1, 2);
                 }
-            } while (!isValid);
+            );
 
             if (Agreement::YES == useVoucher) {
                 // Get voucher code
-                string voucherCode;
-                do {
-                    tie(isValid, voucherCode, error) = InputValidator::validateString("Enter voucher code: ");
-                    if (!isValid) {
-                        printMessage(error.message);
-                        sleepScreen();
-                        continue;
+                string voucherCode = getValidatedInput<string>(
+                    "Enter voucher code: ",
+                    [](const string& prompt) {
+                        return InputChecker::validateString(prompt);
                     }
-                } while (!isValid);
+                );
                 
                 // Find and apply the selected voucher
                 for (const auto& voucher : validVouchers) {
@@ -347,15 +317,12 @@ bool CheckoutCommand::execute() {
             CustomerUI::displayDiscountOptions();
 
             // Get discount type choice
-            int discountChoice;
-            do {
-                tie(isValid, discountChoice, error) = InputValidator::validateInt("Choose a discount option (1 or 2): ", 1, 2);
-                if (!isValid) {
-                    printMessage(error.message);
-                    sleepScreen();
-                    continue;
+            int discountChoice = getValidatedInput<int>(
+                "Choose a discount type (1 for 10% off, 2 for $5 off): ",
+                [](const string& prompt) {
+                    return InputChecker::validateInt(prompt, 1, 2);
                 }
-            } while (!isValid);
+            );
             
             // Set discount value based on choice (10% for percentage, $5 for fixed amount)
             int discountValue = (DiscountType::PERCENTAGE == discountChoice) ? 10 : 5;

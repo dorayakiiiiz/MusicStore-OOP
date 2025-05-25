@@ -9,7 +9,7 @@
 #include "AdminUI.h"
 #include "utils.h"
 #include "ConsoleUI.h"
-#include "InputValidator.h"
+#include "InputChecker.h"
 
 using std::cout, std::cin, std::vector, std::string;
 
@@ -31,14 +31,14 @@ void AdminUI::displayMusicList(vector<Music>& items, int maxPerPage) {
     vector<int> cols = {4, 47, 70, 82, 94};
 
     while (true) {
-        clearScreen(); // Clear screen each time we draw a new page
-        printFrame(0, 0, 120, 30);
-        string header = "musicList";
-        printHeader(header, (120 - header.length()*2) / 2 - 19, 1);
-
         int startIdx = currentPage * maxPerPage;
         int endIdx = (startIdx + maxPerPage > totalItems ? totalItems : startIdx + maxPerPage);
-        int rows = endIdx - startIdx + 1; // +1 for header row
+        int rows = endIdx - startIdx + 1; //
+
+        //Xóa bảng cũ
+        clearScreen(x, y, 106, maxPerPage * 2 + 4); // xóa vùng tối đa
+        // Xóa page 
+        clearScreen(2, 28, 10, 1); 
 
         printFrameOptions(x, y, width, rows);
 
@@ -103,9 +103,8 @@ void AdminUI::displayMusicList(vector<Music>& items, int maxPerPage) {
         std::cout << "D";
 
         // Đợi người dùng nhập phím
-        printRepeatMessage();
         char key = _getch();
-        if (key == ' ') {
+        if (27 == key || 17 == key) {
             break;
         }
         else if ((key == 'a' || key == 'A') && currentPage > 0) {
@@ -209,64 +208,42 @@ void AdminUI::displaySaleStatistics(vector<SalesRecord> salesRecords, float tota
 // Collects information from the admin to create a new music item
 // Returns a Music object with the user-provided details
 Music AdminUI::getNewMusicDetails() {
-    bool isValid;
-    Error error;
 
     // Variables to store new music item details
-    string name, artist, genre;
-    float price = 0.0f;
-    int quantity = 0;
 
     // Get item name with validation
-    do {
-        std::tie(isValid, name, error) = InputValidator::validateString("\tEnter name: ");
-        if (!isValid) {
-            printMessage(error.message);
-            pauseScreen();
-            continue;
+    string name = getValidatedInput<string>("Enter music name: ",
+        [](const string& prompt) {
+            return InputChecker::validateString(prompt);
         }
-    } while (!isValid);
+    );
 
     // Get artist name with validation
-    do {
-        std::tie(isValid, artist, error) = InputValidator::validateString("\tEnter artist: ");
-        if (!isValid) {
-            printMessage(error.message);
-            pauseScreen();
-            continue;
+    string artist = getValidatedInput<string>("Enter artist: ",
+        [](const string& prompt) {
+            return InputChecker::validateString(prompt);
         }
-    } while (!isValid);
+    );
 
     // Get genre with validation
-    do {
-        std::tie(isValid, genre, error) = InputValidator::validateString("\tEnter genre: ");
-        if (!isValid) {
-            printMessage(error.message);
-            pauseScreen();
-            continue;
+    string genre = getValidatedInput<string>("Enter genre: ",
+        [](const string& prompt) {
+            return InputChecker::validateString(prompt);
         }
-    } while (!isValid);
+    );
 
     // Get price with validation (must be non-negative)
-    do {
-        std::tie(isValid, price, error) = InputValidator::validateFloat("\tEnter price: ", 0.0F);
-        if (!isValid) {
-            printMessage(error.message);
-            pauseScreen();
-            continue;
-        }
-    } while (!isValid);
+    float price = getValidatedInput<float>(
+        "\tEnter price: ",
+        [](const std::string& p) { return InputChecker::validateFloat(p, 0.0F); } 
+    );
 
     // Get quantity with validation (must be non-negative)
-    do {
-        std::tie(isValid, quantity, error) = InputValidator::validateInt("\tEnter quantity: ", 0);
-        if (!isValid) {
-            printMessage(error.message);
-            pauseScreen();
-            continue;
-        }
-    } while (!isValid);
-    
+    int quantity = getValidatedInput<int>(
+        "\tEnter quantity: ",
+        [](const std::string& p) { return InputChecker::validateInt(p, 0); } // Dùng lambda để truyền thêm tham số min
+    );
+
     // Create and return a new Music object with the collected data
     return Music(name, artist, genre, price, quantity);
 }
