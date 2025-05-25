@@ -9,7 +9,7 @@
 #include <functional>
 #include <cfloat>
 #include "ConsoleUI.h"
-#include "InputValidator.h"
+#include "InputChecker.h"
 #include "Music.h"
 #include<fstream>
 using std::string, std::vector, std::tuple, std::make_tuple, std::get;
@@ -120,7 +120,6 @@ T getValidatedInput(const string& prompt, function<tuple<bool, T, Error>(const s
     
     return value;
 }
-
 
 
 

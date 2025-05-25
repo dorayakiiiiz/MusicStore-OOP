@@ -1,5 +1,5 @@
-#ifndef _INPUT_VALIDATOR_H_
-#define _INPUT_VALIDATOR_H_
+#ifndef _INPUT_CHECKER_H_
+#define _INPUT_CHECKER_H_
 
 #include <string>
 #include <vector>
@@ -20,7 +20,7 @@ struct Error {
 /**
  * @brief Class for validating user input
  */
-class InputValidator {
+class InputChecker {
 public:
     /**
      * @brief Validate integer input

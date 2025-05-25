@@ -8,7 +8,7 @@
 #include "OrderService.h"
 #include "SalesRecordService.h"
 #include "utils.h"
-#include "InputValidator.h"
+#include "InputChecker.h"
 #include "ConsoleUI.h"
 #include <memory>
 #include <conio.h>
@@ -33,7 +33,7 @@ bool ViewMusicListCommand::execute() {
             printRepeatMessage();
 
             char repeat = _getch();
-            if (repeat == ' ') {
+            if (27 == repeat) {
                 return true;
             }
         }
@@ -41,7 +41,7 @@ bool ViewMusicListCommand::execute() {
         printRepeatMessage();
         AdminUI::displayMusicList(items);
         char repeat = _getch();
-        if (repeat == ' ') {
+        if (27 == repeat) {
             break;
         }
         
@@ -74,7 +74,7 @@ bool AddNewItemsCommand::execute() {
         printRepeatMessage();
 
         char repeat = _getch();
-        if (repeat == ' ') {
+        if (27 == repeat) {
             break;
         }
     }
@@ -103,7 +103,7 @@ bool RemoveItemsCommand::execute() {
         int id = getValidatedInput<int>(
             "Enter item ID to remove: ",
             [&items](const string& prompt) {
-                return InputValidator::validateInt(prompt, 1, items.size());
+                return InputChecker::validateInt(prompt, 1, items.size());
             }
         );
         
@@ -122,7 +122,7 @@ bool RemoveItemsCommand::execute() {
         printRepeatMessage();
 
         char repeat = _getch();
-        if (repeat == ' ') {
+        if (27 == repeat) {
             break;
         }
     }
@@ -151,7 +151,7 @@ bool UpdatePriceCommand::execute() {
         int id = getValidatedInput<int>(
             "Enter item ID to update: ",
             [&items](const string& prompt) {
-                return InputValidator::validateInt(prompt, 1, items.size());
+                return InputChecker::validateInt(prompt, 1, items.size());
             }
         );
 
@@ -159,7 +159,7 @@ bool UpdatePriceCommand::execute() {
         float newPrice = getValidatedInput<float>(
             "Enter new price: ",
             [](const string& prompt) {
-                return InputValidator::validateFloat(prompt, 0.0f);
+                return InputChecker::validateFloat(prompt, 0.0f);
             }
         );
 
@@ -174,7 +174,7 @@ bool UpdatePriceCommand::execute() {
         printRepeatMessage();
 
         char repeat = _getch();
-        if (repeat == ' ') {
+        if (27 == repeat) {
             break;
         }
     }
@@ -199,7 +199,7 @@ bool ViewUsersCommand::execute() {
             printRepeatMessage();
 
             char repeat = _getch();
-            if (repeat == ' ') {
+            if (27 == repeat) {
                 return true;
             }
             return true;
@@ -209,7 +209,7 @@ bool ViewUsersCommand::execute() {
         printRepeatMessage();
 
         char repeat = _getch();
-        if (repeat == ' ') {
+        if (27 == repeat) {
             break;
         }
     }
@@ -238,7 +238,7 @@ bool ViewAllPurchaseHistoriesCommand::execute() {
         int id = getValidatedInput<int>(
             "Enter customer ID to view purchase history: ",
             [&customer](const string& prompt_input) {
-                return InputValidator::validateInt(prompt_input, 1, customer.size());
+                return InputChecker::validateInt(prompt_input, 1, customer.size());
             }
         );
 
@@ -257,7 +257,7 @@ bool ViewAllPurchaseHistoriesCommand::execute() {
         
         printRepeatMessage();
         char repeat = _getch();
-        if (repeat == ' ') {
+        if (27 == repeat) {
             break;
         }
     }
@@ -280,7 +280,7 @@ bool DeleteUserCommand::execute() {
         printRepeatMessage();
 
         char repeat = _getch();
-        if (repeat == ' ') {
+        if (27 == repeat) {
             return true;
         }
     }
@@ -296,7 +296,7 @@ bool DeleteUserCommand::execute() {
         int id = getValidatedInput<int>(
             "Enter user ID to delete: ",
             [&users](const string& prompt_input) {
-                return InputValidator::validateInt(prompt_input, 1, users.size());
+                return InputChecker::validateInt(prompt_input, 1, users.size());
             }
         );
 
@@ -330,7 +330,7 @@ bool DeleteUserCommand::execute() {
             printRepeatMessage();
 
             char repeat = _getch();
-            if (repeat == ' ') {
+            if (27 == repeat) {
                 return true;
             }
             break;
@@ -339,7 +339,7 @@ bool DeleteUserCommand::execute() {
         printRepeatMessage();
 
         char repeat = _getch();
-        if (repeat == ' ') {
+        if (27 == repeat) {
             break;
         }
     }
@@ -365,7 +365,7 @@ bool ViewSalesStatisticsCommand::execute() {
         printRepeatMessage();
 
         char repeat = _getch();
-        if (repeat == ' ') {
+        if (27 == repeat) {
             break;
         }
     }

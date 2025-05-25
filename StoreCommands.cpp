@@ -1,7 +1,7 @@
 #include "StoreCommands.h"
 #include "AuthService.h"
 #include "utils.h"
-#include "InputValidator.h"
+#include "InputChecker.h"
 #include "IController.h"
 #include "ControllerFactory.h"
 #include "ConsoleUI.h"
@@ -27,7 +27,7 @@ bool SignUpCommand::execute() {
     int role = getValidatedInput<int>(
         "Enter your role (1 for admin, 2 for customer): ",
         [](const string& prompt) {
-            return InputValidator::validateInt(prompt, 1, 2);
+            return InputChecker::validateInt(prompt, 1, 2);
         }
     );
     
@@ -35,7 +35,7 @@ bool SignUpCommand::execute() {
     string username = getValidatedInput<string>(
         "Input username: ",
         [](const string& prompt) {
-            return InputValidator::validateString(prompt);
+            return InputChecker::validateString(prompt);
         }
     );
     
@@ -43,7 +43,7 @@ bool SignUpCommand::execute() {
     string password = getValidatedInput<string>(
         "Input password: ",
         [](const string& prompt) {
-            return InputValidator::validateString(prompt);
+            return InputChecker::validateString(prompt);
         }
     );
     
@@ -88,7 +88,7 @@ bool LoginCommand::execute() {
     string username = getValidatedInput<string>(
         "Input username: ",
         [](const string& prompt) {
-            return InputValidator::validateString(prompt);
+            return InputChecker::validateString(prompt);
         }
     );
 
@@ -96,7 +96,7 @@ bool LoginCommand::execute() {
     string password = getValidatedInput<string>(
         "Input password: ",
         [](const string& prompt) {
-            return InputValidator::validateString(prompt);
+            return InputChecker::validateString(prompt);
         }
     );
 

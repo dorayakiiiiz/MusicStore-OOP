@@ -9,7 +9,7 @@
 #include "AdminUI.h"
 #include "utils.h"
 #include "ConsoleUI.h"
-#include "InputValidator.h"
+#include "InputChecker.h"
 
 using std::cout, std::cin, std::vector, std::string;
 
@@ -196,34 +196,34 @@ Music AdminUI::getNewMusicDetails() {
     // Get item name with validation
     string name = getValidatedInput<string>("Enter music name: ",
         [](const string& prompt) {
-            return InputValidator::validateString(prompt);
+            return InputChecker::validateString(prompt);
         }
     );
 
     // Get artist name with validation
     string artist = getValidatedInput<string>("Enter artist: ",
         [](const string& prompt) {
-            return InputValidator::validateString(prompt);
+            return InputChecker::validateString(prompt);
         }
     );
 
     // Get genre with validation
     string genre = getValidatedInput<string>("Enter genre: ",
         [](const string& prompt) {
-            return InputValidator::validateString(prompt);
+            return InputChecker::validateString(prompt);
         }
     );
 
     // Get price with validation (must be non-negative)
     float price = getValidatedInput<float>(
         "\tEnter price: ",
-        [](const std::string& p) { return InputValidator::validateFloat(p, 0.0F); } 
+        [](const std::string& p) { return InputChecker::validateFloat(p, 0.0F); } 
     );
 
     // Get quantity with validation (must be non-negative)
     int quantity = getValidatedInput<int>(
         "\tEnter quantity: ",
-        [](const std::string& p) { return InputValidator::validateInt(p, 0); } // Dùng lambda để truyền thêm tham số min
+        [](const std::string& p) { return InputChecker::validateInt(p, 0); } // Dùng lambda để truyền thêm tham số min
     );
 
     // Create and return a new Music object with the collected data

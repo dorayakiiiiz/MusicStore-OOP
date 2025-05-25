@@ -8,7 +8,7 @@
 #include "SalesRecordService.h"
 #include "OrderService.h"
 #include "utils.h"
-#include "InputValidator.h"
+#include "InputChecker.h"
 #include <memory>
 #include <conio.h>
 
@@ -82,7 +82,7 @@ bool SearchMusicCommand::execute() {
         int criteria = getValidatedInput<int>(
             "Enter search criteria (1 for name, 2 for artist, 3 for genre): ",
             [](const string& prompt) {
-                return InputValidator::validateInt(prompt, 1, 3);
+                return InputChecker::validateInt(prompt, 1, 3);
             }
         );
 
@@ -90,7 +90,7 @@ bool SearchMusicCommand::execute() {
         string keyword = getValidatedInput<string>(
             "Enter keyword: ",
             [](const string& prompt) {
-                return InputValidator::validateString(prompt);
+                return InputChecker::validateString(prompt);
             }
         );
 
@@ -107,7 +107,7 @@ bool SearchMusicCommand::execute() {
         printRepeatMessage();
 
         char repeat = _getch();
-        if (repeat == ' ') {
+        if (27 == repeat) {
             break;
         }
     }
@@ -140,7 +140,7 @@ bool AddToCartCommand::execute() {
         int itemID = getValidatedInput<int>(
             "Enter item ID: ",
             [&items](const string& prompt) {
-                return InputValidator::validateInt(prompt, 1, items.size());
+                return InputChecker::validateInt(prompt, 1, items.size());
             }
         );
 
@@ -148,7 +148,7 @@ bool AddToCartCommand::execute() {
         int quantity = getValidatedInput<int>(
             "Enter quantity: ",
             [](const string& prompt) {
-                return InputValidator::validateInt(prompt, 1, INT_MAX);
+                return InputChecker::validateInt(prompt, 1, INT_MAX);
             }
         );
 
@@ -165,7 +165,7 @@ bool AddToCartCommand::execute() {
         printRepeatMessage();
 
         char repeat = _getch();
-        if (repeat == ' ') {
+        if (27 == repeat) {
             break;
         }
     }
@@ -199,7 +199,7 @@ bool RemoveFromCartCommand::execute() {
             int itemID = getValidatedInput<int>(
                 "Enter item ID to remove: ",
                 [this](const string& prompt) {
-                    return InputValidator::validateInt(prompt, 1, cart.getItems().size());
+                    return InputChecker::validateInt(prompt, 1, cart.getItems().size());
                 }
             );
 
@@ -222,7 +222,7 @@ bool RemoveFromCartCommand::execute() {
             printRepeatMessage();
 
             char repeat = _getch();
-            if (repeat == ' ') {
+            if (27 == repeat) {
                 break;
             }
         }
@@ -269,7 +269,7 @@ bool CheckoutCommand::execute() {
             int useVoucher = getValidatedInput<int>(
                 "Do you want to use a voucher? (1 for yes, 2 for no): ",
                 [](const string& prompt) {
-                    return InputValidator::validateInt(prompt, 1, 2);
+                    return InputChecker::validateInt(prompt, 1, 2);
                 }
             );
 
@@ -278,7 +278,7 @@ bool CheckoutCommand::execute() {
                 string voucherCode = getValidatedInput<string>(
                     "Enter voucher code: ",
                     [](const string& prompt) {
-                        return InputValidator::validateString(prompt);
+                        return InputChecker::validateString(prompt);
                     }
                 );
                 
@@ -320,7 +320,7 @@ bool CheckoutCommand::execute() {
             int discountChoice = getValidatedInput<int>(
                 "Choose a discount type (1 for 10% off, 2 for $5 off): ",
                 [](const string& prompt) {
-                    return InputValidator::validateInt(prompt, 1, 2);
+                    return InputChecker::validateInt(prompt, 1, 2);
                 }
             );
             

@@ -1,6 +1,6 @@
 #include "CommandInvoker.h"
 #include "utils.h"
-#include "InputValidator.h"
+#include "InputChecker.h"
 #include "ConsoleUI.h"
 
 // Constructor with header text
