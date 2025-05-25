@@ -15,7 +15,7 @@ using std::cout, std::cin, std::vector, std::string;
 
 // Displays a welcome message for the admin with their username
 void AdminUI::displayWelcomeMessage(const string& username) {
-    printMessage("welcome " + username + " to the admin menu!");
+    printMessage("welcome " + username + " to the admin menu!", 10, 20);
 }
 
 // Displays a formatted list of all music items in inventory
@@ -38,7 +38,7 @@ void AdminUI::displayMusicList(vector<Music>& items, int maxPerPage) {
         //Xóa bảng cũ
         clearScreen(x, y, 106, maxPerPage * 2 + 4); // xóa vùng tối đa
         // Xóa page 
-        clearScreen(2, 28, 10, 1); 
+        clearScreen(111, 28, 8, 1); 
 
         printFrameOptions(x, y, width, rows);
 
@@ -87,7 +87,7 @@ void AdminUI::displayMusicList(vector<Music>& items, int maxPerPage) {
         }
 
         // Hiển thị điều hướng trang
-        ConsoleUI::gotoXY(2, 28);
+        ConsoleUI::gotoXY(111, 28);
         std::cout << "Page " << currentPage + 1 << "/" << totalPages;
 
         //pre page
@@ -104,13 +104,13 @@ void AdminUI::displayMusicList(vector<Music>& items, int maxPerPage) {
 
         // Đợi người dùng nhập phím
         if(8 == maxPerPage){
-            printRepeatMessage(1, 1, "EXIT");    
+            printRepeatMessage(2, 1, "EXIT");    
         }
         else if (7 == maxPerPage){
-            printRepeatMessage(115, 1, "DELETE");
+            printRepeatMessage(110, 1, "DELETE");
         }
         else{
-            printRepeatMessage(115, 1, "UPDATE");
+            printRepeatMessage(110, 1, "UPDATE");
         }
 
         char key = _getch();
@@ -228,34 +228,43 @@ Music AdminUI::getNewMusicDetails() {
     // Get item name with validation
     string name = getValidatedInput<string>("Enter music name: ",
         [](const string& prompt) {
-            return InputChecker::validateString(prompt);
-        }
+            return InputChecker::validateString(prompt, 10, 10);
+        },
+        10, 10
     );
 
     // Get artist name with validation
     string artist = getValidatedInput<string>("Enter artist: ",
         [](const string& prompt) {
-            return InputChecker::validateString(prompt);
-        }
+            return InputChecker::validateString(prompt, 10, 11);
+        },
+        10, 11
     );
 
     // Get genre with validation
     string genre = getValidatedInput<string>("Enter genre: ",
         [](const string& prompt) {
-            return InputChecker::validateString(prompt);
-        }
+            return InputChecker::validateString(prompt, 10, 12);
+        },
+        10, 12
     );
 
     // Get price with validation (must be non-negative)
     float price = getValidatedInput<float>(
-        "\tEnter price: ",
-        [](const std::string& p) { return InputChecker::validateFloat(p, 0.0F); } 
+        "Enter price: ",
+        [](const std::string& p) { 
+            return InputChecker::validateFloat(p, 10, 13, 0.0F); 
+        },
+        10, 13
     );
 
     // Get quantity with validation (must be non-negative)
     int quantity = getValidatedInput<int>(
-        "\tEnter quantity: ",
-        [](const std::string& p) { return InputChecker::validateInt(p, 0); } // Dùng lambda để truyền thêm tham số min
+        "Enter quantity: ",
+        [](const std::string& p) { 
+            return InputChecker::validateInt(p, 10, 14, 0); 
+        },
+        10, 14
     );
 
     // Create and return a new Music object with the collected data

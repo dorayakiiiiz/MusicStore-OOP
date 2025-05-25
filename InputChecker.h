@@ -29,7 +29,7 @@ public:
      * @param max Maximum valid value
      * @return A tuple containing success flag, validated value, and error details if invalid
      */
-    static tuple<bool, int, Error> validateInt(string prompt, int min = INT_MIN, int max = INT_MAX);
+    static tuple<bool, int, Error> validateInt(string prompt, int promptX, int promptY, int min = INT_MIN, int max = INT_MAX);
 
     /**
      * @brief Validate floating-point input
@@ -38,7 +38,7 @@ public:
      * @param max Maximum valid value
      * @return A tuple containing success flag, validated value, and error details if invalid
      */
-    static tuple<bool, float, Error> validateFloat(string prompt, float min = -FLT_MAX, float max = FLT_MAX);
+    static tuple<bool, float, Error> validateFloat(string prompt, int promptX, int promptY, float min = -FLT_MAX, float max = FLT_MAX);
 
     /**
      * @brief Validate string input
@@ -47,7 +47,7 @@ public:
      * @return A tuple containing success flag, validated value, and error details if invalid
      */
     // static tuple<bool, string, Error> validateString(string prompt, vector<string> options = {});
-    static tuple<bool, string, Error> validateString(string prompt);
+    static tuple<bool, string, Error> validateString(string prompt, int promptX, int promptY);
 };
 
 #endif

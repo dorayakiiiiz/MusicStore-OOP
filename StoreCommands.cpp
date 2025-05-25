@@ -27,31 +27,34 @@ bool SignUpCommand::execute() {
     int role = getValidatedInput<int>(
         "Enter your role (1 for admin, 2 for customer): ",
         [](const string& prompt) {
-            return InputChecker::validateInt(prompt, 1, 2);
-        }
+            return InputChecker::validateInt(prompt, 10, 10, 1, 2);
+        },
+        10, 10
     );
     
     // Get username input with validation
     string username = getValidatedInput<string>(
         "Input username: ",
         [](const string& prompt) {
-            return InputChecker::validateString(prompt);
-        }
+            return InputChecker::validateString(prompt, 10, 11);
+        },
+        10, 11
     );
     
     // Get password input with validation
     string password = getValidatedInput<string>(
         "Input password: ",
         [](const string& prompt) {
-            return InputChecker::validateString(prompt);
-        }
+            return InputChecker::validateString(prompt, 10, 12);
+        },
+        10, 12
     );
     
     // Additional validation for admin registration
     if (Role::ADMIN == role) {
-        string passkey = getInput("Input admin passkey: ");
+        string passkey = getInput("Input admin passkey: ", 10, 13);
         if (!Admin::isValidPasskey(passkey)) {
-            printMessage("Invalid passkey. Please try again later!");
+            printMessage("Invalid passkey. Please try again later!", 10, 14);
             sleepScreen();
             return true;
         }
@@ -60,10 +63,10 @@ bool SignUpCommand::execute() {
     // Register the new user
     bool success = AuthService::getInstance()->registerUser(username, password, static_cast<Role>(role));
     if (success) {
-        printMessage("Sign up successfully!");
+        printMessage("Sign up successfully!", 10, 13);
         sleepScreen();
     } else {
-        printMessage("Username already exists. Please try again later!");
+        printMessage("Username already exists. Please try again later!", 10, 14);
         sleepScreen();
     }
     
@@ -88,23 +91,25 @@ bool LoginCommand::execute() {
     string username = getValidatedInput<string>(
         "Input username: ",
         [](const string& prompt) {
-            return InputChecker::validateString(prompt);
-        }
+            return InputChecker::validateString(prompt, 10, 10);
+        },
+        10, 10
     );
 
     // Get password input with validation
     string password = getValidatedInput<string>(
         "Input password: ",
         [](const string& prompt) {
-            return InputChecker::validateString(prompt);
-        }
+            return InputChecker::validateString(prompt, 10, 11);
+        },
+        10, 11
     );
 
     // Attempt to authenticate the user
     currentUser = AuthService::getInstance()->loginUser(username, password);
 
     if (!currentUser) {
-        printMessage("Invalid username or password. Please try again!");
+        printMessage("Invalid username or password. Please try again!", 10, 12);
         sleepScreen();
         return true;
     }
@@ -116,7 +121,7 @@ bool LoginCommand::execute() {
     shared_ptr<IController> controller = factory.createController(role);
 
     if (controller) {
-        printMessage("Login successfully! Welcome " + currentUser->getUsername() + "!");
+        printMessage("Login successfully! Welcome " + currentUser->getUsername() + "!", 10, 12);
         sleepScreen();
         clearScreen();
         controller->menu(currentUser);
@@ -132,7 +137,7 @@ string ExitCommand::getName() const {
 }
 
 bool ExitCommand::execute() {
-    printMessage("Exiting the application. Thank you for using our service!");
+    printMessage("Exiting the application. Thank you for using our service!", 10, 25);
     sleepScreen();
     system("cls");
     return false;

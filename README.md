@@ -82,72 +82,139 @@ Chương trình được phân tách ra 2 vai trò riêng biệt với 2 loại 
 - Nhập lệnh: ```./out/program``` để chạy chương trình.
 
 ### KIẾN TRÚC PHẦN MỀM
-Dự án được xây dựng theo mô hình kiến trúc nhiều lớp, có thể xem là biến thể của MVC (Model - View - Controller) kết hợp với Service Layer và Repository Layer nhằm phân tách rõ ràng các thành phần của ứng dụng
+Dự án được xây dựng theo mô hình kiến trúc nhiều lớp (Layered Architecture)
 
-#### Model
-- Các class như Music, Order, User, Voucher, Discount, Cart đại diện cho các đối tượng dữ liệu
+#### Domain Layer (Model)
+- Bao gồm các lớp Model như User, Music, Order, Cart, Discount, SalesRecord.
+- Đây là các đối tượng biểu diễn dữ liệu cốt lõi của hệ thống.
 
-#### View
-- Được tách biệt thành các class UI riêng biệt (AdminUI, CustomerUI dựa trên console-based)
-- Hiển thị thông tin và tương tác với người dùng mà không chứa logic nghiệp vụ
+#### Presentation Layer (UI)
+- Bao gồm các lớp UI (AdminUI, CustomerUI, ConsoleUI), các Controller (AdminController, CustomerController), và các Command. 
+- Lớp này chịu trách nhiệm tương tác với người dùng và hiển thị dữ liệu.
 
-#### Controller
-- Các class Controller riêng biệt cho từng vai trò (AdminController, CustomerController), sử dụng Command Pattern để xử lí các action cho Menu chương trình.
-
-#### Service Layer
-- Các class Music Service, UserService, OrderService, CartService, DiscountService, AuthService... chứa từng bussiness logic cụ thể cho các loại đối tượng khác nhau ở tầng Model.
+#### Service Layer / Business Logic Layer
+- Chứa các classs Service (MusicService, UserService, OrderService, CartService, DiscountService, AuthService) để xử lý logic nghiệp vụ.
+- Các lớp này thực hiện các thao tác trên dữ liệu từ Domain Layer và cung cấp các phương thức cho Presentation Layer.
 
 #### Data Access Layer
-- Các lớp Repository (SqlMusicRepository, SqlUserRepository...) chịu trách nhiệm truy xuất dữ liệu cho từng loại model.
+- Bao gồm IDataProvider, SqlDao, IRepository và các triển khai Repository cụ thể, cùng với DatabaseConnector. Lớp này chịu trách nhiệm giao tiếp với cơ sở dữ liệu.
 
 ### NGUYÊN LÍ OOP ĐƯỢC ÁP DỤNG
 #### Tính đóng gói (Encapsulation)
-- Các thuộc tính của class Model như Music, User, Order được khai báo private.
-- Cung cấp các phương thức getter/setter để truy cập và thay đổi dữ liệu khi cần.
+- Tất cả các thuộc tính của các class Model như `Music`, `User`, `Order`, `Cart`, `Discount`, `SalesRecord` đều được khai báo private, chỉ cho phép truy cập thông qua các phương thức getter/setter công khai.
+- Các thao tác thay đổi dữ liệu (ví dụ: cập nhật giá, số lượng) đều phải thông qua các phương thức setter, đảm bảo kiểm soát truy cập và bảo vệ tính nhất quán của dữ liệu.
+- Các class Service (như `MusicService`, `OrderService`, `UserService`, v.v.) cũng đóng gói logic nghiệp vụ, chỉ cung cấp các phương thức công khai để thao tác với dữ liệu, không để lộ chi tiết xử lý bên trong.
+
 #### Tính kế thừa (Inheritance)
-- Sử dụng kế thừa hiệu quả cho User (Admin, Customer), IController (AdminController, CustomerController), ISearch (NameSearch, ArtistSearch, GenreSearch), kế thừa các command cụ thể từ class Command interface, kế thừa từ interface cho các class về Repository...
+- Sử dụng kế thừa để mở rộng chức năng và tái sử dụng mã nguồn:
+    - `User` là lớp cơ sở trừu tượng, các lớp `Admin` và `Customer` kế thừa và triển khai phương thức `getRole()`, cho phép xử lý phân quyền linh hoạt.
+    - `IController` là interface, các lớp `AdminController` và `CustomerController` kế thừa và triển khai menu riêng cho từng loại người dùng.
+    - `ISearch` là interface cho các chiến lược tìm kiếm (`NameSearch`, `ArtistSearch`, `GenreSearch`), cho phép mở rộng thêm tiêu chí tìm kiếm mới dễ dàng.
+    - `Command` là interface cho các lệnh trong menu, các lệnh cụ thể như `SignUpCommand`, `LoginCommand`, `ViewMusicListCommand`, v.v. đều kế thừa và triển khai phương thức `execute()`.
+    - `IRepository<T>` là interface cho các repository, các lớp như `SqlMusicRepository`, `SqlUserRepository`, v.v. kế thừa và triển khai thao tác với từng loại dữ liệu.
+
 #### Tính đa hình (Polymorphism)
-- Được thể hiện rõ qua việc sử dụng các lớp cơ sở trừu tượng và interface như IController, ISearch, DiscountStrategy, Command, IRepository. Các đối tượng cụ thể được sử dụng thông qua con trỏ hoặc tham chiếu đến lớp cơ sở.
+- Được áp dụng xuyên suốt hệ thống thông qua việc sử dụng interface và lớp trừu tượng:
+    - Các đối tượng `User` có thể là `Admin` hoặc `Customer` nhưng đều được xử lý thông qua con trỏ hoặc tham chiếu tới lớp cơ sở `User`.
+    - Các controller, command, search strategy, discount strategy đều được sử dụng thông qua interface (`IController`, `Command`, `ISearch`, `DiscountStrategy`), cho phép thay thế linh hoạt các đối tượng cụ thể tại runtime mà không cần thay đổi code phía client.
+    - Các repository được thao tác thông qua interface `IRepository<T>`, cho phép thay đổi nguồn dữ liệu mà không ảnh hưởng đến các tầng khác.
+
 #### Tính trừu tượng (Abstraction)
-- Các interface và lớp trừu tượng giúp định nghĩa các "hợp đồng" rõ ràng, che giấu chi tiết triển khai phức tạp.
+- Các interface và lớp trừu tượng như `IController`, `ISearch`, `DiscountStrategy`, `Command`, `IRepository`, `IDataProvider` định nghĩa các "hợp đồng" rõ ràng cho từng nhóm chức năng, che giấu chi tiết triển khai phía sau.
+- Các tầng Service, Controller, UI chỉ làm việc với abstraction, không quan tâm đến chi tiết cụ thể của các class phía dưới (ví dụ: Service chỉ biết đến `IRepository`, không quan tâm đó là SQL hay file).
+- Các factory (`ControllerFactory`, `SearchFactory`, `DiscountFactory`) trả về abstraction, giúp code dễ mở rộng và bảo trì.
+
 
 ### TUÂN THỦ CÁC NGUYÊN TẮC SOLID
-#### Single Responsibility Principle (SRP)
-Mỗi class có một trách nhiệm duy nhất
-- Các lớp Service (MusicService, UserService, OrderService, CartService,DiscountService, AuthService) chịu trách nhiệm cho các logic nghiệp vụ cụ thể.
-- Các lớp Controller (AdminController, CustomerController) điều phối luồng giữa UI và Services.
-- Các lớp UI (AdminUI, CustomerUI) chịu trách nhiệm hiển thị.
-= Các lớp Repository chịu trách nhiệm truy cập dữ liệu.
-- Các lớp Command đóng gói một hành động cụ thể cho menu chương trình.
-#### Open/Closed Principle (OCP)
-Code được thiết kế để mở rộng mà không cần sửa đổi
-- Việc sử dụng Strategy Pattern (cho ISearch, DiscountStrategy) và Command Pattern cho phép dễ dàng thêm các chiến lược hoặc lệnh mới mà không cần sửa đổi nhiều code hiện có.
-- Factory Pattern (áp dụng trên ControllerFactory, SearchFactory) cũng hỗ trợ nguyên tắc này.
-#### Liskov Substitution Principle (LSP)
-Các lớp con có thể thay thế lớp cha của chúng.
-- Ví dụ: PercentageDiscountStrategy và FixedDiscountStrategy có thể thay thế cho DiscountStrategy, hay AdminController và CustomerController có thể được sử dụng ở bất cứ đâu gọi IController.
-#### Interface Segregation Principle (ISP)
-- Sử dụng nhiều interface nhỏ, chuyên biệt thay vì interface lớn, phức tạp (Interface ISearch, IController, IRepository, Command) phục vụ cho các mục đích cụ thể
-#### Dependency Inversion Principle (DIP)
-- Các module cấp cao không phụ thuộc vào module cấp thấp mà phụ thuộc vào abstraction
-- Ví dụ: sử dụng dependency injection trong các constructor của Controller và Service, lớp Discount phụ thuộc vào interface DiscountStrategy thay vì các lớp cụ thể
+
+Dự án Music Store được thiết kế và triển khai tuân thủ đầy đủ 5 nguyên tắc SOLID, đảm bảo mã nguồn dễ mở rộng, bảo trì, kiểm thử và phát triển lâu dài.
+
+#### Single Responsibility Principle (SRP) - Nguyên tắc đơn trách nhiệm
+- **Model (Music, User, Order, Cart, Discount, SalesRecord):** Chỉ quản lý dữ liệu, thuộc tính và các thao tác getter/setter, không chứa logic nghiệp vụ.
+- **Service (MusicService, UserService, OrderService, CartService, DiscountService, AuthService, SalesRecordService):** Mỗi service chỉ xử lý logic nghiệp vụ liên quan đến một miền chức năng duy nhất (quản lý nhạc, người dùng, đơn hàng, giỏ hàng, voucher, xác thực, thống kê).
+- **Controller (AdminController, CustomerController):** Điều phối luồng xử lý giữa UI và Service, không xử lý logic nghiệp vụ hay hiển thị.
+- **UI (AdminUI, CustomerUI, ConsoleUI):** Chỉ chịu trách nhiệm hiển thị dữ liệu, lấy input từ người dùng, không xử lý logic nghiệp vụ.
+- **Repository (SqlMusicRepository, SqlUserRepository, SqlOrderRepository, SqlDiscountRepository, SqlSalesRecordRepository):** Chỉ thực hiện truy xuất, lưu trữ dữ liệu với database, không xử lý nghiệp vụ.
+- **Command (SignUpCommand, LoginCommand, ExitCommand, ViewMusicListCommand, AddToCartCommand, CheckoutCommand, ...):** Mỗi command đóng gói một hành động duy nhất trong menu, không kiêm nhiệm nhiều chức năng.
+- **Factory (ControllerFactory, SearchFactory, DiscountFactory):** Chỉ chịu trách nhiệm khởi tạo đối tượng phù hợp với tham số đầu vào.
+- **Tiện ích (InputChecker, DatabaseConnector):** Chỉ kiểm tra dữ liệu đầu vào hoặc quản lý kết nối database.
+
+#### Open/Closed Principle (OCP) - Nguyên tắc đóng/mở
+- **Các interface/abstract class (IRepository, ISearch, DiscountStrategy, Command, IController):** Cho phép mở rộng thêm các chức năng mới (repository mới, chiến lược tìm kiếm mới, loại giảm giá mới, command mới, controller mới) mà không cần sửa code cũ.
+- **Strategy Pattern:** Thêm chiến lược tìm kiếm mới (NameSearch, ArtistSearch, GenreSearch) hoặc loại giảm giá mới (PercentageDiscountStrategy, FixedDiscountStrategy) chỉ cần kế thừa interface và đăng ký với Factory, không phải sửa code Service hay Discount.
+- **Command Pattern:** Thêm chức năng mới cho menu chỉ cần tạo class command mới, không phải sửa code Controller hay Invoker.
+- **Factory Pattern:** Khi có loại controller, search, discount mới, chỉ cần mở rộng Factory, không phải sửa code gọi Factory.
+- **Repository Pattern:** Thay đổi nguồn dữ liệu (ví dụ từ SQL sang file) chỉ cần tạo repository mới, không phải sửa code Service.
+- **UI:** Có thể mở rộng thêm UI mới (AdminUI, CustomerUI, ConsoleUI) mà không ảnh hưởng đến các lớp khác.
+
+#### Liskov Substitution Principle (LSP) - Nguyên tắc thay thế Liskov
+- **User:** Admin và Customer đều kế thừa User, có thể sử dụng thay thế ở mọi nơi yêu cầu User (ví dụ: currentUser trong AuthService, các Command, Service).
+- **DiscountStrategy:** PercentageDiscountStrategy và FixedDiscountStrategy đều kế thừa DiscountStrategy, được sử dụng thay thế trong Discount, DiscountService, không cần biết cụ thể loại giảm giá.
+- **ISearch:** NameSearch, ArtistSearch, GenreSearch đều kế thừa ISearch, có thể thay thế lẫn nhau trong MusicService, SearchFactory.
+- **IController:** AdminController và CustomerController đều kế thừa IController, ControllerFactory trả về IController, các luồng xử lý không cần biết cụ thể loại controller.
+- **IRepository:** Các repository cụ thể đều kế thừa IRepository<T>, Service chỉ làm việc với IRepository<T> mà không quan tâm đến triển khai cụ thể.
+
+#### Interface Segregation Principle (ISP) - Nguyên tắc phân tách giao diện
+- **Các interface nhỏ, chuyên biệt:** IRepository chỉ cho CRUD, ISearch chỉ cho tìm kiếm, DiscountStrategy chỉ cho tính giảm giá, Command chỉ cho execute và getName, IController chỉ cho menu.
+- **Các Service, Controller, UI chỉ phụ thuộc vào interface cần thiết:** Ví dụ, MusicService chỉ cần IRepository<Music>, không cần biết đến repository của User hay Order.
+- **Các Factory (ControllerFactory, SearchFactory, DiscountFactory):** Chỉ trả về interface hoặc abstract class, không ép các client phụ thuộc vào các phương thức không cần thiết.
+
+#### Dependency Inversion Principle (DIP) - Nguyên tắc đảo ngược phụ thuộc
+- **Service phụ thuộc abstraction:** Các Service (MusicService, UserService, ...) chỉ phụ thuộc vào IDataProvider/IRepository, không phụ thuộc vào SqlDao hay repository cụ thể.
+- **Controller phụ thuộc abstraction:** Controller chỉ làm việc với Service thông qua singleton, không khởi tạo trực tiếp Service cụ thể.
+- **Discount phụ thuộc abstraction:** Discount chỉ lưu trữ DiscountStrategy (abstraction), không phụ thuộc vào loại chiến lược cụ thể.
+- **CommandInvoker phụ thuộc abstraction:** Chỉ làm việc với Command (interface), không quan tâm đến command cụ thể.
+- **Factory trả về abstraction:** ControllerFactory trả về IController, SearchFactory trả về ISearch, DiscountFactory trả về DiscountStrategy.
+- **Khởi tạo phụ thuộc qua constructor hoặc singleton:** Các Service, Controller, Factory đều nhận hoặc khởi tạo phụ thuộc thông qua constructor hoặc phương thức getInstance, không khởi tạo cứng các đối tượng phụ thuộc bên trong.
+
+Nhờ tuân thủ chặt chẽ các nguyên tắc SOLID ở mọi tầng (Model, Service, Controller, UI, Repository, Command, Factory), hệ thống dễ dàng mở rộng, bảo trì, kiểm thử và phát triển thêm các tính năng mới mà không ảnh hưởng đến các thành phần đã ổn định.
 
 ### DESIGN PATTERN ĐƯỢC SỬ DỤNG
 #### Factory Pattern
-- ControllerFactory: Tạo AdminController hoặc CustomerController dựa trên Role.
-- SearchFactory: Tạo các chiến lược tìm kiếm (NameSearch, ArtistSearch GenreSearch).
+Factory Pattern được sử dụng để tách biệt logic khởi tạo đối tượng khỏi phần sử dụng, giúp dễ dàng mở rộng và thay đổi các loại đối tượng mà không ảnh hưởng đến code sử dụng chúng.
+- `ControllerFactory`: Được sử dụng trong quá trình đăng nhập để tạo ra controller phù hợp với vai trò người dùng (`Admin` hoặc `Customer`). Khi người dùng đăng nhập thành công, `ControllerFactory` sẽ trả về đối tượng `AdminController` hoặc `CustomerController` tương ứng, sau đó gọi menu phù hợp.
+- `SearchFactory`: Được sử dụng trong các chức năng tìm kiếm nhạc (ở `MusicService` và các command liên quan đến tìm kiếm). Khi người dùng chọn tiêu chí tìm kiếm (theo tên, nghệ sĩ, thể loại), `SearchFactory` sẽ tạo ra chiến lược tìm kiếm tương ứng (`NameSearch`, `ArtistSearch`, `GenreSearch`) để thực hiện tìm kiếm.
+- `DiscountFactory`: Được sử dụng trong `DiscountService` khi tạo mới voucher giảm giá cho người dùng (sau khi mua hàng lớn hoặc khi admin tạo voucher). Factory này sinh ra chiến lược giảm giá phù hợp (`PercentageDiscountStrategy` hoặc `FixedDiscountStrategy`) dựa trên loại voucher mà người dùng chọn. Ngoài ra, DiscountFactory còn được sử dụng khi load dữ liệu voucher từ database để khởi tạo đúng loại chiến lược giảm giá cho từng voucher.
+
 #### Strategy Pattern
-- ISearch và các lớp con (NameSearch, ArtistSearch, GenreSearch): Cho phép thay đổi thuật toán tìm kiếm một cách linh hoạt.
-- DiscountStrategy và các lớp con: Cho phép áp dụng các loại giảm giá khác nhau.
+Strategy Pattern cho phép định nghĩa nhiều thuật toán (hoặc cách xử lý) khác nhau và lựa chọn thuật toán phù hợp tại runtime, giúp mở rộng dễ dàng mà không cần sửa đổi code cũ.
+- **`ISearch` và các lớp con (`NameSearch`, `ArtistSearch`, `GenreSearch`)**: Được sử dụng trong toàn bộ chức năng tìm kiếm nhạc (MusicService, SearchMusicCommand, các UI liên quan). Khi người dùng chọn tiêu chí tìm kiếm, chương trình sẽ khởi tạo chiến lược tìm kiếm phù hợp và thực hiện tìm kiếm với thuật toán tương ứng.
+- **`DiscountStrategy` và các lớp con (`PercentageDiscountStrategy`, `FixedDiscountStrategy`)**: Được sử dụng trong `Discount`, `DiscountService`, `CheckoutCommand`, và các chức năng áp dụng voucher. Mỗi voucher sẽ chứa một chiến lược giảm giá cụ thể, khi áp dụng sẽ gọi đúng thuật toán tính giảm giá (theo phần trăm hoặc số tiền cố định). Khi tạo mới voucher hoặc khi load từ database, chương trình sẽ khởi tạo đúng chiến lược và gán vào đối tượng `Discount`.
+
+
 #### Command Pattern
-- CommandInvoker và các lớp kế thừa từ Command (ViewMusicListCommand, LoginCommand, v.v.) giúp đóng gói các hành động/yêu cầu từ menu chương trình thành đối tượng, tách rời người gọi yêu cầu khỏi người thực hiện yêu cầu. 
-- Điều này làm cho AdminController và CustomerController (2 class xử lí điều phối các hoạt động trên menu chương trình) trở nên gọn gàng hơn.
+Command Pattern giúp đóng gói các hành động trong menu thành các đối tượng riêng biệt, tách biệt phần gọi lệnh khỏi phần thực thi, dễ dàng mở rộng, thêm mới, hoặc quản lý các thao tác undo/redo.
+- **`Interface Command` và các lớp kế thừa**: Toàn bộ các chức năng thao tác trên menu đều được đóng gói thành các class command riêng biệt. 
+    - Ở menu chính (`StoreApp`): `SignUpCommand`, `LoginCommand`, `ExitCommand`.
+    - Ở menu admin (`AdminController`): `ViewMusicListCommand`, `AddNewItemsCommand`, `RemoveItemsCommand`, `UpdatePriceCommand`, `ViewUsersCommand`, `ViewAllPurchaseHistoriesCommand`, `DeleteUserCommand`, `ViewSalesStatisticsCommand`, `AdminLogoutCommand`.
+    - Ở menu customer (CustomerController): `ViewPurchaseHistoryCommand`, `ViewMusicCommand`, `SearchMusicCommand`, `AddToCartCommand`, `RemoveFromCartCommand`, `CheckoutCommand`, `CustomerLogoutCommand`.
+- **`CommandInvoker`**: Được sử dụng ở tất cả các menu (`StoreApp`, `AdminController`, `CustomerController`) để quản lý danh sách các command, hiển thị menu, nhận lựa chọn từ người dùng và thực thi command tương ứng. Nhờ đó, các controller chỉ cần khai báo các command và chuyển việc điều phối menu cho CommandInvoker, giúp code controller gọn gàng, dễ mở rộng.
+- **Các command này sử dụng các service (`MusicService`, `UserService`, `OrderService`, `DiscountService`, `CartService`, `AuthService`) để thực hiện logic nghiệp vụ, đảm bảo tách biệt rõ ràng giữa UI, controller và business logic.**
+
 #### Repository Pattern
-- Tạo interface IRepository<T> định nghĩa các thao tác CRUD (getAll, getById, add, updateById, deleteById) và các lớp triển khai cụ thể (SqlUserRepository, SqlMusicRepository...)
-- Giúp tách biệt logic nghiệp vụ khỏi logic truy xuất dữ liệu, cho phép thay đổi nguồn dữ liệu mà không ảnh hưởng đến business logic
+Repository Pattern giúp tách biệt logic truy xuất dữ liệu khỏi logic nghiệp vụ, cho phép thay đổi nguồn dữ liệu (database, file, v.v.) mà không ảnh hưởng đến các tầng khác.
+- **`IRepository<T>`**: Interface tổng quát định nghĩa các thao tác CRUD (`getAll`, `getById`, `add`, `updateById`, `deleteById`) cho mọi loại dữ liệu.
+- **Các lớp triển khai repository cụ thể**:
+    - `SqlUserRepository`: Quản lý dữ liệu người dùng.
+    - `SqlMusicRepository`: Quản lý dữ liệu bài hát.
+    - `SqlOrderRepository`: Quản lý dữ liệu đơn hàng.
+    - `SqlDiscountRepository`: Quản lý dữ liệu voucher giảm giá.
+    - `SqlSalesRecordRepository`: Quản lý dữ liệu thống kê doanh thu.
+- **`IDataProvider` và `SqlDao`**: Đóng vai trò là lớp trung gian (facade) cung cấp các repository cho các service. Tất cả các service (`MusicService`, `UserService`, `OrderService`, `DiscountService`, `SalesRecordService`, `CartService`, `AuthService`) đều chỉ làm việc với abstraction (`IDataProvider`/`IRepository`), không phụ thuộc vào chi tiết nguồn dữ liệu.
+- **Các service sử dụng repository pattern ở mọi thao tác lấy, thêm, sửa, xóa dữ liệu từ database, đảm bảo code nghiệp vụ không phụ thuộc vào chi tiết truy xuất dữ liệu.**
+
 #### Singleton Pattern
-- Áp dụng singleton cho các Service như MusicSerive, AuthService... nhằm chỉ sử dụng 1 đối tượng cho mỗi loại dịch vụ trong cả chương trình.
-- DatabaseConnector kết nối đến cơ sở dữ liệu SQLServer cũng được áp dụng singleton khởi tạo 1 kết nối xuyên suốt chương trình.
+Singleton Pattern đảm bảo mỗi service hoặc resource quan trọng chỉ có một instance duy nhất trong toàn bộ chương trình, giúp quản lý tài nguyên hiệu quả và tránh xung đột.
+- **Các service singleton**:
+    - `MusicService`: Quản lý toàn bộ logic liên quan đến kho nhạc.
+    - `UserService`: Quản lý người dùng.
+    - `OrderService`: Quản lý đơn hàng.
+    - `DiscountServic`e: Quản lý voucher giảm giá.
+    - `CartService`: Quản lý giỏ hàng.
+    - `AuthService`: Quản lý xác thực đăng nhập/đăng ký.
+    - `SalesRecordService`: Quản lý thống kê doanh thu.
+  Các service này đều sử dụng singleton để đảm bảo chỉ có một đối tượng duy nhất, được truy cập thông qua phương thức getInstance(). Tất cả các command, controller, UI đều sử dụng các service này thông qua singleton.
+- **`DatabaseConnector`**: Được thiết kế singleton để đảm bảo chỉ có một kết nối tới database SQL Server xuyên suốt chương trình. Tất cả các repository đều sử dụng `DatabaseConnector::getInstance()` để truy cập kết nối database, đảm bảo quản lý tài nguyên hiệu quả và tránh lỗi kết nối trùng lặp.
 
 ### Đảm bảo chất lượng (sẽ hoàn thành ở đợt nộp chính thức)
 

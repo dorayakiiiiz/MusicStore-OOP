@@ -2,9 +2,9 @@
 #include "utils.h"
 
 // get a valid int input from user
-tuple <bool, int, Error> InputChecker::validateInt(string prompt, int min, int max) {
+tuple <bool, int, Error> InputChecker::validateInt(string prompt, int promptX, int promptY, int min, int max) {
     Error error = {0, ""};
-    string input = getInput(prompt);
+    string input = getInput(prompt, promptX, promptY);
     // Check if input is empty
     if (input.empty()) {
         error.code = 1;
@@ -30,9 +30,9 @@ tuple <bool, int, Error> InputChecker::validateInt(string prompt, int min, int m
 }
 
 // get a valid float input from user
-tuple <bool, float, Error> InputChecker::validateFloat(string prompt, float min, float max) {
+tuple <bool, float, Error> InputChecker::validateFloat(string prompt, int promptX, int promptY, float min, float max) {
     Error error = {0, ""};
-    string input = getInput(prompt);
+    string input = getInput(prompt, promptX, promptY);
     // Check if input is empty
     if (input.empty()) {
         error.code = 1;
@@ -58,9 +58,9 @@ tuple <bool, float, Error> InputChecker::validateFloat(string prompt, float min,
 }
 
 // get a valid string input from user
-tuple <bool, string, Error> InputChecker::validateString(string prompt) {
+tuple <bool, string, Error> InputChecker::validateString(string prompt, int promptX, int promptY) {
     Error error = {0, ""};
-    string input = getInput(prompt);
+    string input = getInput(prompt, promptX, promptY);
     // Check if input is empty
     if (input.empty()) {
         error.code = 1;

@@ -25,7 +25,7 @@ void printHeader(const string&, int, int);
  * @brief Prints a message with a decorative symbol prefix
  * @param message The message to display
  */
-void printMessage(const string&);
+void printMessage(const string&, int, int);
 
 
 void printMenu(const string&, int, int);
@@ -69,16 +69,11 @@ void printFrameOptions(int x, int y, int width, int select);
  void printInstructions(const string& instructions, int x, int y);
 
 /**
- * @brief Pauses execution until user presses a key
- */
-void pauseScreen();
-
-/**
  * @brief Gets user input with a prompt
  * @param prompt The prompt to display to the user
  * @return The string input by the user
  */
-string getInput(const string&);
+string getInput(const string&, int, int);
 
 /**
  * @brief Sleeps the program for a specified duration
@@ -107,22 +102,27 @@ int getMaxOptionsLength(const vector<string>& options);
  * @return The validated input value
  */
 template<typename T>
-T getValidatedInput(const string& prompt, function<tuple<bool, T, Error>(const string&)> validatorFunc) {
+T getValidatedInput(const string& prompt, function<tuple<bool, T, Error>(const string&)> validatorFunc, int promptX, int promptY) {
     bool isValid;
     T value;
-    Error error; 
+    Error error;
 
     do {
+        clearScreen(promptX, promptY, prompt.size() + 5, 1);
         tie(isValid, value, error) = validatorFunc(prompt);
         if (!isValid) {
-            printMessage(error.message); 
-            pauseScreen();               
+            printMessage(error.message, promptX, promptY + 1);
+            printRepeatMessage(108, 1, "CONTINUE");
+            char repeat = _getch();
+            if (repeat == 27) { // ESC
+                break;
+            }
         }
     } while (!isValid);
-    
+
+    clearScreen(promptX, promptY + 1, error.message.size() + 5, 1);
+
     return value;
 }
-
-
 
 #endif
