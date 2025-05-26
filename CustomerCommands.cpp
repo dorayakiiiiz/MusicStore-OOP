@@ -37,7 +37,7 @@ bool ViewPurchaseHistoryCommand::execute() {
     vector<Order> orderHistory = OrderService::getInstance()->getUserOrders(customer->getUsername());
     
     string header = "purchaseHistory";
-    printHeader(header, (120 - header.length()*2) / 2 - 31, 2);
+    printHeader(header, (120 - header.length()*2) / 2 - 31, 1);
     CustomerUI::displayPurchasedHistory(orderHistory);
 
     return true;
@@ -98,7 +98,7 @@ bool SearchMusicCommand::execute() {
         int criteria = getValidatedInput<int>(
             "ENTER SEARCH CRITERIA (1 FOR NAME, 2 FOR ARTIST, 3 FOR GENRE): ",
             [](const string& prompt) {
-                return InputChecker::validateInt(prompt, 26, 11, 1, 3);
+                return InputChecker::checkInt(prompt, 26, 11, 1, 3);
             },
             26, 11
         );
@@ -107,7 +107,7 @@ bool SearchMusicCommand::execute() {
         string keyword = getValidatedInput<string>(
             "ENTER PASSWORD: ",
             [](const string& prompt) {
-                return InputChecker::validateString(prompt, 42, 14);
+                return InputChecker::checkString(prompt, 42, 14);
             },
             42, 14
         );
@@ -181,7 +181,7 @@ bool AddToCartCommand::execute() {
         int itemID = getValidatedInput<int>(
             "ENTER ITEM ID : ",
             [&items](const string& prompt) {
-                return InputChecker::validateInt(prompt, 9, 24, 1, items.size());
+                return InputChecker::checkInt(prompt, 9, 24, 1, items.size());
             },
             9, 24
         );
@@ -190,15 +190,15 @@ bool AddToCartCommand::execute() {
         int quantity = getValidatedInput<int>(
             "ENTER QUANTITY: ",
             [](const string& prompt) {
-                return InputChecker::validateInt(prompt, 9, 26, 1, INT_MAX);
+                return InputChecker::checkInt(prompt, 9, 26, 1, INT_MAX);
             },
             9, 26
         );
 
         // Add item to cart
         if (CartService::getInstance()->addItemToCart(cart, itemID, quantity)) {
-            printFrame(49, 24, 46, 3); 
-            printMessage("ADDED " + to_string(quantity) + " " + items[itemID - 1].getName() + " TO CART SUCCESSFULLY!", 51, 25);
+            printFrame(49, 24, 66, 3); 
+            printMessage("ADDED (" + to_string(quantity) + ") \"" + items[itemID - 1].getName() + "\" TO CART SUCCESSFULLY!", 55, 25);
         } else {
             printFrame(49, 24, 40, 3); 
             printMessage("FAILED TO ADD ITEM. NOT ENOUGH STOCK!", 60, 25);
@@ -215,6 +215,36 @@ bool AddToCartCommand::execute() {
     }
     return true;
 }
+
+// ViewCurrentCartCommand implementation
+ViewCurrentCartCommand::ViewCurrentCartCommand(Cart& c) : cart(c) {
+
+}
+
+std::string ViewCurrentCartCommand::getName() const {
+    return "VIEW CURRENT CART";
+}
+
+bool ViewCurrentCartCommand::execute() {
+    clearScreen();
+    printFrame(0, 0, 120, 30);
+    string header = "currentCart";
+    printHeader(header, (120 - header.length()*2) / 2 - 19, 1);
+    if (cart.getItems().empty()) {
+        printFrame(40, 14, 40, 3);
+        printMessage("CART IS EMPTY!", 55, 15);
+
+        printRepeatMessage(2, 1, "EXIT");
+        char repeat = _getch();
+        if (27 == repeat) {
+            return true;
+        }
+    }
+
+    CustomerUI::displayCart(cart.getItems(), 8);
+    return true;
+}
+
 
 // RemoveFromCartCommand implementation
 RemoveFromCartCommand::RemoveFromCartCommand(Cart& c) : cart(c) {}
@@ -258,7 +288,7 @@ bool RemoveFromCartCommand::execute() {
         int itemID = getValidatedInput<int>(
             "ENTER ITEM ID TO REMOVE: ",
             [this](const string& prompt) {
-                return InputChecker::validateInt(prompt, 9, 26, 1, cart.getItems().size());
+                return InputChecker::checkInt(prompt, 9, 26, 1, cart.getItems().size());
             },
             9, 26
         );
@@ -300,7 +330,7 @@ bool CheckoutCommand::execute() {
     Customer* customer = dynamic_cast<Customer*>(currentUser.get());
 
     // Get all orders and vouchers from the repository
-    vector<Order> orders = OrderService::getInstance()->getAllOrders();
+    // vector<Order> orders = OrderService::getInstance()->getAllOrders();
     vector<shared_ptr<Discount>> vouchers = DiscountService::getInstance()->getAllDiscounts();
 
     if (cart.getItems().empty()) {
@@ -312,29 +342,41 @@ bool CheckoutCommand::execute() {
         
         // Handle discount vouchers if available
         vector<shared_ptr<Discount>> validVouchers = 
-            DiscountService::getInstance()->loadValidDiscounts(vouchers, customer->getUsername());
+        DiscountService::getInstance()->loadValidDiscounts(vouchers, customer->getUsername());
 
         shared_ptr<Discount> selectedVoucher = nullptr;
+        printFrame(0, 0, 120, 30);
+        printHeader(header, (120 - header.length()*2) / 2 - 19, 1);
 
         if (!validVouchers.empty()) {
             // Display available vouchers
-            CustomerUI::displayVoucherList(validVouchers);
+            printFrame(25, 23, 70, 3);
+            printMessage("DO YOU WANT TO USE A VOUCHER? (1 FOR YES, 2 FOR NO)  : ", 30, 24);
+
             int useVoucher = getValidatedInput<int>(
-                "Do you want to use a voucher? (1 for yes, 2 for no): ",
+                "DO YOU WANT TO USE A VOUCHER? (1 FOR YES, 2 FOR NO): ",
                 [](const string& prompt) {
-                    return InputChecker::validateInt(prompt, 10, 24, 1, 2);
+                    return InputChecker::checkInt(prompt, 30, 24, 1, 2);
                 },
-                10, 24
+                30, 24
             );
 
             if (Agreement::YES == useVoucher) {
+                clearScreen();
+                printFrame(0, 0, 120, 30);
+                printHeader(header, (120 - header.length()*2) / 2 - 19, 1);
+                CustomerUI::displayVoucherList(validVouchers);
                 // Get voucher code
+                printFrameOptions(40, 23, 40, 1);
+
+                ConsoleUI::gotoXY(42, 24);
+                cout << "ENTER VOUCHER CODE  : ";
                 string voucherCode = getValidatedInput<string>(
-                    "Enter voucher code: ",
+                    "ENTER VOUCHER CODE: ",
                     [](const string& prompt) {
-                        return InputChecker::validateString(prompt, 10, 25);
+                        return InputChecker::checkString(prompt, 42, 24);
                     },
-                    10, 25
+                    42, 24
                 );
                 
                 // Find and apply the selected voucher
@@ -344,7 +386,9 @@ bool CheckoutCommand::execute() {
                         
                         // Apply the discount to the total
                         total = DiscountService::getInstance()->applyDiscount(selectedVoucher, total);
-                        printMessage("Voucher applied! New total: $" + to_string(total), 10, 26);
+
+                        printFrame(30, 26, 60, 3);
+                        printMessage("VOUCHER APPLIED! NEW TOTAL: $" + to_string(total), 40, 27);
                         
                         // Remove the used voucher
                         DiscountService::getInstance()->removeDiscount(selectedVoucher);
@@ -353,8 +397,17 @@ bool CheckoutCommand::execute() {
                 }
                 
                 if (!selectedVoucher) {
-                    printMessage("Invalid voucher code!", 10, 27);
+                    printFrame(40, 26, 40, 3);
+                    printMessage("INVALID VOUCHER CODE!", 50, 27);
+                    if (total <= 50) {
+                        printFrameOptions(40, 23, 40, 1);
+                        clearScreen(40, 23, 40, 3);
+                        printFrame(40, 23, 40, 3);
+                        ConsoleUI::gotoXY(50, 24);
+                        cout << char(175) << " TOTAL REVENUE: $" << total;
+                    }
                 }
+                sleepScreen(1200);
             }
         }
 
@@ -369,15 +422,24 @@ bool CheckoutCommand::execute() {
 
         // Give a new voucher if total is over $50
         if (total > 50) {
+            clearScreen();
+            printFrame(0, 0, 120, 30);
+            printHeader(header, (120 - header.length()*2) / 2 - 19, 1);
+
             CustomerUI::displayDiscountOptions();
+
+            printFrameOptions(20, 19, 80, 1);
+
+            ConsoleUI::gotoXY(30, 20);
+            cout << "CHOOSE A DISCOUNT TYPE (1 FOR 10% OFF, 2 FOR $5 OFF)  : ";
 
             // Get discount type choice
             int discountChoice = getValidatedInput<int>(
-                "Choose a discount type (1 for 10% off, 2 for $5 off): ",
+                "CHOOSE A DISCOUNT TYPE (1 FOR 10% OFF, 2 FOR $5 OFF): ",
                 [](const string& prompt) {
-                    return InputChecker::validateInt(prompt, 10, 28, 1, 2);
+                    return InputChecker::checkInt(prompt, 30, 20, 1, 2);
                 },
-                10, 28
+                30, 20
             );
             
             // Set discount value based on choice (10% for percentage, $5 for fixed amount)
@@ -388,9 +450,12 @@ bool CheckoutCommand::execute() {
                                          static_cast<DiscountType>(discountChoice), discountValue);
             // Notify the user about the new voucher
             string notify = (static_cast<DiscountType>(discountChoice) == DiscountType::PERCENTAGE) ? "10% off" : "$5 off";
-            printMessage("New voucher created! Voucher code: " + discount->getCode() + ". " + notify + " on your next purchase.", 10, 29);
-        }
 
+            printFrame(20, 22, 80, 3);
+            printMessage("NEW VOUCHER CREATED! VOUCHER CODE: " + discount->getCode() + ". " + notify + " ON YOUR NEXT PURCHASE.", 23, 23);
+            sleepScreen(1200);
+        }
+        clearScreen(106, 1, 13, 4);
         CustomerUI::displayOrderSuccessMessage();
 
     }

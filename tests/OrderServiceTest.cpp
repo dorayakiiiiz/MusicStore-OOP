@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "../OrderService.h"
 #include "../Cart.h"
-#include "MockDao.h"
+#include "MockSQLDao.h"
 #include <memory>
 
 // Tạo subclass của OrderService cho testing
@@ -12,13 +12,13 @@ public:
 
 class OrderServiceTest : public ::testing::Test {
 protected:
-    std::shared_ptr<MockDao> mockDao;
+    std::shared_ptr<MockSqlDao> mockDao;
     std::shared_ptr<TestOrderService> service;
     std::vector<Order> testOrders;
     
     void SetUp() override {
         // Tạo mock dao
-        mockDao = std::make_shared<MockDao>();
+        mockDao = std::make_shared<MockSqlDao>();
         
         // Test data
         std::vector<Music> items1 = {
@@ -55,6 +55,7 @@ TEST_F(OrderServiceTest, GetAllOrders) {
     
     EXPECT_FLOAT_EQ(34.97f, result[0].getTotal());
     EXPECT_FLOAT_EQ(19.99f, result[1].getTotal());
+    EXPECT_FLOAT_EQ(0.0f, result[2].getTotal());
 }
 
 // Test method checkout

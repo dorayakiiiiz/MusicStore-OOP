@@ -43,6 +43,7 @@ void CustomerController::menu(shared_ptr<User>& currentUser) {
     invoker.addCommand(std::make_shared<ViewMusicCommand>());
     invoker.addCommand(std::make_shared<SearchMusicCommand>());
     invoker.addCommand(std::make_shared<AddToCartCommand>(cart));
+    invoker.addCommand(std::make_shared<ViewCurrentCartCommand>(cart));
     invoker.addCommand(std::make_shared<RemoveFromCartCommand>(cart));
     invoker.addCommand(std::make_shared<CheckoutCommand>(cart, currentUser));
     invoker.addCommand(std::make_shared<CustomerLogoutCommand>(cart, currentUser));

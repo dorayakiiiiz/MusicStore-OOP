@@ -1,34 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\AuthServiceTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\CartServiceTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\CartTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\CommandTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\ControllerFactoryTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\ControllerPatternTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\DatabaseConnectorTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\DiscountFactoryTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\DiscountServiceTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\DiscountStrategyTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\DiscountTest.cpp">
@@ -55,22 +40,13 @@
     <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\SearchFactoryTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\SearchTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\ServiceIntegrationTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\StoreAppTest.cpp">
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\SearchStrategyTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\UserServiceTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\UserTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\UtilsTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\AdminCommands.cpp">
@@ -459,10 +435,7 @@
     <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\googletest\googletest\test\production.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\MockConsole.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\MockDao.h">
+    <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\MockSQLDao.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\utils.h">

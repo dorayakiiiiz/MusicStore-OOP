@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 
-class SearchTest : public ::testing::Test {
+class SearchStrategyTest : public ::testing::Test {
 protected:
     std::vector<Music> testItems;
     std::shared_ptr<ISearch> nameSearch;
@@ -12,7 +12,7 @@ protected:
     std::shared_ptr<ISearch> genreSearch;
 
     void SetUp() override {
-        // Tạo dữ liệu test
+        // Create test data
         testItems = {
             Music("Happy Song", "John Doe", "Pop", 9.99f, 5),
             Music("Sad Song", "Jane Smith", "Rock", 8.99f, 10),
@@ -21,67 +21,86 @@ protected:
             Music("Rock Anthem", "Jane Smith", "Rock", 11.99f, 7)
         };
 
+        // Initialize search strategies
         nameSearch = std::make_shared<NameSearch>();
         artistSearch = std::make_shared<ArtistSearch>();
         genreSearch = std::make_shared<GenreSearch>();
     }
 };
 
-// Test tìm kiếm theo tên
-TEST_F(SearchTest, NameSearch) {
-    // Tìm kiếm chính xác
+// Test NameSearch
+TEST_F(SearchStrategyTest, NameSearch) {
+    // Test exact match
     auto result1 = nameSearch->search(testItems, "Happy Song");
-    EXPECT_EQ(1, result1.size());
+    ASSERT_EQ(1, result1.size());
     EXPECT_EQ("Happy Song", result1[0].getName());
     
-    // Tìm kiếm một phần
+    // Test partial match
     auto result2 = nameSearch->search(testItems, "Song");
-    EXPECT_EQ(3, result2.size());
+    ASSERT_EQ(3, result2.size());
     
-    // Tìm kiếm không phân biệt hoa thường
+    // Test case insensitivity
     auto result3 = nameSearch->search(testItems, "happy");
-    EXPECT_EQ(1, result3.size());
+    ASSERT_EQ(1, result3.size());
     EXPECT_EQ("Happy Song", result3[0].getName());
     
-    // Tìm kiếm không có kết quả
-    auto result4 = nameSearch->search(testItems, "Unknown Song");
+    // Test no match
+    auto result4 = nameSearch->search(testItems, "Non-existent");
     EXPECT_TRUE(result4.empty());
 }
 
-// Test tìm kiếm theo nghệ sĩ
-TEST_F(SearchTest, ArtistSearch) {
-    // Tìm kiếm chính xác
+// Test ArtistSearch
+TEST_F(SearchStrategyTest, ArtistSearch) {
+    // Test exact match
     auto result1 = artistSearch->search(testItems, "John Doe");
-    EXPECT_EQ(2, result1.size());
+    ASSERT_EQ(2, result1.size());
+    EXPECT_EQ("John Doe", result1[0].getArtist());
+    EXPECT_EQ("John Doe", result1[1].getArtist());
     
-    // Tìm kiếm một phần
+    // Test partial match
     auto result2 = artistSearch->search(testItems, "Smith");
-    EXPECT_EQ(2, result2.size());
+    ASSERT_EQ(2, result2.size());
     
-    // Tìm kiếm không phân biệt hoa thường
+    // Test case insensitivity
     auto result3 = artistSearch->search(testItems, "john");
-    EXPECT_EQ(2, result3.size());
+    ASSERT_EQ(2, result3.size());
     
-    // Tìm kiếm không có kết quả
-    auto result4 = artistSearch->search(testItems, "Unknown Artist");
+    // Test no match
+    auto result4 = artistSearch->search(testItems, "Non-existent");
     EXPECT_TRUE(result4.empty());
 }
 
-// Test tìm kiếm theo thể loại
-TEST_F(SearchTest, GenreSearch) {
-    // Tìm kiếm chính xác
+// Test GenreSearch
+TEST_F(SearchStrategyTest, GenreSearch) {
+    // Test exact match
     auto result1 = genreSearch->search(testItems, "Pop");
-    EXPECT_EQ(2, result1.size());
+    ASSERT_EQ(2, result1.size());
+    EXPECT_EQ("Pop", result1[0].getGenre());
+    EXPECT_EQ("Pop", result1[1].getGenre());
     
-    // Tìm kiếm một phần
+    // Test partial match
     auto result2 = genreSearch->search(testItems, "Ro");
-    EXPECT_EQ(2, result2.size());
+    ASSERT_EQ(2, result2.size());
     
-    // Tìm kiếm không phân biệt hoa thường
+    // Test case insensitivity
     auto result3 = genreSearch->search(testItems, "pop");
-    EXPECT_EQ(2, result3.size());
+    ASSERT_EQ(2, result3.size());
     
-    // Tìm kiếm không có kết quả
+    // Test no match
     auto result4 = genreSearch->search(testItems, "Jazz");
     EXPECT_TRUE(result4.empty());
+}
+
+// Test Empty Collection
+TEST_F(SearchStrategyTest, EmptyCollection) {
+    std::vector<Music> emptyItems;
+    
+    auto result1 = nameSearch->search(emptyItems, "Song");
+    EXPECT_TRUE(result1.empty());
+    
+    auto result2 = artistSearch->search(emptyItems, "Artist");
+    EXPECT_TRUE(result2.empty());
+    
+    auto result3 = genreSearch->search(emptyItems, "Genre");
+    EXPECT_TRUE(result3.empty());
 }

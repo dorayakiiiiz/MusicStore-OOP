@@ -6,13 +6,15 @@ void ConsoleUI::gotoXY(short x, short y) {
     SetConsoleCursorPosition(hConsole, pos);
 }
 
-void ConsoleUI::setColor(WORD color) {
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+void ConsoleUI::setColor(Color fg, Color bg) {
+    WORD colorAttribute = (bg << 4) | fg;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), colorAttribute);
 }
+
 
 int ConsoleUI::selectMenu(const std::vector<std::string>& options, const std::string& header) {
     int x = 5;
-    int y = 8 - options.size() / 2;
+    int y = 9 - options.size() / 2;
     int selected = 0;
     int frameX = 0, frameY = 0, frameW = 120, frameH = 30;
     int titleX = frameX + (frameW - header.length() * 2) / 2;
@@ -42,11 +44,11 @@ int ConsoleUI::selectMenu(const std::vector<std::string>& options, const std::st
         for (int i = 0; i < options.size(); ++i) {
             gotoXY(x + 2, y + i * 2 + 1); // In ra giữa khung
             if (i == selected)
-                setColor(BACKGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE); // Highlight
+                setColor(WHITE, BLUE); // Highlight
             else
-                setColor(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE); // Mặc định
+                setColor(WHITE, BLACK); // Mặc định
             std::cout << (i == selected ? ">> " : "   ") << options[i];
-            setColor(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+            setColor(WHITE, BLACK);
         }
 
         int key = _getch();

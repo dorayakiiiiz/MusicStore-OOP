@@ -240,26 +240,26 @@ void AdminUI::displayUserList(const vector<shared_ptr<User>>& users, int maxPerP
 // Displays the details of a specific order
 // Shows order ID, list of purchased items, quantities, prices and total
 void AdminUI::displayPurchasedHistory(vector<Order> orders) {
-    int x = 7;
-    int y = 13;
+    int x = 15;
+    int y = 12;
     int maxPerPage = 1;
-    int width = 106;
+    int width = 90;
     int totalItems = orders.size();
     int totalPages = totalItems;
     int currentPage = 0;
 
-    vector<int> cols = {4, 47, 70, 82, 94};
+        vector<int> cols = {4, 32, 54, 66, 78};
 
     while (true) {
         int OrderIdx = currentPage * maxPerPage;
 
         //Xóa bảng cũ
-        clearScreen(x, y, width, maxPerPage * 2 + 4); // xóa vùng tối đa
+        clearScreen(x, y, width, 16); // xóa vùng tối đa
         // Xóa page 
         clearScreen(111, 28, 8, 1); 
 
-        printFrameOptions(x, 11, width, 1);
-        ConsoleUI::gotoXY(x + 50, 12);
+        printFrameOptions(x, 10, width, 1);
+        ConsoleUI::gotoXY(x + 41, 11);
         cout << "ORDER " << OrderIdx + 1;
 
         const vector<Music>& purchasedItems = orders[OrderIdx].getPurchasedItems();
@@ -303,7 +303,7 @@ void AdminUI::displayPurchasedHistory(vector<Order> orders) {
         }
 
         printFrameOptions(x, y + rows * 2, width, 1);
-        ConsoleUI::gotoXY(10, y + rows * 2 + 1);
+        ConsoleUI::gotoXY(17, y + rows * 2 + 1);
         cout << "ORDER TOTAL: $" << orders[OrderIdx].getTotal();
 
         // Bottom border
@@ -318,9 +318,9 @@ void AdminUI::displayPurchasedHistory(vector<Order> orders) {
         cout << char(195);
         ConsoleUI::gotoXY(x, y + rows * 2);
         cout << char(195);
-        ConsoleUI::gotoXY(x + 105, y);
+        ConsoleUI::gotoXY(x + 89, y);
         cout << char(180);
-        ConsoleUI::gotoXY(x + 105, y + rows * 2);
+        ConsoleUI::gotoXY(x + 89, y + rows * 2);
         cout << char(180);
 
 
@@ -442,8 +442,8 @@ void AdminUI::displaySaleStatistics(vector<SalesRecord> salesRecords, float tota
         std::cout << "D";
 
 
-        printFrame(40, 25, 40, 3);
-        ConsoleUI::gotoXY(50, 26);
+        printFrame(40, 26, 40, 3);
+        ConsoleUI::gotoXY(50, 27);
         cout << "TOTAL REVENUE: $" << totalRevenue;
         
         printRepeatMessage(2, 1, "EXIT");   
@@ -484,7 +484,7 @@ Music AdminUI::getNewMusicDetails() {
     // Get item name with validation
     string name = getValidatedInput<string>("ENTER MUSIC NAME: ",
         [](const string& prompt) {
-            return InputChecker::validateString(prompt, 32, 11);
+            return InputChecker::checkString(prompt, 32, 11);
         },
         32, 11
     );
@@ -492,7 +492,7 @@ Music AdminUI::getNewMusicDetails() {
     // Get artist name with validation
     string artist = getValidatedInput<string>("ENTER ARTIST    : ",
         [](const string& prompt) {
-            return InputChecker::validateString(prompt, 32, 13);
+            return InputChecker::checkString(prompt, 32, 13);
         },
         32, 13
     );
@@ -500,7 +500,7 @@ Music AdminUI::getNewMusicDetails() {
     // Get genre with validation
     string genre = getValidatedInput<string>("ENTER GENRE     : ",
         [](const string& prompt) {
-            return InputChecker::validateString(prompt, 32, 15);
+            return InputChecker::checkString(prompt, 32, 15);
         },
         32, 15
     );
@@ -509,7 +509,7 @@ Music AdminUI::getNewMusicDetails() {
     float price = getValidatedInput<float>(
         "ENTER PRICE     : ",
         [](const std::string& p) { 
-            return InputChecker::validateFloat(p, 32, 17, 0.0F); 
+            return InputChecker::checkFloat(p, 32, 17, 0.0F); 
         },
         32, 17
     );
@@ -518,7 +518,7 @@ Music AdminUI::getNewMusicDetails() {
     int quantity = getValidatedInput<int>(
         "ENTER QUANTITY  : ",
         [](const std::string& p) { 
-            return InputChecker::validateInt(p, 32, 19, 0); 
+            return InputChecker::checkInt(p, 32, 19, 0); 
         },
         32, 19
     );

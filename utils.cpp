@@ -85,8 +85,6 @@ void printRepeatMessage(int x, int y, string instructions) {
 }
 
 void printFrame(int x, int y, int width, int height) {
-    ConsoleUI::setColor(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); // Màu trắng sáng
-
     ConsoleUI::gotoXY(x, y); std::cout << char(201); // góc trên trái
     for (int i = 1; i < width - 1; ++i) std::cout << char(205); // cạnh trên
     std::cout << char(187); // góc trên phải
@@ -100,12 +98,9 @@ void printFrame(int x, int y, int width, int height) {
     for (int i = 1; i < width - 1; ++i) std::cout << char(205); // cạnh dưới
     std::cout << char(188); // góc dưới phải
 
-    ConsoleUI::setColor(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE); // Trả lại màu mặc định
 }
 
 void printFrameOptions(int x, int y, int width, int select) {
-    ConsoleUI::setColor(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); // Màu trắng sáng
-
     // Vẽ cạnh trên của ô đầu tiên
     ConsoleUI::gotoXY(x, y);
     std::cout << char(218); // ┌
@@ -135,8 +130,6 @@ void printFrameOptions(int x, int y, int width, int select) {
     std::cout << char(192); // └
     for (int j = 1; j < width - 1; ++j) std::cout << char(196); // ─
     std::cout << char(217); // ┘
-
-    ConsoleUI::setColor(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE); // Trả lại màu mặc định
 }
 
  void printInstructions(const string& instructions, int x, int y) {

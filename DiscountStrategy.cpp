@@ -33,7 +33,7 @@ void PercentageDiscountStrategy::setValue(int value) {
 }
 
 string PercentageDiscountStrategy::toString() const {
-    return " Percentage discount: " + to_string(percentage) + "%";
+    return "Percentage discount: " + to_string(percentage) + "%";
 }
 
 
@@ -56,6 +56,6 @@ void FixedDiscountStrategy::setValue(int value) {
 }
 
 string FixedDiscountStrategy::toString() const {
-    return " Fixed discount: " + to_string(amount) + "$";
+    return "Fixed discount: " + to_string(amount) + "$";
 }
 

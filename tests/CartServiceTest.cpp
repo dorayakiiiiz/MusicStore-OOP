@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "../CartService.h"
 #include "../Cart.h"
-#include "MockDao.h"
+#include "MockSQLDao.h"
 #include <memory>
 
 // Tạo subclass của CartService cho testing
@@ -12,13 +12,13 @@ public:
 
 class CartServiceTest : public ::testing::Test {
 protected:
-    std::shared_ptr<MockDao> mockDao;
+    std::shared_ptr<MockSqlDao> mockDao;
     std::shared_ptr<TestCartService> service;
     Cart cart;
     
     void SetUp() override {
         // Tạo mock dao
-        mockDao = std::make_shared<MockDao>();
+        mockDao = std::make_shared<MockSqlDao>();
         
         // Test data
         std::vector<Music> testItems = {

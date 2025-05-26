@@ -74,3 +74,19 @@ TEST_F(CartTest, Clear) {
     auto items = cart.getItems();
     EXPECT_TRUE(items.empty());
 }
+
+// Test trường hợp đặc biệt
+TEST_F(CartTest, SpecialCases) {
+    // Thêm item với số lượng 0
+    cart.addItems(testMusic1, 0);
+    auto items = cart.getItems();
+    ASSERT_EQ(1, items.size());
+    EXPECT_EQ(0, items[0].getQuantity());
+    
+    // Thêm item với số lượng âm
+    cart.clear();
+    cart.addItems(testMusic1, -1);
+    items = cart.getItems();
+    ASSERT_EQ(1, items.size());
+    EXPECT_EQ(-1, items[0].getQuantity());
+}

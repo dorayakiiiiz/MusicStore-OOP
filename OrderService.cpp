@@ -48,7 +48,6 @@ void OrderService::deleteOrder(const string& username) {
     // Find and delete the order for the specified user
     for (int i = 0; i < orders.size(); ++i) {
         if (orders[i].getUsername() == username) {
-            cout << "\t" << (dataProvider->order()->deleteById(i + 1) ? "deleted order" : "failed to delete order") << '\n';
             orders.erase(orders.begin() + i);
             i--;
         }

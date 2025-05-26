@@ -111,7 +111,7 @@ bool RemoveItemsCommand::execute() {
         int id = getValidatedInput<int>(
             "ENTER ITEM ID TO REMOVE: ",
             [&items](const string& prompt) {
-                return InputChecker::validateInt(prompt, 9, 26, 1, items.size());
+                return InputChecker::checkInt(prompt, 9, 26, 1, items.size());
             },
             9, 26
         );
@@ -171,7 +171,7 @@ bool UpdatePriceCommand::execute() {
         int id = getValidatedInput<int>(
             "ENTER ITEM ID TO UPDATE: ",
             [&items](const string& prompt) {
-                return InputChecker::validateInt(prompt, 9, 24, 1, items.size());
+                return InputChecker::checkInt(prompt, 9, 24, 1, items.size());
             },
             9, 24
         );
@@ -180,7 +180,7 @@ bool UpdatePriceCommand::execute() {
         float newPrice = getValidatedInput<float>(
             "ENTER NEW PRICE        : ",
             [](const string& prompt) {
-                return InputChecker::validateFloat(prompt, 9, 26, 0.0f);
+                return InputChecker::checkFloat(prompt, 9, 26, 0.0f);
             },
             9, 26
         );
@@ -261,7 +261,7 @@ bool ViewAllPurchaseHistoriesCommand::execute() {
         int id = getValidatedInput<int>(
             "ENTER CUSTOMER ID TO VIEW PURCHASE HISTORY: ",
             [&customer](const string& prompt_input) {
-                return InputChecker::validateInt(prompt_input, 22, 25, 1, customer.size());
+                return InputChecker::checkInt(prompt_input, 22, 25, 1, customer.size());
             },
             22, 25
         );
@@ -331,7 +331,7 @@ bool DeleteUserCommand::execute() {
         int id = getValidatedInput<int>(
             "ENTER USER ID TO DELETE: ",
             [&users](const string& prompt_input) {
-                return InputChecker::validateInt(prompt_input, 22, 26, 1, users.size());
+                return InputChecker::checkInt(prompt_input, 22, 26, 1, users.size());
             },
             22, 26
         );

@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "../MusicService.h"
 #include "../SearchFactory.h"
-#include "MockDao.h"
+#include "MockSQLDao.h"
 #include <memory>
 
 // Tạo subclass của MusicService cho testing
@@ -12,12 +12,12 @@ public:
 
 class MusicServiceTest : public ::testing::Test {
 protected:
-    std::shared_ptr<MockDao> mockDao;
+    std::shared_ptr<MockSqlDao> mockDao;
     std::shared_ptr<TestMusicService> service;
     
     void SetUp() override {
         // Tạo mock dao
-        mockDao = std::make_shared<MockDao>();
+        mockDao = std::make_shared<MockSqlDao>();
         
         // Test data
         std::vector<Music> testItems = {
@@ -115,4 +115,14 @@ TEST_F(MusicServiceTest, RemoveSoldOutItems) {
     ASSERT_EQ(2, allItems.size());
     EXPECT_EQ("Song1", allItems[0].getName());
     EXPECT_EQ("Song3", allItems[1].getName());
+}
+
+// Test invalid search criteria
+TEST_F(MusicServiceTest, InvalidSearchCriteria) {
+    auto allItems = service->getAllMusic();
+    
+    // Test với criteria không hợp lệ
+    EXPECT_THROW({
+        service->searchMusic(allItems, static_cast<SearchType>(999), "keyword");
+    }, std::invalid_argument);
 }

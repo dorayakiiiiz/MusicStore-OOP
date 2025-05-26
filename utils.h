@@ -113,11 +113,11 @@ T getValidatedInput(const string& prompt, function<tuple<bool, T, Error>(const s
         clearScreen(promptX, promptY, prompt.size() + 8, 1);
         tie(isValid, value, error) = validatorFunc(prompt);
         if (!isValid) {;
-            printFrame(61, 25, error.message.size() + 6, 3);
-            printMessage(error.message, 63, 26);
+            printFrame(61, 26, error.message.size() + 6, 3);
+            printMessage(error.message, 63, 27);
             printRepeatMessage(107, 1, "CONTINUE");
             char repeat = _getch();
-            clearScreen(61, 25, error.message.size() + 6, 3);
+            clearScreen(61, 26, error.message.size() + 6, 3);
             clearScreen(107, 1, 11, 4);
         }
     } while (!isValid);

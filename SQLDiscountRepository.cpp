@@ -256,6 +256,8 @@ bool SqlDiscountRepository::deleteById(int id) {
     return success;
 }
 
-// Các hàm không dùng vẫn giữ nguyên
+// do nothing
 bool SqlDiscountRepository::updateById(int id, const shared_ptr<Discount>& discount) { return false; }
+
+// do nothing
 shared_ptr<Discount> SqlDiscountRepository::getById(int id) { return nullptr; }

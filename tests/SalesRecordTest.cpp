@@ -45,11 +45,17 @@ TEST_F(SalesRecordTest, SpecialValues) {
     EXPECT_EQ(0, zeroSales.getSold());
     EXPECT_FLOAT_EQ(0.0f, zeroSales.getRevenue());
     
-    // Record với doanh thu âm (không lí tưởng nhưng nên xử lí được)
+    // Record với doanh thu âm
     SalesRecord negativeRevenue("Neg Rev", "Artist", "Genre", 5, -10.5f);
     EXPECT_FLOAT_EQ(-10.5f, negativeRevenue.getRevenue());
     
-    // Record với lượng bán âm (không lí tưởng nhưng nên xử lí được)
+    // Record với lượng bán âm
     SalesRecord negativeSold("Neg Sold", "Artist", "Genre", -3, 30.0f);
     EXPECT_EQ(-3, negativeSold.getSold());
+    
+    // Record với strings trống
+    SalesRecord emptyStrings("", "", "", 10, 99.90f);
+    EXPECT_EQ("", emptyStrings.getName());
+    EXPECT_EQ("", emptyStrings.getArtist());
+    EXPECT_EQ("", emptyStrings.getGenre());
 }

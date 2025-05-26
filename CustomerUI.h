@@ -103,11 +103,6 @@ public:
      * @brief Displays a warning when attempting to log out with items still in cart
      */
     static void displayCartWarningMessage();
-    
-    /**
-     * @brief Displays a message for invalid menu choices
-     */
-    static void displayInvalidChoiceMessage();
 };
 
 #endif

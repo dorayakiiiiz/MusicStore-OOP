@@ -9,39 +9,32 @@
 #include "../SalesRecord.h"
 #include <memory>
 #include <vector>
-#include <algorithm>
 
-// Mock implementation for IRepository<Music>
+// Mock repository implementation for Music
 class MockMusicRepository : public IRepository<Music> {
 private:
     std::vector<Music> items;
-
 public:
-    std::vector<Music> getAll() override { 
-        return items; 
-    }
+    std::vector<Music> getAll() override { return items; }
     
-    Music getById(int id) override {
+    Music getById(int id) override { 
         if (id > 0 && id <= items.size()) {
-            return items[id - 1];
+            return items[id-1];
         }
-        return Music();
+        return Music(); 
     }
     
-    bool add(const Music& item) override {
-        // Check for duplicates
-        for (const auto& existing : items) {
-            if (existing == item) {
-                return false;
-            }
+    bool add(const Music& entity) override { 
+        for (const auto& item : items) {
+            if (item == entity) return false; // Check for duplicates
         }
-        items.push_back(item);
+        items.push_back(entity); 
         return true;
     }
     
-    bool updateById(int id, const Music& item) override {
+    bool updateById(int id, const Music& entity) override {
         if (id > 0 && id <= items.size()) {
-            items[id - 1] = item;
+            items[id-1] = entity;
             return true;
         }
         return false;
@@ -49,49 +42,42 @@ public:
     
     bool deleteById(int id) override {
         if (id > 0 && id <= items.size()) {
-            items.erase(items.begin() + (id - 1));
+            items.erase(items.begin() + (id-1));
             return true;
         }
         return false;
     }
     
-    // Helper for tests
     void setItems(const std::vector<Music>& newItems) {
         items = newItems;
     }
 };
 
-// Mock implementation for IRepository<shared_ptr<User>>
+// Mock repository implementation for User
 class MockUserRepository : public IRepository<std::shared_ptr<User>> {
 private:
     std::vector<std::shared_ptr<User>> users;
-
 public:
-    std::vector<std::shared_ptr<User>> getAll() override {
-        return users;
-    }
+    std::vector<std::shared_ptr<User>> getAll() override { return users; }
     
-    std::shared_ptr<User> getById(int id) override {
+    std::shared_ptr<User> getById(int id) override { 
         if (id > 0 && id <= users.size()) {
-            return users[id - 1];
+            return users[id-1];
         }
-        return nullptr;
+        return nullptr; 
     }
     
-    bool add(const std::shared_ptr<User>& user) override {
-        // Check for duplicate usernames
-        for (const auto& existing : users) {
-            if (existing->getUsername() == user->getUsername()) {
-                return false;
-            }
+    bool add(const std::shared_ptr<User>& entity) override { 
+        for (const auto& user : users) {
+            if (user->getUsername() == entity->getUsername()) return false;
         }
-        users.push_back(user);
+        users.push_back(entity); 
         return true;
     }
     
-    bool updateById(int id, const std::shared_ptr<User>& user) override {
+    bool updateById(int id, const std::shared_ptr<User>& entity) override {
         if (id > 0 && id <= users.size()) {
-            users[id - 1] = user;
+            users[id-1] = entity;
             return true;
         }
         return false;
@@ -99,44 +85,39 @@ public:
     
     bool deleteById(int id) override {
         if (id > 0 && id <= users.size()) {
-            users.erase(users.begin() + (id - 1));
+            users.erase(users.begin() + (id-1));
             return true;
         }
         return false;
     }
     
-    // Helper for tests
     void setUsers(const std::vector<std::shared_ptr<User>>& newUsers) {
         users = newUsers;
     }
 };
 
-// Mock implementation for IRepository<Order>
+// Mock repository implementation for Order
 class MockOrderRepository : public IRepository<Order> {
 private:
     std::vector<Order> orders;
-
 public:
-    std::vector<Order> getAll() override {
-        return orders;
-    }
+    std::vector<Order> getAll() override { return orders; }
     
-    Order getById(int id) override {
+    Order getById(int id) override { 
         if (id > 0 && id <= orders.size()) {
-            return orders[id - 1];
+            return orders[id-1];
         }
-        // Return default order
-        return Order("", {}, 0.0f);
+        return Order(); 
     }
     
-    bool add(const Order& order) override {
-        orders.push_back(order);
+    bool add(const Order& entity) override { 
+        orders.push_back(entity); 
         return true;
     }
     
-    bool updateById(int id, const Order& order) override {
+    bool updateById(int id, const Order& entity) override {
         if (id > 0 && id <= orders.size()) {
-            orders[id - 1] = order;
+            orders[id-1] = entity;
             return true;
         }
         return false;
@@ -144,49 +125,42 @@ public:
     
     bool deleteById(int id) override {
         if (id > 0 && id <= orders.size()) {
-            orders.erase(orders.begin() + (id - 1));
+            orders.erase(orders.begin() + (id-1));
             return true;
         }
         return false;
     }
     
-    // Helper for tests
     void setOrders(const std::vector<Order>& newOrders) {
         orders = newOrders;
     }
 };
 
-// Mock implementation for IRepository<shared_ptr<Discount>>
+// Mock repository implementation for Discount
 class MockDiscountRepository : public IRepository<std::shared_ptr<Discount>> {
 private:
     std::vector<std::shared_ptr<Discount>> discounts;
-
 public:
-    std::vector<std::shared_ptr<Discount>> getAll() override {
-        return discounts;
-    }
+    std::vector<std::shared_ptr<Discount>> getAll() override { return discounts; }
     
-    std::shared_ptr<Discount> getById(int id) override {
+    std::shared_ptr<Discount> getById(int id) override { 
         if (id > 0 && id <= discounts.size()) {
-            return discounts[id - 1];
+            return discounts[id-1];
         }
-        return nullptr;
+        return nullptr; 
     }
     
-    bool add(const std::shared_ptr<Discount>& discount) override {
-        // Check for duplicate codes
-        for (const auto& existing : discounts) {
-            if (existing->getCode() == discount->getCode()) {
-                return false;
-            }
+    bool add(const std::shared_ptr<Discount>& entity) override { 
+        for (const auto& discount : discounts) {
+            if (discount->getCode() == entity->getCode()) return false;
         }
-        discounts.push_back(discount);
+        discounts.push_back(entity); 
         return true;
     }
     
-    bool updateById(int id, const std::shared_ptr<Discount>& discount) override {
+    bool updateById(int id, const std::shared_ptr<Discount>& entity) override {
         if (id > 0 && id <= discounts.size()) {
-            discounts[id - 1] = discount;
+            discounts[id-1] = entity;
             return true;
         }
         return false;
@@ -194,54 +168,61 @@ public:
     
     bool deleteById(int id) override {
         if (id > 0 && id <= discounts.size()) {
-            discounts.erase(discounts.begin() + (id - 1));
+            discounts.erase(discounts.begin() + (id-1));
             return true;
         }
         return false;
     }
     
-    // Helper for tests
     void setDiscounts(const std::vector<std::shared_ptr<Discount>>& newDiscounts) {
         discounts = newDiscounts;
     }
 };
 
-// Mock implementation for IRepository<SalesRecord>
+// Mock repository implementation for SalesRecord
 class MockSalesRecordRepository : public IRepository<SalesRecord> {
 private:
     std::vector<SalesRecord> records;
-
 public:
-    std::vector<SalesRecord> getAll() override {
-        return records;
-    }
+    std::vector<SalesRecord> getAll() override { return records; }
     
-    SalesRecord getById(int id) override {
+    SalesRecord getById(int id) override { 
         if (id > 0 && id <= records.size()) {
-            return records[id - 1];
+            return records[id-1];
         }
-        return SalesRecord();
+        return SalesRecord(); 
     }
     
-    bool add(const SalesRecord& record) override {
-    // Kiểm tra nếu record đã tồn tại (dựa trên name và artist)
-    for (auto& existingRecord : records) {
-        if (existingRecord.getName() == record.getName() && 
-            existingRecord.getArtist() == record.getArtist()) {
-            // Nếu đã có, cập nhật thông tin thay vì thêm mới
-            // Code thật sẽ làm việc này trong SQLSalesRecordRepository
-            return true;
+    // Implementation for add() in MockSalesRecordRepository:
+    bool add(const SalesRecord& entity) override {
+        // Check if record with same name and artist already exists
+        for (auto& record : records) {
+            if (record.getName() == entity.getName() && record.getArtist() == entity.getArtist()) {
+                // Update existing record by adding sold quantities and revenue
+                int newSold = record.getSold() + entity.getSold();
+                float newRevenue = record.getRevenue() + entity.getRevenue();
+                
+                // We can't directly modify the record, so we need to replace it
+                // (In a real implementation, this would be an SQL UPDATE)
+                record = SalesRecord(
+                    record.getName(),
+                    record.getArtist(),
+                    record.getGenre(),
+                    newSold,
+                    newRevenue
+                );
+                return true;
+            }
         }
+        
+        // If no matching record found, add as new
+        records.push_back(entity);
+        return true;
     }
-    
-    // Nếu không tìm thấy, thêm mới
-    records.push_back(record);
-    return true;
-}
-    
-    bool updateById(int id, const SalesRecord& record) override {
+        
+    bool updateById(int id, const SalesRecord& entity) override {
         if (id > 0 && id <= records.size()) {
-            records[id - 1] = record;
+            records[id-1] = entity;
             return true;
         }
         return false;
@@ -249,20 +230,19 @@ public:
     
     bool deleteById(int id) override {
         if (id > 0 && id <= records.size()) {
-            records.erase(records.begin() + (id - 1));
+            records.erase(records.begin() + (id-1));
             return true;
         }
         return false;
     }
     
-    // Helper for tests
     void setRecords(const std::vector<SalesRecord>& newRecords) {
         records = newRecords;
     }
 };
 
-// Mock SqlDao implementation
-class MockDao : public IDataProvider {
+// Main mock data provider that implements IDataProvider
+class MockSqlDao : public IDataProvider {
 private:
     std::shared_ptr<MockMusicRepository> musicRepo;
     std::shared_ptr<MockUserRepository> userRepo;
@@ -271,7 +251,7 @@ private:
     std::shared_ptr<MockSalesRecordRepository> salesRecordRepo;
 
 public:
-    MockDao() {
+    MockSqlDao() {
         musicRepo = std::make_shared<MockMusicRepository>();
         userRepo = std::make_shared<MockUserRepository>();
         orderRepo = std::make_shared<MockOrderRepository>();
@@ -282,43 +262,43 @@ public:
     std::shared_ptr<IRepository<Music>> music() override {
         return musicRepo;
     }
-    
+
     std::shared_ptr<IRepository<std::shared_ptr<User>>> user() override {
         return userRepo;
     }
-    
+
     std::shared_ptr<IRepository<Order>> order() override {
         return orderRepo;
     }
-    
+
     std::shared_ptr<IRepository<std::shared_ptr<Discount>>> discount() override {
         return discountRepo;
     }
-    
+
     std::shared_ptr<IRepository<SalesRecord>> salesRecord() override {
         return salesRecordRepo;
     }
-    
-    // Helpers for testing
+
+    // Helper methods for setting test data
     void setMusicItems(const std::vector<Music>& items) {
-        std::static_pointer_cast<MockMusicRepository>(musicRepo)->setItems(items);
+        musicRepo->setItems(items);
     }
-    
+
     void setUsers(const std::vector<std::shared_ptr<User>>& users) {
-        std::static_pointer_cast<MockUserRepository>(userRepo)->setUsers(users);
+        userRepo->setUsers(users);
     }
-    
+
     void setOrders(const std::vector<Order>& orders) {
-        std::static_pointer_cast<MockOrderRepository>(orderRepo)->setOrders(orders);
+        orderRepo->setOrders(orders);
     }
-    
+
     void setDiscounts(const std::vector<std::shared_ptr<Discount>>& discounts) {
-        std::static_pointer_cast<MockDiscountRepository>(discountRepo)->setDiscounts(discounts);
+        discountRepo->setDiscounts(discounts);
     }
-    
+
     void setSalesRecords(const std::vector<SalesRecord>& records) {
-        std::static_pointer_cast<MockSalesRecordRepository>(salesRecordRepo)->setRecords(records);
+        salesRecordRepo->setRecords(records);
     }
 };
 
-#endif
+#endif // MOCK_SQL_DAO_H

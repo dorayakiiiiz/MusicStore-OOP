@@ -1,13 +1,8 @@
-E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\AuthServiceTest.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\AuthServiceTest.obj
 E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\CartServiceTest.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\CartServiceTest.obj
 E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\CartTest.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\CartTest.obj
-E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\CommandTest.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\CommandTest.obj
 E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\ControllerFactoryTest.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\ControllerFactoryTest.obj
-E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\ControllerPatternTest.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\ControllerPatternTest.obj
-E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\DatabaseConnectorTest.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\DatabaseConnectorTest.obj
 E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\DiscountFactoryTest.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\DiscountFactoryTest.obj
 E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\DiscountServiceTest.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\DiscountServiceTest.obj
-E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\DiscountStrategyTest.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\DiscountStrategyTest.obj
 E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\DiscountTest.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\DiscountTest.obj
 E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\MusicServiceTest.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\MusicServiceTest.obj
 E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\MusicTest.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\MusicTest.obj
@@ -16,12 +11,9 @@ E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\OrderTest.cpp;E:\PPLTHDT\Proj
 E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\SalesRecordServiceTest.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\SalesRecordServiceTest.obj
 E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\SalesRecordTest.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\SalesRecordTest.obj
 E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\SearchFactoryTest.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\SearchFactoryTest.obj
-E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\SearchTest.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\SearchTest.obj
-E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\ServiceIntegrationTest.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\ServiceIntegrationTest.obj
-E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\StoreAppTest.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\StoreAppTest.obj
+E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\SearchStrategyTest.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\SearchStrategyTest.obj
 E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\UserServiceTest.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\UserServiceTest.obj
 E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\UserTest.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\UserTest.obj
-E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\UtilsTest.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\UtilsTest.obj
 E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\AdminCommands.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\AdminCommands.obj
 E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\AdminController.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\AdminController.obj
 E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\AdminUI.cpp;E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\build\run_tests.dir\Debug\AdminUI.obj

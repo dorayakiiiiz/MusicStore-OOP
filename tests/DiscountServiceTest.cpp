@@ -1,15 +1,15 @@
 #include "gtest/gtest.h"
 #include "../DiscountService.h"
-#include "MockDao.h"
+#include "MockSQLDao.h"
 #include <memory>
 
 // Tạo subclass của DiscountService cho testing
 class TestDiscountService : public DiscountService {
 public:
-    TestDiscountService(std::shared_ptr<IDataProvider> provider) : DiscountService(provider) {}
+    TestDiscountService(std::shared_ptr<IDataProvider> provider) : DiscountService(provider) {};
     
     // Make generateRandomCode return a predictable value for testing
-    string generateRandomCode()  {
+    std::string generateRandomCode() override {
         static int counter = 0;
         return "TEST" + std::to_string(++counter);
     }
@@ -17,13 +17,13 @@ public:
 
 class DiscountServiceTest : public ::testing::Test {
 protected:
-    std::shared_ptr<MockDao> mockDao;
+    std::shared_ptr<MockSqlDao> mockDao;
     std::shared_ptr<TestDiscountService> service;
     std::vector<std::shared_ptr<Discount>> testDiscounts;
     
     void SetUp() override {
         // Tạo mock dao
-        mockDao = std::make_shared<MockDao>();
+        mockDao = std::make_shared<MockSqlDao>();
         
         // Create test data
         auto percentageStrategy = std::make_shared<PercentageDiscountStrategy>(20);

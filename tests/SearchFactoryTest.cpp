@@ -6,47 +6,32 @@
 class SearchFactoryTest : public ::testing::Test {
 protected:
     SearchFactory factory;
-
-    void SetUp() override {
-        // Factory được khởi tạo mặc định trong constructor
-    }
 };
 
-// Test tạo các chiến lược tìm kiếm
-TEST_F(SearchFactoryTest, CreateSearch) {
-    // Tạo strategy NAME
+// Test createSearch cho các loại search
+TEST_F(SearchFactoryTest, CreateSearchByType) {
+    // Test với NAME search
     auto nameSearch = factory.createSearch(SearchType::NAME);
     ASSERT_NE(nullptr, nameSearch);
+    EXPECT_TRUE(dynamic_cast<NameSearch*>(nameSearch.get()) != nullptr);
     
-    // Tạo strategy ARTIST
+    // Test với ARTIST search
     auto artistSearch = factory.createSearch(SearchType::ARTIST);
     ASSERT_NE(nullptr, artistSearch);
+    EXPECT_TRUE(dynamic_cast<ArtistSearch*>(artistSearch.get()) != nullptr);
     
-    // Tạo strategy GENRE
+    // Test với GENRE search
     auto genreSearch = factory.createSearch(SearchType::GENRE);
     ASSERT_NE(nullptr, genreSearch);
-    
-    // Kiểm tra các strategy có hoạt động đúng không
-    std::vector<Music> testItems = {
-        Music("Test Song", "Test Artist", "Test Genre", 9.99f, 5)
-    };
-    
-    // NAME search should find by name
-    auto nameResults = nameSearch->search(testItems, "Test Song");
-    EXPECT_EQ(1, nameResults.size());
-    
-    // ARTIST search should find by artist
-    auto artistResults = artistSearch->search(testItems, "Test Artist");
-    EXPECT_EQ(1, artistResults.size());
-    
-    // GENRE search should find by genre
-    auto genreResults = genreSearch->search(testItems, "Test Genre");
-    EXPECT_EQ(1, genreResults.size());
+    EXPECT_TRUE(dynamic_cast<GenreSearch*>(genreSearch.get()) != nullptr);
 }
 
-// Test với search type không hợp lệ
-TEST_F(SearchFactoryTest, InvalidSearchType) {
-    // Thử tạo strategy với giá trị không hợp lệ (cast enum)
-    auto invalidSearch = factory.createSearch(static_cast<SearchType>(999));
+// Test với invalid search type
+TEST_F(SearchFactoryTest, CreateSearchInvalidType) {
+    // Tạo một SearchType không hợp lệ (ngoài enum)
+    SearchType invalidType = static_cast<SearchType>(999);
+    auto invalidSearch = factory.createSearch(invalidType);
+    
+    // Expected: nullptr hoặc exception
     EXPECT_EQ(nullptr, invalidSearch);
 }
