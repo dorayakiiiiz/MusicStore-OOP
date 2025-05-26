@@ -6,8 +6,8 @@
 ### GVHD: Trần Duy Quang
 
 ## THÀNH VIÊN NHÓM
-- 23120197 - Trà Văn Sỹ (Nhóm trưởng)
-- 23120209 - Lê Hoàng Nhật Anh
+- **23120197 - Trà Văn Sỹ (Nhóm trưởng)**
+- **23120209 - Lê Hoàng Nhật Anh**
 
 ## CÁC CÔNG VIỆC MÀ TỪNG THÀNH VIÊN ĐÃ THỰC HIỆN
 ### Trà Văn Sỹ
@@ -129,43 +129,41 @@ Dự án được xây dựng theo mô hình kiến trúc nhiều lớp (Layered
 
 Dự án Music Store được thiết kế và triển khai tuân thủ đầy đủ 5 nguyên tắc SOLID, đảm bảo mã nguồn dễ mở rộng, bảo trì, kiểm thử và phát triển lâu dài.
 
-#### Single Responsibility Principle (SRP) - Nguyên tắc đơn trách nhiệm
-- **Model (Music, User, Order, Cart, Discount, SalesRecord):** Chỉ quản lý dữ liệu, thuộc tính và các thao tác getter/setter, không chứa logic nghiệp vụ.
-- **Service (MusicService, UserService, OrderService, CartService, DiscountService, AuthService, SalesRecordService):** Mỗi service chỉ xử lý logic nghiệp vụ liên quan đến một miền chức năng duy nhất (quản lý nhạc, người dùng, đơn hàng, giỏ hàng, voucher, xác thực, thống kê).
-- **Controller (AdminController, CustomerController):** Điều phối luồng xử lý giữa UI và Service, không xử lý logic nghiệp vụ hay hiển thị.
-- **UI (AdminUI, CustomerUI, ConsoleUI):** Chỉ chịu trách nhiệm hiển thị dữ liệu, lấy input từ người dùng, không xử lý logic nghiệp vụ.
-- **Repository (SqlMusicRepository, SqlUserRepository, SqlOrderRepository, SqlDiscountRepository, SqlSalesRecordRepository):** Chỉ thực hiện truy xuất, lưu trữ dữ liệu với database, không xử lý nghiệp vụ.
-- **Command (SignUpCommand, LoginCommand, ExitCommand, ViewMusicListCommand, AddToCartCommand, CheckoutCommand, ...):** Mỗi command đóng gói một hành động duy nhất trong menu, không kiêm nhiệm nhiều chức năng.
-- **Factory (ControllerFactory, SearchFactory, DiscountFactory):** Chỉ chịu trách nhiệm khởi tạo đối tượng phù hợp với tham số đầu vào.
-- **Tiện ích (InputChecker, DatabaseConnector):** Chỉ kiểm tra dữ liệu đầu vào hoặc quản lý kết nối database.
+#### Single Responsibility Principle (SRP)
+- **Model (`Music`, `User`, `Order`, `Cart`, `Discount`, `SalesRecord`):** Chỉ quản lý dữ liệu, thuộc tính và các thao tác getter/setter, không chứa logic nghiệp vụ.
+- **Service (`MusicService`, `UserService`, `OrderService`, `CartService`, `DiscountService`, `AuthService`, `SalesRecordService`):** Mỗi service chỉ xử lý logic nghiệp vụ liên quan đến một miền chức năng duy nhất (quản lý nhạc, người dùng, đơn hàng, giỏ hàng, voucher, xác thực, thống kê).
+- **Controller (`AdminController`, `CustomerController`):** Điều phối luồng xử lý giữa UI và Service, không xử lý logic nghiệp vụ hay hiển thị.
+- **UI (`AdminUI`, `CustomerUI`, `ConsoleUI`):** Chỉ chịu trách nhiệm hiển thị dữ liệu, lấy input từ người dùng, không xử lý logic nghiệp vụ.
+- **Repository (`SqlMusicRepository`, `SqlUserRepository`, `SqlOrderRepository`, `SqlDiscountRepository`, `SqlSalesRecordRepository`):** Chỉ thực hiện truy xuất, lưu trữ dữ liệu với database, không xử lý nghiệp vụ.
+- **Command (`SignUpCommand`, `LoginCommand`, `ExitCommand`, `ViewMusicListCommand`, `AddToCartCommand`, `CheckoutCommand`, ...):** Mỗi command đóng gói một hành động duy nhất trong menu, không kiêm nhiệm nhiều chức năng.
+- **Factory (`ControllerFactory`, `SearchFactory`, `DiscountFactory`):** Chỉ chịu trách nhiệm khởi tạo đối tượng phù hợp với tham số đầu vào.
+- **Tiện ích (`InputChecker`, `DatabaseConnector`):** Chỉ kiểm tra dữ liệu đầu vào hoặc quản lý kết nối database.
 
-#### Open/Closed Principle (OCP) - Nguyên tắc đóng/mở
-- **Các interface/abstract class (IRepository, ISearch, DiscountStrategy, Command, IController):** Cho phép mở rộng thêm các chức năng mới (repository mới, chiến lược tìm kiếm mới, loại giảm giá mới, command mới, controller mới) mà không cần sửa code cũ.
+#### Open/Closed Principle (OCP)
+- **Các interface/abstract class (`IRepository`, `ISearch`, `DiscountStrategy`, `Command`, `IController`):** Cho phép mở rộng thêm các chức năng mới (repository mới, chiến lược tìm kiếm mới, loại giảm giá mới, command mới, controller mới) mà không cần sửa code cũ.
 - **Strategy Pattern:** Thêm chiến lược tìm kiếm mới (NameSearch, ArtistSearch, GenreSearch) hoặc loại giảm giá mới (PercentageDiscountStrategy, FixedDiscountStrategy) chỉ cần kế thừa interface và đăng ký với Factory, không phải sửa code Service hay Discount.
 - **Command Pattern:** Thêm chức năng mới cho menu chỉ cần tạo class command mới, không phải sửa code Controller hay Invoker.
 - **Factory Pattern:** Khi có loại controller, search, discount mới, chỉ cần mở rộng Factory, không phải sửa code gọi Factory.
 - **Repository Pattern:** Thay đổi nguồn dữ liệu (ví dụ từ SQL sang file) chỉ cần tạo repository mới, không phải sửa code Service.
 - **UI:** Có thể mở rộng thêm UI mới (AdminUI, CustomerUI, ConsoleUI) mà không ảnh hưởng đến các lớp khác.
 
-#### Liskov Substitution Principle (LSP) - Nguyên tắc thay thế Liskov
-- **User:** Admin và Customer đều kế thừa User, có thể sử dụng thay thế ở mọi nơi yêu cầu User (ví dụ: currentUser trong AuthService, các Command, Service).
-- **DiscountStrategy:** PercentageDiscountStrategy và FixedDiscountStrategy đều kế thừa DiscountStrategy, được sử dụng thay thế trong Discount, DiscountService, không cần biết cụ thể loại giảm giá.
-- **ISearch:** NameSearch, ArtistSearch, GenreSearch đều kế thừa ISearch, có thể thay thế lẫn nhau trong MusicService, SearchFactory.
-- **IController:** AdminController và CustomerController đều kế thừa IController, ControllerFactory trả về IController, các luồng xử lý không cần biết cụ thể loại controller.
-- **IRepository:** Các repository cụ thể đều kế thừa IRepository<T>, Service chỉ làm việc với IRepository<T> mà không quan tâm đến triển khai cụ thể.
+#### Liskov Substitution Principle (LSP) 
+- **`User`:** `Admin` và `Customer` đều kế thừa `User`, có thể sử dụng thay thế ở mọi nơi yêu cầu User (ví dụ: currentUser trong `AuthService`, các Command, Service).
+- **`DiscountStrategy`:** `PercentageDiscountStrategy` và `FixedDiscountStrategy` đều kế thừa `DiscountStrategy`, được sử dụng thay thế trong `Discount`, `DiscountService`, không cần biết cụ thể loại giảm giá.
+- **`ISearch`:** `NameSearch`, `ArtistSearch`, `GenreSearch` đều kế thừa `ISearch`, có thể thay thế lẫn nhau trong `MusicService`, `SearchFactory`.
+- **`IController`:** `AdminController` và `CustomerController` đều kế thừa `IController`, `ControllerFactory` trả về `IController`, các luồng xử lý không cần biết cụ thể loại controller.
+- **`IRepository`:** Các repository cụ thể đều kế thừa `IRepository<T>`, Service chỉ làm việc với `IRepository<T>` mà không quan tâm đến triển khai cụ thể.
 
-#### Interface Segregation Principle (ISP) - Nguyên tắc phân tách giao diện
-- **Các interface nhỏ, chuyên biệt:** IRepository chỉ cho CRUD, ISearch chỉ cho tìm kiếm, DiscountStrategy chỉ cho tính giảm giá, Command chỉ cho execute và getName, IController chỉ cho menu.
-- **Các Service, Controller, UI chỉ phụ thuộc vào interface cần thiết:** Ví dụ, MusicService chỉ cần IRepository<Music>, không cần biết đến repository của User hay Order.
-- **Các Factory (ControllerFactory, SearchFactory, DiscountFactory):** Chỉ trả về interface hoặc abstract class, không ép các client phụ thuộc vào các phương thức không cần thiết.
+#### Interface Segregation Principle (ISP)
+- **Các interface nhỏ, chuyên biệt:** `IRepository` chỉ cho CRUD, `ISearch` chỉ cho tìm kiếm, `DiscountStrategy` chỉ cho tính giảm giá, Command chỉ cho execute và getName, `IController` chỉ cho menu.
+- **Các Factory (`ControllerFactory`, `SearchFactory`, `DiscountFactory`):** Chỉ trả về interface hoặc abstract class, không ép các client phụ thuộc vào các phương thức không cần thiết.
 
-#### Dependency Inversion Principle (DIP) - Nguyên tắc đảo ngược phụ thuộc
-- **Service phụ thuộc abstraction:** Các Service (MusicService, UserService, ...) chỉ phụ thuộc vào IDataProvider/IRepository, không phụ thuộc vào SqlDao hay repository cụ thể.
+#### Dependency Inversion Principle (DIP)
+- **Service phụ thuộc abstraction:** Các Service (`MusicService`, `UserService`, ...) chỉ phụ thuộc vào `IDataProvider`/`IRepository`, không phụ thuộc vào `SqlDao` hay repository cụ thể.
 - **Controller phụ thuộc abstraction:** Controller chỉ làm việc với Service thông qua singleton, không khởi tạo trực tiếp Service cụ thể.
-- **Discount phụ thuộc abstraction:** Discount chỉ lưu trữ DiscountStrategy (abstraction), không phụ thuộc vào loại chiến lược cụ thể.
-- **CommandInvoker phụ thuộc abstraction:** Chỉ làm việc với Command (interface), không quan tâm đến command cụ thể.
-- **Factory trả về abstraction:** ControllerFactory trả về IController, SearchFactory trả về ISearch, DiscountFactory trả về DiscountStrategy.
-- **Khởi tạo phụ thuộc qua constructor hoặc singleton:** Các Service, Controller, Factory đều nhận hoặc khởi tạo phụ thuộc thông qua constructor hoặc phương thức getInstance, không khởi tạo cứng các đối tượng phụ thuộc bên trong.
+- **Discount phụ thuộc abstraction:** `Discount` chỉ lưu trữ `DiscountStrategy` (abstraction), không phụ thuộc vào loại chiến lược cụ thể.
+- **CommandInvoker phụ thuộc abstraction:** Chỉ làm việc với `Command` (interface), không quan tâm đến command cụ thể.
+- **Factory trả về abstraction:** `ControllerFactory` trả về `IController`, `SearchFactory` trả về `ISearch`, `DiscountFactory` trả về `DiscountStrategy`.
 
 Nhờ tuân thủ chặt chẽ các nguyên tắc SOLID ở mọi tầng (Model, Service, Controller, UI, Repository, Command, Factory), hệ thống dễ dàng mở rộng, bảo trì, kiểm thử và phát triển thêm các tính năng mới mà không ảnh hưởng đến các thành phần đã ổn định.
 
@@ -216,11 +214,16 @@ Singleton Pattern đảm bảo mỗi service hoặc resource quan trọng chỉ 
   Các service này đều sử dụng singleton để đảm bảo chỉ có một đối tượng duy nhất, được truy cập thông qua phương thức getInstance(). Tất cả các command, controller, UI đều sử dụng các service này thông qua singleton.
 - **`DatabaseConnector`**: Được thiết kế singleton để đảm bảo chỉ có một kết nối tới database SQL Server xuyên suốt chương trình. Tất cả các repository đều sử dụng `DatabaseConnector::getInstance()` để truy cập kết nối database, đảm bảo quản lý tài nguyên hiệu quả và tránh lỗi kết nối trùng lặp.
 
-### Đảm bảo chất lượng: Unit Testing
-Dự án đã được kiểm thử với tổng cộng 135 test cases, đạt tỷ lệ pass 92.6%.
-Chi tiết báo cáo kiểm thử có thể xem tại [link_đến_báo_cáo].
+### ĐẢM BẢO CHẤT LƯỢNG
+**Unit testing:** Chương trình đã được kiểm thử với 178 test cases, đạt tỷ lệ pass 100%. 
+- [Chi tiết báo cáo kiểm thử](https://docs.google.com/spreadsheets/d/1kW1PXAE2B0CP4XauVlffiyTqdsdMYj5Z/edit?usp=sharing&ouid=111498391809847142303&rtpof=true&sd=true)  
 
-### Tài liệu mô tả kiến trúc phần mềm + Coding Convention
+
+**Coding convention:** Chương trình tuân thủ theo đúng các quy định về coding convention của C++.
+- [Tài liệu Coding Convention](https://docs.google.com/document/d/10KNVaHAwrnSvY9fQ1v7uBX2IVxCTLYYALBpOFh5hXmo/edit?tab=t.0)
+
+
+### Tài liệu mô tả kiến trúc phần mềm
 - Class Diagram (cài đặt Extension Markdown Preview Mermaid Support để hiển thị)
 ```mermaid
 classDiagram
@@ -547,11 +550,51 @@ classDiagram
     DiscountService --> Discount 
 ```
     
-- [Tài liệu mô tả (tạo bằng Doxygen, chứa trong thư mục references)](references/html/index.html)
+- [Tài liệu mô tả (trong thư mục references)](references/html/index.html)
 
-- [Tài liệu Coding Convention](https://docs.google.com/document/d/10KNVaHAwrnSvY9fQ1v7uBX2IVxCTLYYALBpOFh5hXmo/edit?tab=t.0)
+### CÁC CHỦ ĐỀ NÂNG CAO
+#### 1. Kết nối và truy xuất Database SQL Server trên Cloud với ODBC
+Dự án sử dụng kết nối trực tiếp đến SQL Server trên cloud thông qua ODBC API thay vì đọc/ghi file text đơn giản:
+
+- **Quản lý kết nối với Singleton Pattern:** [`DatabaseConnector`](DatabaseConnector.h) đảm bảo chỉ có một kết nối duy nhất đến database, tự động reconnect khi mất kết nối
+- **Xử lý lỗi ODBC chuyên nghiệp:** [`ODBCErrorHandler`](DatabaseConnector.h) cung cấp thông tin chi tiết về lỗi SQL
+- **Connection String động:** Kết nối đến SQL Server cloud với chuỗi kết nối được tối ưu hóa
+- **Transaction Management:** Sử dụng commit/rollback trong [`SqlOrderRepository`](SQLOrderRepository.cpp) để đảm bảo tính toàn vẹn dữ liệu khi thêm order
+- **Prepared Statements:** Tất cả các repository sử dụng prepared statements để tránh SQL injection
+
+```cpp
+// Ví dụ transaction trong SqlOrderRepository
+SQLSetConnectAttr(hDbc, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_OFF, 0);
+// Insert operations...
+SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_COMMIT);   
+```
+
+### 2. Command Pattern với Command Invoker
+
+Triển khai triển khai Command Pattern để tách biệt giao diện người dùng và logic nghiệp vụ, giúp việc thêm hoặc sửa đổi chức năng trở nên dễ dàng.   
+- Interface Command: Command định nghĩa hợp đồng chung cho mọi lệnh trong hệ thống
+- Invoker: CommandInvoker quản lý và thực thi các lệnh, tự động tạo menu từ danh sách lệnh
+- Phân chia command theo chức năng: Chia thành StoreCommands, AdminCommands và CustomerCommands
+- Dependency Injection: Các command nhận dependencies qua constructor, tăng tính tái sử dụng
+- Menu tương tác W/S/Enter: Tự động tạo giao diện người dùng từ danh sách command
+
+```cpp
+// Ví dụ sử dụng trong AdminController
+void AdminController::menu(shared_ptr<User>& currentUser) {
+    CommandInvoker invoker("ADMIN MENU");
+    
+    invoker.addCommand(std::make_shared<ViewMusicListCommand>());
+    invoker.addCommand(std::make_shared<AddNewItemsCommand>());
+    invoker.addCommand(std::make_shared<ViewUsersCommand>());
+    // Thêm các command khác...
+    
+    invoker.executeMenu();  // Tự động hiển thị và xử lý menu
+}
+```
 
 
 ### Video demo mô tả:
+```bash
 https://youtu.be/7A5fEKxOeRI?si=2_lJkSKKqz_AJuZ-
+```
 
