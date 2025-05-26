@@ -40,19 +40,19 @@ public:
      * @param orders Vector of orders to display
      * @param username Username to filter orders by
      */
-    static void displayPurchasedHistory(const vector<Order>& orders, const string& username);
+    static void displayPurchasedHistory(const vector<Order>& orders);
     
     /**
      * @brief Displays a formatted list of all music items
      * @param items Vector containing all music items to display
      */
-    static void displayMusicList(vector<Music>& items);
+    static void displayMusicList(vector<Music>& items, int maxPerPage);
 
     /**
      * @brief Displays the current items in the shopping cart
      * @param items Vector of items in the cart
      */
-    static void displayCart(const vector<Music>& items);
+    static void displayCart(const vector<Music>& items, int maxPerPage);
     
     /**
      * @brief Displays a message when no search results are found

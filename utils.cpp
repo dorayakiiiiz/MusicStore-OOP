@@ -45,7 +45,7 @@ void printMenu(const string& header, int x, int y)
     }
     else{
         fileName = "ascii/customerMenu.txt";
-        x += 5;
+        x -= 5;
     }
 
     string line = "";
@@ -73,6 +73,10 @@ void printRepeatMessage(int x, int y, string instructions) {
     if(instructions == "EXIT"){
         ConsoleUI::gotoXY(x + 1, y + 2);
         cout << "(Esc)";
+    }
+    else if (instructions == "CONTINUE") {
+        ConsoleUI::gotoXY(x + 1, y + 2);
+         cout << "(Any key)";
     }
     else{
         ConsoleUI::gotoXY(x + 1, y + 2);

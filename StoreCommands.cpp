@@ -71,7 +71,7 @@ bool SignUpCommand::execute() {
             if (!Admin::isValidPasskey(passkey)) {
                 printFrame(30, 20, 60, 3);
                 printMessage("INVALID PASSKEY. PLEASE TRY AGAIN LATER!", 38, 21);
-                printRepeatMessage(108, 1, "CONTINUE");
+                printRepeatMessage(107, 1, "CONTINUE");
                 printRepeatMessage(2, 1, "EXIT");
                 char repeat = _getch();
                 if (repeat == 27) {
@@ -93,7 +93,7 @@ bool SignUpCommand::execute() {
         } else {
             printFrame(30, 20, 60, 3);
             printMessage("USERNAME ALREADY EXISTS. PLEASE TRY AGAIN LATER!", 34, 21);
-            printRepeatMessage(108, 1, "CONTINUE");
+            printRepeatMessage(107, 1, "CONTINUE");
             printRepeatMessage(2, 1, "EXIT");
             char repeat = _getch();
             if (repeat == 27) {
@@ -152,7 +152,7 @@ bool LoginCommand::execute() {
         if (!currentUser) {
             printFrame(30, 16, 60, 3);
             printMessage("INVALID USERNAME OR PASSWORD. PLEASE TRY AGAIN!", 36, 17);
-            printRepeatMessage(108, 1, "CONTINUE");
+            printRepeatMessage(107, 1, "CONTINUE");
             printRepeatMessage(2, 1, "EXIT");
             char repeat = _getch();
             if (repeat == 27) {

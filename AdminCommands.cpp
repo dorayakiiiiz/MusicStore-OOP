@@ -122,12 +122,12 @@ bool RemoveItemsCommand::execute() {
             printFrame(49, 25, 40, 3); 
             printMessage("ITEM REMOVED SUCCESSFULLY!", 55, 26);
         } else {
-            printFrame(7, 25, 40, 3); 
+            printFrame(49, 25, 40, 3); 
             printMessage("ERROR WHILE REMOVING THE ITEMS!", 50, 26);
         }
 
         printRepeatMessage(2, 1, "EXIT");
-        printRepeatMessage(110, 1, "DELETE");
+        printRepeatMessage(107, 1, "CONTINUE");
 
         char repeat = _getch();
         if (27 == repeat) {
@@ -196,6 +196,7 @@ bool UpdatePriceCommand::execute() {
         }
 
         printRepeatMessage(2, 1, "EXIT");
+        printRepeatMessage(107, 1, "CONTINUE");
 
         char repeat = _getch();
         if (27 == repeat) {
@@ -249,7 +250,7 @@ bool ViewAllPurchaseHistoriesCommand::execute() {
         clearScreen();
         printFrame(0, 0, 120, 30); 
         string header = "purchaseHistory";
-        printHeader(header, (120 - header.length()*2) / 2 - 33, 1);
+        printHeader(header, (120 - header.length()*2) / 2 - 34, 1);
         AdminUI::displayUserList(customer, 6);
 
         printFrameOptions(20, 24, 60, 1);
@@ -267,7 +268,7 @@ bool ViewAllPurchaseHistoriesCommand::execute() {
 
         clearScreen();
         printFrame(0, 0, 120, 30); 
-        printHeader(header, (120 - header.length()*2) / 2 - 31, 1);
+        printHeader(header, (120 - header.length()*2) / 2 - 34, 1);
 
         // Get the selected customer
         shared_ptr<User> selectedCustomer = customer[id - 1];
@@ -282,7 +283,7 @@ bool ViewAllPurchaseHistoriesCommand::execute() {
             AdminUI::displayPurchasedHistory(userOrders);
         }
 
-        printRepeatMessage(108, 1, "CONTINUE");
+        printRepeatMessage(107, 1, "CONTINUE");
         printRepeatMessage(2, 1, "EXIT");
         char repeat = _getch();
         if (27 == repeat) {
@@ -343,12 +344,12 @@ bool DeleteUserCommand::execute() {
         // Delete the selected user
         bool success = UserService::getInstance()->deleteUserById(id);
         if (success) {
-            printFrame(42, 25, 38, 3); 
-            printMessage("USER DELETED SUCCESSFULLY!", 47, 26);
+            printFrame(62, 25, 38, 3); 
+            printMessage("USER DELETED SUCCESSFULLY!", 67, 26);
 
             // If admin deleted their own account, log them out
             if (isCurrentUser) {
-                printFrame(40, 13, 40, 5);
+                printFrame(30, 13, 60, 5);
                 printMessage("YOU HAVE DELETED YOURSELF. LOGGING OUT...", 45, 15);
                 currentUser = nullptr;
                 sleepScreen();
@@ -362,7 +363,7 @@ bool DeleteUserCommand::execute() {
         // delete the order history of the deleted user
         OrderService::getInstance()->deleteOrder(delUser->getUsername());
 
-        printRepeatMessage(108, 1, "CONTINUE");
+        printRepeatMessage(107, 1, "CONTINUE");
         printRepeatMessage(2, 1, "EXIT");
 
         char repeat = _getch();
@@ -399,10 +400,10 @@ std::string AdminLogoutCommand::getName() const {
 }
 
 bool AdminLogoutCommand::execute() {
-    printFrame(40, 20, 40, 5);
-    printMessage("LOG OUT SUCCESSFULLY!", 48, 22);
+    printFrame(5, 24, 60, 5);
+    printMessage("LOG OUT SUCCESSFULLY!", 23, 26);
     currentUser = nullptr;
-    sleepScreen();
+    sleepScreen(1200);
     return false; // Exit menu loop
 }
 

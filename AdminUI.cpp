@@ -107,10 +107,10 @@ void AdminUI::displayMusicList(vector<Music>& items, int maxPerPage) {
             printRepeatMessage(2, 1, "EXIT");    
         }
         else if (7 == maxPerPage){
-            printRepeatMessage(110, 1, "REMOVE");
+            printRepeatMessage(109, 1, "REMOVE");
         }
         else{
-            printRepeatMessage(110, 1, "UPDATE");
+            printRepeatMessage(109, 1, "UPDATE");
         }
 
         char key = _getch();
@@ -210,15 +210,15 @@ void AdminUI::displayUserList(const vector<shared_ptr<User>>& users, int maxPerP
         ConsoleUI::gotoXY(117, 14);
         std::cout << "D";
 
-              // Đợi người dùng nhập phím
+        // Đợi người dùng nhập phím
         if(8 == maxPerPage){
             printRepeatMessage(2, 1, "EXIT");    
         }
         else if (7 == maxPerPage){
-            printRepeatMessage(110, 1, "DELETE");
+            printRepeatMessage(109, 1, "DELETE");
         }
         else{
-            printRepeatMessage(110, 1, "SELECT");
+            printRepeatMessage(109, 1, "SELECT");
         }
 
         char key = _getch();
@@ -279,7 +279,7 @@ void AdminUI::displayPurchasedHistory(vector<Order> orders) {
         ConsoleUI::gotoXY(x + 1, y + 1); std::cout << "ID";
         ConsoleUI::gotoXY(x + cols[0] + 1, y + 1); std::cout << "SONG NAME";
         ConsoleUI::gotoXY(x + cols[1] + 1, y + 1); std::cout << "ARTIST";
-        ConsoleUI::gotoXY(x + cols[2] + 1, y + 1); std::cout << "Quantity";
+        ConsoleUI::gotoXY(x + cols[2] + 1, y + 1); std::cout << "QUANTITY";
         ConsoleUI::gotoXY(x + cols[3] + 1, y + 1); std::cout << "PRICE/UNIT";
         ConsoleUI::gotoXY(x + cols[4] + 1, y + 1); std::cout << "TOTAL";
 
@@ -360,7 +360,7 @@ void AdminUI::displayPurchasedHistory(vector<Order> orders) {
 // Shows name, quantity sold, and revenue for each item, plus total revenue
 void AdminUI::displaySaleStatistics(vector<SalesRecord> salesRecords, float totalRevenue) {
     int x = 7;
-    int y = 8;
+    int y = 7;
     int maxPerPage = 8;
     int width = 106;
     int totalItems = salesRecords.size();
@@ -442,8 +442,8 @@ void AdminUI::displaySaleStatistics(vector<SalesRecord> salesRecords, float tota
         std::cout << "D";
 
 
-        printFrame(40, 26, 40, 3);
-        ConsoleUI::gotoXY(50, 27);
+        printFrame(40, 25, 40, 3);
+        ConsoleUI::gotoXY(50, 26);
         cout << "TOTAL REVENUE: $" << totalRevenue;
         
         printRepeatMessage(2, 1, "EXIT");   
