@@ -94,7 +94,7 @@ public:
      * 
      * @return string A randomly generated discount code
      */
-    string generateRandomCode();
+    virtual string generateRandomCode();
 
     /**
      * @brief Create a new discount voucher

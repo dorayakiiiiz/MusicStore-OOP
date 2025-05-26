@@ -176,6 +176,25 @@ bool AddToCartCommand::execute() {
     return true;
 }
 
+// ViewCurrentCartCommand implementation
+ViewCurrentCartCommand::ViewCurrentCartCommand(Cart& c) : cart(c) {}
+
+std::string ViewCurrentCartCommand::getName() const {
+    return "VIEW CURRENT CART";
+}
+
+bool ViewCurrentCartCommand::execute() {
+    clearScreen();
+    printFrame(0, 0, 120, 30);
+    string header = "currentCart";
+    printHeader(header, (120 - header.length()*2) / 2 - 19, 1);
+
+    CustomerUI::displayCart(cart.getItems());
+
+    return true;
+}
+
+
 // RemoveFromCartCommand implementation
 RemoveFromCartCommand::RemoveFromCartCommand(Cart& c) : cart(c) {}
 
@@ -252,7 +271,7 @@ bool CheckoutCommand::execute() {
     Customer* customer = dynamic_cast<Customer*>(currentUser.get());
 
     // Get all orders and vouchers from the repository
-    vector<Order> orders = OrderService::getInstance()->getAllOrders();
+    // vector<Order> orders = OrderService::getInstance()->getAllOrders();
     vector<shared_ptr<Discount>> vouchers = DiscountService::getInstance()->getAllDiscounts();
 
     if (cart.getItems().empty()) {

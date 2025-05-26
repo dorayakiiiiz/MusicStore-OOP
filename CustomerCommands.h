@@ -52,6 +52,20 @@ public:
 };
 
 /**
+ * @brief Command to view current cart
+ */
+class ViewCurrentCartCommand : public Command {
+private:
+    Cart& cart;
+    
+public:
+    ViewCurrentCartCommand(Cart& c);
+    std::string getName() const override;
+    bool execute() override;
+};
+
+
+/**
  * @brief Command to remove items from cart
  */
 class RemoveFromCartCommand : public Command {

@@ -216,7 +216,9 @@ Singleton Pattern đảm bảo mỗi service hoặc resource quan trọng chỉ 
   Các service này đều sử dụng singleton để đảm bảo chỉ có một đối tượng duy nhất, được truy cập thông qua phương thức getInstance(). Tất cả các command, controller, UI đều sử dụng các service này thông qua singleton.
 - **`DatabaseConnector`**: Được thiết kế singleton để đảm bảo chỉ có một kết nối tới database SQL Server xuyên suốt chương trình. Tất cả các repository đều sử dụng `DatabaseConnector::getInstance()` để truy cập kết nối database, đảm bảo quản lý tài nguyên hiệu quả và tránh lỗi kết nối trùng lặp.
 
-### Đảm bảo chất lượng (sẽ hoàn thành ở đợt nộp chính thức)
+### Đảm bảo chất lượng: Unit Testing
+Dự án đã được kiểm thử với tổng cộng 135 test cases, đạt tỷ lệ pass 92.6%.
+Chi tiết báo cáo kiểm thử có thể xem tại [link_đến_báo_cáo].
 
 ### Tài liệu mô tả kiến trúc phần mềm + Coding Convention
 - Class Diagram (cài đặt Extension Markdown Preview Mermaid Support để hiển thị)

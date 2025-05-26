@@ -24,7 +24,7 @@ string Discount::getCode() const {
 
 // Apply the discount to a total price
 float Discount::apply(float total) const {
-    return total - strategy->calculateDiscount(total);
+    return total - strategy->calculateDiscount(total) ? total - strategy->calculateDiscount(total) : 0.0f; // Ensure total doesn't go negative
 }
 
 // Get the username this discount belongs to
