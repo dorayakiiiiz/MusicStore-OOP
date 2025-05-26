@@ -24,6 +24,12 @@ private:
     vector<Music> purchasedItems; /**< List of music items in the order */
     float total;                 /**< Total price of the order (after discounts) */
 public:
+
+    /**
+     * @brief Default constructor - creates an empty order
+     */
+    Order();
+
     /**
      * @brief Constructor - creates a new order with customer username, purchased items and total price
      * 
@@ -32,6 +38,13 @@ public:
      * @param total Total price of the order
      */
     Order(const string&, const vector<Music>&, const float&);
+
+    /**
+     * @brief Copy constructor
+     * 
+     * @param other Order object to copy from
+     */
+    Order(const Order& other);
     
     /**
      * @brief Get the total price of the order

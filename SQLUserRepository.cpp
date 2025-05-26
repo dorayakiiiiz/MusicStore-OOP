@@ -290,4 +290,5 @@ shared_ptr<User> SqlUserRepository::getById(int id) {
     return user;
 }
 
+// do nothing
 bool SqlUserRepository::updateById(int id, const shared_ptr<User>& user) { return false; }

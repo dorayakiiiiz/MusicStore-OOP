@@ -1,7 +1,6 @@
 #include "gtest/gtest.h"
 #include "../Music.h"
 #include <string>
-#include <sstream>
 
 class MusicTest : public ::testing::Test {
 protected:
@@ -40,7 +39,7 @@ TEST_F(MusicTest, Getters) {
     EXPECT_EQ(10, testMusic.getQuantity());
 }
 
-// Test các update methods
+// Test update methods
 TEST_F(MusicTest, UpdateMethods) {
     testMusic.updatePrice(19.99f);
     EXPECT_FLOAT_EQ(19.99f, testMusic.getPrice());
@@ -60,7 +59,30 @@ TEST_F(MusicTest, EqualityOperator) {
     Music sameMusicDifferentDetails("Test Song", "Test Artist", "Different Genre", 19.99f, 5);
     Music differentMusic("Different Song", "Test Artist", "Test Genre", 9.99f, 10);
     
-    // Theo code của bạn, == so sánh theo name và artist
-    EXPECT_TRUE(testMusic == sameMusicDifferentDetails);
+    EXPECT_TRUE(testMusic == sameMusicDifferentDetails); // Same name & artist = equal
     EXPECT_FALSE(testMusic == differentMusic);
+}
+
+// Test các edge cases
+TEST_F(MusicTest, EdgeCases) {
+    // Negative price
+    Music negativePrice("Negative", "Price", "Test", -5.0f, 10);
+    EXPECT_FLOAT_EQ(-5.0f, negativePrice.getPrice());
+    
+    // Zero quantity
+    Music zeroQuantity("Zero", "Quantity", "Test", 9.99f, 0);
+    EXPECT_EQ(0, zeroQuantity.getQuantity());
+    
+    // Empty strings
+    Music emptyStrings("", "", "", 9.99f, 10);
+    EXPECT_EQ("", emptyStrings.getName());
+    EXPECT_EQ("", emptyStrings.getArtist());
+    EXPECT_EQ("", emptyStrings.getGenre());
+    
+    // Update with negative values
+    testMusic.updatePrice(-1.0f);
+    EXPECT_FLOAT_EQ(-1.0f, testMusic.getPrice());
+    
+    testMusic.updateQuantity(-5);
+    EXPECT_EQ(-5, testMusic.getQuantity());
 }

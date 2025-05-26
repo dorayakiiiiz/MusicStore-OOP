@@ -175,5 +175,8 @@ SalesRecord SqlSalesRecordRepository::getById(int id) {
     return record;
 }
 
+// do nothing
 bool SqlSalesRecordRepository::updateById(int id, const SalesRecord& record) { return false; }
+
+// do nothing
 bool SqlSalesRecordRepository::deleteById(int id) { return false; }

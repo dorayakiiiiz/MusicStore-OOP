@@ -10,7 +10,10 @@
 #include <sstream>
 using std::stringstream;
 
-// Constructor - initializes an order with username, items, and total price
+// Default constructor - creates an empty order
+Order::Order() : username(""), purchasedItems({}), total(0.0f) {}
+
+// Parameterized constructor - initializes an order with username, items, and total price
 Order::Order(const string& username, const vector<Music>& items, const float& total) {
     this->username = username;
     this->total = total;
@@ -20,6 +23,10 @@ Order::Order(const string& username, const vector<Music>& items, const float& to
         purchasedItems.emplace_back(item);
     }
 }
+
+// Copy constructor - creates a new order by copying from another order object
+Order::Order(const Order& other) 
+    : username(other.username), purchasedItems(other.purchasedItems), total(other.total) {}
 
 // Get the total price of the order
 float Order::getTotal() const {

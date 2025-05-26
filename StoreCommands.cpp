@@ -29,7 +29,7 @@ bool SignUpCommand::execute() {
         int role = getValidatedInput<int>(
             "ENTER YOUR ROLE (1 FOR ADMIN, 2 FOR CUSTOMER): ",
             [](const string& prompt) {
-                return InputChecker::validateInt(prompt, 34, 8, 1, 2);
+                return InputChecker::checkInt(prompt, 34, 8, 1, 2);
             },
             34, 8
         );
@@ -51,7 +51,7 @@ bool SignUpCommand::execute() {
         string username = getValidatedInput<string>(
             "INPUT USERNAME     : ",
             [](const string& prompt) {
-                return InputChecker::validateString(prompt, 32, 12);
+                return InputChecker::checkString(prompt, 32, 12);
             },
             32, 12
         );
@@ -60,7 +60,7 @@ bool SignUpCommand::execute() {
         string password = getValidatedInput<string>(
             "INPUT PASSWORD     : ",
             [](const string& prompt) {
-                return InputChecker::validateString(prompt, 32, 14);
+                return InputChecker::checkString(prompt, 32, 14);
             },
             32, 14
         );
@@ -132,7 +132,7 @@ bool LoginCommand::execute() {
         string username = getValidatedInput<string>(
             "INPUT USERNAME: ",
             [](const string& prompt) {
-                return InputChecker::validateString(prompt, 32, 11);
+                return InputChecker::checkString(prompt, 32, 11);
             },
             32, 11
         );
@@ -141,7 +141,7 @@ bool LoginCommand::execute() {
         string password = getValidatedInput<string>(
             "INPUT PASSWORD: ",
             [](const string& prompt) {
-                return InputChecker::validateString(prompt, 32, 13);
+                return InputChecker::checkString(prompt, 32, 13);
             },
             32, 13
         );

@@ -2,7 +2,7 @@
 #include "utils.h"
 
 // get a valid int input from user
-tuple <bool, int, Error> InputChecker::validateInt(string prompt, int promptX, int promptY, int min, int max) {
+tuple <bool, int, Error> InputChecker::checkInt(string prompt, int promptX, int promptY, int min, int max) {
     Error error = {0, ""};
     string input = getInput(prompt, promptX, promptY);
     // Check if input is empty
@@ -14,7 +14,7 @@ tuple <bool, int, Error> InputChecker::validateInt(string prompt, int promptX, i
     try {
         // Convert string to integer
         int choice = stoi(input);
-        // Validate range
+        // check range
         if (choice < min || choice > max) {
             error.code = 2;
             error.message = "Input out of range!";
@@ -30,7 +30,7 @@ tuple <bool, int, Error> InputChecker::validateInt(string prompt, int promptX, i
 }
 
 // get a valid float input from user
-tuple <bool, float, Error> InputChecker::validateFloat(string prompt, int promptX, int promptY, float min, float max) {
+tuple <bool, float, Error> InputChecker::checkFloat(string prompt, int promptX, int promptY, float min, float max) {
     Error error = {0, ""};
     string input = getInput(prompt, promptX, promptY);
     // Check if input is empty
@@ -42,7 +42,7 @@ tuple <bool, float, Error> InputChecker::validateFloat(string prompt, int prompt
     try {
         // Convert string to float
         float choice = stof(input);
-        // Validate range
+        // check range
         if (choice < min || choice > max) {
             error.code = 2;
             error.message = "Input out of range!";
@@ -58,7 +58,7 @@ tuple <bool, float, Error> InputChecker::validateFloat(string prompt, int prompt
 }
 
 // get a valid string input from user
-tuple <bool, string, Error> InputChecker::validateString(string prompt, int promptX, int promptY) {
+tuple <bool, string, Error> InputChecker::checkString(string prompt, int promptX, int promptY) {
     Error error = {0, ""};
     string input = getInput(prompt, promptX, promptY);
     // Check if input is empty

@@ -484,7 +484,7 @@ Music AdminUI::getNewMusicDetails() {
     // Get item name with validation
     string name = getValidatedInput<string>("ENTER MUSIC NAME: ",
         [](const string& prompt) {
-            return InputChecker::validateString(prompt, 32, 11);
+            return InputChecker::checkString(prompt, 32, 11);
         },
         32, 11
     );
@@ -492,7 +492,7 @@ Music AdminUI::getNewMusicDetails() {
     // Get artist name with validation
     string artist = getValidatedInput<string>("ENTER ARTIST    : ",
         [](const string& prompt) {
-            return InputChecker::validateString(prompt, 32, 13);
+            return InputChecker::checkString(prompt, 32, 13);
         },
         32, 13
     );
@@ -500,7 +500,7 @@ Music AdminUI::getNewMusicDetails() {
     // Get genre with validation
     string genre = getValidatedInput<string>("ENTER GENRE     : ",
         [](const string& prompt) {
-            return InputChecker::validateString(prompt, 32, 15);
+            return InputChecker::checkString(prompt, 32, 15);
         },
         32, 15
     );
@@ -509,7 +509,7 @@ Music AdminUI::getNewMusicDetails() {
     float price = getValidatedInput<float>(
         "ENTER PRICE     : ",
         [](const std::string& p) { 
-            return InputChecker::validateFloat(p, 32, 17, 0.0F); 
+            return InputChecker::checkFloat(p, 32, 17, 0.0F); 
         },
         32, 17
     );
@@ -518,7 +518,7 @@ Music AdminUI::getNewMusicDetails() {
     int quantity = getValidatedInput<int>(
         "ENTER QUANTITY  : ",
         [](const std::string& p) { 
-            return InputChecker::validateInt(p, 32, 19, 0); 
+            return InputChecker::checkInt(p, 32, 19, 0); 
         },
         32, 19
     );

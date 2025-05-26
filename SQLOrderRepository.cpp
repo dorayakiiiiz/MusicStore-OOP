@@ -292,9 +292,10 @@ bool SqlOrderRepository::deleteById(int id) {
 
 
 
-// these functions are not used in the project
+// do nothing
 bool SqlOrderRepository::updateById(int id, const Order& order) { return false; }
 
+// do nothing
 Order SqlOrderRepository::getById(int id) {
     Order order("", {}, 0.0f);
     return order;

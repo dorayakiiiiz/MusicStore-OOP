@@ -3,30 +3,31 @@
 
 class UserTest : public ::testing::Test {
 protected:
+    // Không thể tạo User trực tiếp vì nó là abstract class
+    std::shared_ptr<Customer> customer;
+    std::shared_ptr<Admin> admin;
+
     void SetUp() override {
-        // Không cần thiết lập gì đặc biệt
+        customer = std::make_shared<Customer>("testuser", "password123");
+        admin = std::make_shared<Admin>("adminuser", "adminpass");
     }
 };
 
-// Test constructor và getters của Customer
+// Test Customer constructor và getters
 TEST_F(UserTest, CustomerConstructorAndGetters) {
-    Customer customer("testuser", "password123");
-    
-    EXPECT_EQ("testuser", customer.getUsername());
-    EXPECT_EQ("password123", customer.getPassword());
-    EXPECT_EQ(Role::CUSTOMER, customer.getRole());
+    EXPECT_EQ("testuser", customer->getUsername());
+    EXPECT_EQ("password123", customer->getPassword());
+    EXPECT_EQ(Role::CUSTOMER, customer->getRole());
 }
 
-// Test constructor và getters của Admin
+// Test Admin constructor và getters
 TEST_F(UserTest, AdminConstructorAndGetters) {
-    Admin admin("adminuser", "adminpass");
-    
-    EXPECT_EQ("adminuser", admin.getUsername());
-    EXPECT_EQ("adminpass", admin.getPassword());
-    EXPECT_EQ(Role::ADMIN, admin.getRole());
+    EXPECT_EQ("adminuser", admin->getUsername());
+    EXPECT_EQ("adminpass", admin->getPassword());
+    EXPECT_EQ(Role::ADMIN, admin->getRole());
 }
 
-// Test validate passkey của Admin
+// Test Admin passkey validation
 TEST_F(UserTest, AdminPasskeyValidation) {
     EXPECT_TRUE(Admin::isValidPasskey("23120197"));
     EXPECT_TRUE(Admin::isValidPasskey("23120209"));
@@ -35,30 +36,37 @@ TEST_F(UserTest, AdminPasskeyValidation) {
 
 // Test toString method
 TEST_F(UserTest, UserToStringMethod) {
-    Customer customer("testuser", "password123");
-    Admin admin("adminuser", "adminpass");
+    std::string customerStr = customer->toString();
+    std::string adminStr = admin->toString();
     
-    // ToString should include username in both cases
-    EXPECT_NE(std::string::npos, customer.toString().find("testuser"));
-    EXPECT_NE(std::string::npos, admin.toString().find("adminuser"));
+    // Kiểm tra xem toString có chứa username không
+    EXPECT_NE(std::string::npos, customerStr.find("testuser"));
+    EXPECT_NE(std::string::npos, adminStr.find("adminuser"));
 }
 
-// Test copy constructor cho Customer
-TEST_F(UserTest, CustomerCopyConstructor) {
-    Customer original("testuser", "password123");
-    Customer copy(original);
+// Test Copy Constructor
+TEST_F(UserTest, CopyConstructor) {
+    Customer copiedCustomer(*customer);
+    EXPECT_EQ(customer->getUsername(), copiedCustomer.getUsername());
+    EXPECT_EQ(customer->getPassword(), copiedCustomer.getPassword());
+    EXPECT_EQ(customer->getRole(), copiedCustomer.getRole());
     
-    EXPECT_EQ(original.getUsername(), copy.getUsername());
-    EXPECT_EQ(original.getPassword(), copy.getPassword());
-    EXPECT_EQ(original.getRole(), copy.getRole());
+    Admin copiedAdmin(*admin);
+    EXPECT_EQ(admin->getUsername(), copiedAdmin.getUsername());
+    EXPECT_EQ(admin->getPassword(), copiedAdmin.getPassword());
+    EXPECT_EQ(admin->getRole(), copiedAdmin.getRole());
 }
 
-// Test copy constructor cho Admin
-TEST_F(UserTest, AdminCopyConstructor) {
-    Admin original("adminuser", "adminpass");
-    Admin copy(original);
+// Test với trường hợp đặc biệt
+TEST_F(UserTest, SpecialCases) {
+    // User có username và password trống
+    Customer emptyCustomer("", "");
+    EXPECT_EQ("", emptyCustomer.getUsername());
+    EXPECT_EQ("", emptyCustomer.getPassword());
     
-    EXPECT_EQ(original.getUsername(), copy.getUsername());
-    EXPECT_EQ(original.getPassword(), copy.getPassword());
-    EXPECT_EQ(original.getRole(), copy.getRole());
+    // User có username và password dài
+    std::string longString(1000, 'a');
+    Customer longCustomer(longString, longString);
+    EXPECT_EQ(longString, longCustomer.getUsername());
+    EXPECT_EQ(longString, longCustomer.getPassword());
 }

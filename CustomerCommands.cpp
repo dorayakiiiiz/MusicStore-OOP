@@ -82,7 +82,7 @@ bool SearchMusicCommand::execute() {
         int criteria = getValidatedInput<int>(
             "Enter search criteria (1 for name, 2 for artist, 3 for genre): ",
             [](const string& prompt) {
-                return InputChecker::validateInt(prompt, 10, 10, 1, 3);
+                return InputChecker::checkInt(prompt, 10, 10, 1, 3);
             },
             10, 10
         );
@@ -91,7 +91,7 @@ bool SearchMusicCommand::execute() {
         string keyword = getValidatedInput<string>(
             "Enter keyword: ",
             [](const string& prompt) {
-                return InputChecker::validateString(prompt, 10, 11);
+                return InputChecker::checkString(prompt, 10, 11);
             },
             10, 11
         );
@@ -142,7 +142,7 @@ bool AddToCartCommand::execute() {
         int itemID = getValidatedInput<int>(
             "Enter item ID: ",
             [&items](const string& prompt) {
-                return InputChecker::validateInt(prompt, 10, 25, 1, items.size());
+                return InputChecker::checkInt(prompt, 10, 25, 1, items.size());
             },
             10, 25
         );
@@ -151,7 +151,7 @@ bool AddToCartCommand::execute() {
         int quantity = getValidatedInput<int>(
             "Enter quantity: ",
             [](const string& prompt) {
-                return InputChecker::validateInt(prompt, 10, 26, 1, INT_MAX);
+                return InputChecker::checkInt(prompt, 10, 26, 1, INT_MAX);
             },
             10, 26
         );
@@ -203,7 +203,7 @@ bool RemoveFromCartCommand::execute() {
             int itemID = getValidatedInput<int>(
                 "Enter item ID to remove: ",
                 [this](const string& prompt) {
-                    return InputChecker::validateInt(prompt, 10, 20, 1, cart.getItems().size());
+                    return InputChecker::checkInt(prompt, 10, 20, 1, cart.getItems().size());
                 },
                 10, 20
             );
@@ -274,7 +274,7 @@ bool CheckoutCommand::execute() {
             int useVoucher = getValidatedInput<int>(
                 "Do you want to use a voucher? (1 for yes, 2 for no): ",
                 [](const string& prompt) {
-                    return InputChecker::validateInt(prompt, 10, 24, 1, 2);
+                    return InputChecker::checkInt(prompt, 10, 24, 1, 2);
                 },
                 10, 24
             );
@@ -284,7 +284,7 @@ bool CheckoutCommand::execute() {
                 string voucherCode = getValidatedInput<string>(
                     "Enter voucher code: ",
                     [](const string& prompt) {
-                        return InputChecker::validateString(prompt, 10, 25);
+                        return InputChecker::checkString(prompt, 10, 25);
                     },
                     10, 25
                 );
@@ -327,7 +327,7 @@ bool CheckoutCommand::execute() {
             int discountChoice = getValidatedInput<int>(
                 "Choose a discount type (1 for 10% off, 2 for $5 off): ",
                 [](const string& prompt) {
-                    return InputChecker::validateInt(prompt, 10, 28, 1, 2);
+                    return InputChecker::checkInt(prompt, 10, 28, 1, 2);
                 },
                 10, 28
             );
