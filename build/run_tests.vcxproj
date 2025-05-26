@@ -340,12 +340,14 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\AuthServiceTest.cpp" />
     <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\CartServiceTest.cpp" />
     <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\CartTest.cpp" />
     <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\ControllerFactoryTest.cpp" />
     <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\DiscountFactoryTest.cpp" />
     <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\DiscountServiceTest.cpp" />
     <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\DiscountTest.cpp" />
+    <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\InputCheckerTest.cpp" />
     <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\MusicServiceTest.cpp" />
     <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\MusicTest.cpp" />
     <ClCompile Include="E:\PPLTHDT\Project\MusicStore\MusicStore-OOP\tests\OrderServiceTest.cpp" />

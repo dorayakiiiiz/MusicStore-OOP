@@ -11,20 +11,26 @@
 
 ## CÁC CÔNG VIỆC MÀ TỪNG THÀNH VIÊN ĐÃ THỰC HIỆN
 ### Trà Văn Sỹ
-- Xây dựng các class Model (Music, Order, User,...)
+- Xây dựng các class Model (Music, Order, User, Cart...)
 
-- Xây dựng các class liên quan đến Service cho các đối tượng (MusicService, OrderService,...) và các Controller cho từng role của User (admin/customer)
+- Xây dựng các class liên quan đến Service xử lí các chức năng cho các đối tượng (MusicService, OrderService,...) và các Controller cho từng role của User (admin/customer)
 
-- Thiết kế các phần liên quan đến design pattern (Factory Pattern, Strategy Pattern) cho các đối tượng (Factory Pattern lựa chọn Controller phù hợp với role của user khi đăng nhập vào hệ thống, Strategy Pattern xử lí nhiều loại mã giảm giá khác nhau...)
+- Thiết kế các design pattern (Factory Pattern, Strategy Pattern, Command Pattern, Strategy Pattern) cho các đối tượng (Factory Pattern lựa chọn Controller phù hợp với role của user khi đăng nhập vào hệ thống, Strategy Pattern xử lí nhiều loại mã giảm giá khác nhau...). SearchStrategy giúp tìm kiếm bài hát...
 
 - Soạn tài liệu với doxygen
+
+- Thực hiện unit test chương trình
 
 ### Lê Hoàng Nhật Anh
 - Xây dựng các phương thức đọc/ghi dữ liệu trên database áp dụng MSSQL cho các kiểu dữ liệu khác nhau (Music, Order, User, Voucher...). Thiết kế class Factory cho ReadData và SaveData.
 
-- Thiết kế các phần liên quan đến UI của toàn bộ chương trình (AdminUI, CustomerUI,...)
+- Thiết kế Repository Pattern truy xuất data cho chương trình
 
-- Xây dựng các class xử lí bắt lỗi nhập liệu (InputValidator)
+- Thiết kế các phần liên quan đến giao diện (UI) của toàn bộ chương trình (ConsoleUI, AdminUI, CustomerUI,...)
+
+- Xây dựng các class xử lí bắt lỗi nhập liệu (Input Checker)
+
+- Thực hiện unit test chương trình
 
 - Quay video demo
 

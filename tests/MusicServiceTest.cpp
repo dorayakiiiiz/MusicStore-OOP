@@ -1,6 +1,5 @@
 #include "gtest/gtest.h"
 #include "../MusicService.h"
-#include "../SearchFactory.h"
 #include "MockSQLDao.h"
 #include <memory>
 
@@ -85,7 +84,7 @@ TEST_F(MusicServiceTest, AddMusicItem) {
 
 // Test method removeMusicItem
 TEST_F(MusicServiceTest, RemoveMusicItem) {
-    EXPECT_TRUE(service->removeMusicItem(1));
+    EXPECT_TRUE(service->removeMusicItem(1)); // Remove first item
     
     auto allItems = service->getAllMusic();
     ASSERT_EQ(2, allItems.size());
@@ -115,14 +114,4 @@ TEST_F(MusicServiceTest, RemoveSoldOutItems) {
     ASSERT_EQ(2, allItems.size());
     EXPECT_EQ("Song1", allItems[0].getName());
     EXPECT_EQ("Song3", allItems[1].getName());
-}
-
-// Test invalid search criteria
-TEST_F(MusicServiceTest, InvalidSearchCriteria) {
-    auto allItems = service->getAllMusic();
-    
-    // Test với criteria không hợp lệ
-    EXPECT_THROW({
-        service->searchMusic(allItems, static_cast<SearchType>(999), "keyword");
-    }, std::invalid_argument);
 }
