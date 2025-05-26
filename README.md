@@ -216,11 +216,16 @@ Singleton Pattern đảm bảo mỗi service hoặc resource quan trọng chỉ 
   Các service này đều sử dụng singleton để đảm bảo chỉ có một đối tượng duy nhất, được truy cập thông qua phương thức getInstance(). Tất cả các command, controller, UI đều sử dụng các service này thông qua singleton.
 - **`DatabaseConnector`**: Được thiết kế singleton để đảm bảo chỉ có một kết nối tới database SQL Server xuyên suốt chương trình. Tất cả các repository đều sử dụng `DatabaseConnector::getInstance()` để truy cập kết nối database, đảm bảo quản lý tài nguyên hiệu quả và tránh lỗi kết nối trùng lặp.
 
-### Đảm bảo chất lượng: Unit Testing
-Dự án đã được kiểm thử với tổng cộng 135 test cases, đạt tỷ lệ pass 92.6%.
-Chi tiết báo cáo kiểm thử có thể xem tại [link_đến_báo_cáo].
+### ĐẢM BẢO CHẤT LƯỢNG
+**Unit testing:** Chương trình đã được kiểm thử với 178 test cases, đạt tỷ lệ pass 100%. 
+- [Chi tiết báo cáo kiểm thử](https://docs.google.com/spreadsheets/d/1kW1PXAE2B0CP4XauVlffiyTqdsdMYj5Z/edit?usp=sharing&ouid=111498391809847142303&rtpof=true&sd=true)  
 
-### Tài liệu mô tả kiến trúc phần mềm + Coding Convention
+
+**Coding convention:** Chương trình tuân thủ theo đúng các quy định về coding convention của C++.
+- [Tài liệu Coding Convention](https://docs.google.com/document/d/10KNVaHAwrnSvY9fQ1v7uBX2IVxCTLYYALBpOFh5hXmo/edit?tab=t.0)
+
+
+### Tài liệu mô tả kiến trúc phần mềm
 - Class Diagram (cài đặt Extension Markdown Preview Mermaid Support để hiển thị)
 ```mermaid
 classDiagram
@@ -547,11 +552,51 @@ classDiagram
     DiscountService --> Discount 
 ```
     
-- [Tài liệu mô tả (tạo bằng Doxygen, chứa trong thư mục references)](references/html/index.html)
+- [Tài liệu mô tả (trong thư mục references)](references/html/index.html)
 
-- [Tài liệu Coding Convention](https://docs.google.com/document/d/10KNVaHAwrnSvY9fQ1v7uBX2IVxCTLYYALBpOFh5hXmo/edit?tab=t.0)
+### CÁC CHỦ ĐỀ NÂNG CAO
+#### 1. Kết nối và truy xuất Database SQL Server trên Cloud với ODBC
+Dự án sử dụng kết nối trực tiếp đến SQL Server trên cloud thông qua ODBC API thay vì đọc/ghi file text đơn giản:
+
+- **Quản lý kết nối với Singleton Pattern:** [`DatabaseConnector`](DatabaseConnector.h) đảm bảo chỉ có một kết nối duy nhất đến database, tự động reconnect khi mất kết nối
+- **Xử lý lỗi ODBC chuyên nghiệp:** [`ODBCErrorHandler`](DatabaseConnector.h) cung cấp thông tin chi tiết về lỗi SQL
+- **Connection String động:** Kết nối đến SQL Server cloud với chuỗi kết nối được tối ưu hóa
+- **Transaction Management:** Sử dụng commit/rollback trong [`SqlOrderRepository`](SQLOrderRepository.cpp) để đảm bảo tính toàn vẹn dữ liệu khi thêm order
+- **Prepared Statements:** Tất cả các repository sử dụng prepared statements để tránh SQL injection
+
+```cpp
+// Ví dụ transaction trong SqlOrderRepository
+SQLSetConnectAttr(hDbc, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_OFF, 0);
+// Insert operations...
+SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_COMMIT);   
+```
+
+### 2. Command Pattern với Command Invoker
+
+Triển khai triển khai Command Pattern để tách biệt giao diện người dùng và logic nghiệp vụ, giúp việc thêm hoặc sửa đổi chức năng trở nên dễ dàng.   
+- Interface Command: Command định nghĩa hợp đồng chung cho mọi lệnh trong hệ thống
+- Invoker: CommandInvoker quản lý và thực thi các lệnh, tự động tạo menu từ danh sách lệnh
+- Phân chia command theo chức năng: Chia thành StoreCommands, AdminCommands và CustomerCommands
+- Dependency Injection: Các command nhận dependencies qua constructor, tăng tính tái sử dụng
+- Menu tương tác W/S/Enter: Tự động tạo giao diện người dùng từ danh sách command
+
+```cpp
+// Ví dụ sử dụng trong AdminController
+void AdminController::menu(shared_ptr<User>& currentUser) {
+    CommandInvoker invoker("ADMIN MENU");
+    
+    invoker.addCommand(std::make_shared<ViewMusicListCommand>());
+    invoker.addCommand(std::make_shared<AddNewItemsCommand>());
+    invoker.addCommand(std::make_shared<ViewUsersCommand>());
+    // Thêm các command khác...
+    
+    invoker.executeMenu();  // Tự động hiển thị và xử lý menu
+}
+```
 
 
 ### Video demo mô tả:
+```bash
 https://youtu.be/7A5fEKxOeRI?si=2_lJkSKKqz_AJuZ-
+```
 
