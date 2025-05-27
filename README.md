@@ -80,17 +80,28 @@ Chương trình được phân tách ra 2 vai trò riêng biệt với 2 loại 
 #### Database: Truy xuất và lưu trữ dữ liệu từ database với SQL Server thay vì đọc file thông thường
 
 ### HƯỚNG DẪN BIÊN DỊCH CHƯƠNG TRÌNH
+```
 - Yêu cầu: Trình biên dịch g++ version 13 trở lên, có cài đặt ODBC Driver cho SQL Server (có thể tải từ trang chủ Microsoft)
 
 - Hệ điều hành: Windows
+```
 
-- Nhập lệnh sau ở terminal:  ```g++ source/main.cpp source/app/*.cpp source/controllers/*.cpp source/services/*.cpp source/models/*.cpp source/database/*.cpp source/factories/*.cpp source/strategies/*.cpp source/commands/*.cpp source/ui/*.cpp -I source -std=c++17 -lole32 -lodbc32 -o release/program```  để biên dịch chương trình
+- Nhập lệnh sau ở terminal để biên dịch chương trình:  
+```bash
+g++ source/main.cpp source/app/*.cpp source/controllers/*.cpp source/services/*.cpp source/models/*.cpp source/database/*.cpp source/factories/*.cpp source/strategies/*.cpp source/commands/*.cpp source/ui/*.cpp -I source -std=c++17 -lole32 -lodbc32 -o release/program
+```
 
 - Hoặc sử dụng Makefile (trên Windows, có cài đặt MingGW hoặc MSYS2) có sẵn trong thư mục `source`:
-  - Chạy lệnh: ```mingw32-make``` để biên dịch chương trình.
+  - Chạy lệnh: 
+  ```bash
+  mingw32-make
+  ```
   - Lệnh này sẽ tự động biên dịch tất cả các file `.cpp` trong thư mục `source` và tạo ra file thực thi `program` trong thư mục `release`.
 
-- Nhập lệnh: ```./release/program``` để chạy chương trình.
+- Nhập lệnh sau để chạy chương trình: 
+```bash
+./release/program
+``` 
 
 ### KIẾN TRÚC PHẦN MỀM
 Dự án được xây dựng theo mô hình kiến trúc nhiều lớp (Layered Architecture)
