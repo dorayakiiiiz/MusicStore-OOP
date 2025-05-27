@@ -17,15 +17,15 @@ using std::cout, std::cin, std::vector, std::string;
 
 // Displays a welcome message for the admin with their username
 void AdminUI::displayWelcomeMessage(const string& username) {
-    printMessage("WELCOME " + username + " TO THE ADMIN MENU!", 10, 20);
+    printMessage("WELCOME " + username + " TO THE ADMIN MENU!", 10, 20, LGREEN);
 }
 
 // Displays a formatted list of all music items in inventory
 // Shows ID, name, artist, genre, price and quantity for each item
 void AdminUI::displayMusicList(vector<Music>& items, int maxPerPage) {
     if (items.empty()) {
-        printFrame(30, 14, 60, 3); 
-        printMessage("NO ITEMS FOUND!", 50, 15);
+        printFrame(30, 14, 60, 3, LRED); 
+        printMessage("NO ITEMS FOUND!", 50, 15, LRED);
         sleepScreen(1200);
         return;
     }
@@ -45,9 +45,7 @@ void AdminUI::displayMusicList(vector<Music>& items, int maxPerPage) {
         int rows = endIdx - startIdx + 1; //
 
         //Xóa bảng cũ
-        clearScreen(x, y, width, maxPerPage * 2 + 4); // xóa vùng tối đa
-        // Xóa page 
-        clearScreen(111, 28, 8, 1); 
+        clearScreen(1, 6, 118, 23); // xóa vùng tối đa
 
         printFrameOptions(x, y, width, rows);
 
@@ -61,7 +59,7 @@ void AdminUI::displayMusicList(vector<Music>& items, int maxPerPage) {
         }
 
         // In header
-        ConsoleUI::setColor(Color::LYELLOW);
+        ConsoleUI::setColor(Color::LAQUA);
         ConsoleUI::gotoXY(x + 1, y + 1); std::cout << "ID";
         ConsoleUI::gotoXY(x + cols[0] + 1, y + 1); std::cout << "SONG NAME";
         ConsoleUI::gotoXY(x + cols[1] + 1, y + 1); std::cout << "ARTIST";
@@ -97,8 +95,9 @@ void AdminUI::displayMusicList(vector<Music>& items, int maxPerPage) {
             std::cout << char(193); 
         }
 
+        ConsoleUI::setColor(Color::LAQUA);
         // Hiển thị điều hướng trang
-        ConsoleUI::gotoXY(111, 28);
+        ConsoleUI::gotoXY(111 - totalPages / 10, 28);
         std::cout << "PAGE " << currentPage + 1 << "/" << totalPages;
 
         //pre page
@@ -112,16 +111,23 @@ void AdminUI::displayMusicList(vector<Music>& items, int maxPerPage) {
         std::cout << char(175);
         ConsoleUI::gotoXY(117, 14);
         std::cout << "D";
+        ConsoleUI::setColor(Color::WHITE);
+
+        if (currentPage == 0) {
+            clearScreen(2, 14, 1, 2);
+        } else if (currentPage == totalPages - 1) {
+            clearScreen(117, 14, 1, 2);
+        }
 
         // Đợi người dùng nhập phím
         if(8 == maxPerPage){
-            printRepeatMessage(2, 1, "EXIT");    
+            printRepeatMessage(2, 1, "EXIT", LRED);    
         }
         else if (7 == maxPerPage){
-            printRepeatMessage(109, 1, "REMOVE");
+            printRepeatMessage(109, 1, "REMOVE", LAQUA);
         }
         else{
-            printRepeatMessage(109, 1, "UPDATE");
+            printRepeatMessage(109, 1, "UPDATE", LAQUA);
         }
 
         char key = _getch();
@@ -159,9 +165,7 @@ void AdminUI::displayUserList(const vector<shared_ptr<User>>& users, int maxPerP
         int rows = endIdx - startIdx + 1; //
 
         //Xóa bảng cũ
-        clearScreen(x, y, width, maxPerPage * 2 + 4); // xóa vùng tối đa
-        // Xóa page 
-        clearScreen(111, 28, 8, 1); 
+        clearScreen(1, 6, 118, 23); // xóa vùng tối đa
 
         printFrameOptions(x, y, width, rows);
 
@@ -174,7 +178,7 @@ void AdminUI::displayUserList(const vector<shared_ptr<User>>& users, int maxPerP
             std::cout << char(197); 
         }
             //In header
-        ConsoleUI::setColor(Color::LYELLOW);
+        ConsoleUI::setColor(Color::LAQUA);
         ConsoleUI::gotoXY(x + 1, y + 1);
         std::cout << "ID";
         ConsoleUI::gotoXY(x + cols[0] + 1, y + 1);
@@ -207,8 +211,9 @@ void AdminUI::displayUserList(const vector<shared_ptr<User>>& users, int maxPerP
             std::cout << char(193); 
         }
 
+        ConsoleUI::setColor(Color::LAQUA);
         // Hiển thị điều hướng trang
-        ConsoleUI::gotoXY(111, 28);
+        ConsoleUI::gotoXY(111 - totalPages / 10, 28);
         std::cout << "PAGE " << currentPage + 1 << "/" << totalPages;
 
         //pre page
@@ -222,16 +227,23 @@ void AdminUI::displayUserList(const vector<shared_ptr<User>>& users, int maxPerP
         std::cout << char(175);
         ConsoleUI::gotoXY(117, 14);
         std::cout << "D";
+        ConsoleUI::setColor(Color::WHITE);
+
+        if (currentPage == 0) {
+            clearScreen(2, 14, 1, 2);
+        } else if (currentPage == totalPages - 1) {
+            clearScreen(117, 14, 1, 2);
+        }
 
         // Đợi người dùng nhập phím
         if(8 == maxPerPage){
-            printRepeatMessage(2, 1, "EXIT");    
+            printRepeatMessage(2, 1, "EXIT", LRED);    
         }
         else if (7 == maxPerPage){
-            printRepeatMessage(109, 1, "DELETE");
+            printRepeatMessage(109, 1, "DELETE", LAQUA);
         }
         else{
-            printRepeatMessage(109, 1, "SELECT");
+            printRepeatMessage(109, 1, "SELECT", LAQUA);
         }
 
         char key = _getch();
@@ -253,6 +265,12 @@ void AdminUI::displayUserList(const vector<shared_ptr<User>>& users, int maxPerP
 // Displays the details of a specific order
 // Shows order ID, list of purchased items, quantities, prices and total
 void AdminUI::displayPurchasedHistory(vector<Order> orders) {
+    if (orders.empty()) {
+        printFrame(30, 14, 60, 3, LRED); 
+        printMessage("NO PURCHASE HISTORY FOUND FOR THIS CUSTOMER.", 35, 15, LRED);
+        sleepScreen(1200);
+        return;
+    }
     int x = 15;
     int y = 12;
     int maxPerPage = 1;
@@ -267,13 +285,11 @@ void AdminUI::displayPurchasedHistory(vector<Order> orders) {
         int OrderIdx = currentPage * maxPerPage;
 
         //Xóa bảng cũ
-        clearScreen(x, y, width, 16); // xóa vùng tối đa
-        // Xóa page 
-        clearScreen(111, 28, 8, 1); 
+        clearScreen(1, 6, 118, 23); // xóa vùng tối đa
 
         printFrameOptions(x, 10, width, 1);
         ConsoleUI::gotoXY(x + 41, 11);
-        ConsoleUI::setColor(Color::LGREEN);
+        ConsoleUI::setColor(Color::LBLUE);
         cout << "ORDER " << OrderIdx + 1;
         ConsoleUI::setColor(Color::WHITE);
 
@@ -291,7 +307,7 @@ void AdminUI::displayPurchasedHistory(vector<Order> orders) {
         }
 
         // In header
-        ConsoleUI::setColor(Color::LBLUE);
+        ConsoleUI::setColor(Color::LAQUA);
         ConsoleUI::gotoXY(x + 1, y + 1); std::cout << "ID";
         ConsoleUI::gotoXY(x + cols[0] + 1, y + 1); std::cout << "SONG NAME";
         ConsoleUI::gotoXY(x + cols[1] + 1, y + 1); std::cout << "ARTIST";
@@ -321,7 +337,7 @@ void AdminUI::displayPurchasedHistory(vector<Order> orders) {
 
         printFrameOptions(x, y + rows * 2, width, 1);
         ConsoleUI::gotoXY(17, y + rows * 2 + 1);
-        ConsoleUI::setColor(Color::LRED);
+        ConsoleUI::setColor(Color::LGREEN);
         cout << "ORDER TOTAL: $" << orders[OrderIdx].getTotal();
         ConsoleUI::setColor(Color::WHITE);
 
@@ -342,9 +358,9 @@ void AdminUI::displayPurchasedHistory(vector<Order> orders) {
         ConsoleUI::gotoXY(x + 89, y + rows * 2);
         cout << char(180);
 
-
+        ConsoleUI::setColor(Color::LAQUA);
         // Hiển thị điều hướng trang
-        ConsoleUI::gotoXY(111, 28);
+        ConsoleUI::gotoXY(111 - totalPages / 10, 28);
         std::cout << "PAGE " << currentPage + 1 << "/" << totalPages;
 
         //pre page
@@ -358,8 +374,15 @@ void AdminUI::displayPurchasedHistory(vector<Order> orders) {
         std::cout << char(175);
         ConsoleUI::gotoXY(117, 14);
         std::cout << "D";
+        ConsoleUI::setColor(Color::WHITE);
 
-        printRepeatMessage(2, 1, "EXIT");   
+        if (currentPage == 0) {
+            clearScreen(2, 14, 1, 2);
+        } else if (currentPage == totalPages - 1) {
+            clearScreen(117, 14, 1, 2);
+        }
+
+        printRepeatMessage(2, 1, "EXIT", LRED);   
 
         char key = _getch();
 
@@ -379,8 +402,8 @@ void AdminUI::displayPurchasedHistory(vector<Order> orders) {
 // Shows name, quantity sold, and revenue for each item, plus total revenue
 void AdminUI::displaySaleStatistics(vector<SalesRecord> salesRecords, float totalRevenue) {
     if (salesRecords.empty()) {
-        printFrame(30, 14, 60, 3); 
-        printMessage("NO ITEM WAS SOLD!", 50, 15);
+        printFrame(30, 14, 60, 3, LRED); 
+        printMessage("NO ITEM WAS SOLD!", 50, 15, LRED);
         sleepScreen(1200);
         return;
     }
@@ -400,9 +423,7 @@ void AdminUI::displaySaleStatistics(vector<SalesRecord> salesRecords, float tota
         int rows = endIdx - startIdx + 1; //
 
         //Xóa bảng cũ
-        clearScreen(x, y, width, maxPerPage * 2 + 4); // xóa vùng tối đa
-        // Xóa page 
-        clearScreen(111, 28, 8, 1); 
+        clearScreen(1, 6, 118, 23); // xóa vùng tối đa
 
         printFrameOptions(x, y, width, rows);
 
@@ -416,7 +437,7 @@ void AdminUI::displaySaleStatistics(vector<SalesRecord> salesRecords, float tota
         }
 
         // In header
-        ConsoleUI::setColor(Color::LPURPLE);
+        ConsoleUI::setColor(Color::LAQUA);
         ConsoleUI::gotoXY(x + 1, y + 1); std::cout << "ID";
         ConsoleUI::gotoXY(x + cols[0] + 1, y + 1); std::cout << "SONG NAME";
         ConsoleUI::gotoXY(x + cols[1] + 1, y + 1); std::cout << "ARTIST";
@@ -453,7 +474,8 @@ void AdminUI::displaySaleStatistics(vector<SalesRecord> salesRecords, float tota
         }
 
         // Hiển thị điều hướng trang
-        ConsoleUI::gotoXY(111, 28);
+        ConsoleUI::setColor(Color::LAQUA);
+        ConsoleUI::gotoXY(111 - totalPages / 10, 28);
         std::cout << "PAGE " << currentPage + 1 << "/" << totalPages;
 
         //pre page
@@ -468,12 +490,18 @@ void AdminUI::displaySaleStatistics(vector<SalesRecord> salesRecords, float tota
         ConsoleUI::gotoXY(117, 14);
         std::cout << "D";
 
-
         printFrame(40, 26, 40, 3);
         ConsoleUI::gotoXY(50, 27);
         cout << "TOTAL REVENUE: $" << totalRevenue;
+        ConsoleUI::setColor(Color::WHITE);
+
+        if (currentPage == 0) {
+            clearScreen(2, 14, 1, 2);
+        } else if (currentPage == totalPages - 1) {
+            clearScreen(117, 14, 1, 2);
+        }
         
-        printRepeatMessage(2, 1, "EXIT");   
+        printRepeatMessage(2, 1, "EXIT", LRED);   
 
         char key = _getch();
 
@@ -492,10 +520,7 @@ void AdminUI::displaySaleStatistics(vector<SalesRecord> salesRecords, float tota
 // Collects information from the admin to create a new music item
 // Returns a Music object with the user-provided details
 Music AdminUI::getNewMusicDetails() {
-
     printFrameOptions(30, 10, 60, 5);
-
-    ConsoleUI::setColor(Color::LAQUA);
     ConsoleUI::gotoXY(32, 11);
     cout << "ENTER MUSIC NAME  : ";
     ConsoleUI::gotoXY(32, 13);
@@ -506,11 +531,11 @@ Music AdminUI::getNewMusicDetails() {
     cout << "ENTER PRICE       : ";
     ConsoleUI::gotoXY(32, 19);
     cout << "ENTER QUANTITY    : ";
-    ConsoleUI::setColor(Color::WHITE);
 
     // Variables to store new music item details
 
     // Get item name with validation
+    ConsoleUI::setColor(Color::LAQUA);
     string name = getValidatedInput<string>("ENTER MUSIC NAME: ",
         [](const string& prompt) {
             return InputChecker::checkString(prompt, 32, 11);
@@ -518,6 +543,7 @@ Music AdminUI::getNewMusicDetails() {
         32, 11
     );
 
+    ConsoleUI::setColor(Color::LAQUA);
     // Get artist name with validation
     string artist = getValidatedInput<string>("ENTER ARTIST    : ",
         [](const string& prompt) {
@@ -526,6 +552,7 @@ Music AdminUI::getNewMusicDetails() {
         32, 13
     );
 
+    ConsoleUI::setColor(Color::LAQUA);
     // Get genre with validation
     string genre = getValidatedInput<string>("ENTER GENRE     : ",
         [](const string& prompt) {
@@ -534,6 +561,7 @@ Music AdminUI::getNewMusicDetails() {
         32, 15
     );
 
+    ConsoleUI::setColor(Color::LAQUA);
     // Get price with validation (must be non-negative)
     float price = getValidatedInput<float>(
         "ENTER PRICE     : ",
@@ -543,6 +571,7 @@ Music AdminUI::getNewMusicDetails() {
         32, 17
     );
 
+    ConsoleUI::setColor(Color::LAQUA);
     // Get quantity with validation (must be non-negative)
     int quantity = getValidatedInput<int>(
         "ENTER QUANTITY  : ",

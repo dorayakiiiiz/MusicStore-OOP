@@ -18,13 +18,14 @@ string SignUpCommand::getName() const {
 bool SignUpCommand::execute() {
     while(true){
         clearScreen();
-        printFrame(0, 0, 120, 30);
+        printFrame(0, 0, 120, 30, LRED);
         
         string header = "signUp";
-        printHeader(header, (120 - header.length() * 2) / 2 - 15, 1);
+        printHeader(header, (120 - header.length() * 2) / 2 - 15, 1, LRED);
         
         printFrame(27, 7, 66, 3);
         // Get role input with validation
+        ConsoleUI::setColor(RED);
         int role = getValidatedInput<int>(
             "ENTER YOUR ROLE (1 FOR ADMIN, 2 FOR CUSTOMER): ",
             [](const string& prompt) {
@@ -47,6 +48,7 @@ bool SignUpCommand::execute() {
         }
         
         // Get username input with validation
+        ConsoleUI::setColor(LRED);
         string username = getValidatedInput<string>(
             "INPUT USERNAME     : ",
             [](const string& prompt) {
@@ -56,6 +58,7 @@ bool SignUpCommand::execute() {
         );
         
         // Get password input with validation
+        ConsoleUI::setColor(LRED);
         string password = getValidatedInput<string>(
             "INPUT PASSWORD     : ",
             [](const string& prompt) {
@@ -66,12 +69,13 @@ bool SignUpCommand::execute() {
         
         // Additional validation for admin registration
         if (Role::ADMIN == role) {
+            ConsoleUI::setColor(LRED);
             string passkey = getInput("INPUT ADMIN PASSKEY: ", 32, 16);
             if (!Admin::isValidPasskey(passkey)) {
-                printFrame(30, 20, 60, 3);
-                printMessage("INVALID PASSKEY. PLEASE TRY AGAIN LATER!", 38, 21);
-                printRepeatMessage(107, 1, "CONTINUE");
-                printRepeatMessage(2, 1, "EXIT");
+                printFrame(30, 20, 60, 3, LRED);
+                printMessage("INVALID PASSKEY. PLEASE TRY AGAIN LATER!", 38, 21, LRED);
+                printRepeatMessage(107, 1, "CONTINUE", LYELLOW);
+                printRepeatMessage(2, 1, "EXIT", LRED);
                 char repeat = _getch();
                 if (repeat == 27) {
                     return true;
@@ -85,15 +89,15 @@ bool SignUpCommand::execute() {
         // Register the new user
         bool success = AuthService::getInstance()->registerUser(username, password, static_cast<Role>(role));
         if (success) {
-            printFrame(40, 20, 40, 5);
-            printMessage("SIGN UP SUCCESSFULLY", 48, 22);
+            printFrame(40, 20, 40, 5, LGREEN);
+            printMessage("SIGN UP SUCCESSFULLY", 48, 22, LGREEN);
             sleepScreen(1200);
             return true;
         } else {
-            printFrame(30, 20, 60, 3);
-            printMessage("USERNAME ALREADY EXISTS. PLEASE TRY AGAIN LATER!", 34, 21);
-            printRepeatMessage(107, 1, "CONTINUE");
-            printRepeatMessage(2, 1, "EXIT");
+            printFrame(30, 20, 60, 3, LRED);
+            printMessage("USERNAME ALREADY EXISTS. PLEASE TRY AGAIN LATER!", 34, 21, LRED);
+            printRepeatMessage(107, 1, "CONTINUE", LYELLOW);
+            printRepeatMessage(2, 1, "EXIT", LRED);
             char repeat = _getch();
             if (repeat == 27) {
                 return true;
@@ -117,9 +121,9 @@ string LoginCommand::getName() const {
 bool LoginCommand::execute() {
     while(true){
         clearScreen();
-        printFrame(0, 0, 120, 30);
+        printFrame(0, 0, 120, 30, LRED);
         string header = "login";
-        printHeader(header, (120 - header.length()*2) / 2 - 11, 1);
+        printHeader(header, (120 - header.length()*2) / 2 - 11, 1, LRED);
 
         printFrameOptions(30, 10, 60, 2);
         ConsoleUI::gotoXY(32, 11);
@@ -128,6 +132,7 @@ bool LoginCommand::execute() {
         cout << "INPUT PASSWORD  : ";
 
         // Get username input with validation
+        ConsoleUI::setColor(LRED);
         string username = getValidatedInput<string>(
             "INPUT USERNAME: ",
             [](const string& prompt) {
@@ -137,6 +142,7 @@ bool LoginCommand::execute() {
         );
 
         // Get password input with validation
+        ConsoleUI::setColor(LRED);
         string password = getValidatedInput<string>(
             "INPUT PASSWORD: ",
             [](const string& prompt) {
@@ -149,10 +155,10 @@ bool LoginCommand::execute() {
         currentUser = AuthService::getInstance()->loginUser(username, password);
 
         if (!currentUser) {
-            printFrame(30, 16, 60, 3);
-            printMessage("INVALID USERNAME OR PASSWORD. PLEASE TRY AGAIN!", 36, 17);
-            printRepeatMessage(107, 1, "CONTINUE");
-            printRepeatMessage(2, 1, "EXIT");
+            printFrame(30, 16, 60, 3, LRED);
+            printMessage("INVALID USERNAME OR PASSWORD. PLEASE TRY AGAIN!", 36, 17, LRED);
+            printRepeatMessage(107, 1, "CONTINUE", LYELLOW);
+            printRepeatMessage(2, 1, "EXIT", LYELLOW);
             char repeat = _getch();
             if (repeat == 27) {
                 return true;
@@ -169,8 +175,8 @@ bool LoginCommand::execute() {
         shared_ptr<IController> controller = factory.createController(role);
 
         if (controller) {
-            printFrame(30, 16, 60, 5);
-            printMessage("LOGIN SUCCESSFULLY! WELCOME " + currentUser->getUsername() + "!", 40, 18);
+            printFrame(30, 16, 60, 5, LGREEN);
+            printMessage("LOGIN SUCCESSFULLY! WELCOME " + currentUser->getUsername() + "!", 40, 18, LGREEN);
             sleepScreen(1200);
             clearScreen();
             controller->menu(currentUser);
@@ -188,9 +194,11 @@ string ExitCommand::getName() const {
 bool ExitCommand::execute() {
     printFrame(5, 22, 40, 6);
     ConsoleUI::gotoXY(9, 24);
+    ConsoleUI::setColor(LGREEN);
     cout << "    EXITING THE APPLICATION\n";
     ConsoleUI::gotoXY(9, 25);
     cout << "THANK YOU FOR USING OUR SERVICE!";
+    ConsoleUI::setColor(WHITE);
     sleepScreen(1500);
     system("cls");
     return false;

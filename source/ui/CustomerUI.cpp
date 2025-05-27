@@ -12,15 +12,15 @@
 
 // Displays a personalized welcome message for the customer
 void CustomerUI::displayWelcomeMessage(const string& username) {
-    printMessage("WELCOME " + username + " TO THE MUSIC STORE!", 10, 20);
+    printMessage("WELCOME " + username + " TO THE MUSIC STORE!", 10, 20, LGREEN);
 }
 
 // Displays the order history for a specific customer
 // Shows all previous orders with details of purchased items and totals
 void CustomerUI::displayPurchasedHistory(const vector<Order>& orders) {
     if (orders.empty()) {
-        printFrame(40, 14, 40, 3); 
-        printMessage("NO PURCHASE HISTORY FOUND!",  46, 15);
+        printFrame(40, 14, 40, 3, LRED); 
+        printMessage("NO PURCHASE HISTORY FOUND!",  46, 15, LRED);
         sleepScreen(1200);
         return;
     }
@@ -50,7 +50,7 @@ void CustomerUI::displayPurchasedHistory(const vector<Order>& orders) {
 
         printFrameOptions(x, 10, width, 1);
         ConsoleUI::gotoXY(x + 41, 11);
-        ConsoleUI::setColor(Color::LBLUE);
+        ConsoleUI::setColor(Color::YELLOW);
         cout << "ORDER " << OrderIdx + 1;
         ConsoleUI::setColor(Color::WHITE);
 
@@ -68,7 +68,7 @@ void CustomerUI::displayPurchasedHistory(const vector<Order>& orders) {
         }
 
         // In header
-        ConsoleUI::setColor(Color::LAQUA);
+        ConsoleUI::setColor(Color::LYELLOW);
         ConsoleUI::gotoXY(x + 1, y + 1); std::cout << "ID";
         ConsoleUI::gotoXY(x + cols[0] + 1, y + 1); std::cout << "SONG NAME";
         ConsoleUI::gotoXY(x + cols[1] + 1, y + 1); std::cout << "ARTIST";
@@ -121,7 +121,8 @@ void CustomerUI::displayPurchasedHistory(const vector<Order>& orders) {
 
 
         // Hiển thị điều hướng trang
-        ConsoleUI::gotoXY(111, 28);
+        ConsoleUI::setColor(Color::LYELLOW);
+        ConsoleUI::gotoXY(111 - totalPages/10, 28);
         std::cout << "PAGE " << currentPage + 1 << "/" << totalPages;
 
         //pre page
@@ -135,8 +136,15 @@ void CustomerUI::displayPurchasedHistory(const vector<Order>& orders) {
         std::cout << char(175);
         ConsoleUI::gotoXY(117, 14);
         std::cout << "D";
+        ConsoleUI::setColor(Color::WHITE);
 
-        printRepeatMessage(2, 1, "EXIT");   
+        if (currentPage == 0) {
+            clearScreen(2, 14, 1, 2);
+        } else if (currentPage == totalPages - 1) {
+            clearScreen(117, 14, 1, 2);
+        }
+
+        printRepeatMessage(2, 1, "EXIT", LYELLOW);   
 
         char key = _getch();
 
@@ -155,8 +163,8 @@ void CustomerUI::displayPurchasedHistory(const vector<Order>& orders) {
 // Displays a formatted list of all available music items
 void CustomerUI::displayMusicList(vector<Music>& items, int maxPerPage) {
     if (items.empty()) {
-        printFrame(30, 14, 60, 3); 
-        printMessage("NO ITEMS FOUND!", 50, 15);
+        printFrame(30, 14, 60, 3, LRED); 
+        printMessage("NO ITEMS FOUND!", 50, 15, LRED);
         sleepScreen(1200);
         return;
     }
@@ -198,7 +206,7 @@ void CustomerUI::displayMusicList(vector<Music>& items, int maxPerPage) {
         }
 
         // In header
-        ConsoleUI::setColor(Color::LGREEN);
+        ConsoleUI::setColor(Color::LYELLOW);
         ConsoleUI::gotoXY(x + 1, y + 1); std::cout << "ID";
         ConsoleUI::gotoXY(x + cols[0] + 1, y + 1); std::cout << "SONG NAME";
         ConsoleUI::gotoXY(x + cols[1] + 1, y + 1); std::cout << "ARTIST";
@@ -234,8 +242,9 @@ void CustomerUI::displayMusicList(vector<Music>& items, int maxPerPage) {
             std::cout << char(193); 
         }
 
+        ConsoleUI::setColor(Color::LYELLOW);
         // Hiển thị điều hướng trang
-        ConsoleUI::gotoXY(111, 28);
+        ConsoleUI::gotoXY(111 - totalPages / 10, 28);
         std::cout << "PAGE " << currentPage + 1 << "/" << totalPages;
 
         //pre page
@@ -249,13 +258,20 @@ void CustomerUI::displayMusicList(vector<Music>& items, int maxPerPage) {
         std::cout << char(175);
         ConsoleUI::gotoXY(117, 14);
         std::cout << "D";
+        ConsoleUI::setColor(Color::WHITE);
+
+        if (currentPage == 0) {
+            clearScreen(2, 14, 1, 2);
+        } else if (currentPage == totalPages - 1) {
+            clearScreen(117, 14, 1, 2);
+        }
 
         // Đợi người dùng nhập phím
         if(8 == maxPerPage){
-            printRepeatMessage(2, 1, "EXIT");    
+            printRepeatMessage(2, 1, "EXIT", LYELLOW);    
         }
         else if (6 == maxPerPage){
-            printRepeatMessage(107, 1, "ADD ITEM");
+            printRepeatMessage(107, 1, "ADD ITEM", LAQUA);
         }
 
         char key = _getch();
@@ -280,8 +296,8 @@ void CustomerUI::displayMusicList(vector<Music>& items, int maxPerPage) {
 // Shows name, quantity, unit price and total price for each item
 void CustomerUI::displayCart(const vector<Music>& items, int maxPerPage) {
     if (items.empty()) {
-        printFrame(40, 14, 40, 3);
-        printMessage("CART IS EMPTY!", 55, 15);
+        printFrame(40, 14, 40, 3, LRED);
+        printMessage("CART IS EMPTY!", 52, 15, LRED);
         sleepScreen(1200);
         return;
     }
@@ -305,12 +321,13 @@ void CustomerUI::displayCart(const vector<Music>& items, int maxPerPage) {
         int rows = endIdx - startIdx + 1; //
 
         //Xóa bảng cũ
-        clearScreen(x, y, width, maxPerPage * 2 + 4); // xóa vùng tối đa
+        clearScreen(1, 6, 118, 23); // xóa vùng tối đa
         // Xóa page 
         clearScreen(111, 28, 8, 1); 
         // Xóa vùng thông báo
         clearScreen(2, 1, 7, 4);
         clearScreen(109, 1, 9, 4);
+        clearScreen(106, 1, 9, 4);
         // Xóa hiển thiện điều hướng
         clearScreen(2, 14, 1, 2);
         clearScreen(117, 14, 1, 2);
@@ -327,7 +344,7 @@ void CustomerUI::displayCart(const vector<Music>& items, int maxPerPage) {
         }
 
         // In header
-        ConsoleUI::setColor(Color::LRED);
+        ConsoleUI::setColor(Color::LYELLOW);
         ConsoleUI::gotoXY(x + 1, y + 1); std::cout << "ID";
         ConsoleUI::gotoXY(x + cols[0] + 1, y + 1); std::cout << "SONG NAME";
         ConsoleUI::gotoXY(x + cols[1] + 1, y + 1); std::cout << "ARTIST";
@@ -363,8 +380,9 @@ void CustomerUI::displayCart(const vector<Music>& items, int maxPerPage) {
             std::cout << char(193); 
         }
 
+        ConsoleUI::setColor(Color::LYELLOW);
         // Hiển thị điều hướng trang
-        ConsoleUI::gotoXY(111, 28);
+        ConsoleUI::gotoXY(111 - totalPages / 10, 28);
         std::cout << "PAGE " << currentPage + 1 << "/" << totalPages;
 
         //pre page
@@ -378,16 +396,27 @@ void CustomerUI::displayCart(const vector<Music>& items, int maxPerPage) {
         std::cout << char(175);
         ConsoleUI::gotoXY(117, 14);
         std::cout << "D";
+        ConsoleUI::setColor(Color::WHITE);
+
+        if (currentPage == 0) {
+            clearScreen(2, 14, 1, 2);
+        } else if (currentPage == totalPages - 1) {
+            clearScreen(117, 14, 1, 2);
+        }
+
 
         // Đợi người dùng nhập phím
         if(8 == maxPerPage){
-            printRepeatMessage(2, 1, "EXIT");    
+            printRepeatMessage(2, 1, "EXIT", LYELLOW);   
+            clearScreen(2, 1, 7, 4);
         }
         else if (7 == maxPerPage){
-            printRepeatMessage(109, 1, "REMOVE");
+            printRepeatMessage(109, 1, "REMOVE", LAQUA);
+            clearScreen(109, 1, 9, 4); 
         }
         else {
-            printRepeatMessage(106, 1, "CHECK OUT");
+            printRepeatMessage(106, 1, "CHECK OUT", LAQUA);
+            clearScreen(106, 1, 9, 4);
         }
 
         char key = _getch();
@@ -410,8 +439,8 @@ void CustomerUI::displayCart(const vector<Music>& items, int maxPerPage) {
 
 // Displays a message when no search results are found
 void CustomerUI::displayNoResultsMessage() {
-    printFrame(40, 14, 40, 3);
-    printMessage("NO RESULTS FOUND!",  48, 15);
+    printFrame(40, 14, 40, 3, LRED);
+    printMessage("NO RESULTS FOUND!",  48, 15, LRED);
 }
 
 // Displays search results from a music search operation
@@ -421,8 +450,8 @@ void CustomerUI::displaySearchResults(vector<Music>& results) {
 
 // Displays a message when attempting to checkout with an empty cart
 void CustomerUI::displayEmptyCartMessage() {
-    printFrame(30, 14, 61, 3);
-    printMessage("CART IS EMPTY! PLEASE ADD ITEMS TO CART BEFORE CHECKING OUT.",  32, 15);
+    printFrame(29, 14, 63, 3, LRED);
+    printMessage("CART IS EMPTY! PLEASE ADD ITEMS TO CART BEFORE CHECKING OUT.",  31, 15, LRED);
 }
 
 // Displays order details before confirming checkout
@@ -431,7 +460,9 @@ void CustomerUI::displayOrderDetails(const string& username, const vector<Music>
     displayCart(items, 6);
     printFrame(40, 23, 40, 3);
     ConsoleUI::gotoXY(50, 24);
+    printFrame(29, 14, 63, 3, LYELLOW);
     cout << "TOTAL REVENUE: $" << total;
+    printFrame(29, 14, 63, 3, WHITE);
     sleepScreen(1200);
     clearScreen(1, 1, 105, 5);
 }
@@ -448,7 +479,7 @@ void CustomerUI::displayVoucherList(const vector<shared_ptr<Discount>>& vouchers
 
     printFrame(30, 7, 60, 3);
     ConsoleUI::gotoXY(38, 8);
-    ConsoleUI::setColor(Color::LRED);
+    ConsoleUI::setColor(Color::LGREEN);
     cout << "YOU HAVE THE FOLLOWING VOUCHERS AVAILABLE";
     ConsoleUI::setColor(Color::WHITE);
 
@@ -472,7 +503,7 @@ void CustomerUI::displayVoucherList(const vector<shared_ptr<Discount>>& vouchers
         std::cout << char(197); 
         
             //In header
-        ConsoleUI::setColor(Color::LGREEN);
+        ConsoleUI::setColor(Color::LYELLOW);
         ConsoleUI::gotoXY(x + 1, y + 1);
         std::cout << "ID";
         ConsoleUI::gotoXY(x + 6, y + 1);
@@ -501,6 +532,7 @@ void CustomerUI::displayVoucherList(const vector<shared_ptr<Discount>>& vouchers
         std::cout << char(193); 
         
 
+        ConsoleUI::setColor(Color::LYELLOW);
         // Hiển thị điều hướng trang
         ConsoleUI::gotoXY(111, 28);
         std::cout << "PAGE " << currentPage + 1 << "/" << totalPages;
@@ -516,10 +548,17 @@ void CustomerUI::displayVoucherList(const vector<shared_ptr<Discount>>& vouchers
         std::cout << char(175);
         ConsoleUI::gotoXY(117, 14);
         std::cout << "D";
+        ConsoleUI::setColor(Color::WHITE);
+
+        if (currentPage == 0) {
+            clearScreen(2, 14, 1, 2);
+        } else if (currentPage == totalPages - 1) {
+            clearScreen(117, 14, 1, 2);
+        }
 
         // Đợi người dùng nhập phím
   
-        printRepeatMessage(109, 1, "SELECT");
+        printRepeatMessage(109, 1, "SELECT", LAQUA);
 
         char key = _getch();
         if (13 == key){
@@ -536,7 +575,7 @@ void CustomerUI::displayVoucherList(const vector<shared_ptr<Discount>>& vouchers
 // Displays discount options after a large purchase (over $50)
 // Shows available discount types the customer can choose
 void CustomerUI::displayDiscountOptions() {
-    printFrame(7, 8, 107, 9);
+    printFrame(7, 8, 107, 9, LYELLOW);
     ConsoleUI::gotoXY(9, 9);
     ConsoleUI::setColor(Color::LBLUE);
     cout << "CONGRATULATIONS! AS THE TOTAL IS OVER $50, YOU WILL RECEIVE A DISCOUNT VOUCHER FOR YOUR NEXT PURCHASE";
@@ -552,18 +591,18 @@ void CustomerUI::displayDiscountOptions() {
 
 // Displays a success message after completing an order
 void CustomerUI::displayOrderSuccessMessage() {
-    printFrame(30, 26, 60, 3);
+    printFrame(30, 26, 60, 3, LGREEN);
     ConsoleUI::gotoXY(32, 27);
-    ConsoleUI::setColor(Color::LRED);
+    ConsoleUI::setColor(Color::LGREEN);
     cout << "ORDER PLACED SUCCESSFULLY! THANK YOU FOR YOUR PURCHASE!";
     ConsoleUI::setColor(Color::WHITE);
 }
 
 // Displays a message when the customer logs out
 void CustomerUI::displayLogoutMessage() {
-    printFrame(5, 24, 50, 5);
+    printFrame(5, 24, 50, 5, LGREEN);
     ConsoleUI::gotoXY(14, 26);
-    ConsoleUI::setColor(Color::LRED);
+    ConsoleUI::setColor(Color::LGREEN);
     cout << "YOU HAVE LOGGED OUT SUCCESSFULLY!";
     ConsoleUI::setColor(Color::WHITE);
     sleepScreen(1200);
@@ -571,7 +610,7 @@ void CustomerUI::displayLogoutMessage() {
 
 // Displays a warning when attempting to log out with items still in cart
 void CustomerUI::displayCartWarningMessage() {
-    printFrame(5, 23, 50, 6);
+    printFrame(5, 23, 50, 6, LRED);
     ConsoleUI::gotoXY(12, 25);
     ConsoleUI::setColor(Color::LRED);
     cout << "   YOU HAVE ITEMS IN YOUR CART!";

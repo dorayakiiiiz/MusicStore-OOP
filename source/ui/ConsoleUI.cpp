@@ -19,8 +19,23 @@ int ConsoleUI::selectMenu(const std::vector<std::string>& options, const std::st
     int frameX = 0, frameY = 0, frameW = 120, frameH = 30;
     int titleX = frameX + (frameW - header.length() * 2) / 2;
 
+    Color fg;
+    Color bg;
+    if(header == "WELCOME TO THE MUSIC STORE"){
+        fg = LRED;
+        bg = RED;
+    }
+    else if (header == "ADMIN MENU"){
+        fg = LAQUA;
+        bg = LBLUE;
+    }
+    else{
+        fg = LYELLOW;
+        bg = YELLOW;
+    }
+
     clearScreen();
-    printFrame(frameX, frameY, frameW, frameH);
+    printFrame(frameX, frameY, frameW, frameH, fg);
 
     // In tiêu đề căn giữa
     gotoXY(titleX, 6);
@@ -28,23 +43,23 @@ int ConsoleUI::selectMenu(const std::vector<std::string>& options, const std::st
 
     // In hướng dẫn
     string instructions = "Use W/S to navigate and Enter to select";
-    int guideX = 71;
+    int guideX = 70;
     int guideY = 24; // Dòng gần cuối nếu height = 30
-    int guideW = 2 + instructions.size();
+    int guideW = 4 + instructions.size();
     int guideH = 3;
     printFrame(guideX, guideY, guideW, guideH);
-    printInstructions(instructions, guideX + 1, guideY + 1);
+    printInstructions(instructions, guideX + 2, guideY + 1, fg);
 
     while (true) {
         // In khung lựa chọnchọn
         int optW = 6 + getMaxOptionsLength(options);
-        printFrameOptions(x, y, optW + 2, options.size());
+        printFrameOptions(x, y, optW + 2, options.size(), fg);
 
         // In các lựa chọn menu, mỗi dòng chiếm đúng 1 khung option
         for (int i = 0; i < options.size(); ++i) {
             gotoXY(x + 2, y + i * 2 + 1); // In ra giữa khung
             if (i == selected)
-                setColor(WHITE, BLUE); // Highlight
+                setColor(WHITE, bg); // Highlight
             else
                 setColor(WHITE, BLACK); // Mặc định
             std::cout << (i == selected ? ">> " : "   ") << options[i];

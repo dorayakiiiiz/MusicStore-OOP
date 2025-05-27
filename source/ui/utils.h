@@ -1,5 +1,5 @@
-#ifndef _UI_H_
-#define _UI_H_
+#ifndef _UTILS_H_
+#define _UTILS_H_
 
 #include <string>
 #include <vector>
@@ -15,20 +15,21 @@
 using std::string, std::vector, std::tuple, std::make_tuple, std::get;
 using std::stoi, std::cout, std::cin, std::function, std::tie;
 
+
 /**
  * @brief Prints a formatted header with decorative elements
  * @param header The header text to display
  */
-void printHeader(const string&, int, int);
+void printHeader(const string&, int, int, Color fg = WHITE, Color bg = BLACK);
 
 /**
  * @brief Prints a message with a decorative symbol prefix
  * @param message The message to display
  */
-void printMessage(const string&, int, int);
+void printMessage(const string&, int, int, Color fg = WHITE, Color bg = BLACK);
 
 
-void printMenu(const string&, int, int);
+void printMenu(const string&, int, int, Color fg = WHITE, Color bg = BLACK);
 /**
  * @brief Prints a horizontal line of dashes
  */
@@ -44,9 +45,9 @@ void clearScreen(int x, int y, int width, int height);
 /**
  * @brief Prints a message for repeating the last action
  */
-void printRepeatMessage(int x, int y, string instructions);
+void printRepeatMessage(int x, int y, string instructions, Color fg = WHITE, Color bg = BLACK);
 
-void printFrame(int x, int y, int width, int height);
+void printFrame(int x, int y, int width, int height, Color fg = WHITE, Color bg = BLACK);
 /**
  * @brief Prints a frame around a specified area
  * @param x The x-coordinate of the top-left corner
@@ -55,7 +56,7 @@ void printFrame(int x, int y, int width, int height);
  * @param height The height of the frame
  */
 
-void printFrameOptions(int x, int y, int width, int select);
+void printFrameOptions(int x, int y, int width, int select, Color fg = WHITE, Color bg = BLACK);
 
 
 /**
@@ -66,14 +67,14 @@ void printFrameOptions(int x, int y, int width, int select);
  * @param select The number of options to display
  */
 
- void printInstructions(const string& instructions, int x, int y);
+ void printInstructions(const string& instructions, int x, int y, Color fg = WHITE, Color bg = BLACK);
 
 /**
  * @brief Gets user input with a prompt
  * @param prompt The prompt to display to the user
  * @return The string input by the user
  */
-string getInput(const string&, int, int);
+string getInput(const string&, int, int, Color fg = WHITE, Color bg = BLACK);
 
 /**
  * @brief Sleeps the program for a specified duration
@@ -113,8 +114,8 @@ T getValidatedInput(const string& prompt, function<tuple<bool, T, Error>(const s
         clearScreen(promptX, promptY, prompt.size() + 8, 1);
         tie(isValid, value, error) = validatorFunc(prompt);
         if (!isValid) {;
-            printFrame(61, 26, error.message.size() + 6, 3);
-            printMessage(error.message, 63, 27);
+            printFrame(61, 26, error.message.size() + 6, 3, LRED);
+            printMessage(error.message, 63, 27, LRED);
             printRepeatMessage(107, 1, "CONTINUE");
             char repeat = _getch();
             clearScreen(61, 26, error.message.size() + 6, 3);
