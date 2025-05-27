@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "../Music.h"
+#include "../source/models/Music.h"
 #include <string>
 
 class MusicTest : public ::testing::Test {

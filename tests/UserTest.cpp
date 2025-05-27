@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "../User.h"
+#include "../source/models/User.h"
 
 class UserTest : public ::testing::Test {
 protected:

@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
-#include "../Discount.h"
-#include "../DiscountStrategy.h"
+#include "../source/models/Discount.h"
+#include "../source/strategies/DiscountStrategy.h"
 #include <memory>
 
 class DiscountTest : public ::testing::Test {

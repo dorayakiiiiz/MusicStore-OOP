@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
-#include "../Search.h"
-#include "../Music.h"
+#include "../source/strategies/Search.h"
+#include "../source/models/Music.h"
 #include <vector>
 #include <memory>
 

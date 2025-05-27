@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
-#include "../SearchFactory.h"
-#include "../Search.h"
+#include "../source/factories/SearchFactory.h"
+#include "../source/strategies/Search.h"
 #include <memory>
 
 class SearchFactoryTest : public ::testing::Test {

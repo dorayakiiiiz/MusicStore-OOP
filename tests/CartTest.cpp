@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
-#include "../Cart.h"
-#include "../Music.h"
+#include "../source/models/Cart.h"
+#include "../source/models/Music.h"
 
 class CartTest : public ::testing::Test {
 protected:

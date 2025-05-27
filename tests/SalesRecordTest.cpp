@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "../SalesRecord.h"
+#include "../source/models/SalesRecord.h"
 
 class SalesRecordTest : public ::testing::Test {
 protected:

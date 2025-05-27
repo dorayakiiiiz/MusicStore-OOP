@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "../InputChecker.h"
+#include "../source/ui/InputChecker.h"
 #include <tuple>
 
 // Lưu ý: InputChecker rất khó test vì phụ thuộc vào input của người dùng

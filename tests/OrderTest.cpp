@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
-#include "../Order.h"
-#include "../Music.h"
+#include "../source/models/Order.h"
+#include "../source/models/Music.h"
 #include <vector>
 
 class OrderTest : public ::testing::Test {

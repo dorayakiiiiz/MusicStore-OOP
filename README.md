@@ -80,12 +80,17 @@ Chương trình được phân tách ra 2 vai trò riêng biệt với 2 loại 
 #### Database: Truy xuất và lưu trữ dữ liệu từ database với SQL Server thay vì đọc file thông thường
 
 ### HƯỚNG DẪN BIÊN DỊCH CHƯƠNG TRÌNH
-- Nhập lệnh sau ở terminal:  ```g++ ...```  để biên dịch chương trình
+- Yêu cầu: Trình biên dịch g++ version 13 trở lên, có cài đặt ODBC Driver cho SQL Server (có thể tải từ trang chủ Microsoft)
 
-- Nếu đã điều chỉnh trong .vscode/task.json thì chỉ cần gõ lệnh sau để biên dịch:
-    ```g++ *.cpp -lole32 -lodbc32 -o out/program```
+- Hệ điều hành: Windows
 
-- Nhập lệnh: ```./out/program``` để chạy chương trình.
+- Nhập lệnh sau ở terminal:  ```g++ source/main.cpp source/app/*.cpp source/controllers/*.cpp source/services/*.cpp source/models/*.cpp source/database/*.cpp source/factories/*.cpp source/strategies/*.cpp source/commands/*.cpp source/ui/*.cpp -I source -std=c++17 -lole32 -lodbc32 -o release/program```  để biên dịch chương trình
+
+- Hoặc sử dụng Makefile (trên Windows, có cài đặt MingGW hoặc MSYS2) có sẵn trong thư mục `source`:
+  - Chạy lệnh: ```mingw32-make``` để biên dịch chương trình.
+  - Lệnh này sẽ tự động biên dịch tất cả các file `.cpp` trong thư mục `source` và tạo ra file thực thi `program` trong thư mục `release`.
+
+- Nhập lệnh: ```./release/program``` để chạy chương trình.
 
 ### KIẾN TRÚC PHẦN MỀM
 Dự án được xây dựng theo mô hình kiến trúc nhiều lớp (Layered Architecture)

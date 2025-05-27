@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
-#include "../CartService.h"
-#include "../Cart.h"
+#include "../source/services/CartService.h"
+#include "../source/models/Cart.h"
 #include "MockSQLDao.h"
 #include <memory>
 

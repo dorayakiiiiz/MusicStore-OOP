@@ -1,12 +1,12 @@
 #ifndef MOCK_SQL_DAO_H
 #define MOCK_SQL_DAO_H
 
-#include "../IDataProvider.h"
-#include "../Music.h"
-#include "../User.h"
-#include "../Order.h"
-#include "../Discount.h"
-#include "../SalesRecord.h"
+#include "../source/database/IDataProvider.h"
+#include "../source/models/Music.h"
+#include "../source/models/User.h"
+#include "../source/models/Order.h"
+#include "../source/models/Discount.h"
+#include "../source/models/SalesRecord.h"
 #include <memory>
 #include <vector>
 
