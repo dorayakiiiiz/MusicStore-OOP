@@ -86,19 +86,24 @@ Chương trình được phân tách ra 2 vai trò riêng biệt với 2 loại 
 - Hệ điều hành: Windows
 ```
 
-- Nhập lệnh sau ở terminal để biên dịch chương trình:  
+Nhập lệnh sau ở terminal (bash) để biên dịch chương trình:  
 ```bash
 g++ source/main.cpp source/app/*.cpp source/controllers/*.cpp source/services/*.cpp source/models/*.cpp source/database/*.cpp source/factories/*.cpp source/strategies/*.cpp source/commands/*.cpp source/ui/*.cpp -I source -std=c++17 -lole32 -lodbc32 -o release/program
 ```
 
-- Hoặc sử dụng Makefile (trên Windows, có cài đặt MingGW hoặc MSYS2) có sẵn trong thư mục `source`:
-  - Chạy lệnh: 
-  ```bash
+hoặc
+```bash
+g++ $(find source -type f -name "*.cpp") -I source -std=c++17 -lole32 -lodbc32 -o release/program
+```
+
+Hoặc sử dụng Makefile (trên Windows, có cài đặt MingGW hoặc MSYS2) có sẵn trong thư mục `source`:
+- Chạy lệnh: 
+```bash
   mingw32-make
-  ```
+```
   - Lệnh này sẽ tự động biên dịch tất cả các file `.cpp` trong thư mục `source` và tạo ra file thực thi `program` trong thư mục `release`.
 
-- Nhập lệnh sau để chạy chương trình: 
+Nhập lệnh sau để chạy chương trình: 
 ```bash
 ./release/program
 ``` 
