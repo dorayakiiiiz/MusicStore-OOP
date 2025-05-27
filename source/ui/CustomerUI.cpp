@@ -18,17 +18,12 @@ void CustomerUI::displayWelcomeMessage(const string& username) {
 // Displays the order history for a specific customer
 // Shows all previous orders with details of purchased items and totals
 void CustomerUI::displayPurchasedHistory(const vector<Order>& orders) {
-    // if (orders.empty()) {
-    //     printFrame(40, 14, 40, 3); 
-    //     printMessage("NO PURCHASE HISTORY FOUND!",  46, 15);
-    //     printRepeatMessage(2, 1, "EXIT");   
-
-    //     char key = _getch();
-
-    //     if (27 == key) {
-    //         return;
-    //     }
-    // }
+    if (orders.empty()) {
+        printFrame(40, 14, 40, 3); 
+        printMessage("NO PURCHASE HISTORY FOUND!",  46, 15);
+        sleepScreen(1200);
+        return;
+    }
 
     int x = 15;
     int y = 12;
@@ -159,6 +154,13 @@ void CustomerUI::displayPurchasedHistory(const vector<Order>& orders) {
 
 // Displays a formatted list of all available music items
 void CustomerUI::displayMusicList(vector<Music>& items, int maxPerPage) {
+    if (items.empty()) {
+        printFrame(30, 14, 60, 3); 
+        printMessage("NO ITEMS FOUND!", 50, 15);
+        sleepScreen(1200);
+        return;
+    }
+
     int x = 7;
     int y = 8;
     int width = 106;
@@ -277,6 +279,13 @@ void CustomerUI::displayMusicList(vector<Music>& items, int maxPerPage) {
 // Displays the current items in the shopping cart
 // Shows name, quantity, unit price and total price for each item
 void CustomerUI::displayCart(const vector<Music>& items, int maxPerPage) {
+    if (items.empty()) {
+        printFrame(40, 14, 40, 3);
+        printMessage("CART IS EMPTY!", 55, 15);
+        sleepScreen(1200);
+        return;
+    }
+
     int x = 7;
     int y = 8;
     int width = 106;
@@ -412,8 +421,8 @@ void CustomerUI::displaySearchResults(vector<Music>& results) {
 
 // Displays a message when attempting to checkout with an empty cart
 void CustomerUI::displayEmptyCartMessage() {
-    printFrame(30, 14, 60, 3);
-    printMessage("CART IS EMPTY! PLEASE ADD ITEMS TO CART BEFORE CHECKING OUT.",  40, 15);
+    printFrame(30, 14, 61, 3);
+    printMessage("CART IS EMPTY! PLEASE ADD ITEMS TO CART BEFORE CHECKING OUT.",  32, 15);
 }
 
 // Displays order details before confirming checkout

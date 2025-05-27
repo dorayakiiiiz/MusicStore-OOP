@@ -23,6 +23,13 @@ void AdminUI::displayWelcomeMessage(const string& username) {
 // Displays a formatted list of all music items in inventory
 // Shows ID, name, artist, genre, price and quantity for each item
 void AdminUI::displayMusicList(vector<Music>& items, int maxPerPage) {
+    if (items.empty()) {
+        printFrame(30, 14, 60, 3); 
+        printMessage("NO ITEMS FOUND!", 50, 15);
+        sleepScreen(1200);
+        return;
+    }
+
     int x = 7;
     int y = 8;
     int width = 106;
@@ -371,6 +378,12 @@ void AdminUI::displayPurchasedHistory(vector<Order> orders) {
 // Displays sales statistics for items sold in the store
 // Shows name, quantity sold, and revenue for each item, plus total revenue
 void AdminUI::displaySaleStatistics(vector<SalesRecord> salesRecords, float totalRevenue) {
+    if (salesRecords.empty()) {
+        printFrame(30, 14, 60, 3); 
+        printMessage("NO ITEM WAS SOLD!", 50, 15);
+        sleepScreen(1200);
+        return;
+    }
     int x = 7;
     int y = 7;
     int maxPerPage = 8;
