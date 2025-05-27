@@ -80,8 +80,38 @@ Chương trình được phân tách ra 2 vai trò riêng biệt với 2 loại 
 #### Database: Truy xuất và lưu trữ dữ liệu từ database với SQL Server thay vì đọc file thông thường
 
 ### HƯỚNG DẪN BIÊN DỊCH CHƯƠNG TRÌNH
+
+- Bước 1: Cài đặt ODBC Driver for SQL Server 17 (Đây là driver cần thiết để C++ có thể giao tiếp với SQL Server thông qua ODBC)
+    + Tải từ trang chính thức của Microsoft: https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server
+    + Chọn phiên bản tương ứng hệ điều hành của máy bạn (Windows 64-bit) và cài đặt.
+- Bước 2: Cài đặt MSYS2 & UnixODBC
+    + Mở MSYS2 UCRT64 Terminal và nhập lệnh: ```pacman -S mingw-w64-ucrt-x86_64-unixodbc```
+    + Sau đó nhấn ```Y``` để cài đặt
+- Bước 3: Cài đặt SQL Server (mssql extension) trong VSCode
+    + Mở VSCode → nhấn ```Ctrl + Shift + X``` để mở Marketplace Extensions
+    + Tìm và cài đặt SQL Server (mssql) của Microsoft. 
+    + Sau khi cài, nhấn ```Ctrl + Alt + D``` → Chọn vào dấu + trong phần CONNECTIONS để thêm kết nối.
+- Bước 4: Tạo cơ sở dữ liệu
+    + Mở file ```music_store.sql``` bằng VSCode hoặc SQL Server Management Studio.
+    + Chạy lệnh Execute để tạo database ```music_store``` và các bảng cần thiết.
+- Bước 5: Kết nối đến cơ sở dữ liệu
+    + Tại VSCode trong phần Connection Dialog (Preview), ta nhập các thông tin như
+        - Profile Name: tên tùy chọn
+        - Server name: tên máy SQL Server của bạn
+        - Authentication type: SQL Login hoặc Windows Authentication. Nếu là SQL Login cần nhập User name và Password
+        - Database name: ```music_store```
+        - Encrypt: chọn Optional
+    + Tích chọn Trust server certificate
+    + Sau đó nhấn Connect để kết nối
+
+
+**Yêu cầu:**
 ```
-- Yêu cầu: Trình biên dịch g++ version 13 trở lên, có cài đặt ODBC Driver cho SQL Server (có thể tải từ trang chủ Microsoft)
+-  Trình biên dịch g++ version 13 trở lên.
+
+-  Cài đặt ODBC Driver for SQL Server 17 (hoặc phiên bản mới nhất) để có thể kết nối với SQL Server.
+
+- Link download: https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server
 
 - Hệ điều hành: Windows
 ```
