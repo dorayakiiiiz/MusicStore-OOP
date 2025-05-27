@@ -27,17 +27,6 @@ bool ViewMusicListCommand::execute() {
     printHeader(header, (120 - header.length()*2) / 2 - 19, 1);
 
     vector<Music> items = MusicService::getInstance()->getAllMusic();
-    if (items.empty()) {
-        printFrame(30, 14, 60, 3); 
-        printMessage("NO ITEMS FOUND!", 50, 15);
-        printRepeatMessage(2, 1, "EXIT");
-
-        char repeat = _getch();
-
-        if (27 == repeat) {
-            return true;
-        }
-    }
 
     AdminUI::displayMusicList(items, 8);
     return true;
@@ -98,6 +87,7 @@ bool RemoveItemsCommand::execute() {
         if (items.empty()) {
             printFrame(40, 14, 40, 3); 
             printMessage("NO ITEMS LEFT IN INVENTORY!", 45, 15);
+            sleepScreen(1200);
             return true;
         }
 
@@ -156,6 +146,7 @@ bool UpdatePriceCommand::execute() {
         if (items.empty()) {
             printFrame(40, 14, 40, 3); 
             printMessage("NO ITEMS LEFT IN INVENTORY!", 45, 15);
+            sleepScreen(1200);
             return true;
         }
         AdminUI::displayMusicList(items, 6);
@@ -221,12 +212,7 @@ bool ViewUsersCommand::execute() {
     if (users.empty()) {
         printFrame(30, 14, 60, 3); 
         printMessage("NO USERS FOUND!", 50, 15);
-        printRepeatMessage(2, 1, "EXIT");
-
-        char repeat = _getch();
-        if (27 == repeat) {
-            return true;
-        }
+        sleepScreen(1200);
         return true;
     }
 
@@ -279,6 +265,7 @@ bool ViewAllPurchaseHistoriesCommand::execute() {
         if (userOrders.empty()) {
             printFrame(30, 14, 60, 3); 
             printMessage("NO PURCHASE HISTORY FOUND FOR THIS CUSTOMER.", 35, 15);
+            sleepScreen(1200);
         } else {
             AdminUI::displayPurchasedHistory(userOrders);
         }
@@ -312,12 +299,8 @@ bool DeleteUserCommand::execute() {
         if (users.empty()) {
             printFrame(30, 14, 60, 3);
             printMessage("NO USERS LEFT IN THE SYSTEM!", 50, 15);
-            printRepeatMessage(2, 1, "EXIT");
-
-            char repeat = _getch();
-            if (27 == repeat) {
-                return true;
-            }
+            sleepScreen(1200);
+            return true;
         }
 
         AdminUI::displayUserList(users, 7);

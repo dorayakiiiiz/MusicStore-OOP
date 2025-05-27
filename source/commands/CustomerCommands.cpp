@@ -38,6 +38,7 @@ bool ViewPurchaseHistoryCommand::execute() {
     
     string header = "purchaseHistory";
     printHeader(header, (120 - header.length()*2) / 2 - 31, 1);
+
     CustomerUI::displayPurchasedHistory(orderHistory);
 
     return true;
@@ -56,17 +57,7 @@ bool ViewMusicCommand::execute() {
     printHeader(header, (120 - header.length()*2) / 2 - 19, 1);
 
     vector<Music> items = MusicService::getInstance()->getAllMusic();
-    if (items.empty()) {
-        printFrame(30, 14, 60, 3); 
-        printMessage("NO ITEMS FOUND!", 50, 15);
-        printRepeatMessage(2, 1, "EXIT");
 
-        char repeat = _getch();
-
-        if (27 == repeat) {
-            return true;
-        }
-    }
     CustomerUI::displayMusicList(items, 8);
 
     return true;
@@ -162,6 +153,7 @@ bool AddToCartCommand::execute() {
         if (items.empty()) {
             printFrame(40, 14, 40, 3); 
             printMessage("NO ITEMS LEFT IN INVENTORY!", 45, 15);
+            sleepScreen(1200);
             return true;
         }
 
@@ -230,16 +222,6 @@ bool ViewCurrentCartCommand::execute() {
     printFrame(0, 0, 120, 30);
     string header = "currentCart";
     printHeader(header, (120 - header.length()*2) / 2 - 19, 1);
-    if (cart.getItems().empty()) {
-        printFrame(40, 14, 40, 3);
-        printMessage("CART IS EMPTY!", 55, 15);
-
-        printRepeatMessage(2, 1, "EXIT");
-        char repeat = _getch();
-        if (27 == repeat) {
-            return true;
-        }
-    }
 
     CustomerUI::displayCart(cart.getItems(), 8);
     return true;
@@ -266,12 +248,8 @@ bool RemoveFromCartCommand::execute() {
         if (cart.getItems().empty()) {
             printFrame(40, 14, 40, 3);
             printMessage("CART IS EMPTY!", 55, 15);
-
-            printRepeatMessage(2, 1, "EXIT");
-            char repeat = _getch();
-            if (27 == repeat) {
-                break;
-        }
+            sleepScreen(1200);
+            return true;
         } else {
             CustomerUI::displayCart(cart.getItems(), 7);
             printFrame(0, 0, 120, 30);
