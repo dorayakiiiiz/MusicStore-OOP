@@ -19,12 +19,12 @@ using std::vector, std::shared_ptr, std::make_shared;
  */
 class AuthService {
 private:
-    inline static shared_ptr<AuthService> instance = nullptr; /**< Singleton instance of AuthService */
+    inline static shared_ptr<AuthService> _instance = nullptr; /**< Singleton instance of AuthService */
 
 protected:
-    AuthService(shared_ptr<IDataProvider> provider); /**< Constructor for singleton pattern */
+    AuthService(shared_ptr<IDataProvider> _provider); /**< Constructor for singleton pattern */
 
-    shared_ptr<IDataProvider> dataProvider; /**< Data provider for accessing user data */
+    shared_ptr<IDataProvider> _dataProvider; /**< Data provider for accessing user data */
 public:
 
     /**

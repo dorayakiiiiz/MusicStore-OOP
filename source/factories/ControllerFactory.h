@@ -31,7 +31,7 @@ using std::string, std::shared_ptr, std::make_shared, std::map;
 
 class ControllerFactory {
 private:
-    map<Role, shared_ptr<IController>> controllers; /**< Map to store controller instances */
+    map<Role, shared_ptr<IController>> _controllers; /**< Map to store controller instances */
 public:
     /**
      * @brief Constructor for ControllerFactory

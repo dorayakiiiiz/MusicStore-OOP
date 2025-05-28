@@ -6,6 +6,8 @@
 #include <vector>
 #include <string>
 
+using std::shared_ptr, std::vector;
+
 /**
  * @brief Invoker class for executing commands
  * 
@@ -13,21 +15,21 @@
  */
 class CommandInvoker {
 private:
-    std::vector<std::shared_ptr<Command>> commands;
-    std::string headerText;
+    vector<shared_ptr<Command>> _commands;
+    string _headerText;
     
 public:
     /**
      * @brief Constructor
      * @param headerText Text to display as header
      */
-    CommandInvoker(const std::string& headerText);
+    CommandInvoker(const string& headerText);
     
     /**
      * @brief Register a command
      * @param command Command to add to the collection
      */
-    void addCommand(std::shared_ptr<Command> command);
+    void addCommand(shared_ptr<Command> command);
     
     /**
      * @brief Execute the command menu loop

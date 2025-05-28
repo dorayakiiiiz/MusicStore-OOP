@@ -24,7 +24,7 @@ using std::vector, std::string, std::shared_ptr, std::make_shared;
  */
 class MusicService {
 private:
-    inline static shared_ptr<MusicService> instance = nullptr; /**< Singleton instance of MusicService */
+    inline static shared_ptr<MusicService> _instance = nullptr; /**< Singleton instance of MusicService */
 
 protected:
     MusicService(shared_ptr<IDataProvider> provider); /**< Constructor for singleton pattern */

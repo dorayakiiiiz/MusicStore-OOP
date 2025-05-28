@@ -4,19 +4,19 @@
 
 class ConsoleConfig {
 public:
-    // Đặt kích thước cửa sổ console
+    // Set the window panel size
     static void SetWindowsSize(SHORT width, SHORT height);
 
-    // Đặt kích thước buffer màn hình console
+    // Set console screen buffer size
     static void SetScreenBufferSize(SHORT width, SHORT height);
 
-    // Vô hiệu hóa resize cửa sổ và các nút thu/phóng
+    // Disable window resizing and zoom buttons
     static void DisableResizeWindow();
 
-    // Ẩn con trỏ nháy trên console
+    // Hide the console cursor
     static void DisableCursor();
 
-    // Thiết lập toàn bộ console: kích thước, buffer, khóa resize, ẩn con trỏ
+    // Set the whole console: size, buffer, resize lock, hide cursor
     static void FixConsoleWindow(SHORT width = 120, SHORT height = 30);
 
 };

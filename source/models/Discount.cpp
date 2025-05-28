@@ -14,34 +14,34 @@ using std::string, std::unique_ptr, std::shared_ptr, std::move, std::exception, 
 
 // Constructor - creates a discount with a username and strategy
 Discount::Discount(const string& code, const string& username, shared_ptr<DiscountStrategy> strategy)
-    : code(code), username(username), strategy(move(strategy)) {}
+    : _code(code), _username(username), _strategy(move(strategy)) {}
 
 // Get the discount code 
 string Discount::getCode() const {
-    return code;
+    return _code;
 }
 
 // Apply the discount to a total price
 float Discount::apply(float total) const {
-    return total - strategy->calculateDiscount(total) ? total - strategy->calculateDiscount(total) : 0.0f; // Ensure total doesn't go negative
+    return total - _strategy->calculateDiscount(total) ? total - _strategy->calculateDiscount(total) : 0.0f; // Ensure total doesn't go negative
 }
 
 // Get the username this discount belongs to
 string Discount::getUsername() const {
-    return username;
+    return _username;
 }
 
 // Get the type of discount (Percentage or Fixed Amount)
 string Discount::getType() const {
-    return strategy->getType();
+    return _strategy->getType();
 }
 
 // Get the value of the discount (percentage or amount)
 float Discount::getValue() const {
-    return strategy->getValue();
+    return _strategy->getValue();
 }
 
 // Convert the discount to a string representation for storage
 string Discount::toString() const {
-    return code + " (" + strategy->toString() + ")";
+    return _code + " (" + _strategy->toString() + ")";
 }

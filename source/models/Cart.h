@@ -20,7 +20,7 @@ using std::vector, std::pair, std::unique_ptr;
  */
 class Cart {
 private:
-    vector<Music> items; /**< List of music items in the cart */
+    vector<Music> _items; /**< List of music items in the cart */
 public:
     /**
      * @brief Add a music item to the cart with specified quantity
@@ -36,11 +36,6 @@ public:
      * @param id The index of the item to remove
      */
     void removeItem(int);
-    
-    /**
-     * @brief Display the contents of the cart
-     */
-    void displayCart() const;
     
     /**
      * @brief Calculate the total price of all items in the cart

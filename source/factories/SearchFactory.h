@@ -19,7 +19,7 @@ private:
      * 
      * @details The map associates each search type with its corresponding search strategy instance.
      */
-    map<SearchType, shared_ptr<ISearch>> prototypes;
+    map<SearchType, shared_ptr<ISearch>> _prototypes;
 public:
     /**
      * @brief Constructor for SearchFactory

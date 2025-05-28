@@ -6,6 +6,8 @@
 #include <memory>
 #include <string>
 
+using std::shared_ptr;
+
 // Forward declarations
 class Music;
 
@@ -14,7 +16,7 @@ class Music;
  */
 class ViewMusicListCommand : public Command {
 public:
-    std::string getName() const override;
+    string getName() const override;
     bool execute() override;
 };
 
@@ -23,7 +25,7 @@ public:
  */
 class AddNewItemsCommand : public Command {
 public:
-    std::string getName() const override;
+    string getName() const override;
     bool execute() override;
 };
 
@@ -32,7 +34,7 @@ public:
  */
 class RemoveItemsCommand : public Command {
 public:
-    std::string getName() const override;
+    string getName() const override;
     bool execute() override;
 };
 
@@ -41,7 +43,7 @@ public:
  */
 class UpdatePriceCommand : public Command {
 public:
-    std::string getName() const override;
+    string getName() const override;
     bool execute() override;
 };
 
@@ -50,7 +52,7 @@ public:
  */
 class ViewUsersCommand : public Command {
 public:
-    std::string getName() const override;
+    string getName() const override;
     bool execute() override;
 };
 
@@ -59,7 +61,7 @@ public:
  */
 class ViewAllPurchaseHistoriesCommand : public Command {
 public:
-    std::string getName() const override;
+    string getName() const override;
     bool execute() override;
 };
 
@@ -68,11 +70,11 @@ public:
  */
 class DeleteUserCommand : public Command {
 private:
-    std::shared_ptr<User>& currentUser;
+    shared_ptr<User>& _currentUser;
 
 public:
-    DeleteUserCommand(std::shared_ptr<User>& user);
-    std::string getName() const override;
+    DeleteUserCommand(shared_ptr<User>& user);
+    string getName() const override;
     bool execute() override;
 };
 
@@ -81,7 +83,7 @@ public:
  */
 class ViewSalesStatisticsCommand : public Command {
 public:
-    std::string getName() const override;
+    string getName() const override;
     bool execute() override;
 };
 
@@ -90,11 +92,11 @@ public:
  */
 class AdminLogoutCommand : public Command {
 private:
-    std::shared_ptr<User>& currentUser;
+    shared_ptr<User>& _currentUser;
     
 public:
-    AdminLogoutCommand(std::shared_ptr<User>& user);
-    std::string getName() const override;
+    AdminLogoutCommand(shared_ptr<User>& user);
+    string getName() const override;
     bool execute() override;
 };
 

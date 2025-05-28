@@ -67,22 +67,23 @@ vector<shared_ptr<User>> SqlUserRepository::getAll() {
 
 bool SqlUserRepository::add(const shared_ptr<User>& user) {
     DatabaseConnector* dbConnector = DatabaseConnector::getInstance();
-    if (!dbConnector->ensureConnected()) return false;
-
+    if (!dbConnector->ensureConnected()) {
+        return false;
+    }
     SQLHDBC hDbc = dbConnector->getConnection();
     SQLHSTMT hStmt = nullptr;
     SQLRETURN ret;
 
-    std::string username = user->getUsername();
-    std::string password = user->getPassword();
-    std::string role = (user->getRole() == Role::ADMIN) ? "A" : "C";
+    string username = user->getUsername();
+    string password = user->getPassword();
+    string role = (user->getRole() == Role::ADMIN) ? "A" : "C";
 
     // Step 1: Check duplicates
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
         return false;
     }
 
-    std::string checkQuery = "SELECT COUNT(*) FROM user_info WHERE Username = ?";
+    string checkQuery = "SELECT COUNT(*) FROM user_info WHERE Username = ?";
     ret = SQLPrepare(hStmt, (SQLCHAR*)checkQuery.c_str(), SQL_NTS);
     SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)username.c_str(), 0, nullptr);
 
@@ -100,7 +101,7 @@ bool SqlUserRepository::add(const shared_ptr<User>& user) {
     // Step 2: Get next ID
     int newId = 1;
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) == SQL_SUCCESS) {
-        std::string idQuery = "SELECT ISNULL(MAX(ID), 0) + 1 FROM user_info";
+        string idQuery = "SELECT ISNULL(MAX(ID), 0) + 1 FROM user_info";
         if (SQLExecDirect(hStmt, (SQLCHAR*)idQuery.c_str(), SQL_NTS) == SQL_SUCCESS && SQLFetch(hStmt) == SQL_SUCCESS) {
             SQLGetData(hStmt, 1, SQL_C_SLONG, &newId, 0, nullptr);
         }
@@ -112,7 +113,7 @@ bool SqlUserRepository::add(const shared_ptr<User>& user) {
         return false;
     }
 
-    std::string insertQuery = "INSERT INTO user_info (ID, Username, Pass, UserRole) VALUES (?, ?, ?, ?)";
+    string insertQuery = "INSERT INTO user_info (ID, Username, Pass, UserRole) VALUES (?, ?, ?, ?)";
     SQLPrepare(hStmt, (SQLCHAR*)insertQuery.c_str(), SQL_NTS);
     
     SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &newId, 0, nullptr);
@@ -127,20 +128,22 @@ bool SqlUserRepository::add(const shared_ptr<User>& user) {
 
 bool SqlUserRepository::deleteById(int id) {
     DatabaseConnector* dbConnector = DatabaseConnector::getInstance();
-    if (!dbConnector->ensureConnected()) return false;
-
+    if (!dbConnector->ensureConnected()) {
+        return false;
+    }
     SQLHDBC hDbc = dbConnector->getConnection();
     SQLHSTMT hStmt = nullptr;
     bool success = false;
 
-    // Tắt autocommit để dùng transaction
+    // Turn off autocommit to use transaction
     SQLSetConnectAttr(hDbc, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_OFF, 0);
 
     do {
-        // Bước 1: Xóa bản ghi
-        if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
+        // Step 1: Delete the record
+        if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) 
+            break;
 
-        std::string deleteQuery = "DELETE FROM user_info WHERE ID = ?";
+        string deleteQuery = "DELETE FROM user_info WHERE ID = ?";
         if (SQLPrepare(hStmt, (SQLCHAR*)deleteQuery.c_str(), SQL_NTS) != SQL_SUCCESS) {
             SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
             break;
@@ -155,10 +158,11 @@ bool SqlUserRepository::deleteById(int id) {
         }
         SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 
-        // Bước 2: Lấy các ID lớn hơn ID bị xóa
-        if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
+        // Step 2: Get IDs greater than the deleted ID
+        if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) 
+            break;
 
-        std::string selectQuery = "SELECT ID FROM user_info WHERE ID > ? ORDER BY ID ASC";
+        string selectQuery = "SELECT ID FROM user_info WHERE ID > ? ORDER BY ID ASC";
         if (SQLPrepare(hStmt, (SQLCHAR*)selectQuery.c_str(), SQL_NTS) != SQL_SUCCESS) {
             SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
             break;
@@ -172,7 +176,7 @@ bool SqlUserRepository::deleteById(int id) {
             break;
         }
 
-        std::vector<int> idsToUpdate;
+        vector<int> idsToUpdate;
         int currentId;
         while (SQLFetch(hStmt) == SQL_SUCCESS) {
             if (SQLGetData(hStmt, 1, SQL_C_SLONG, &currentId, 0, nullptr) == SQL_SUCCESS) {
@@ -181,15 +185,16 @@ bool SqlUserRepository::deleteById(int id) {
         }
         SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 
-        // Bước 3: Cập nhật ID giảm đi 1 theo thứ tự, tránh trùng bằng cách chuyển sang âm tạm
+        // Step 3: Update ID by 1 in order, avoid duplicates by switching to negative temporarily
         for (int oldId : idsToUpdate) {
-            int tmpId = -oldId;    // tạm đổi sang âm
+            int tmpId = -oldId;    // temporarily convert to negative
             int newId = oldId - 1;
 
-            // Cập nhật sang tmpId âm
-            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
+            // Update to negative tmpId
+            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) 
+                break;
 
-            std::string updateTmpQuery = "UPDATE user_info SET ID = ? WHERE ID = ?";
+            string updateTmpQuery = "UPDATE user_info SET ID = ? WHERE ID = ?";
             if (SQLPrepare(hStmt, (SQLCHAR*)updateTmpQuery.c_str(), SQL_NTS) != SQL_SUCCESS) {
                 SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
                 break;
@@ -208,10 +213,11 @@ bool SqlUserRepository::deleteById(int id) {
             }
             SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 
-            // Cập nhật từ tmpId âm sang newId dương
-            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
+            // Update from negative tmpId to positive newId
+            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) 
+                break;
 
-            std::string updateNewQuery = "UPDATE user_info SET ID = ? WHERE ID = ?";
+            string updateNewQuery = "UPDATE user_info SET ID = ? WHERE ID = ?";
             if (SQLPrepare(hStmt, (SQLCHAR*)updateNewQuery.c_str(), SQL_NTS) != SQL_SUCCESS) {
                 SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
                 break;
@@ -235,20 +241,18 @@ bool SqlUserRepository::deleteById(int id) {
 
     } while(false);
 
-    // Commit hoặc rollback transaction
+    // Commit or rollback transaction
     if (success) {
         SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_COMMIT);
     } else {
         SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_ROLLBACK);
     }
 
-    // Bật lại autocommit
+    // Turn autocommit back on
     SQLSetConnectAttr(hDbc, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_ON, 0);
 
     return success;
 }
-
-
 
 // these methods are not implemented yet
 shared_ptr<User> SqlUserRepository::getById(int id) { 
@@ -256,8 +260,9 @@ shared_ptr<User> SqlUserRepository::getById(int id) {
 
     DatabaseConnector* dbConnector = DatabaseConnector::getInstance();
 
-    if (!dbConnector->ensureConnected()) return user;
-
+    if (!dbConnector->ensureConnected()) {
+        return user;
+    }
     SQLHDBC hDbc = dbConnector->getConnection();
     SQLHSTMT hStmt = nullptr;
 
@@ -265,7 +270,7 @@ shared_ptr<User> SqlUserRepository::getById(int id) {
         return user;
     }
 
-    std::string query = "SELECT Username, Pass, UserRole FROM user_info WHERE ID = ?";
+    string query = "SELECT Username, Pass, UserRole FROM user_info WHERE ID = ?";
     if (SQLPrepare(hStmt, (SQLCHAR*)query.c_str(), SQL_NTS) == SQL_SUCCESS) {
         SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &id, 0, nullptr);
         if (SQLExecute(hStmt) == SQL_SUCCESS && SQLFetch(hStmt) == SQL_SUCCESS) {
@@ -294,4 +299,6 @@ shared_ptr<User> SqlUserRepository::getById(int id) {
 }
 
 // do nothing
-bool SqlUserRepository::updateById(int id, const shared_ptr<User>& user) { return false; }
+bool SqlUserRepository::updateById(int id, const shared_ptr<User>& user) { 
+    return false; 
+}

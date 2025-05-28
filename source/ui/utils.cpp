@@ -4,17 +4,17 @@
 #include <windows.h>
 #include <iostream>
 
-using std::cout, std::cin, std::string, std::vector, std::tuple, std::make_tuple, std::get, std::stoi;
-using std::to_string;
+using std::cout, std::cin, std::string, std::vector, std::tuple, std::make_tuple, std::get, std::stoi, std::to_string, std::ifstream;
 
 // Prints a formatted header with decorative elements
 // Used to visually separate different sections of the UI
-void printHeader(const string& header, int x, int y) {
+void printHeader(const string& header, int x, int y, Color fg, Color bg) {
+    ConsoleUI::setColor(fg);
     string fileName = "ascii/" + header + ".txt";
     string line = "";
-    std::ifstream inFile;
+    ifstream inFile;
     inFile.open(fileName);
-    ConsoleUI::setColor(Color::LBLUE);
+
     if (inFile.is_open()) {
         while (getline(inFile, line)) {
             ConsoleUI::gotoXY(x, y++);
@@ -22,36 +22,36 @@ void printHeader(const string& header, int x, int y) {
         }
     }
     cout << '\n';
-    ConsoleUI::setColor(Color::WHITE);
+    ConsoleUI::setColor(WHITE);
     inFile.close();
 }
 
 // Prints a message with a decorative symbol prefix
 // Used for displaying information to the user
-void printMessage(const string& message, int x, int y) {
+void printMessage(const string& message, int x, int y, Color fg, Color bg) {
+    ConsoleUI::setColor(fg);
     ConsoleUI::gotoXY(x, y);
-    ConsoleUI::setColor(Color::LBLUE);
     cout << char(175) << ' ' << message << '\n';
-    ConsoleUI::setColor(Color::WHITE);
+    ConsoleUI::setColor(WHITE);
 }
 
 void printMenu(const string& header, int x, int y)
 {
     string fileName = "";
-    if(header == "WELCOME TO THE MUSIC STORE"){
+    if("WELCOME TO THE MUSIC STORE" == header){
+        ConsoleUI::setColor(AQUA);
         fileName = "ascii/musicStore.txt";
         x += 18;
-        ConsoleUI::setColor(Color::LRED);
     }
-    else if (header == "ADMIN MENU"){
+    else if ("ADMIN MENU" == header){
         fileName = "ascii/adminMenu.txt";
         x += 14;
-        ConsoleUI::setColor(Color::LGREEN);
+        ConsoleUI::setColor(LBLUE);
     }
     else{
         fileName = "ascii/customerMenu.txt";
         x -= 5;
-        ConsoleUI::setColor(Color::LBLUE);
+        ConsoleUI::setColor(YELLOW);
     }
 
     string line = "";
@@ -64,7 +64,7 @@ void printMenu(const string& header, int x, int y)
         }
     }
     cout << '\n';
-    ConsoleUI::setColor(Color::WHITE);
+    ConsoleUI::setColor(WHITE);
     inFile.close();
 }
 
@@ -72,84 +72,96 @@ void printMenu(const string& header, int x, int y)
 // Used to visually separate content sections
 
 // Prints a message for repeating the last action
-void printRepeatMessage(int x, int y, string instructions) {
+void printRepeatMessage(int x, int y, string instructions, Color fg, Color bg) {
     int guideW = 3 + instructions.size();
     int guideH = 4;
-    printFrame(x, y, guideW, guideH);
-    printInstructions(instructions, x + 1, y + 1);
-    if(instructions == "EXIT"){
+
+    printFrame(x, y, guideW, guideH, fg);
+    printInstructions(instructions, x + 1, y + 1, fg);
+
+    if("EXIT" == instructions){
+        ConsoleUI::setColor(fg);
         ConsoleUI::gotoXY(x + 1, y + 2);
-        ConsoleUI::setColor(Color::LRED);
         cout << "(Esc)";
-        ConsoleUI::setColor(Color::WHITE);
     }
-    else if (instructions == "CONTINUE") {
+    else if ("CONTINUE" == instructions) {
+        ConsoleUI::setColor(fg);
         ConsoleUI::gotoXY(x + 1, y + 2);
-        ConsoleUI::setColor(Color::LGREEN);
         cout << "(Any key)";
-        ConsoleUI::setColor(Color::WHITE);
     }
     else{
+        ConsoleUI::setColor(fg);
         ConsoleUI::gotoXY(x + 1, y + 2);
-        ConsoleUI::setColor(Color::LBLUE);
         cout << "(Enter)";
-        ConsoleUI::setColor(Color::WHITE);
     }
+
+    ConsoleUI::setColor(WHITE);
 }
 
-void printFrame(int x, int y, int width, int height) {
-    ConsoleUI::gotoXY(x, y); std::cout << char(201); // góc trên trái
-    for (int i = 1; i < width - 1; ++i) std::cout << char(205); // cạnh trên
-    std::cout << char(187); // góc trên phải
+void printFrame(int x, int y, int width, int height, Color fg, Color bg) {
+    ConsoleUI::setColor(fg);
+    ConsoleUI::gotoXY(x, y); 
+    cout << char(201); 
+    for (int i = 1; i < width - 1; ++i) {
+        cout << char(205); 
+    }
+    cout << char(187); 
 
     for (int i = 1; i < height - 1; ++i) {
-        ConsoleUI::gotoXY(x, y + i); std::cout << char(186); // cạnh trái
-        ConsoleUI::gotoXY(x + width - 1, y + i); std::cout << char(186); // cạnh phải
+        ConsoleUI::gotoXY(x, y + i); 
+        cout << char(186); 
+        ConsoleUI::gotoXY(x + width - 1, y + i); 
+        cout << char(186); 
     }
 
-    ConsoleUI::gotoXY(x, y + height - 1); std::cout << char(200); // góc dưới trái
-    for (int i = 1; i < width - 1; ++i) std::cout << char(205); // cạnh dưới
-    std::cout << char(188); // góc dưới phải
-
+    ConsoleUI::gotoXY(x, y + height - 1); 
+    cout << char(200); 
+    for (int i = 1; i < width - 1; ++i) {
+        cout << char(205); 
+    }
+    cout << char(188); 
+    ConsoleUI::setColor(WHITE);
 }
 
-void printFrameOptions(int x, int y, int width, int select) {
-    // Vẽ cạnh trên của ô đầu tiên
+void printFrameOptions(int x, int y, int width, int select, Color fg, Color bg) {
+    ConsoleUI::setColor(fg);
     ConsoleUI::gotoXY(x, y);
-    std::cout << char(218); // ┌
-    for (int j = 1; j < width - 1; ++j) std::cout << char(196); // ─
-    std::cout << char(191); // ┐
+    cout << char(218); // ┌
+    for (int j = 1; j < width - 1; ++j) cout << char(196); // ─
+    cout << char(191); // ┐
 
-    // Các cạnh giữa (sát nhau)
     for (int i = 1; i < select; ++i) {
         int currY = y + i * 2;
         ConsoleUI::gotoXY(x, currY);
-        std::cout << char(195); // ├
-        for (int j = 1; j < width - 1; ++j) std::cout << char(196); // ─
-        std::cout << char(180); // ┤
+        cout << char(195); // ├
+        for (int j = 1; j < width - 1; ++j) {
+            cout << char(196); // ─
+        }
+        cout << char(180); // ┤
     }
 
-    // Cạnh giữa có ô được chọn
     for(int i = 0; i < select; ++i) {
         int curY = y + i * 2 + 1;
         ConsoleUI::gotoXY(x, curY);
-        std::cout << char(179); 
+        cout << char(179); 
         ConsoleUI::gotoXY(x + width - 1, curY);
-        std::cout << char(179); 
+        cout << char(179); 
     }
 
-    // Cạnh dưới cuối cùng
     ConsoleUI::gotoXY(x, y + select * 2);
-    std::cout << char(192); // └
-    for (int j = 1; j < width - 1; ++j) std::cout << char(196); // ─
-    std::cout << char(217); // ┘
+    cout << char(192); // └
+    for (int j = 1; j < width - 1; ++j) {
+        cout << char(196); // ─
+    }
+    cout << char(217); // ┘
+    ConsoleUI::setColor(WHITE);
 }
 
- void printInstructions(const string& instructions, int x, int y) {
+ void printInstructions(const string& instructions, int x, int y, Color fg, Color bg) {
+    ConsoleUI::setColor(fg);
     ConsoleUI::gotoXY(x, y);
-    ConsoleUI::setColor(Color::YELLOW);
-    std::cout << instructions;
-    ConsoleUI::setColor(Color::WHITE);
+    cout << instructions;
+    ConsoleUI::setColor(WHITE);
  }
 
 // Gets user input with a prompt
@@ -158,6 +170,7 @@ string getInput(const string& prompt, int x, int y) {
     ConsoleUI::gotoXY(x, y);
     cout << (char)175 << ' ' << prompt;
     string input; getline(cin, input);
+    ConsoleUI::setColor(WHITE);
     return input;
 }
 
@@ -167,19 +180,16 @@ void clearScreen() {
 }
 
 void clearScreen(int x, int y, int width, int height) {
+    ConsoleUI::setColor(WHITE);
     for (int i = 0; i < height; ++i) {
         ConsoleUI::gotoXY(x, y + i);
-        std::cout << std::string(width, ' ');
+        cout << std::string(width, ' ');
     }
 }
 
 // Sleeps the program for a specified duration
-void sleepScreen(int time = 500) {
+void sleepScreen(int time) {
     Sleep(time);
-}
-
-void sleepScreen() {
-    Sleep(500);
 }
 
 int getMaxOptionsLength(const vector<string>& options) {

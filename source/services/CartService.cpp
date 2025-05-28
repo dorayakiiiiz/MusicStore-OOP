@@ -4,25 +4,25 @@
 
 // Constructor
 CartService::CartService(shared_ptr<IDataProvider> provider) {
-    this->dataProvider = provider;
+    this->_dataProvider = provider;
 }
 
 // Get the singleton instance of CartService
 shared_ptr<CartService> CartService::getInstance(shared_ptr<IDataProvider> provider) {
-    if (instance == nullptr) {
+    if (_instance == nullptr) {
         // If no provider is passed, use the default SqlDao
         if (!provider) {
             provider = make_shared<SqlDao>();
         }
-        instance = shared_ptr<CartService>(new CartService(provider));
+        _instance = shared_ptr<CartService>(new CartService(provider));
     }
-    return instance;
+    return _instance;
 }
 
 // Add a music item to the shopping cart
 bool CartService::addItemToCart(Cart& cart, int itemID, int quantity) {
 
-    Music item = dataProvider->music()->getById(itemID);
+    Music item = _dataProvider->music()->getById(itemID);
 
     if (item.getQuantity() < quantity) {
         return false; // Not enough stock
@@ -33,7 +33,7 @@ bool CartService::addItemToCart(Cart& cart, int itemID, int quantity) {
     
 
     item.updateQuantity(item.getQuantity() - quantity);
-    dataProvider->music()->updateById(itemID, item);
+    _dataProvider->music()->updateById(itemID, item);
 
     return true;
 }
@@ -47,12 +47,12 @@ bool CartService::removeItemFromCart(Cart& cart, int itemID) {
     }
 
     // get all items from the repository
-    vector<Music> inventory = dataProvider->music()->getAll();
-    for (int i = 0; i < inventory.size(); i++) {
+    vector<Music> inventory = _dataProvider->music()->getAll();
+    for (int i = 0; i < inventory.size(); ++i) {
         if (inventory[i] == cart.getItems()[itemID]) {
             // add the item back to inventory
             inventory[i].updateQuantity(inventory[i].getQuantity() + cart.getItems()[itemID].getQuantity());
-            dataProvider->music()->updateById(i + 1, inventory[i]);
+            _dataProvider->music()->updateById(i + 1, inventory[i]);
             break;
         }
     }

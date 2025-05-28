@@ -8,24 +8,24 @@ using std::unordered_map;
 
 // Constructor
 OrderService::OrderService(shared_ptr<IDataProvider> provider) {
-    this->dataProvider = provider;
+    this->_dataProvider = provider;
 }
 
 // Get the singleton instance of OrderService
 shared_ptr<OrderService> OrderService::getInstance(shared_ptr<IDataProvider> provider) {
-    if (instance == nullptr) {
+    if (_instance == nullptr) {
         // If no provider is passed, use the default SqlDao
         if (!provider) {
             provider = make_shared<SqlDao>();
         }
-        instance = shared_ptr<OrderService>(new OrderService(provider));
+        _instance = shared_ptr<OrderService>(new OrderService(provider));
     }
-    return instance;
+    return _instance;
 }
 
 // Get all orders from the repository
 vector<Order> OrderService::getAllOrders() {
-    return dataProvider->order()->getAll();
+    return _dataProvider->order()->getAll();
 }
 
 // Process order checkout and create a new order
@@ -34,7 +34,7 @@ void OrderService::checkout( const string& username, Cart& cart, float total) {
     Order order(username, cart.getItems(), total);
 
     // Save the order to the repository
-    dataProvider->order()->add(order);
+    _dataProvider->order()->add(order);
     
     
     // Clear the cart after successful checkout
@@ -44,7 +44,7 @@ void OrderService::checkout( const string& username, Cart& cart, float total) {
 // Delete an order from the repository
 void OrderService::deleteOrder(const string& username) {
     // Get all orders
-    auto orders = dataProvider->order()->getAll();
+    auto orders = _dataProvider->order()->getAll();
     // Find and delete the order for the specified user
     for (int i = 0; i < orders.size(); ++i) {
         if (orders[i].getUsername() == username) {
@@ -57,7 +57,7 @@ void OrderService::deleteOrder(const string& username) {
 // Retrieve orders for a specific user
 vector<Order> OrderService::getUserOrders(const string& username) {
     // Get all orders from the repository
-    auto orders = dataProvider->order()->getAll();
+    auto orders = _dataProvider->order()->getAll();
 
     vector<Order> userOrders;
 

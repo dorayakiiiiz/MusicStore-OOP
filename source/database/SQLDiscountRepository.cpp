@@ -75,9 +75,9 @@ bool SqlDiscountRepository::add(const shared_ptr<Discount>& discount) {
     SQLHSTMT hStmt = nullptr;
     SQLRETURN ret;
 
-    std::string username = discount->getUsername();
+    string username = discount->getUsername();
     char typeV = discount->getType()[0]; 
-    std::string code = discount->getCode();
+    string code = discount->getCode();
     int value = discount->getValue();
     string type = (typeV == 'F') ? "F" : "P";
     
@@ -86,7 +86,7 @@ bool SqlDiscountRepository::add(const shared_ptr<Discount>& discount) {
         return false;
     }
 
-    std::string checkQuery = "SELECT COUNT(*) FROM vouchers WHERE Code = ?";
+    string checkQuery = "SELECT COUNT(*) FROM vouchers WHERE Code = ?";
     ret = SQLPrepare(hStmt, (SQLCHAR*)checkQuery.c_str(), SQL_NTS);
     SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)code.c_str(), 0, nullptr);
 
@@ -104,7 +104,7 @@ bool SqlDiscountRepository::add(const shared_ptr<Discount>& discount) {
     // Step 2: Get next ID
     int newId = 1;
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) == SQL_SUCCESS) {
-        std::string idQuery = "SELECT ISNULL(MAX(ID), 0) + 1 FROM vouchers";
+        string idQuery = "SELECT ISNULL(MAX(ID), 0) + 1 FROM vouchers";
         if (SQLExecDirect(hStmt, (SQLCHAR*)idQuery.c_str(), SQL_NTS) == SQL_SUCCESS && SQLFetch(hStmt) == SQL_SUCCESS) {
             SQLGetData(hStmt, 1, SQL_C_SLONG, &newId, 0, nullptr);
         }
@@ -116,7 +116,7 @@ bool SqlDiscountRepository::add(const shared_ptr<Discount>& discount) {
         return false;
     }
 
-    std::string insertQuery = "INSERT INTO vouchers (ID, Code, Username, TypeV, ValueV) VALUES (?, ?, ?, ?, ?)";
+    string insertQuery = "INSERT INTO vouchers (ID, Code, Username, TypeV, ValueV) VALUES (?, ?, ?, ?, ?)";
     SQLPrepare(hStmt, (SQLCHAR*)insertQuery.c_str(), SQL_NTS);
     
     SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &newId, 0, nullptr);
@@ -126,8 +126,6 @@ bool SqlDiscountRepository::add(const shared_ptr<Discount>& discount) {
     SQLBindParameter(hStmt, 5, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &value, 0, nullptr);
 
     bool success = SQL_SUCCEEDED(SQLExecute(hStmt));
-    if(!success)
-       std::cout << "hehe6\n";
     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 
     return success;
@@ -141,14 +139,15 @@ bool SqlDiscountRepository::deleteById(int id) {
     SQLHSTMT hStmt = nullptr;
     bool success = false;
 
-    // Tắt autocommit để dùng transaction
+    // Turn off autocommit to use transaction
     SQLSetConnectAttr(hDbc, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_OFF, 0);
 
     do {
-        // Bước 1: Xóa bản ghi
-        if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
+        // Step 1: Delete the record
+        if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) 
+            break;
 
-        std::string deleteQuery = "DELETE FROM vouchers WHERE ID = ?";
+        string deleteQuery = "DELETE FROM vouchers WHERE ID = ?";
         if (SQLPrepare(hStmt, (SQLCHAR*)deleteQuery.c_str(), SQL_NTS) != SQL_SUCCESS) {
             SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
             break;
@@ -163,10 +162,11 @@ bool SqlDiscountRepository::deleteById(int id) {
         }
         SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 
-        // Bước 2: Lấy các ID lớn hơn ID bị xóa
-        if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
+        // Step 2: Get IDs greater than the deleted ID
+        if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) 
+            break;
 
-        std::string selectQuery = "SELECT ID FROM vouchers WHERE ID > ? ORDER BY ID ASC";
+        string selectQuery = "SELECT ID FROM vouchers WHERE ID > ? ORDER BY ID ASC";
         if (SQLPrepare(hStmt, (SQLCHAR*)selectQuery.c_str(), SQL_NTS) != SQL_SUCCESS) {
             SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
             break;
@@ -180,7 +180,7 @@ bool SqlDiscountRepository::deleteById(int id) {
             break;
         }
 
-        std::vector<int> idsToUpdate;
+        vector<int> idsToUpdate;
         int currentId;
         while (SQLFetch(hStmt) == SQL_SUCCESS) {
             if (SQLGetData(hStmt, 1, SQL_C_SLONG, &currentId, 0, nullptr) == SQL_SUCCESS) {
@@ -189,15 +189,16 @@ bool SqlDiscountRepository::deleteById(int id) {
         }
         SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 
-        // Bước 3: Cập nhật ID giảm đi 1 theo thứ tự
+        // Step 3: Update ID by 1 in order
         for (int oldId : idsToUpdate) {
-            int tmpId = -oldId;    // chuyển sang âm để tránh trùng
+            int tmpId = -oldId;    // convert to negative to avoid duplication
             int newId = oldId - 1;
 
-            // Cập nhật sang tmpId âm
-            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
+            // Update to negative tmpId
+            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) 
+                break;
 
-            std::string updateTmpQuery = "UPDATE vouchers SET ID = ? WHERE ID = ?";
+            string updateTmpQuery = "UPDATE vouchers SET ID = ? WHERE ID = ?";
             if (SQLPrepare(hStmt, (SQLCHAR*)updateTmpQuery.c_str(), SQL_NTS) != SQL_SUCCESS) {
                 SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
                 break;
@@ -216,10 +217,11 @@ bool SqlDiscountRepository::deleteById(int id) {
             }
             SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 
-            // Cập nhật từ tmpId âm sang newId dương
-            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
+            // Update from negative tmpId to positive newId
+            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) 
+                break;
 
-            std::string updateNewQuery = "UPDATE vouchers SET ID = ? WHERE ID = ?";
+            string updateNewQuery = "UPDATE vouchers SET ID = ? WHERE ID = ?";
             if (SQLPrepare(hStmt, (SQLCHAR*)updateNewQuery.c_str(), SQL_NTS) != SQL_SUCCESS) {
                 SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
                 break;
@@ -243,21 +245,25 @@ bool SqlDiscountRepository::deleteById(int id) {
 
     } while(false);
 
-    // Commit hoặc rollback transaction
+    // Commit or rollback transaction
     if (success) {
         SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_COMMIT);
     } else {
         SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_ROLLBACK);
     }
 
-    // Bật lại autocommit
+    // Turn autocommit back on
     SQLSetConnectAttr(hDbc, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_ON, 0);
 
     return success;
 }
 
 // do nothing
-bool SqlDiscountRepository::updateById(int id, const shared_ptr<Discount>& discount) { return false; }
+bool SqlDiscountRepository::updateById(int id, const shared_ptr<Discount>& discount) { 
+    return false; 
+}
 
 // do nothing
-shared_ptr<Discount> SqlDiscountRepository::getById(int id) { return nullptr; }
+shared_ptr<Discount> SqlDiscountRepository::getById(int id) { 
+    return nullptr; 
+}

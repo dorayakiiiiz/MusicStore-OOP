@@ -62,7 +62,7 @@ public:
  */
 class PercentageDiscountStrategy : public DiscountStrategy {
 private:
-    int percentage;
+    int _percentage;
     
 public:
     /**
@@ -115,7 +115,7 @@ public:
  */
 class FixedDiscountStrategy : public DiscountStrategy {
 private:
-    int amount;
+    int _amount;
     
 public:
     /**
@@ -161,7 +161,5 @@ public:
      */
     string toString() const override;
 };
-
-
 
 #endif

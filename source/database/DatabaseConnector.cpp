@@ -11,21 +11,6 @@
 // Initialize static members
 DatabaseConnector* DatabaseConnector::instance = nullptr;
 
-
-// handle errors that occur during database operations
-// void ODBCErrorHandler::showError(SQLHANDLE handle, SQLSMALLINT type) {
-//     SQLCHAR sqlState[6], message[256];
-//     SQLINTEGER nativeError;
-//     SQLSMALLINT msgLen;
-//     SQLRETURN ret = SQLGetDiagRec(type, handle, 1, sqlState, &nativeError, message, sizeof(message), &msgLen);
-    
-//     if (SQL_SUCCEEDED(ret)) {
-//         std::cerr << "SQL Error: " << message << " (SQL State: " << sqlState << ")" << std::endl;
-//     } else {
-//         std::cerr << "Failed to retrieve error information." << std::endl;
-//     }
-// }
-
 // Get singleton instance 
 DatabaseConnector* DatabaseConnector::getInstance() {
     if (instance == nullptr) {
@@ -46,7 +31,9 @@ DatabaseConnector::~DatabaseConnector() {
 // Establish a connection to the SQL Server database
 bool DatabaseConnector::connect() {
     // Step 1: Initialize the ODBC environment
-    if (SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &hEnv) != SQL_SUCCESS) return false;
+    if (SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &hEnv) != SQL_SUCCESS) {
+        return false;
+    }
     SQLSetEnvAttr(hEnv, SQL_ATTR_ODBC_VERSION, (void*)SQL_OV_ODBC3, 0);
     if (SQLAllocHandle(SQL_HANDLE_DBC, hEnv, &hDbc) != SQL_SUCCESS) {
         SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
@@ -54,21 +41,19 @@ bool DatabaseConnector::connect() {
     }
 
     // Step 2: Connect to the database using connection string
-    SQLCHAR connStr[] = 
-    "Driver={ODBC Driver 17 for SQL Server};"
-    "Server=tcp:musicstoredb.database.windows.net,1433;"
-    "Database=music_store;"
-    "Uid=adminuser;"
-    "Pwd=23120197_23120209#OOP_CTT3;"
-    "Encrypt=yes;"
-    "TrustServerCertificate=no;"
-    "Connection Timeout=30;";
+    SQLCHAR connStr[] = "Driver={ODBC Driver 17 for SQL Server};"
+                        "Server=tcp:musicstoredb.database.windows.net,1433;"
+                        "Database=music_store;"
+                        "Uid=adminuser;"
+                        "Pwd=23120197_23120209#OOP_CTT3;"
+                        "Encrypt=yes;"
+                        "TrustServerCertificate=no;"
+                        "Connection Timeout=30;";
 
     SQLRETURN ret = SQLDriverConnect(hDbc, NULL, connStr, SQL_NTS, NULL, 0, NULL, SQL_DRIVER_NOPROMPT);
 
     // Handle connection errors
     if (!SQL_SUCCEEDED(ret)) {
-        // showError();
         disconnect();
         return false;
     }
@@ -86,7 +71,6 @@ bool DatabaseConnector::ensureConnected() {
     
     // Test if connection is still alive
     if (!testConnection()) {
-        // std::cout << "Database connection lost. Reconnecting..." << std::endl;
         disconnect();
         return connect();
     }
@@ -96,7 +80,9 @@ bool DatabaseConnector::ensureConnected() {
 
 // Test if connection is still active
 bool DatabaseConnector::testConnection() const {
-    if (!connected) return false;
+    if (!connected) {
+        return false;
+    }
     
     SQLHSTMT hStmt = nullptr;
     bool isValid = false;
@@ -134,11 +120,6 @@ void DatabaseConnector::disconnect() {
     }
     connected = false;  // Update connection state
 }
-
-// Display any ODBC errors that occurred during a connection operation
-// void DatabaseConnector::showError() const {
-//     ODBCErrorHandler::showError(hDbc, SQL_HANDLE_DBC);
-// }
 
 // Static cleanup method to call at program end
 void DatabaseConnector::cleanup() {

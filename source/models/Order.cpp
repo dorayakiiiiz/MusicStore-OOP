@@ -11,34 +11,34 @@
 using std::stringstream;
 
 // Default constructor - creates an empty order
-Order::Order() : username(""), purchasedItems({}), total(0.0f) {}
+Order::Order() : _username(""), _purchasedItems({}), _total(0.0f) {}
 
 // Parameterized constructor - initializes an order with username, items, and total price
 Order::Order(const string& username, const vector<Music>& items, const float& total) {
-    this->username = username;
-    this->total = total;
+    this->_username = username;
+    this->_total = total;
 
     // Copy all items to the purchasedItems vector
     for (const auto& item : items) {
-        purchasedItems.emplace_back(item);
+        _purchasedItems.emplace_back(item);
     }
 }
 
 // Copy constructor - creates a new order by copying from another order object
 Order::Order(const Order& other) 
-    : username(other.username), purchasedItems(other.purchasedItems), total(other.total) {}
+    : _username(other._username), _purchasedItems(other._purchasedItems), _total(other._total) {}
 
 // Get the total price of the order
 float Order::getTotal() const {
-    return total;
+    return _total;
 }
 
 // Get the username of the customer who placed the order
 string Order::getUsername() const {
-    return username;
+    return _username;
 }
 
 // Get the list of purchased music items
 const vector<Music>& Order::getPurchasedItems() const {
-    return purchasedItems;
+    return _purchasedItems;
 }

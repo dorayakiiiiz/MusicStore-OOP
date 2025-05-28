@@ -32,8 +32,8 @@ enum Role {
  */
 class User {
 private:
-    string username; /**< Username for authentication */
-    string password; /**< Password for authentication */
+    string _username; /**< Username for authentication */
+    string _password; /**< Password for authentication */
 public:
     /**
      * @brief Virtual destructor for proper inheritance
@@ -68,13 +68,6 @@ public:
      * @return string The password
      */
     string getPassword() const;
-    
-    /**
-     * @brief Convert user to string representation
-     * 
-     * @return string String representation of the user
-     */
-    string toString() const;
 };
 
 /**
@@ -113,7 +106,7 @@ private:
     /**
      * @brief Static list of valid admin registration passkeys
      */
-    inline static vector<string> passKeys = {"23120197", "23120209"};
+    inline static vector<string> _passKeys = {"23120197", "23120209"};
 public:
     /**
      * @brief Constructor with username and password

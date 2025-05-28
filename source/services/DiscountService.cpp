@@ -15,23 +15,23 @@
 
 // Constructor
 DiscountService::DiscountService(shared_ptr<IDataProvider> provider) {
-    this->dataProvider = provider;
+    this->_dataProvider = provider;
 }
 
 // Get the singleton instance of DiscountService
 shared_ptr<DiscountService> DiscountService::getInstance(shared_ptr<IDataProvider> provider) {
-    if (instance == nullptr) {
+    if (_instance == nullptr) {
         // If no provider is passed, use the default SqlDao
         if (!provider) {
             provider = make_shared<SqlDao>();
         }
-        instance = shared_ptr<DiscountService>(new DiscountService(provider));
+        _instance = shared_ptr<DiscountService>(new DiscountService(provider));
     }
-    return instance;
+    return _instance;
 }
 // Get all discount vouchers from the repository
 vector<shared_ptr<Discount>> DiscountService::getAllDiscounts() {
-    return dataProvider->discount()->getAll();
+    return _dataProvider->discount()->getAll();
 }
 
 // Apply a discount to a total price
@@ -65,11 +65,11 @@ vector<shared_ptr<Discount>> DiscountService::loadValidDiscounts(
 // Remove a discount voucher from the repository
 void DiscountService::removeDiscount(const shared_ptr<Discount>& discount) {
     // get all the vouchers from the repository
-    vector<shared_ptr<Discount>> vouchers = dataProvider->discount()->getAll();
+    vector<shared_ptr<Discount>> vouchers = _dataProvider->discount()->getAll();
 
     for (int i = 0; i < vouchers.size(); ++i) {
         if (vouchers[i]->getCode() == discount->getCode()) {
-            dataProvider->discount()->deleteById(i + 1);
+            _dataProvider->discount()->deleteById(i + 1);
             break;
         }
     }
@@ -97,7 +97,7 @@ shared_ptr<Discount> DiscountService::createDiscount(const string& username, Dis
     strategy->setValue(discountValue);
 
     // Ensure the discount code is unique
-    vector<shared_ptr<Discount>> vouchers = dataProvider->discount()->getAll();
+    vector<shared_ptr<Discount>> vouchers = _dataProvider->discount()->getAll();
     string code;
     while (true) {
         code = generateRandomCode();
@@ -109,6 +109,6 @@ shared_ptr<Discount> DiscountService::createDiscount(const string& username, Dis
         break;
     }
     shared_ptr<Discount> discount = make_shared<Discount>(code, username, strategy);
-    dataProvider->discount()->add(discount);
+    _dataProvider->discount()->add(discount);
     return discount;
 }

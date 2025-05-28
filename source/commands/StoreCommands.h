@@ -13,7 +13,7 @@ using std::string, std::shared_ptr, std::make_shared;;
  */
 class SignUpCommand : public Command {
 private:
-    shared_ptr<User>& currentUser;
+    shared_ptr<User>& _currentUser;
     
 public:
     SignUpCommand(shared_ptr<User>& user);
@@ -26,7 +26,7 @@ public:
  */
 class LoginCommand : public Command {
 private:
-    shared_ptr<User>& currentUser;
+    shared_ptr<User>& _currentUser;
 
 public:
     LoginCommand(shared_ptr<User>& user);

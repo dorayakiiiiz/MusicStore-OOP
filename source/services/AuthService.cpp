@@ -13,24 +13,24 @@
 
 // Constructor
 AuthService::AuthService(shared_ptr<IDataProvider> provider) {
-    this->dataProvider = provider;
+    this->_dataProvider = provider;
 }
 
 // Get the singleton instance of AuthService
 shared_ptr<AuthService> AuthService::getInstance(shared_ptr<IDataProvider> provider) {
-    if (instance == nullptr) {
+    if (_instance == nullptr) {
         // If no provider is passed, use the default SqlDao
         if (!provider) {
             provider = make_shared<SqlDao>();
         }
-        instance = shared_ptr<AuthService>(new AuthService(provider));
+        _instance = shared_ptr<AuthService>(new AuthService(provider));
     }
-    return instance;
+    return _instance;
 }
 // Register a new user with username, password, and role
 bool AuthService::registerUser(const string& username, const string& password, Role role) {
     // Get all users from the repository
-    vector<shared_ptr<User>> users = dataProvider->user()->getAll();
+    vector<shared_ptr<User>> users = _dataProvider->user()->getAll();
     // Check if username already exists
     for (int i = 0; i < users.size(); ++i) {
         if (users[i]->getUsername() == username) {
@@ -46,14 +46,14 @@ bool AuthService::registerUser(const string& username, const string& password, R
         newUser = make_shared<Admin>(username, password);
     }
     // Save the new user to the repository
-    bool success = dataProvider->user()->add(newUser);
+    bool success = _dataProvider->user()->add(newUser);
     return success;
 }
 
 // Authenticate a user with username and password
 shared_ptr<User> AuthService::loginUser(const string& username, const string& password) {
     // Get all users from the repository
-    vector<shared_ptr<User>> users = dataProvider->user()->getAll();
+    vector<shared_ptr<User>> users = _dataProvider->user()->getAll();
     // Search for matching username and password
     for (int i = 0; i < users.size(); ++i) {
         if (users[i]->getUsername() == username && users[i]->getPassword() == password) {

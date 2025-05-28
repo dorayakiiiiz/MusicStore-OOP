@@ -18,12 +18,12 @@ using std::vector, std::string, std::make_shared, std::shared_ptr;
 
 class CartService {
 private:
-    inline static shared_ptr<CartService> instance = nullptr; /**< Singleton instance of CartService */
+    inline static shared_ptr<CartService> _instance = nullptr; /**< Singleton instance of CartService */
 
 protected:
-    CartService(shared_ptr<IDataProvider> provider); /**< Constructor for singleton pattern */
+    CartService(shared_ptr<IDataProvider> _provider); /**< Constructor for singleton pattern */
 
-    shared_ptr<IDataProvider> dataProvider; /**< Data provider for accessing repositories */
+    shared_ptr<IDataProvider> _dataProvider; /**< Data provider for accessing repositories */
 public:
 
     /**

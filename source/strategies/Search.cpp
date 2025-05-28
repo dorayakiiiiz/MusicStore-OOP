@@ -41,4 +41,3 @@ vector<Music> GenreSearch::search(const vector<Music>& items, const string& keyw
     }
     return results;
 }
-

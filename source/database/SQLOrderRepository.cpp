@@ -26,11 +26,11 @@ vector<Order> SqlOrderRepository::getAll() {
     }
 
     string query = R"(
-        SELECT Username, TotalPrice, NameSong, Artist, Genre, Price, Quantity
-        FROM orders
-        JOIN detail_order ON orders.ID = detail_order.ID
-        ORDER BY orders.ID
-    )";
+                    SELECT Username, TotalPrice, NameSong, Artist, Genre, Price, Quantity
+                    FROM orders
+                    JOIN detail_order ON orders.ID = detail_order.ID
+                    ORDER BY orders.ID
+                    )";
     ret = SQLExecDirect(hStmt, (SQLCHAR*)query.c_str(), SQL_NTS);
 
     if (SQL_SUCCEEDED(ret)) {
@@ -87,16 +87,17 @@ bool SqlOrderRepository::add(const Order& order) {
     SQLHSTMT hStmt = nullptr;
     SQLRETURN ret;
 
-    if (!dbConnector->ensureConnected()) return false;
-
+    if (!dbConnector->ensureConnected()) {
+        return false;
+    }
     SQLHDBC hDbc = dbConnector->getConnection();
 
-    // Tắt autocommit để sử dụng transaction
+    // Turn off autocommit to use transaction
     SQLSetConnectAttr(hDbc, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_OFF, 0);
 
     int newOrderId = 1;
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) == SQL_SUCCESS) {
-        std::string getMaxIdQuery = "SELECT ISNULL(MAX(ID), 0) + 1 FROM orders";
+        string getMaxIdQuery = "SELECT ISNULL(MAX(ID), 0) + 1 FROM orders";
         ret = SQLExecDirect(hStmt, (SQLCHAR*)getMaxIdQuery.c_str(), SQL_NTS);
         if (SQL_SUCCEEDED(ret) && SQLFetch(hStmt) == SQL_SUCCESS) {
             SQLGetData(hStmt, 1, SQL_C_SLONG, &newOrderId, 0, NULL);
@@ -105,9 +106,9 @@ bool SqlOrderRepository::add(const Order& order) {
         hStmt = nullptr;
     }
 
-    // Thêm vào bảng orders
+    // Add to orders table
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) == SQL_SUCCESS) {
-        std::string insertOrderQuery = "INSERT INTO orders (ID, Username, TotalPrice) VALUES (?, ?, ?)";
+        string insertOrderQuery = "INSERT INTO orders (ID, Username, TotalPrice) VALUES (?, ?, ?)";
         ret = SQLPrepare(hStmt, (SQLCHAR*)insertOrderQuery.c_str(), SQL_NTS);
 
         if (SQL_SUCCEEDED(ret)) {
@@ -130,7 +131,7 @@ bool SqlOrderRepository::add(const Order& order) {
         return false;
     }
 
-    // Thêm vào bảng detail_order
+    // Add to table detail_order
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
         SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_ROLLBACK);
         return false;
@@ -165,7 +166,7 @@ bool SqlOrderRepository::add(const Order& order) {
         SQLBindParameter(hStmt, 6, SQL_PARAM_INPUT, SQL_C_LONG, SQL_INTEGER, 0, 0, &quantity, 0, NULL);
 
         ret = SQLExecute(hStmt);
-        SQLFreeStmt(hStmt, SQL_RESET_PARAMS); // reset cho lần sau
+        SQLFreeStmt(hStmt, SQL_RESET_PARAMS); // reset
 
         if (!SQL_SUCCEEDED(ret)) {
             SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
@@ -182,19 +183,22 @@ bool SqlOrderRepository::add(const Order& order) {
 
 bool SqlOrderRepository::deleteById(int id) {
     DatabaseConnector* dbConnector = DatabaseConnector::getInstance();
-    if (!dbConnector->ensureConnected()) return false;
-
+    if (!dbConnector->ensureConnected()) {
+        return false;
+    }
     SQLHDBC hDbc = dbConnector->getConnection();
     SQLHSTMT hStmt = nullptr;
     bool success = false;
 
-    // Tắt autocommit để dùng transaction
+    // Turn off autocommit to use transaction
     SQLSetConnectAttr(hDbc, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_OFF, 0);
 
     do {
-        // Bước 1: Xóa detail_order
-        if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
-        std::string deleteDetail = "DELETE FROM detail_order WHERE ID = ?";
+        // Step 1: Delete detail_order
+        if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+            break;
+        }
+        string deleteDetail = "DELETE FROM detail_order WHERE ID = ?";
         if (SQLPrepare(hStmt, (SQLCHAR*)deleteDetail.c_str(), SQL_NTS) != SQL_SUCCESS ||
             SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &id, 0, nullptr) != SQL_SUCCESS ||
             !SQL_SUCCEEDED(SQLExecute(hStmt))) {
@@ -203,9 +207,11 @@ bool SqlOrderRepository::deleteById(int id) {
         }
         SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 
-        // Bước 2: Xóa orders
-        if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
-        std::string deleteOrder = "DELETE FROM orders WHERE ID = ?";
+        // Step 2: Delete orders
+        if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+            break;
+        }
+        string deleteOrder = "DELETE FROM orders WHERE ID = ?";
         if (SQLPrepare(hStmt, (SQLCHAR*)deleteOrder.c_str(), SQL_NTS) != SQL_SUCCESS ||
             SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &id, 0, nullptr) != SQL_SUCCESS ||
             !SQL_SUCCEEDED(SQLExecute(hStmt))) {
@@ -214,16 +220,18 @@ bool SqlOrderRepository::deleteById(int id) {
         }
         SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 
-        // Bước 3: Lấy tất cả ID còn lại
-        if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
-        std::string selectQuery = "SELECT ID FROM orders ORDER BY ID ASC";
+        // Step 3: Get all remaining IDs
+        if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+            break;
+        }
+        string selectQuery = "SELECT ID FROM orders ORDER BY ID ASC";
         if (SQLPrepare(hStmt, (SQLCHAR*)selectQuery.c_str(), SQL_NTS) != SQL_SUCCESS ||
             SQLExecute(hStmt) != SQL_SUCCESS) {
             SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
             break;
         }
 
-        std::vector<int> oldIds;
+        vector<int> oldIds;
         int currentId;
         while (SQLFetch(hStmt) == SQL_SUCCESS) {
             if (SQLGetData(hStmt, 1, SQL_C_SLONG, &currentId, 0, nullptr) == SQL_SUCCESS) {
@@ -232,17 +240,20 @@ bool SqlOrderRepository::deleteById(int id) {
         }
         SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 
-        // Bước 4: Đánh lại ID
+        // Step 4: Re-enter ID
         for (int i = 0; i < (int)oldIds.size(); ++i) {
             int oldId = oldIds[i];
             int newId = i + 1;
-            if (oldId == newId) continue;
-
+            if (oldId == newId) {
+                continue;
+            }
             int tmpId = -oldId;
 
-            // a. Tạm đổi ID detail_order sang ID âm
-            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
-            std::string tmpUpdate = "UPDATE detail_order SET ID = ? WHERE ID = ?";
+            // Temporarily change ID detail_order to negative ID
+            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+                break;
+            }
+            string tmpUpdate = "UPDATE detail_order SET ID = ? WHERE ID = ?";
             if (SQLPrepare(hStmt, (SQLCHAR*)tmpUpdate.c_str(), SQL_NTS) != SQL_SUCCESS ||
                 SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &tmpId, 0, nullptr) != SQL_SUCCESS ||
                 SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &oldId, 0, nullptr) != SQL_SUCCESS ||
@@ -252,9 +263,11 @@ bool SqlOrderRepository::deleteById(int id) {
             }
             SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 
-            // b. Đổi ID trong orders
-            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
-            std::string updateOrder = "UPDATE orders SET ID = ? WHERE ID = ?";
+            // Change ID in orders
+            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+                break;
+            }
+            string updateOrder = "UPDATE orders SET ID = ? WHERE ID = ?";
             if (SQLPrepare(hStmt, (SQLCHAR*)updateOrder.c_str(), SQL_NTS) != SQL_SUCCESS ||
                 SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &newId, 0, nullptr) != SQL_SUCCESS ||
                 SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &oldId, 0, nullptr) != SQL_SUCCESS ||
@@ -264,9 +277,11 @@ bool SqlOrderRepository::deleteById(int id) {
             }
             SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 
-            // c. Khôi phục ID detail_order về ID mới
-            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
-            std::string restoreDetail = "UPDATE detail_order SET ID = ? WHERE ID = ?";
+            // Restore detail_order ID to new ID
+            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+                break;
+            }
+            string restoreDetail = "UPDATE detail_order SET ID = ? WHERE ID = ?";
             if (SQLPrepare(hStmt, (SQLCHAR*)restoreDetail.c_str(), SQL_NTS) != SQL_SUCCESS ||
                 SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &newId, 0, nullptr) != SQL_SUCCESS ||
                 SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &tmpId, 0, nullptr) != SQL_SUCCESS ||
@@ -281,23 +296,22 @@ bool SqlOrderRepository::deleteById(int id) {
 
     } while (false);
 
-    // Commit hoặc rollback
+    // Commit or rollback
     if (success) {
         SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_COMMIT);
     } else {
         SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_ROLLBACK);
     }
-    // Bật lại autocommit
+    // Turn autocommit back on
     SQLSetConnectAttr(hDbc, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_ON, 0);
 
     return success;
 }
 
-
-
-
 // do nothing
-bool SqlOrderRepository::updateById(int id, const Order& order) { return false; }
+bool SqlOrderRepository::updateById(int id, const Order& order) { 
+    return false; 
+}
 
 // do nothing
 Order SqlOrderRepository::getById(int id) {

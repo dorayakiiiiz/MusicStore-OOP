@@ -1,15 +1,19 @@
 #include "SqlMusicRepository.h"
 
+using std::vector, std::string;
+
 SqlMusicRepository::SqlMusicRepository() {}
 
 SqlMusicRepository::~SqlMusicRepository() {}
 
 std::vector<Music> SqlMusicRepository::getAll() {
-    std::vector<Music> items;
+    vector<Music> items;
 
     DatabaseConnector* dbConnector = DatabaseConnector::getInstance();
 
-    if (!dbConnector->ensureConnected()) return items;
+    if (!dbConnector->ensureConnected()) {
+        return items;
+    }
 
     SQLHDBC hDbc = dbConnector->getConnection();
     SQLHSTMT hStmt = nullptr;
@@ -18,7 +22,7 @@ std::vector<Music> SqlMusicRepository::getAll() {
         return items;
     }
 
-    std::string query = "SELECT NameSong, Artist, Genre, Price, Quantity FROM music_info";
+    string query = "SELECT NameSong, Artist, Genre, Price, Quantity FROM music_info";
     if (SQLExecDirect(hStmt, (SQLCHAR*)query.c_str(), SQL_NTS) == SQL_SUCCESS) {
         char tempName[256], tempArtist[256], tempGenre[100];
         float price;
@@ -44,7 +48,9 @@ Music SqlMusicRepository::getById(int id) {
 
     DatabaseConnector* dbConnector = DatabaseConnector::getInstance();
 
-    if (!dbConnector->ensureConnected()) return music;
+    if (!dbConnector->ensureConnected()) {
+        return music;
+    }
 
     SQLHDBC hDbc = dbConnector->getConnection();
     SQLHSTMT hStmt = nullptr;
@@ -53,7 +59,7 @@ Music SqlMusicRepository::getById(int id) {
         return music;
     }
 
-    std::string query = "SELECT NameSong, Artist, Genre, Price, Quantity FROM music_info WHERE ID = ?";
+    string query = "SELECT NameSong, Artist, Genre, Price, Quantity FROM music_info WHERE ID = ?";
     if (SQLPrepare(hStmt, (SQLCHAR*)query.c_str(), SQL_NTS) == SQL_SUCCESS) {
         SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &id, 0, nullptr);
         if (SQLExecute(hStmt) == SQL_SUCCESS && SQLFetch(hStmt) == SQL_SUCCESS) {
@@ -77,15 +83,17 @@ Music SqlMusicRepository::getById(int id) {
 
 bool SqlMusicRepository::add(const Music& music) {
     DatabaseConnector* dbConnector = DatabaseConnector::getInstance();
-    if (!dbConnector->ensureConnected()) return false;
+    if (!dbConnector->ensureConnected()) {
+        return false;
+    }
 
     SQLHDBC hDbc = dbConnector->getConnection();
     SQLHSTMT hStmt = nullptr;
     SQLRETURN ret;
 
-    std::string name = music.getName();
-    std::string artist = music.getArtist();
-    std::string genre = music.getGenre();
+    string name = music.getName();
+    string artist = music.getArtist();
+    string genre = music.getGenre();
     float price = music.getPrice();
     int quantity = music.getQuantity();
 
@@ -94,7 +102,7 @@ bool SqlMusicRepository::add(const Music& music) {
         return false;
     }
 
-    std::string checkQuery = "SELECT COUNT(*) FROM music_info WHERE NameSong = ? AND Artist = ?";
+    string checkQuery = "SELECT COUNT(*) FROM music_info WHERE NameSong = ? AND Artist = ?";
     ret = SQLPrepare(hStmt, (SQLCHAR*)checkQuery.c_str(), SQL_NTS);
     SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)name.c_str(), 0, nullptr);
     SQLBindParameter(hStmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 255, 0, (SQLPOINTER)artist.c_str(), 0, nullptr);
@@ -113,7 +121,7 @@ bool SqlMusicRepository::add(const Music& music) {
     // Step 2: Get next ID
     int newId = 1;
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) == SQL_SUCCESS) {
-        std::string idQuery = "SELECT ISNULL(MAX(ID), 0) + 1 FROM music_info";
+        string idQuery = "SELECT ISNULL(MAX(ID), 0) + 1 FROM music_info";
         if (SQLExecDirect(hStmt, (SQLCHAR*)idQuery.c_str(), SQL_NTS) == SQL_SUCCESS && SQLFetch(hStmt) == SQL_SUCCESS) {
             SQLGetData(hStmt, 1, SQL_C_SLONG, &newId, 0, nullptr);
         }
@@ -125,7 +133,7 @@ bool SqlMusicRepository::add(const Music& music) {
         return false;
     }
 
-    std::string insertQuery = "INSERT INTO music_info (ID, NameSong, Artist, Genre, Price, Quantity) VALUES (?, ?, ?, ?, ?, ?)";
+    string insertQuery = "INSERT INTO music_info (ID, NameSong, Artist, Genre, Price, Quantity) VALUES (?, ?, ?, ?, ?, ?)";
     SQLPrepare(hStmt, (SQLCHAR*)insertQuery.c_str(), SQL_NTS);
 
     SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &newId, 0, nullptr);
@@ -159,7 +167,7 @@ bool SqlMusicRepository::updateById(int id, const Music& music) {
     }
 
     // Step 3: Prepare update query
-    std::string updateQuery = "UPDATE music_info SET Price = ?, Quantity = ? WHERE ID = ?";
+    string updateQuery = "UPDATE music_info SET Price = ?, Quantity = ? WHERE ID = ?";
     ret = SQLPrepare(hStmt, (SQLCHAR*)updateQuery.c_str(), SQL_NTS);
 
     // Step 4: Bind parameters if query prepared successfully
@@ -183,20 +191,21 @@ bool SqlMusicRepository::updateById(int id, const Music& music) {
 
 bool SqlMusicRepository::deleteById(int id) {
     DatabaseConnector* dbConnector = DatabaseConnector::getInstance();
-    if (!dbConnector->ensureConnected()) return false;
-
+    if (!dbConnector->ensureConnected()) {
+        return false;
+    }
     SQLHDBC hDbc = dbConnector->getConnection();
     SQLHSTMT hStmt = nullptr;
     bool success = false;
 
-    // Tắt autocommit để dùng transaction
+    // Turn off autocommit to use transaction
     SQLSetConnectAttr(hDbc, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_OFF, 0);
 
     do {
-        // Bước 1: Xóa bản ghi
+        // Step 1: Delete the record
         if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
 
-        std::string deleteQuery = "DELETE FROM music_info WHERE ID = ?";
+        string deleteQuery = "DELETE FROM music_info WHERE ID = ?";
         if (SQLPrepare(hStmt, (SQLCHAR*)deleteQuery.c_str(), SQL_NTS) != SQL_SUCCESS) {
             SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
             break;
@@ -211,10 +220,11 @@ bool SqlMusicRepository::deleteById(int id) {
         }
         SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 
-        // Bước 2: Lấy tất cả ID còn lại
-        if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
-
-        std::string selectQuery = "SELECT ID FROM music_info ORDER BY ID ASC";
+        // Step 2: Get all remaining IDs
+        if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+            break;
+        }
+        string selectQuery = "SELECT ID FROM music_info ORDER BY ID ASC";
         if (SQLPrepare(hStmt, (SQLCHAR*)selectQuery.c_str(), SQL_NTS) != SQL_SUCCESS) {
             SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
             break;
@@ -224,7 +234,7 @@ bool SqlMusicRepository::deleteById(int id) {
             break;
         }
 
-        std::vector<int> oldIds;
+        vector<int> oldIds;
         int currentId;
         while (SQLFetch(hStmt) == SQL_SUCCESS) {
             if (SQLGetData(hStmt, 1, SQL_C_SLONG, &currentId, 0, nullptr) == SQL_SUCCESS) {
@@ -233,16 +243,19 @@ bool SqlMusicRepository::deleteById(int id) {
         }
         SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 
-        // Bước 3: Cập nhật ID theo thứ tự mới
+        // Step 3: Update ID in new order
         for (int i = 0; i < (int)oldIds.size(); ++i) {
             int oldId = oldIds[i];
             int newId = i + 1;
 
-            if (oldId == newId) continue;
-
-            // Chuyển tạm sang ID âm để tránh trùng
-            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
-            std::string tmpUpdate = "UPDATE music_info SET ID = ? WHERE ID = ?";
+            if (oldId == newId) {
+                continue;
+            }
+            // Temporarily switch to negative ID to avoid duplication
+            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+                break;
+            }
+            string tmpUpdate = "UPDATE music_info SET ID = ? WHERE ID = ?";
             int tmpId = -oldId;
             if (SQLPrepare(hStmt, (SQLCHAR*)tmpUpdate.c_str(), SQL_NTS) != SQL_SUCCESS) {
                 SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
@@ -263,8 +276,10 @@ bool SqlMusicRepository::deleteById(int id) {
             SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
 
             // Update sang newId
-            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) break;
-            std::string updateNewId = "UPDATE music_info SET ID = ? WHERE ID = ?";
+            if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) != SQL_SUCCESS) {
+                break;
+            }
+            string updateNewId = "UPDATE music_info SET ID = ? WHERE ID = ?";
             if (SQLPrepare(hStmt, (SQLCHAR*)updateNewId.c_str(), SQL_NTS) != SQL_SUCCESS) {
                 SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
                 break;
@@ -288,16 +303,15 @@ bool SqlMusicRepository::deleteById(int id) {
 
     } while(false);
 
-    // Commit hoặc rollback
+    // Commit or rollback
     if (success) {
         SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_COMMIT);
     } else {
         SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_ROLLBACK);
     }
 
-    // Bật lại autocommit
+    // Turn autocommit back on
     SQLSetConnectAttr(hDbc, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_ON, 0);
 
     return success;
 }
-
