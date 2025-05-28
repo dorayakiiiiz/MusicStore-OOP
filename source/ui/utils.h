@@ -80,9 +80,8 @@ string getInput(const string&, int, int);
 /**
  * @brief Sleeps the program for a specified duration
  */
-void sleepScreen(int time);
+void sleepScreen(int time = 500);
 
-void sleepScreen();
 
 /**
  * @brief Converts a string to lowercase

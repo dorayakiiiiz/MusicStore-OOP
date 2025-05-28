@@ -12,7 +12,7 @@
  */
 class ViewPurchaseHistoryCommand : public Command {
 private:
-    std::shared_ptr<User>& currentUser;
+    std::shared_ptr<User>& _currentUser;
     
 public:
     ViewPurchaseHistoryCommand(std::shared_ptr<User>& user);
@@ -43,7 +43,7 @@ public:
  */
 class AddToCartCommand : public Command {
 private:
-    Cart& cart;
+    Cart& _cart;
     
 public:
     AddToCartCommand(Cart& c);
@@ -56,7 +56,7 @@ public:
  */
 class ViewCurrentCartCommand : public Command {
 private:
-    Cart& cart;
+    Cart& _cart;
     
 public:
     ViewCurrentCartCommand(Cart& c);
@@ -70,7 +70,7 @@ public:
  */
 class RemoveFromCartCommand : public Command {
 private:
-    Cart& cart;
+    Cart& _cart;
     
 public:
     RemoveFromCartCommand(Cart& c);
@@ -83,8 +83,8 @@ public:
  */
 class CheckoutCommand : public Command {
 private:
-    Cart& cart;
-    std::shared_ptr<User>& currentUser;
+    Cart& _cart;
+    std::shared_ptr<User>& _currentUser;
     
 public:
     CheckoutCommand(Cart& c, std::shared_ptr<User>& user);
@@ -97,8 +97,8 @@ public:
  */
 class CustomerLogoutCommand : public Command {
 private:
-    Cart& cart;
-    std::shared_ptr<User>& currentUser;
+    Cart& _cart;
+    std::shared_ptr<User>& _currentUser;
     
 public:
     CustomerLogoutCommand(Cart& c, std::shared_ptr<User>& user);

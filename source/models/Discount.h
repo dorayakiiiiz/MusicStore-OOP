@@ -25,9 +25,9 @@ enum DiscountType {
 using std::string, std::shared_ptr;
 class Discount {
 private:
-    string code;
-    string username;
-    shared_ptr<DiscountStrategy> strategy;
+    string _code;
+    string _username;
+    shared_ptr<DiscountStrategy> _strategy;
     
 public:
     /**

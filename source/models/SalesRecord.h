@@ -11,11 +11,11 @@ using std::string;
  */
 class SalesRecord {
 private:
-    string name;    /**> The name of the music item */
-    string artist; /**> The artist of the music item */
-    string genre; /**> The genre of the music item */
-    int sold;   /**> The quantity sold */
-    float revenue; /**> The revenue generated from the music item */
+    string _name;    /**> The name of the music item */
+    string _artist; /**> The artist of the music item */
+    string _genre; /**> The genre of the music item */
+    int _sold;   /**> The quantity sold */
+    float _revenue; /**> The revenue generated from the music item */
 public:
     /**
      * @brief Default constructor

@@ -16,10 +16,10 @@ using std::to_string;
 
 // Forward declarations of strategy implementations
 
-PercentageDiscountStrategy::PercentageDiscountStrategy(int percentage) : percentage(percentage) {}
+PercentageDiscountStrategy::PercentageDiscountStrategy(int percentage) : _percentage(percentage) {}
 
 float PercentageDiscountStrategy::calculateDiscount(float total) const {
-    return total * percentage / 100.0f;
+    return total * _percentage / 100.0f;
 }
 
 string PercentageDiscountStrategy::getType() const {
@@ -27,22 +27,22 @@ string PercentageDiscountStrategy::getType() const {
 }
 
 int PercentageDiscountStrategy::getValue() const {
-    return percentage;
+    return _percentage;
 }
 
 void PercentageDiscountStrategy::setValue(int value) {
-    percentage = value; 
+    _percentage = value; 
 }
 
 string PercentageDiscountStrategy::toString() const {
-    return "Percentage discount: " + to_string(percentage) + "%";
+    return "Percentage discount: " + to_string(_percentage) + "%";
 }
 
 
-FixedDiscountStrategy::FixedDiscountStrategy(int amount) : amount(amount) {}
+FixedDiscountStrategy::FixedDiscountStrategy(int amount) : _amount(amount) {}
 
 float FixedDiscountStrategy::calculateDiscount(float total) const {
-    return total < amount ? total : amount;
+    return total < _amount ? total : _amount;
 }
 
 string FixedDiscountStrategy::getType() const {
@@ -50,14 +50,13 @@ string FixedDiscountStrategy::getType() const {
 }
 
 int FixedDiscountStrategy::getValue() const {
-    return amount;
+    return _amount;
 }
 
 void FixedDiscountStrategy::setValue(int value) {
-    amount = value; 
+    _amount = value; 
 }
 
 string FixedDiscountStrategy::toString() const {
-    return "Fixed discount: " + to_string(amount) + "$";
+    return "Fixed discount: " + to_string(_amount) + "$";
 }
-

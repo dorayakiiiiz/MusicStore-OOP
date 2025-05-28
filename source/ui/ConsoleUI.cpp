@@ -12,7 +12,7 @@ void ConsoleUI::setColor(Color fg, Color bg) {
 }
 
 
-int ConsoleUI::selectMenu(const std::vector<std::string>& options, const std::string& header) {
+int ConsoleUI::selectMenu(const vector<std::string>& options, const string& header) {
     int x = 5;
     int y = 9 - options.size() / 2;
     int selected = 0;
@@ -37,39 +37,39 @@ int ConsoleUI::selectMenu(const std::vector<std::string>& options, const std::st
     clearScreen();
     printFrame(frameX, frameY, frameW, frameH, fg);
 
-    // In tiêu đề căn giữa
+    // Print centered title
     gotoXY(titleX, 6);
     printMenu(header, titleX, 6);
 
-    // In hướng dẫn
+    // Print instructions
     string instructions = "Use W/S to navigate and Enter to select";
     int guideX = 70;
-    int guideY = 24; // Dòng gần cuối nếu height = 30
+    int guideY = 24; 
     int guideW = 4 + instructions.size();
     int guideH = 3;
     printFrame(guideX, guideY, guideW, guideH);
     printInstructions(instructions, guideX + 2, guideY + 1, fg);
 
     while (true) {
-        // In khung lựa chọnchọn
+        // Print selection frame
         int optW = 6 + getMaxOptionsLength(options);
         printFrameOptions(x, y, optW + 2, options.size(), fg);
 
-        // In các lựa chọn menu, mỗi dòng chiếm đúng 1 khung option
+        //Print menu options, each line occupies exactly 1 option frame
         for (int i = 0; i < options.size(); ++i) {
-            gotoXY(x + 2, y + i * 2 + 1); // In ra giữa khung
+            gotoXY(x + 2, y + i * 2 + 1); 
             if (i == selected)
                 setColor(WHITE, bg); // Highlight
             else
-                setColor(WHITE, BLACK); // Mặc định
-            std::cout << (i == selected ? ">> " : "   ") << options[i];
+                setColor(WHITE, BLACK); 
+            cout << (i == selected ? ">> " : "   ") << options[i];
             setColor(WHITE, BLACK);
         }
 
         int key = _getch();
-        if (key == 'w' || key == 'W')
+        if ('w' == key || 'W' == key)
             selected = (selected - 1 + options.size()) % options.size();
-        else if (key == 's' || key == 'S')
+        else if ('s' == key || 'S' == key)
             selected = (selected + 1) % options.size();
         else if (13 == key)
             return selected;

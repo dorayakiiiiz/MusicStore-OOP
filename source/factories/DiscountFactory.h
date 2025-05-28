@@ -10,7 +10,7 @@
 using std::shared_ptr, std::make_shared, std::map;
 class DiscountFactory {
 private:
-    map<DiscountType, shared_ptr<DiscountStrategy>> strategies; /**< Map to store discount strategies by type */
+    map<DiscountType, shared_ptr<DiscountStrategy>> _strategies; /**< Map to store discount strategies by type */
 public:
     /**
      * @brief Constructor for DiscountFactory

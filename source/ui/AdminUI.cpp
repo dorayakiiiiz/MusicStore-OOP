@@ -42,16 +42,15 @@ void AdminUI::displayMusicList(vector<Music>& items, int maxPerPage) {
     while (true) {
         int startIdx = currentPage * maxPerPage;
         int endIdx = (startIdx + maxPerPage > totalItems ? totalItems : startIdx + maxPerPage);
-        int rows = endIdx - startIdx + 1; //
+        int rows = endIdx - startIdx + 1; 
 
-        //Xóa bảng cũ
-        clearScreen(1, 8, 118, 21); // xóa vùng tối đa
+        clearScreen(1, 8, 118, 21); 
 
         printFrameOptions(x, y, width, rows);
 
         for (int col : cols) {
             ConsoleUI::gotoXY(x + col, y + 1);
-            std::cout << char(179); // │
+            std::cout << char(179); 
             ConsoleUI::gotoXY(x + col, y);
             std::cout << char(194); 
             ConsoleUI::gotoXY(x + col, y + 2);
@@ -59,14 +58,20 @@ void AdminUI::displayMusicList(vector<Music>& items, int maxPerPage) {
         }
 
         // In header
-        ConsoleUI::setColor(Color::AQUA);
-        ConsoleUI::gotoXY(x + 1, y + 1); std::cout << "ID";
-        ConsoleUI::gotoXY(x + cols[0] + 1, y + 1); std::cout << "SONG NAME";
-        ConsoleUI::gotoXY(x + cols[1] + 1, y + 1); std::cout << "ARTIST";
-        ConsoleUI::gotoXY(x + cols[2] + 1, y + 1); std::cout << "GENRE";
-        ConsoleUI::gotoXY(x + cols[3] + 1, y + 1); std::cout << "PRICE";
-        ConsoleUI::gotoXY(x + cols[4] + 1, y + 1); std::cout << "QUANTITY";
-        ConsoleUI::setColor(Color::WHITE);
+        ConsoleUI::setColor(AQUA);
+        ConsoleUI::gotoXY(x + 1, y + 1); 
+        cout << "ID";
+        ConsoleUI::gotoXY(x + cols[0] + 1, y + 1); 
+        cout << "SONG NAME";
+        ConsoleUI::gotoXY(x + cols[1] + 1, y + 1); 
+        cout << "ARTIST";
+        ConsoleUI::gotoXY(x + cols[2] + 1, y + 1); 
+        cout << "GENRE";
+        ConsoleUI::gotoXY(x + cols[3] + 1, y + 1); 
+        cout << "PRICE";
+        ConsoleUI::gotoXY(x + cols[4] + 1, y + 1); 
+        cout << "QUANTITY";
+        ConsoleUI::setColor(WHITE);
 
         for (int i = startIdx; i < endIdx; ++i) {
             int displayIdx = i - startIdx + 1;
@@ -74,53 +79,58 @@ void AdminUI::displayMusicList(vector<Music>& items, int maxPerPage) {
 
             for (int col : cols) {
                 ConsoleUI::gotoXY(x + col, curY);
-                std::cout << char(179); // │
+                cout << char(179);
                 ConsoleUI::gotoXY(x + col, curY + 1);
-                std::cout << char(197); 
+                cout << char(197); 
             }
 
-            ConsoleUI::gotoXY(x + 1, curY); std::cout << i + 1;
-            ConsoleUI::gotoXY(x + cols[0] + 1, curY); std::cout << items[i].getName();
-            ConsoleUI::gotoXY(x + cols[1] + 1, curY); std::cout << items[i].getArtist();
-            ConsoleUI::gotoXY(x + cols[2] + 1, curY); std::cout << items[i].getGenre();
-            ConsoleUI::gotoXY(x + cols[3] + 1, curY); std::cout << items[i].getPrice();
-            ConsoleUI::gotoXY(x + cols[4] + 1, curY); std::cout << items[i].getQuantity();
+            ConsoleUI::gotoXY(x + 1, curY); 
+            cout << i + 1;
+            ConsoleUI::gotoXY(x + cols[0] + 1, curY); 
+            cout << items[i].getName();
+            ConsoleUI::gotoXY(x + cols[1] + 1, curY); 
+            cout << items[i].getArtist();
+            ConsoleUI::gotoXY(x + cols[2] + 1, curY); 
+            cout << items[i].getGenre();
+            ConsoleUI::gotoXY(x + cols[3] + 1, curY); 
+            cout << items[i].getPrice();
+            ConsoleUI::gotoXY(x + cols[4] + 1, curY); 
+            cout << items[i].getQuantity();
         }
 
         // Bottom border
         for (int col : cols) {
             ConsoleUI::gotoXY(x + col, y + rows * 2 - 1);
-            std::cout << char(179); // │
+            cout << char(179); 
             ConsoleUI::gotoXY(x + col, y + rows * 2);
-            std::cout << char(193); 
+            cout << char(193); 
         }
 
-        ConsoleUI::setColor(Color::LYELLOW);
+        ConsoleUI::setColor(LYELLOW);
         // Hiển thị điều hướng trang
         ConsoleUI::gotoXY(111 - totalPages / 10, 28);
-        std::cout << "PAGE " << currentPage + 1 << "/" << totalPages;
+        cout << "PAGE " << currentPage + 1 << "/" << totalPages;
 
         //pre page
         ConsoleUI::gotoXY(2, 15);
-        std::cout << char(174);
+        cout << char(174);
         ConsoleUI::gotoXY(2, 14);
-        std::cout << "A";
+        cout << "A";
 
         //next page
         ConsoleUI::gotoXY(117, 15);
-        std::cout << char(175);
+        cout << char(175);
         ConsoleUI::gotoXY(117, 14);
-        std::cout << "D";
-        ConsoleUI::setColor(Color::WHITE);
+        cout << "D";
+        ConsoleUI::setColor(WHITE);
 
-        if (currentPage == 0) {
+        if (0 == currentPage) {
             clearScreen(2, 14, 1, 2);
         } 
-        if (currentPage == totalPages - 1) {
+        if (totalPages - 1 == currentPage) {
             clearScreen(117, 14, 1, 2);
         }
 
-        // Đợi người dùng nhập phím
         if(8 == maxPerPage){
             printRepeatMessage(2, 1, "EXIT", LRED);    
         }
@@ -139,9 +149,11 @@ void AdminUI::displayMusicList(vector<Music>& items, int maxPerPage) {
         else if (13 == key && 8 != maxPerPage){
             break;
         }
-        else if ((key == 'a' || key == 'A') && currentPage > 0) {
+        else if (('a' == key || 'A' == key) 
+                    && currentPage > 0) {
             --currentPage;
-        } else if ((key == 'd' || key == 'D') && currentPage < totalPages - 1) {
+        } else if (('d' == key || 'D' == key) 
+                    && currentPage < totalPages - 1) {
             ++currentPage;
         }
 
@@ -163,81 +175,80 @@ void AdminUI::displayUserList(const vector<shared_ptr<User>>& users, int maxPerP
     while (true) {
         int startIdx = currentPage * maxPerPage;
         int endIdx = (startIdx + maxPerPage > totalItems ? totalItems : startIdx + maxPerPage);
-        int rows = endIdx - startIdx + 1; //
+        int rows = endIdx - startIdx + 1; 
 
-        //Xóa bảng cũ
-        clearScreen(1, 8, 118, 21); // xóa vùng tối đa
+        clearScreen(1, 8, 118, 21); 
 
         printFrameOptions(x, y, width, rows);
 
         for (int col : cols) {
             ConsoleUI::gotoXY(x + col, y + 1);
-            std::cout << char(179); // │
+            cout << char(179);
             ConsoleUI::gotoXY(x + col, y);
-            std::cout << char(194); 
+            cout << char(194); 
             ConsoleUI::gotoXY(x + col, y + 2);
-            std::cout << char(197); 
+            cout << char(197); 
         }
             //In header
-        ConsoleUI::setColor(Color::AQUA);
+        ConsoleUI::setColor(AQUA);
         ConsoleUI::gotoXY(x + 1, y + 1);
-        std::cout << "ID";
+        cout << "ID";
         ConsoleUI::gotoXY(x + cols[0] + 1, y + 1);
-        std::cout << "USERNAME";
+        cout << "USERNAME";
         ConsoleUI::gotoXY(x + cols[1] + 1, y + 1);
-        std::cout << "ROLE";
-        ConsoleUI::setColor(Color::WHITE);
+        cout << "ROLE";
+        ConsoleUI::setColor(WHITE);
 
         for (int i = startIdx; i < endIdx; ++i) {
             int displayIdx = i - startIdx + 1;
             int curY = y + displayIdx * 2 + 1;
-            // Kẻ cột dọc
+
             for (int col : cols) {
                 ConsoleUI::gotoXY(x + col, curY);
-                std::cout << char(179); // │
+                std::cout << char(179); 
                 ConsoleUI::gotoXY(x + col, curY + 1);
                 std::cout << char(197); 
             }
 
-            //In
-            ConsoleUI::gotoXY(x + 1, curY); std::cout << i + 1;
-            ConsoleUI::gotoXY(x + cols[0] + 1, curY); std::cout << users[i]->getUsername();
-            ConsoleUI::gotoXY(x + cols[1] + 1, curY); std::cout << (Role::ADMIN == users[i]->getRole() ? "Admin" : "Customer");
+            ConsoleUI::gotoXY(x + 1, curY); 
+            cout << i + 1;
+            ConsoleUI::gotoXY(x + cols[0] + 1, curY);
+            cout << users[i]->getUsername();
+            ConsoleUI::gotoXY(x + cols[1] + 1, curY); 
+            cout << (Role::ADMIN == users[i]->getRole() ? "Admin" : "Customer");
         }
 
         for (int col : cols) {
             ConsoleUI::gotoXY(x + col, y + rows*2 - 1);
-            std::cout << char(179); // │
+            cout << char(179); 
             ConsoleUI::gotoXY(x + col, y + rows*2);
-            std::cout << char(193); 
+            cout << char(193); 
         }
 
-        ConsoleUI::setColor(Color::LYELLOW);
-        // Hiển thị điều hướng trang
+        ConsoleUI::setColor(LYELLOW);
         ConsoleUI::gotoXY(111 - totalPages / 10, 28);
-        std::cout << "PAGE " << currentPage + 1 << "/" << totalPages;
+        cout << "PAGE " << currentPage + 1 << "/" << totalPages;
 
         //pre page
         ConsoleUI::gotoXY(2, 15);
-        std::cout << char(174);
+        cout << char(174);
         ConsoleUI::gotoXY(2, 14);
-        std::cout << "A";
+        cout << "A";
 
         //next page
         ConsoleUI::gotoXY(117, 15);
-        std::cout << char(175);
+        cout << char(175);
         ConsoleUI::gotoXY(117, 14);
-        std::cout << "D";
-        ConsoleUI::setColor(Color::WHITE);
+        cout << "D";
+        ConsoleUI::setColor(WHITE);
 
-        if (currentPage == 0) {
+        if (0 == currentPage) {
             clearScreen(2, 14, 1, 2);
         } 
         if (currentPage == totalPages - 1) {
             clearScreen(117, 14, 1, 2);
         }
 
-        // Đợi người dùng nhập phím
         if(8 == maxPerPage){
             printRepeatMessage(2, 1, "EXIT", LRED);    
         }
@@ -256,9 +267,11 @@ void AdminUI::displayUserList(const vector<shared_ptr<User>>& users, int maxPerP
         else if (13 == key && 8 != maxPerPage){
             break;
         }
-        else if ((key == 'a' || key == 'A') && currentPage > 0) {
+        else if (('a' == key || 'A' == key) 
+                && currentPage > 0) {
             --currentPage;
-        } else if ((key == 'd' || key == 'D') && currentPage < totalPages - 1) {
+        } else if (('d' == key || 'D' == key) 
+                    && currentPage < totalPages - 1) {
             ++currentPage;
         }
     }
@@ -286,14 +299,13 @@ void AdminUI::displayPurchasedHistory(vector<Order> orders) {
     while (true) {
         int OrderIdx = currentPage * maxPerPage;
 
-        //Xóa bảng cũ
-        clearScreen(1, 12, 118, 17); // xóa vùng tối đa
+        clearScreen(1, 12, 118, 17); 
 
         printFrameOptions(x, 10, width, 1);
         ConsoleUI::gotoXY(x + 41, 11);
-        ConsoleUI::setColor(Color::LYELLOW);
+        ConsoleUI::setColor(LYELLOW);
         cout << "ORDER " << OrderIdx + 1;
-        ConsoleUI::setColor(Color::WHITE);
+        ConsoleUI::setColor(WHITE);
 
         const vector<Music>& purchasedItems = orders[OrderIdx].getPurchasedItems();
         int rows = purchasedItems.size() + 1;
@@ -301,22 +313,27 @@ void AdminUI::displayPurchasedHistory(vector<Order> orders) {
 
         for (int col : cols) {
             ConsoleUI::gotoXY(x + col, y + 1);
-            std::cout << char(179); // │
+            cout << char(179); 
             ConsoleUI::gotoXY(x + col, y);
-            std::cout << char(194); 
+            cout << char(194); 
             ConsoleUI::gotoXY(x + col, y + 2);
-            std::cout << char(197); 
+            cout << char(197); 
         }
 
-        // In header
-        ConsoleUI::setColor(Color::AQUA);
-        ConsoleUI::gotoXY(x + 1, y + 1); std::cout << "ID";
-        ConsoleUI::gotoXY(x + cols[0] + 1, y + 1); std::cout << "SONG NAME";
-        ConsoleUI::gotoXY(x + cols[1] + 1, y + 1); std::cout << "ARTIST";
-        ConsoleUI::gotoXY(x + cols[2] + 1, y + 1); std::cout << "QUANTITY";
-        ConsoleUI::gotoXY(x + cols[3] + 1, y + 1); std::cout << "PRICE/UNIT";
-        ConsoleUI::gotoXY(x + cols[4] + 1, y + 1); std::cout << "TOTAL";
-        ConsoleUI::setColor(Color::WHITE);
+        ConsoleUI::setColor(AQUA);
+        ConsoleUI::gotoXY(x + 1, y + 1); 
+        cout << "ID";
+        ConsoleUI::gotoXY(x + cols[0] + 1, y + 1); 
+        cout << "SONG NAME";
+        ConsoleUI::gotoXY(x + cols[1] + 1, y + 1); 
+        cout << "ARTIST";
+        ConsoleUI::gotoXY(x + cols[2] + 1, y + 1); 
+        cout << "QUANTITY";
+        ConsoleUI::gotoXY(x + cols[3] + 1, y + 1); 
+        cout << "PRICE/UNIT";
+        ConsoleUI::gotoXY(x + cols[4] + 1, y + 1); 
+        cout << "TOTAL";
+        ConsoleUI::setColor(WHITE);
 
         for (int i = 0; i < purchasedItems.size(); ++i) {
             int displayIdx = i + 1;
@@ -324,31 +341,37 @@ void AdminUI::displayPurchasedHistory(vector<Order> orders) {
 
             for (int col : cols) {
                 ConsoleUI::gotoXY(x + col, curY);
-                std::cout << char(179); // │
+                cout << char(179); 
                 ConsoleUI::gotoXY(x + col, curY + 1);
-                std::cout << char(197); 
+                cout << char(197); 
             }
 
-            ConsoleUI::gotoXY(x + 1, curY); std::cout << i + 1;
-            ConsoleUI::gotoXY(x + cols[0] + 1, curY); std::cout << purchasedItems[i].getName();
-            ConsoleUI::gotoXY(x + cols[1] + 1, curY); std::cout << purchasedItems[i].getArtist();
-            ConsoleUI::gotoXY(x + cols[2] + 1, curY); std::cout << purchasedItems[i].getQuantity();
-            ConsoleUI::gotoXY(x + cols[3] + 1, curY); std::cout << purchasedItems[i].getPrice();
-            ConsoleUI::gotoXY(x + cols[4] + 1, curY); std::cout << purchasedItems[i].getPrice() * purchasedItems[i].getQuantity();
+            ConsoleUI::gotoXY(x + 1, curY); 
+            cout << i + 1;
+            ConsoleUI::gotoXY(x + cols[0] + 1, curY); 
+            cout << purchasedItems[i].getName();
+            ConsoleUI::gotoXY(x + cols[1] + 1, curY); 
+            cout << purchasedItems[i].getArtist();
+            ConsoleUI::gotoXY(x + cols[2] + 1, curY); 
+            cout << purchasedItems[i].getQuantity();
+            ConsoleUI::gotoXY(x + cols[3] + 1, curY); 
+            cout << purchasedItems[i].getPrice();
+            ConsoleUI::gotoXY(x + cols[4] + 1, curY); 
+            cout << purchasedItems[i].getPrice() * purchasedItems[i].getQuantity();
         }
 
         printFrameOptions(x, y + rows * 2, width, 1);
         ConsoleUI::gotoXY(17, y + rows * 2 + 1);
-        ConsoleUI::setColor(Color::LYELLOW);
+        ConsoleUI::setColor(LYELLOW);
         cout << "ORDER TOTAL: $" << orders[OrderIdx].getTotal();
-        ConsoleUI::setColor(Color::WHITE);
+        ConsoleUI::setColor(WHITE);
 
         // Bottom border
         for (int col : cols) {
             ConsoleUI::gotoXY(x + col, y + rows * 2 - 1);
-            std::cout << char(179); // │
+            cout << char(179);
             ConsoleUI::gotoXY(x + col, y + rows * 2);
-            std::cout << char(193); 
+            cout << char(193); 
         }
 
         ConsoleUI::gotoXY(x, y);
@@ -360,25 +383,24 @@ void AdminUI::displayPurchasedHistory(vector<Order> orders) {
         ConsoleUI::gotoXY(x + 89, y + rows * 2);
         cout << char(180);
 
-        ConsoleUI::setColor(Color::LYELLOW);
-        // Hiển thị điều hướng trang
+        ConsoleUI::setColor(LYELLOW);
         ConsoleUI::gotoXY(111 - totalPages / 10, 28);
-        std::cout << "PAGE " << currentPage + 1 << "/" << totalPages;
+        cout << "PAGE " << currentPage + 1 << "/" << totalPages;
 
         //pre page
         ConsoleUI::gotoXY(2, 15);
-        std::cout << char(174);
+        cout << char(174);
         ConsoleUI::gotoXY(2, 14);
-        std::cout << "A";
+        cout << "A";
 
         //next page
         ConsoleUI::gotoXY(117, 15);
-        std::cout << char(175);
+        cout << char(175);
         ConsoleUI::gotoXY(117, 14);
-        std::cout << "D";
-        ConsoleUI::setColor(Color::WHITE);
+        cout << "D";
+        ConsoleUI::setColor(WHITE);
 
-        if (currentPage == 0) {
+        if (0 == currentPage) {
             clearScreen(2, 14, 1, 2);
         } 
         if (currentPage == totalPages - 1) {
@@ -392,12 +414,13 @@ void AdminUI::displayPurchasedHistory(vector<Order> orders) {
         if (27 == key) {
             break;
         }
-        else if ((key == 'a' || key == 'A') && currentPage > 0) {
+        else if (('a' == key || 'A' == key) 
+                && currentPage > 0) {
             --currentPage;
-        } else if ((key == 'd' || key == 'D') && currentPage < totalPages - 1) {
+        } else if (('d' == key || 'D' == key) 
+                && currentPage < totalPages - 1) {
             ++currentPage;
         }
-
     }
 }
 
@@ -423,31 +446,35 @@ void AdminUI::displaySaleStatistics(vector<SalesRecord> salesRecords, float tota
     while (true) {
         int startIdx = currentPage * maxPerPage;
         int endIdx = (startIdx + maxPerPage > totalItems ? totalItems : startIdx + maxPerPage);
-        int rows = endIdx - startIdx + 1; //
+        int rows = endIdx - startIdx + 1; 
 
-        //Xóa bảng cũ
-        clearScreen(1, 7, 118, 22); // xóa vùng tối đa
+        clearScreen(1, 7, 118, 22); 
 
         printFrameOptions(x, y, width, rows);
 
         for (int col : cols) {
             ConsoleUI::gotoXY(x + col, y + 1);
-            std::cout << char(179); // │
+            std::cout << char(179); 
             ConsoleUI::gotoXY(x + col, y);
             std::cout << char(194); 
             ConsoleUI::gotoXY(x + col, y + 2);
             std::cout << char(197); 
         }
 
-        // In header
-        ConsoleUI::setColor(Color::AQUA);
-        ConsoleUI::gotoXY(x + 1, y + 1); std::cout << "ID";
-        ConsoleUI::gotoXY(x + cols[0] + 1, y + 1); std::cout << "SONG NAME";
-        ConsoleUI::gotoXY(x + cols[1] + 1, y + 1); std::cout << "ARTIST";
-        ConsoleUI::gotoXY(x + cols[2] + 1, y + 1); std::cout << "GENRE";
-        ConsoleUI::gotoXY(x + cols[3] + 1, y + 1); std::cout << "SOLD";
-        ConsoleUI::gotoXY(x + cols[4] + 1, y + 1); std::cout << "REVENUE";
-        ConsoleUI::setColor(Color::WHITE);
+        ConsoleUI::setColor(AQUA);
+        ConsoleUI::gotoXY(x + 1, y + 1); 
+        cout << "ID";
+        ConsoleUI::gotoXY(x + cols[0] + 1, y + 1); 
+        cout << "SONG NAME";
+        ConsoleUI::gotoXY(x + cols[1] + 1, y + 1); 
+        cout << "ARTIST";
+        ConsoleUI::gotoXY(x + cols[2] + 1, y + 1); 
+        cout << "GENRE";
+        ConsoleUI::gotoXY(x + cols[3] + 1, y + 1); 
+        cout << "SOLD";
+        ConsoleUI::gotoXY(x + cols[4] + 1, y + 1); 
+        cout << "REVENUE";
+        ConsoleUI::setColor(WHITE);
 
         for (int i = startIdx; i < endIdx; ++i) {
             int displayIdx = i - startIdx + 1;
@@ -455,51 +482,56 @@ void AdminUI::displaySaleStatistics(vector<SalesRecord> salesRecords, float tota
 
             for (int col : cols) {
                 ConsoleUI::gotoXY(x + col, curY);
-                std::cout << char(179); // │
+                cout << char(179); 
                 ConsoleUI::gotoXY(x + col, curY + 1);
-                std::cout << char(197); 
+                cout << char(197); 
             }
 
-            ConsoleUI::gotoXY(x + 1, curY); std::cout << i + 1;
-            ConsoleUI::gotoXY(x + cols[0] + 1, curY); std::cout << salesRecords[i].getName();
-            ConsoleUI::gotoXY(x + cols[1] + 1, curY); std::cout << salesRecords[i].getArtist();
-            ConsoleUI::gotoXY(x + cols[2] + 1, curY); std::cout << salesRecords[i].getGenre();
-            ConsoleUI::gotoXY(x + cols[3] + 1, curY); std::cout << salesRecords[i].getSold();
-            ConsoleUI::gotoXY(x + cols[4] + 1, curY); std::cout << salesRecords[i].getRevenue();
+            ConsoleUI::gotoXY(x + 1, curY); 
+            cout << i + 1;
+            ConsoleUI::gotoXY(x + cols[0] + 1, curY); 
+            cout << salesRecords[i].getName();
+            ConsoleUI::gotoXY(x + cols[1] + 1, curY); 
+            cout << salesRecords[i].getArtist();
+            ConsoleUI::gotoXY(x + cols[2] + 1, curY); 
+            cout << salesRecords[i].getGenre();
+            ConsoleUI::gotoXY(x + cols[3] + 1, curY); 
+            cout << salesRecords[i].getSold();
+            ConsoleUI::gotoXY(x + cols[4] + 1, curY); 
+            cout << salesRecords[i].getRevenue();
         }
 
         // Bottom border
         for (int col : cols) {
             ConsoleUI::gotoXY(x + col, y + rows * 2 - 1);
-            std::cout << char(179); // │
+            cout << char(179); 
             ConsoleUI::gotoXY(x + col, y + rows * 2);
-            std::cout << char(193); 
+            cout << char(193); 
         }
 
-        // Hiển thị điều hướng trang
-        ConsoleUI::setColor(Color::LYELLOW);
+        ConsoleUI::setColor(LYELLOW);
         ConsoleUI::gotoXY(111 - totalPages / 10, 28);
-        std::cout << "PAGE " << currentPage + 1 << "/" << totalPages;
+        cout << "PAGE " << currentPage + 1 << "/" << totalPages;
 
         //pre page
         ConsoleUI::gotoXY(2, 15);
-        std::cout << char(174);
+        cout << char(174);
         ConsoleUI::gotoXY(2, 14);
-        std::cout << "A";
+        cout << "A";
 
         //next page
         ConsoleUI::gotoXY(117, 15);
-        std::cout << char(175);
+        cout << char(175);
         ConsoleUI::gotoXY(117, 14);
-        std::cout << "D";
+        cout << "D";
 
         printFrame(40, 26, 40, 3, AQUA);
         ConsoleUI::gotoXY(50, 27);
         ConsoleUI::setColor(LYELLOW);
         cout << "TOTAL REVENUE: $" << totalRevenue;
-        ConsoleUI::setColor(Color::WHITE);
+        ConsoleUI::setColor(WHITE);
 
-        if (currentPage == 0) {
+        if (0 == currentPage) {
             clearScreen(2, 14, 1, 2);
         } 
         if (currentPage == totalPages - 1) {
@@ -513,12 +545,13 @@ void AdminUI::displaySaleStatistics(vector<SalesRecord> salesRecords, float tota
         if (27 == key) {
             break;
         }
-        else if ((key == 'a' || key == 'A') && currentPage > 0) {
+        else if (('a' == key || 'A' == key) 
+                && currentPage > 0) {
             --currentPage;
-        } else if ((key == 'd' || key == 'D') && currentPage < totalPages - 1) {
+        } else if (('d' == key || 'D' == key) 
+                && currentPage < totalPages - 1) {
             ++currentPage;
         }
-
     }
 }
 
@@ -526,7 +559,7 @@ void AdminUI::displaySaleStatistics(vector<SalesRecord> salesRecords, float tota
 // Returns a Music object with the user-provided details
 Music AdminUI::getNewMusicDetails() {
     printFrameOptions(30, 10, 60, 5);
-    ConsoleUI::setColor(Color::AQUA);
+    ConsoleUI::setColor(AQUA);
     ConsoleUI::gotoXY(32, 11);
     cout << "ENTER MUSIC NAME  : ";
     ConsoleUI::gotoXY(32, 13);
@@ -537,7 +570,7 @@ Music AdminUI::getNewMusicDetails() {
     cout << "ENTER PRICE       : ";
     ConsoleUI::gotoXY(32, 19);
     cout << "ENTER QUANTITY    : ";
-    ConsoleUI::setColor(Color::WHITE);
+    ConsoleUI::setColor(WHITE);
 
     // Variables to store new music item details
 
@@ -568,7 +601,7 @@ Music AdminUI::getNewMusicDetails() {
     // Get price with validation (must be non-negative)
     float price = getValidatedInput<float>(
         "ENTER PRICE     : ",
-        [](const std::string& p) { 
+        [](const string& p) { 
             return InputChecker::checkFloat(p, 32, 17, 0.0F); 
         },
         32, 17
@@ -577,7 +610,7 @@ Music AdminUI::getNewMusicDetails() {
     // Get quantity with validation (must be non-negative)
     int quantity = getValidatedInput<int>(
         "ENTER QUANTITY  : ",
-        [](const std::string& p) { 
+        [](const string& p) { 
             return InputChecker::checkInt(p, 32, 19, 0); 
         },
         32, 19

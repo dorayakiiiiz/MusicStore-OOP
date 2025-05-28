@@ -17,25 +17,6 @@
 #include <vector>
 
 using std::string;
-
-/**
- * @brief Helper class for handling ODBC errors
- * 
- * Provides static utility methods to display SQL error information
- * when database operations fail.
- */
-// class ODBCErrorHandler {
-//     public:
-//         /**
-//          * @brief Displays ODBC error information
-//          * 
-//          * Retrieves and prints error information from ODBC for the given handle.
-//          * 
-//          * @param handle The SQL handle that generated the error
-//          * @param type The type of handle (SQL_HANDLE_ENV, SQL_HANDLE_DBC, SQL_HANDLE_STMT)
-//          */
-//         static void showError(SQLHANDLE handle, SQLSMALLINT type);
-// };
     
 /**
  * @brief Database connection manager
@@ -118,14 +99,6 @@ public:
      * @brief Cleanup resources before program exit
      */
     static void cleanup();
-
-// private:
-    // /**
-    //  * @brief Displays error information for the current connection
-    //  * 
-    //  * Helper method that uses ODBCErrorHandler to show connection errors.
-    //  */
-    // void showError() const;
 };
 
 #endif

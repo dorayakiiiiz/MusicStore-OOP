@@ -4,24 +4,25 @@
 #include "../ui/ConsoleUI.h"
 
 // Constructor with header text
-CommandInvoker::CommandInvoker(const std::string& headerText) : headerText(headerText) {}
+CommandInvoker::CommandInvoker(const std::string& headerText) : _headerText(headerText) {}
 
 // Add a command to the collection
 void CommandInvoker::addCommand(std::shared_ptr<Command> command) {
-    commands.push_back(command);
+    _commands.push_back(command);
 }
 
 // Execute the command menu loop
 void CommandInvoker::executeMenu() {
     while (true) {
-        // Lấy tên các command
         std::vector<std::string> options;
-        for (const auto& command : commands) {
+        for (const auto& command : _commands) {
             options.push_back(command->getName());
         }
 
-        int selected = ConsoleUI::selectMenu(options, headerText);
-        bool continueLoop = commands[selected]->execute();
-        if (!continueLoop) break;
+        int selected = ConsoleUI::selectMenu(options, _headerText);
+        bool continueLoop = _commands[selected]->execute();
+        if (!continueLoop) {
+            break;
+        }
     }
 }

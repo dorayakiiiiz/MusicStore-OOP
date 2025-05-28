@@ -9,7 +9,7 @@
 using std::tie;
 
 // SignUpCommand implementation
-SignUpCommand::SignUpCommand(shared_ptr<User>& user) : currentUser(user) {}
+SignUpCommand::SignUpCommand(shared_ptr<User>& user) : _currentUser(user) {}
 
 string SignUpCommand::getName() const {
     return "SIGN UP";
@@ -46,7 +46,7 @@ bool SignUpCommand::execute() {
         ConsoleUI::gotoXY(32, 14);
         cout << "INPUT PASSWORD       : ";
 
-        if(role == 1){
+        if(1 == role){
             ConsoleUI::gotoXY(32, 16);
             cout << "INPUT ADMIN PASSKEY  : ";
         }
@@ -79,10 +79,10 @@ bool SignUpCommand::execute() {
                 printRepeatMessage(107, 1, "CONTINUE", LGREEN);
                 printRepeatMessage(2, 1, "EXIT", LRED);
                 char repeat = _getch();
-                if (repeat == 27) {
+                if (27 == repeat) {
                     return true;
                 }
-                else if (repeat == 13){
+                else if (13 == repeat){
                     continue;
                 }
             }
@@ -101,10 +101,10 @@ bool SignUpCommand::execute() {
             printRepeatMessage(107, 1, "CONTINUE", LGREEN);
             printRepeatMessage(2, 1, "EXIT", LRED);
             char repeat = _getch();
-            if (repeat == 27) {
+            if (27 == repeat) {
                 return true;
             }
-            else if (repeat == 13){
+            else if (13 == repeat){
                 continue;
             }
         }
@@ -114,7 +114,7 @@ bool SignUpCommand::execute() {
 }
 
 // LoginCommand implementation
-LoginCommand::LoginCommand(shared_ptr<User>& user) : currentUser(user) {}
+LoginCommand::LoginCommand(shared_ptr<User>& user) : _currentUser(user) {}
 
 string LoginCommand::getName() const {
     return "LOGIN";
@@ -154,34 +154,34 @@ bool LoginCommand::execute() {
         );
 
         // Attempt to authenticate the user
-        currentUser = AuthService::getInstance()->loginUser(username, password);
+        _currentUser = AuthService::getInstance()->loginUser(username, password);
 
-        if (!currentUser) {
+        if (!_currentUser) {
             printFrame(30, 16, 60, 3, LRED);
             printMessage("INVALID USERNAME OR PASSWORD. PLEASE TRY AGAIN!", 36, 17, LRED);
             printRepeatMessage(107, 1, "CONTINUE", LGREEN);
             printRepeatMessage(2, 1, "EXIT", LRED);
             char repeat = _getch();
-            if (repeat == 27) {
+            if (27 == repeat) {
                 return true;
             }
-            else if (repeat == 13){
+            else if (13 == repeat){
                 continue;
             }
         }
 
         // create the appropriate controller based on user role
         // and call the menu function of the controller
-        Role role = currentUser->getRole();
+        Role role = _currentUser->getRole();
         ControllerFactory factory;
         shared_ptr<IController> controller = factory.createController(role);
 
         if (controller) {
             printFrame(30, 16, 60, 5, LGREEN);
-            printMessage("LOGIN SUCCESSFULLY! WELCOME " + currentUser->getUsername() + "!", 40, 18, LGREEN);
+            printMessage("LOGIN SUCCESSFULLY! WELCOME " + _currentUser->getUsername() + "!", 40, 18, LGREEN);
             sleepScreen(1200);
             clearScreen();
-            controller->menu(currentUser);
+            controller->menu(_currentUser);
             return true;
         }
     }

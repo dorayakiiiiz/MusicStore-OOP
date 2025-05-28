@@ -17,12 +17,12 @@ using std::vector, std::string, std::make_shared, std::shared_ptr;
  */
 class OrderService {
 private:
-    inline static shared_ptr<OrderService> instance = nullptr; /**< Singleton instance of OrderService */
+    inline static shared_ptr<OrderService> _instance = nullptr; /**< Singleton instance of OrderService */
 
 protected:
-    OrderService(shared_ptr<IDataProvider> provider); /**< Private constructor for singleton pattern */
+    OrderService(shared_ptr<IDataProvider> _provider); /**< Private constructor for singleton pattern */
 
-    shared_ptr<IDataProvider> dataProvider; /**< Data provider for accessing order data */
+    shared_ptr<IDataProvider> _dataProvider; /**< Data provider for accessing order data */
 public:
 
     /**

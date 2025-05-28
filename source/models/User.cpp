@@ -9,24 +9,19 @@
 #include "User.h"
 
 // Constructor for the base user class
-User::User(const string& uname, const string& pword) : username(uname), password(pword) {}
+User::User(const string& uname, const string& pword) : _username(uname), _password(pword) {}
 
 // Virtual destructor for the base user class
 User::~User() {}
 
 // Get the username of the user
 string User::getUsername() const {
-    return username;
+    return _username;
 }
 
 // Get the password of the user
 string User::getPassword() const {
-    return password;
-}
-
-// Convert user to string representation for display
-string User::toString() const {
-    return username + " - " + (Role::ADMIN == getRole() ? "Admin" : "Customer");
+    return _password;
 }
 
 // Copy constructor for Customer class
@@ -53,12 +48,10 @@ Role Admin::getRole() const {
 
 // Static method to validate admin registration passkeys
 bool Admin::isValidPasskey(const string& key) {
-    for (const auto& passKey : passKeys) {
+    for (const auto& passKey : _passKeys) {
         if (passKey == key) {
             return true;
         }
     }
     return false;
 }
-
-

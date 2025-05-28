@@ -25,13 +25,13 @@ using std::vector, std::shared_ptr, std::string, std::make_shared, std::make_uni
  */
 class DiscountService {
 private:
-    inline static shared_ptr<DiscountService> instance = nullptr; /**< Singleton instance of DiscountService */
+    inline static shared_ptr<DiscountService> _instance = nullptr; /**< Singleton instance of DiscountService */
 
 protected:
 
-    DiscountService(shared_ptr<IDataProvider> provider); /**< Constructor for singleton pattern */
+    DiscountService(shared_ptr<IDataProvider> _provider); /**< Constructor for singleton pattern */
 
-    shared_ptr<IDataProvider> dataProvider; /**< Data provider for accessing discount data */
+    shared_ptr<IDataProvider> _dataProvider; /**< Data provider for accessing discount data */
 public:
 
     /**

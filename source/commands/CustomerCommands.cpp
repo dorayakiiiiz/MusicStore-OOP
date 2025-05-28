@@ -20,7 +20,7 @@ enum Agreement {
 using std::vector, std::string, std::shared_ptr, std::make_shared, std::pair, std::tie, std::to_string;
 
 // ViewPurchaseHistoryCommand implementation
-ViewPurchaseHistoryCommand::ViewPurchaseHistoryCommand(shared_ptr<User>& user) : currentUser(user) {}
+ViewPurchaseHistoryCommand::ViewPurchaseHistoryCommand(shared_ptr<User>& user) : _currentUser(user) {}
 
 string ViewPurchaseHistoryCommand::getName() const {
     return "SEE PURCHASE HISTORY";
@@ -30,7 +30,7 @@ bool ViewPurchaseHistoryCommand::execute() {
     clearScreen();
     printFrame(0, 0, 120, 30, LYELLOW);
 
-    Customer* customer = dynamic_cast<Customer*>(currentUser.get());
+    Customer* customer = dynamic_cast<Customer*>(_currentUser.get());
     vector<Order> orders = OrderService::getInstance()->getAllOrders();
 
     // Get order history for the current customer
@@ -115,8 +115,8 @@ bool SearchMusicCommand::execute() {
         } else {
             CustomerUI::displaySearchResults(results);
 
-        printFrame(0, 0, 120, 30, LYELLOW);
-        printHeader(header, (120 - header.length()*2) / 2 - 23, 1, YELLOW);
+            printFrame(0, 0, 120, 30, LYELLOW);
+            printHeader(header, (120 - header.length()*2) / 2 - 23, 1, YELLOW);
 
             printFrame(24, 10, 75, 3);
             printMessage("ENTER SEARCH CRITERIA (1 FOR NAME, 2 FOR ARTIST, 3 FOR GENRE): ", 26, 11);
@@ -138,7 +138,7 @@ bool SearchMusicCommand::execute() {
 }
 
 // AddToCartCommand implementation
-AddToCartCommand::AddToCartCommand(Cart& c) : cart(c) {}
+AddToCartCommand::AddToCartCommand(Cart& c) : _cart(c) {}
 
 string AddToCartCommand::getName() const {
     return "ADD TO CART";
@@ -193,7 +193,7 @@ bool AddToCartCommand::execute() {
         );
 
         // Add item to cart
-        if (CartService::getInstance()->addItemToCart(cart, itemID, quantity)) {
+        if (CartService::getInstance()->addItemToCart(_cart, itemID, quantity)) {
             printFrame(49, 24, 66, 3, LGREEN); 
             printMessage("ADDED (" + to_string(quantity) + ") \"" + items[itemID - 1].getName() + "\" TO CART SUCCESSFULLY!", 55, 25, LGREEN);
         } else {
@@ -214,7 +214,7 @@ bool AddToCartCommand::execute() {
 }
 
 // ViewCurrentCartCommand implementation
-ViewCurrentCartCommand::ViewCurrentCartCommand(Cart& c) : cart(c) {
+ViewCurrentCartCommand::ViewCurrentCartCommand(Cart& c) : _cart(c) {
 
 }
 
@@ -228,13 +228,13 @@ bool ViewCurrentCartCommand::execute() {
     string header = "currentCart";
     printHeader(header, (120 - header.length()*2) / 2 - 19, 1, YELLOW);
 
-    CustomerUI::displayCart(cart.getItems(), 8);
+    CustomerUI::displayCart(_cart.getItems(), 8);
     return true;
 }
 
 
 // RemoveFromCartCommand implementation
-RemoveFromCartCommand::RemoveFromCartCommand(Cart& c) : cart(c) {}
+RemoveFromCartCommand::RemoveFromCartCommand(Cart& c) : _cart(c) {}
 
 std::string RemoveFromCartCommand::getName() const {
     return "REMOVE ITEMS FROM CART";
@@ -250,13 +250,13 @@ bool RemoveFromCartCommand::execute() {
         // Get all music items from the repository
         vector<Music> items = MusicService::getInstance()->getAllMusic();
 
-        if (cart.getItems().empty()) {
+        if (_cart.getItems().empty()) {
             printFrame(40, 14, 40, 3, LRED);
             printMessage("CART IS EMPTY!", 52, 15, LRED);
             sleepScreen(1200);
             return true;
         } else {
-            CustomerUI::displayCart(cart.getItems(), 7);
+            CustomerUI::displayCart(_cart.getItems(), 7);
             printFrame(0, 0, 120, 30, LYELLOW);
             printHeader(header, (120 - header.length()*2) / 2 - 24, 1, YELLOW);
         }
@@ -272,13 +272,13 @@ bool RemoveFromCartCommand::execute() {
         int itemID = getValidatedInput<int>(
             "ENTER ITEM ID TO REMOVE: ",
             [this](const string& prompt) {
-                return InputChecker::checkInt(prompt, 9, 26, 1, cart.getItems().size());
+                return InputChecker::checkInt(prompt, 9, 26, 1, _cart.getItems().size());
             },
             9, 26
         );
 
         // Remove item from cart
-        if (CartService::getInstance()->removeItemFromCart(cart, itemID - 1)) {
+        if (CartService::getInstance()->removeItemFromCart(_cart, itemID - 1)) {
             printFrame(49, 25, 40, 3, LGREEN); 
             printMessage("ITEM REMOVED SUCCESSFULLY!", 55, 26, LGREEN);
         } else {
@@ -299,7 +299,7 @@ bool RemoveFromCartCommand::execute() {
 }
 
 // CheckoutCommand implementation
-CheckoutCommand::CheckoutCommand(Cart& c, shared_ptr<User>& user) : cart(c), currentUser(user) {}
+CheckoutCommand::CheckoutCommand(Cart& c, shared_ptr<User>& user) : _cart(c), _currentUser(user) {}
 
 std::string CheckoutCommand::getName() const {
     return "CHECK OUT";
@@ -311,20 +311,20 @@ bool CheckoutCommand::execute() {
     string header = "checkOut";
     printHeader(header, (120 - header.length()*2) / 2 - 19, 1, YELLOW);
 
-    Customer* customer = dynamic_cast<Customer*>(currentUser.get());
+    Customer* customer = dynamic_cast<Customer*>(_currentUser.get());
 
     // Get all orders and vouchers from the repository
     // vector<Order> orders = OrderService::getInstance()->getAllOrders();
     vector<shared_ptr<Discount>> vouchers = DiscountService::getInstance()->getAllDiscounts();
 
-    if (cart.getItems().empty()) {
+    if (_cart.getItems().empty()) {
         CustomerUI::displayEmptyCartMessage();
         sleepScreen(1200);
         return true;
     } 
     // Calculate initial total
-    float total = cart.calculateTotal();
-    CustomerUI::displayOrderDetails(customer->getUsername(), cart.getItems(), total);
+    float total = _cart.calculateTotal();
+    CustomerUI::displayOrderDetails(customer->getUsername(), _cart.getItems(), total);
     
     // Handle discount vouchers if available
     vector<shared_ptr<Discount>> validVouchers = 
@@ -402,10 +402,10 @@ bool CheckoutCommand::execute() {
     }
 
     // add the items purchased to the sales record
-    SalesRecordService::getInstance()->addToRecord(cart);
+    SalesRecordService::getInstance()->addToRecord(_cart);
     
     // Create the order with final total
-    OrderService::getInstance()->checkout(customer->getUsername(), cart, total);
+    OrderService::getInstance()->checkout(customer->getUsername(), _cart, total);
 
     // delete the item that was sold out from the inventory
     MusicService::getInstance()->removeSoldOutItems();
@@ -460,7 +460,7 @@ bool CheckoutCommand::execute() {
 }
 
 // CustomerLogoutCommand implementation
-CustomerLogoutCommand::CustomerLogoutCommand(Cart& c, shared_ptr<User>& user) : cart(c), currentUser(user) {}
+CustomerLogoutCommand::CustomerLogoutCommand(Cart& c, shared_ptr<User>& user) : _cart(c), _currentUser(user) {}
 
 std::string CustomerLogoutCommand::getName() const {
     return "LOG OUT";
@@ -468,9 +468,9 @@ std::string CustomerLogoutCommand::getName() const {
 
 bool CustomerLogoutCommand::execute() {
     // Check if cart is empty before allowing logout
-    if (cart.getItems().empty()) {
+    if (_cart.getItems().empty()) {
         CustomerUI::displayLogoutMessage();
-        currentUser = nullptr;
+        _currentUser = nullptr;
         sleepScreen();
         return false; // Exit menu loop
     } else {

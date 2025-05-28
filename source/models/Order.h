@@ -19,9 +19,9 @@ using std::string, std::vector, std::pair;
  */
 class Order {
 private:
-    string username;             /**< Username of the customer who placed the order */
-    vector<Music> purchasedItems; /**< List of music items in the order */
-    float total;                 /**< Total price of the order (after discounts) */
+    string _username;             /**< Username of the customer who placed the order */
+    vector<Music> _purchasedItems; /**< List of music items in the order */
+    float _total;                 /**< Total price of the order (after discounts) */
 public:
 
     /**

@@ -17,14 +17,14 @@ MusicService::MusicService(shared_ptr<IDataProvider> provider) {
 
 // Get the singleton instance of MusicService
 shared_ptr<MusicService> MusicService::getInstance(shared_ptr<IDataProvider> provider) {
-    if (instance == nullptr) {
+    if (_instance == nullptr) {
         // If no provider is passed, use the default SqlDao
         if (!provider) {
             provider = make_shared<SqlDao>();
         }
-        instance = shared_ptr<MusicService>(new MusicService(provider));
+        _instance = shared_ptr<MusicService>(new MusicService(provider));
     }
-    return instance;
+    return _instance;
 }
 
 // Get all music items from the repository

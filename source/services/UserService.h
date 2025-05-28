@@ -16,12 +16,12 @@ using std::vector, std::string, std::shared_ptr, std::make_shared;
  */
 class UserService {
 private:
-    inline static shared_ptr<UserService> instance = nullptr; /**< Singleton instance of UserService */
+    inline static shared_ptr<UserService> _instance = nullptr; /**< Singleton instance of UserService */
 
 protected:
-    UserService(shared_ptr<IDataProvider> provider); /**< Constructor for singleton pattern */
+    UserService(shared_ptr<IDataProvider> _provider); /**< Constructor for singleton pattern */
     
-    shared_ptr<IDataProvider> dataProvider; /**< Data provider for accessing user data */
+    shared_ptr<IDataProvider> _dataProvider; /**< Data provider for accessing user data */
 
 public:
 

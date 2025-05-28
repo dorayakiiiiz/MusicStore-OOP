@@ -18,11 +18,11 @@ using std::string;
  */
 class Music {
 private:
-    string name;     /**< Name of the music track */
-    string artist;   /**< Artist who performed the music */
-    string genre;    /**< Genre of the music (e.g., Pop, Rock, etc.) */
-    float price;     /**< Price of the music item */
-    int quantity;    /**< Available quantity in inventory */
+    string _name;     /**< Name of the music track */
+    string _artist;   /**< Artist who performed the music */
+    string _genre;    /**< Genre of the music (e.g., Pop, Rock, etc.) */
+    float _price;     /**< Price of the music item */
+    int _quantity;    /**< Available quantity in inventory */
 
 public:
     /**
@@ -75,12 +75,6 @@ public:
      * @return int The available quantity
      */
     int getQuantity() const;
-    
-    /**
-     * @brief Converts the music object to a string representation
-     * @return string String representation of the music item
-     */
-    string toString() const; 
     
     /**
      * @brief Updates the price of the music item

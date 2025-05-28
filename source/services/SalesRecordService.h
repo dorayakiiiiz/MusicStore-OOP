@@ -17,7 +17,7 @@ using std::vector;
  */
 class SalesRecordService {
 private:
-    inline static shared_ptr<SalesRecordService> instance = nullptr; /**< Singleton instance of SalesRecordService */
+    inline static shared_ptr<SalesRecordService> _instance = nullptr; /**< Singleton instance of SalesRecordService */
 
 protected:
     /**
@@ -25,9 +25,9 @@ protected:
      * 
      * @param provider Data provider to access sales record data
      */
-    SalesRecordService(shared_ptr<IDataProvider> provider); /**< Constructor for singleton pattern */
+    SalesRecordService(shared_ptr<IDataProvider> _provider); /**< Constructor for singleton pattern */
 
-    shared_ptr<IDataProvider> dataProvider; /**< Data provider for accessing sales record data */
+    shared_ptr<IDataProvider> _dataProvider; /**< Data provider for accessing sales record data */
 public:
 
     /**

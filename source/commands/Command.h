@@ -2,6 +2,7 @@
 #define _COMMAND_H_
 
 #include <string>
+using std::string;
 
 /**
  * @brief Interface for the Command pattern
@@ -23,7 +24,7 @@ public:
      * @brief Get the name of the command for display in menus
      * @return std::string The display name of the command
      */
-    virtual std::string getName() const = 0;
+    virtual string getName() const = 0;
 };
 
 #endif

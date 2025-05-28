@@ -279,7 +279,7 @@ bool ViewAllPurchaseHistoriesCommand::execute() {
 }
 
 // DeleteUserCommand implementation
-DeleteUserCommand::DeleteUserCommand(shared_ptr<User>& user) : currentUser(user) {}
+DeleteUserCommand::DeleteUserCommand(shared_ptr<User>& user) : _currentUser(user) {}
 
 std::string DeleteUserCommand::getName() const {
     return "DELETE USERS";
@@ -292,7 +292,7 @@ bool DeleteUserCommand::execute() {
         printFrame(0, 0, 120, 30, AQUA);
         string header = "deleteUsers";
         printHeader(header, (120 - header.length()*2) / 2 - 24, 1, LBLUE);
-            vector<shared_ptr<User>> users = UserService::getInstance()->getAllUsers();
+        vector<shared_ptr<User>> users = UserService::getInstance()->getAllUsers();
 
         if (users.empty()) {
             printFrame(30, 14, 60, 3, LRED);
@@ -321,7 +321,7 @@ bool DeleteUserCommand::execute() {
         // Check if admin is deleting their own account
         shared_ptr<User> delUser = UserService::getInstance()->getUserById(id);
 
-        bool isCurrentUser = (currentUser->getUsername() == delUser->getUsername());
+        bool isCurrentUser = (_currentUser->getUsername() == delUser->getUsername());
         
         // Delete the selected user
         bool success = UserService::getInstance()->deleteUserById(id);
@@ -333,7 +333,7 @@ bool DeleteUserCommand::execute() {
             if (isCurrentUser) {
                 printFrame(30, 13, 60, 5, LRED);
                 printMessage("YOU HAVE DELETED YOURSELF. LOGGING OUT...", 45, 15, LRED);
-                currentUser = nullptr;
+                _currentUser = nullptr;
                 sleepScreen(1200);
                 return false; // Exit menu loop
             }
@@ -375,7 +375,7 @@ bool ViewSalesStatisticsCommand::execute() {
 }
 
 // AdminLogoutCommand implementation
-AdminLogoutCommand::AdminLogoutCommand(shared_ptr<User>& user) : currentUser(user) {}
+AdminLogoutCommand::AdminLogoutCommand(shared_ptr<User>& user) : _currentUser(user) {}
 
 std::string AdminLogoutCommand::getName() const {
     return "LOG OUT";
@@ -384,8 +384,7 @@ std::string AdminLogoutCommand::getName() const {
 bool AdminLogoutCommand::execute() {
     printFrame(5, 24, 60, 5, LGREEN);
     printMessage("LOG OUT SUCCESSFULLY!", 23, 26, LGREEN);
-    currentUser = nullptr;
+    _currentUser = nullptr;
     sleepScreen(1200);
     return false; // Exit menu loop
 }
-
