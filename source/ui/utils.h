@@ -8,6 +8,7 @@
 #include <limits>
 #include <functional>
 #include <cfloat>
+#include "Color.h"
 #include "../ui/ConsoleUI.h"
 #include "../ui/InputChecker.h"
 #include "../models/Music.h"
@@ -29,7 +30,7 @@ void printHeader(const string&, int, int, Color fg = WHITE, Color bg = BLACK);
 void printMessage(const string&, int, int, Color fg = WHITE, Color bg = BLACK);
 
 
-void printMenu(const string&, int, int, Color fg = WHITE, Color bg = BLACK);
+void printMenu(const string&, int, int);
 /**
  * @brief Prints a horizontal line of dashes
  */
@@ -74,7 +75,7 @@ void printFrameOptions(int x, int y, int width, int select, Color fg = WHITE, Co
  * @param prompt The prompt to display to the user
  * @return The string input by the user
  */
-string getInput(const string&, int, int, Color fg = WHITE, Color bg = BLACK);
+string getInput(const string&, int, int);
 
 /**
  * @brief Sleeps the program for a specified duration
@@ -116,7 +117,7 @@ T getValidatedInput(const string& prompt, function<tuple<bool, T, Error>(const s
         if (!isValid) {;
             printFrame(61, 26, error.message.size() + 6, 3, LRED);
             printMessage(error.message, 63, 27, LRED);
-            printRepeatMessage(107, 1, "CONTINUE");
+            printRepeatMessage(107, 1, "CONTINUE", LGREEN);
             char repeat = _getch();
             clearScreen(61, 26, error.message.size() + 6, 3);
             clearScreen(107, 1, 11, 4);

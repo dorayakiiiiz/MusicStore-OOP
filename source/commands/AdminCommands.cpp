@@ -22,7 +22,7 @@ std::string ViewMusicListCommand::getName() const {
 
 bool ViewMusicListCommand::execute() {
     clearScreen();
-    printFrame(0, 0, 120, 30, LAQUA);
+    printFrame(0, 0, 120, 30, AQUA);
     string header = "musicList";
     printHeader(header, (120 - header.length()*2) / 2 - 19, 1, LBLUE);
 
@@ -40,7 +40,7 @@ std::string AddNewItemsCommand::getName() const {
 bool AddNewItemsCommand::execute() {
     while (true) {
         clearScreen();
-        printFrame(0, 0, 120, 30, LAQUA); 
+        printFrame(0, 0, 120, 30, AQUA); 
         string header = "addNewItems";
         printHeader(header, (120 - header.length()*2) / 2 - 26, 1, LBLUE);
 
@@ -57,7 +57,7 @@ bool AddNewItemsCommand::execute() {
         }
 
         printRepeatMessage(2, 1, "EXIT", LRED);
-        printRepeatMessage(107, 1, "CONTINUE", LYELLOW);
+        printRepeatMessage(107, 1, "CONTINUE", YELLOW);
 
         char repeat = _getch();
         if (27 == repeat) {
@@ -78,7 +78,7 @@ bool RemoveItemsCommand::execute() {
 
     while (true) {
         clearScreen();
-        printFrame(0, 0, 120, 30, LAQUA); 
+        printFrame(0, 0, 120, 30, AQUA); 
         string header = "removeItems";
         printHeader(header, (120 - header.length()*2) / 2 - 24, 1, LBLUE);
 
@@ -94,11 +94,11 @@ bool RemoveItemsCommand::execute() {
         AdminUI::displayMusicList(items, 7);
 
         printFrameOptions(7, 25, 40, 1);
-
+        ConsoleUI::setColor(AQUA);
         ConsoleUI::gotoXY(9, 26);
         cout << "ENTER ITEM ID TO REMOVE  : ";
+        ConsoleUI::setColor(WHITE);
 
-        ConsoleUI::setColor(LAQUA);
         int id = getValidatedInput<int>(
             "ENTER ITEM ID TO REMOVE: ",
             [&items](const string& prompt) {
@@ -118,7 +118,7 @@ bool RemoveItemsCommand::execute() {
         }
 
         printRepeatMessage(2, 1, "EXIT", LRED);
-        printRepeatMessage(107, 1, "CONTINUE", LYELLOW);
+        printRepeatMessage(107, 1, "CONTINUE", YELLOW);
 
         char repeat = _getch();
         if (27 == repeat) {
@@ -139,7 +139,7 @@ bool UpdatePriceCommand::execute() {
 
     while (true) {
         clearScreen();
-        printFrame(0, 0, 120, 30, LAQUA); 
+        printFrame(0, 0, 120, 30, AQUA); 
         string header = "updatePrice";
         printHeader(header, (120 - header.length()*2) / 2 - 22, 1, LBLUE);
 
@@ -153,13 +153,13 @@ bool UpdatePriceCommand::execute() {
         AdminUI::displayMusicList(items, 6);
 
         printFrameOptions(7, 23, 40, 2);
-
+        ConsoleUI::setColor(AQUA);
         ConsoleUI::gotoXY(9, 24);
         cout << "ENTER ITEM ID TO UPDATE  : ";
         ConsoleUI::gotoXY(9, 26);
         cout << "ENTER NEW PRICE          : ";
+        ConsoleUI::setColor(WHITE);
 
-        ConsoleUI::setColor(LAQUA);
         // Get ID of item to update with validation
         int id = getValidatedInput<int>(
             "ENTER ITEM ID TO UPDATE: ",
@@ -169,7 +169,6 @@ bool UpdatePriceCommand::execute() {
             9, 24
         );
 
-        ConsoleUI::setColor(LAQUA);
         // Get new price with validation
         float newPrice = getValidatedInput<float>(
             "ENTER NEW PRICE        : ",
@@ -190,7 +189,7 @@ bool UpdatePriceCommand::execute() {
         }
 
         printRepeatMessage(2, 1, "EXIT", LRED);
-        printRepeatMessage(107, 1, "CONTINUE", LYELLOW);
+        printRepeatMessage(107, 1, "CONTINUE", YELLOW);
 
         char repeat = _getch();
         if (27 == repeat) {
@@ -207,7 +206,7 @@ std::string ViewUsersCommand::getName() const {
 
 bool ViewUsersCommand::execute() {
     clearScreen();
-    printFrame(0, 0, 120, 30, LAQUA); 
+    printFrame(0, 0, 120, 30, AQUA); 
     string header = "userList";
     printHeader(header, (120 - header.length()*2) / 2 - 18, 1, LBLUE);
 
@@ -237,17 +236,17 @@ bool ViewAllPurchaseHistoriesCommand::execute() {
 
     while(true){
         clearScreen();
-        printFrame(0, 0, 120, 30, LAQUA); 
+        printFrame(0, 0, 120, 30, AQUA); 
         string header = "purchaseHistory";
         printHeader(header, (120 - header.length()*2) / 2 - 34, 1, LBLUE);
         AdminUI::displayUserList(customer, 6);
 
         printFrameOptions(20, 24, 60, 1);
-
+        ConsoleUI::setColor(AQUA);
         ConsoleUI::gotoXY(22, 25);
         cout << "ENTER CUSTOMER ID TO VIEW PURCHASE HISTORY  : ";
+        ConsoleUI::setColor(WHITE);
 
-        ConsoleUI::setColor(LAQUA);
         int id = getValidatedInput<int>(
             "ENTER CUSTOMER ID TO VIEW PURCHASE HISTORY: ",
             [&customer](const string& prompt_input) {
@@ -257,19 +256,19 @@ bool ViewAllPurchaseHistoriesCommand::execute() {
         );
 
         clearScreen();
-        printFrame(0, 0, 120, 30, LAQUA); 
+        printFrame(0, 0, 120, 30, AQUA); 
         printHeader(header, (120 - header.length()*2) / 2 - 34, 1, LBLUE);
 
         // Get the selected customer
         shared_ptr<User> selectedCustomer = customer[id - 1];
-        printFrame(30, 7, 60, 3);
-        printMessage("CUSTOMER: " + selectedCustomer->getUsername(), 50, 8, LBLUE);
+        printFrame(30, 7, 60, 3, AQUA);
+        printMessage("CUSTOMER: " + selectedCustomer->getUsername(), 50, 8, YELLOW);
 
         vector<Order> userOrders = OrderService::getInstance()->getUserOrders(selectedCustomer->getUsername());
 
         AdminUI::displayPurchasedHistory(userOrders);
 
-        printRepeatMessage(107, 1, "CONTINUE", LYELLOW);
+        printRepeatMessage(107, 1, "CONTINUE", YELLOW);
         printRepeatMessage(2, 1, "EXIT", LRED);
         char repeat = _getch();
         if (27 == repeat) {
@@ -290,7 +289,7 @@ bool DeleteUserCommand::execute() {
     
     while (true) {
         clearScreen();
-        printFrame(0, 0, 120, 30, LAQUA);
+        printFrame(0, 0, 120, 30, AQUA);
         string header = "deleteUsers";
         printHeader(header, (120 - header.length()*2) / 2 - 24, 1, LBLUE);
             vector<shared_ptr<User>> users = UserService::getInstance()->getAllUsers();
@@ -305,12 +304,12 @@ bool DeleteUserCommand::execute() {
         AdminUI::displayUserList(users, 7);
         
         printFrameOptions(20, 25, 40, 1);
-
+        ConsoleUI::setColor(AQUA);
         ConsoleUI::gotoXY(22, 26);
         cout << "ENTER USER ID TO DELETE  : ";
+        ConsoleUI::setColor(WHITE);
 
         // Get username to delete
-        ConsoleUI::setColor(LAQUA);
         int id = getValidatedInput<int>(
             "ENTER USER ID TO DELETE: ",
             [&users](const string& prompt_input) {
@@ -346,7 +345,7 @@ bool DeleteUserCommand::execute() {
         // delete the order history of the deleted user
         OrderService::getInstance()->deleteOrder(delUser->getUsername());
 
-        printRepeatMessage(107, 1, "CONTINUE", LYELLOW);
+        printRepeatMessage(107, 1, "CONTINUE", YELLOW);
         printRepeatMessage(2, 1, "EXIT", LRED);
 
         char repeat = _getch();
@@ -364,7 +363,7 @@ std::string ViewSalesStatisticsCommand::getName() const {
 
 bool ViewSalesStatisticsCommand::execute() {
     clearScreen();
-    printFrame(0, 0, 120, 30, LAQUA);
+    printFrame(0, 0, 120, 30, AQUA);
     string header = "saleStatistics";
     printHeader(header, (120 - header.length()*2) / 2 - 27, 1, LBLUE);
 

@@ -22,11 +22,11 @@ int ConsoleUI::selectMenu(const std::vector<std::string>& options, const std::st
     Color fg;
     Color bg;
     if(header == "WELCOME TO THE MUSIC STORE"){
-        fg = LRED;
-        bg = RED;
+        fg = LGREEN;
+        bg = LAQUA;
     }
     else if (header == "ADMIN MENU"){
-        fg = LAQUA;
+        fg = AQUA;
         bg = LBLUE;
     }
     else{

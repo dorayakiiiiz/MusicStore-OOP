@@ -39,18 +39,11 @@ void CustomerUI::displayPurchasedHistory(const vector<Order>& orders) {
         int OrderIdx = currentPage * maxPerPage;
 
         //Xóa bảng cũ
-        clearScreen(x, y, width, 16); // xóa vùng tối đa
-        // Xóa page 
-        clearScreen(111, 28, 8, 1); 
-        // Xóa vùng thông báo
-        clearScreen(2, 1, 7, 4);
-        // Xóa hiển thiện điều hướng
-        clearScreen(2, 14, 1, 2);
-        clearScreen(117, 14, 1, 2);
+        clearScreen(1, 12, 118, 17); // xóa vùng tối đa
 
         printFrameOptions(x, 10, width, 1);
         ConsoleUI::gotoXY(x + 41, 11);
-        ConsoleUI::setColor(Color::YELLOW);
+        ConsoleUI::setColor(Color::LBLUE);
         cout << "ORDER " << OrderIdx + 1;
         ConsoleUI::setColor(Color::WHITE);
 
@@ -98,7 +91,7 @@ void CustomerUI::displayPurchasedHistory(const vector<Order>& orders) {
 
         printFrameOptions(x, y + rows * 2, width, 1);
         ConsoleUI::gotoXY(17, y + rows * 2 + 1);
-        ConsoleUI::setColor(Color::LRED);
+        ConsoleUI::setColor(Color::LAQUA);
         cout << "ORDER TOTAL: $" << orders[OrderIdx].getTotal();
         ConsoleUI::setColor(Color::WHITE);
 
@@ -121,7 +114,7 @@ void CustomerUI::displayPurchasedHistory(const vector<Order>& orders) {
 
 
         // Hiển thị điều hướng trang
-        ConsoleUI::setColor(Color::LYELLOW);
+        ConsoleUI::setColor(Color::AQUA);
         ConsoleUI::gotoXY(111 - totalPages/10, 28);
         std::cout << "PAGE " << currentPage + 1 << "/" << totalPages;
 
@@ -144,7 +137,7 @@ void CustomerUI::displayPurchasedHistory(const vector<Order>& orders) {
             clearScreen(117, 14, 1, 2);
         }
 
-        printRepeatMessage(2, 1, "EXIT", LYELLOW);   
+        printRepeatMessage(2, 1, "EXIT", LRED);   
 
         char key = _getch();
 
@@ -184,15 +177,7 @@ void CustomerUI::displayMusicList(vector<Music>& items, int maxPerPage) {
         int rows = endIdx - startIdx + 1; //
 
         //Xóa bảng cũ
-        clearScreen(x, y, width, maxPerPage * 2 + 4); // xóa vùng tối đa
-        // Xóa page 
-        clearScreen(111, 28, 8, 1); 
-        // Xóa vùng thông báo
-        clearScreen(2, 1, 7, 4);
-        clearScreen(107, 1, 11, 4);
-        // Xóa hiển thiện điều hướng
-        clearScreen(2, 14, 1, 2);
-        clearScreen(117, 14, 1, 2);
+        clearScreen(1, 8, 118, 21); // xóa vùng tối đa
 
         printFrameOptions(x, y, width, rows);
 
@@ -242,7 +227,7 @@ void CustomerUI::displayMusicList(vector<Music>& items, int maxPerPage) {
             std::cout << char(193); 
         }
 
-        ConsoleUI::setColor(Color::LYELLOW);
+        ConsoleUI::setColor(Color::AQUA);
         // Hiển thị điều hướng trang
         ConsoleUI::gotoXY(111 - totalPages / 10, 28);
         std::cout << "PAGE " << currentPage + 1 << "/" << totalPages;
@@ -268,10 +253,10 @@ void CustomerUI::displayMusicList(vector<Music>& items, int maxPerPage) {
 
         // Đợi người dùng nhập phím
         if(8 == maxPerPage){
-            printRepeatMessage(2, 1, "EXIT", LYELLOW);    
+            printRepeatMessage(2, 1, "EXIT", LRED);    
         }
         else if (6 == maxPerPage){
-            printRepeatMessage(107, 1, "ADD ITEM", LAQUA);
+            printRepeatMessage(107, 1, "ADD ITEM", LBLUE);
         }
 
         char key = _getch();
@@ -311,9 +296,9 @@ void CustomerUI::displayCart(const vector<Music>& items, int maxPerPage) {
 
     vector<int> cols = {4, 47, 70, 82, 94};
     clearScreen();
-    printFrame(0, 0, 120, 30);
+    printFrame(0, 0, 120, 30, LYELLOW);
     string header = "currentCart";
-    printHeader(header, (120 - header.length()*2) / 2 - 24, 1);
+    printHeader(header, (120 - header.length()*2) / 2 - 24, 1, YELLOW);
 
     while (true) {
         int startIdx = currentPage * maxPerPage;
@@ -321,16 +306,7 @@ void CustomerUI::displayCart(const vector<Music>& items, int maxPerPage) {
         int rows = endIdx - startIdx + 1; //
 
         //Xóa bảng cũ
-        clearScreen(1, 6, 118, 23); // xóa vùng tối đa
-        // Xóa page 
-        clearScreen(111, 28, 8, 1); 
-        // Xóa vùng thông báo
-        clearScreen(2, 1, 7, 4);
-        clearScreen(109, 1, 9, 4);
-        clearScreen(106, 1, 9, 4);
-        // Xóa hiển thiện điều hướng
-        clearScreen(2, 14, 1, 2);
-        clearScreen(117, 14, 1, 2);
+        clearScreen(1, 8, 118, 21); // xóa vùng tối đa
 
         printFrameOptions(x, y, width, rows);
 
@@ -380,7 +356,7 @@ void CustomerUI::displayCart(const vector<Music>& items, int maxPerPage) {
             std::cout << char(193); 
         }
 
-        ConsoleUI::setColor(Color::LYELLOW);
+        ConsoleUI::setColor(Color::AQUA);
         // Hiển thị điều hướng trang
         ConsoleUI::gotoXY(111 - totalPages / 10, 28);
         std::cout << "PAGE " << currentPage + 1 << "/" << totalPages;
@@ -407,16 +383,14 @@ void CustomerUI::displayCart(const vector<Music>& items, int maxPerPage) {
 
         // Đợi người dùng nhập phím
         if(8 == maxPerPage){
-            printRepeatMessage(2, 1, "EXIT", LYELLOW);   
+            printRepeatMessage(2, 1, "EXIT", LRED);   
             clearScreen(2, 1, 7, 4);
         }
         else if (7 == maxPerPage){
-            printRepeatMessage(109, 1, "REMOVE", LAQUA);
-            clearScreen(109, 1, 9, 4); 
+            printRepeatMessage(109, 1, "REMOVE", LBLUE);
         }
         else {
-            printRepeatMessage(106, 1, "CHECK OUT", LAQUA);
-            clearScreen(106, 1, 9, 4);
+            printRepeatMessage(106, 1, "CHECK OUT", LBLUE);
         }
 
         char key = _getch();
@@ -426,6 +400,7 @@ void CustomerUI::displayCart(const vector<Music>& items, int maxPerPage) {
             break;
         }
         else if (13 == key && 8 != maxPerPage){
+            clearScreen(106, 1, 12, 4);
             break;
         }
         else if ((key == 'a' || key == 'A') && currentPage > 0) {
@@ -458,11 +433,11 @@ void CustomerUI::displayEmptyCartMessage() {
 // Shows username, list of items, and total price
 void CustomerUI::displayOrderDetails(const string& username, const vector<Music>& items, float total) {
     displayCart(items, 6);
-    printFrame(40, 23, 40, 3);
+    printFrame(40, 23, 40, 3, LYELLOW);
     ConsoleUI::gotoXY(50, 24);
-    printFrame(29, 14, 63, 3, LYELLOW);
+    ConsoleUI::setColor(AQUA);
     cout << "TOTAL REVENUE: $" << total;
-    printFrame(29, 14, 63, 3, WHITE);
+    ConsoleUI::setColor(WHITE);
     sleepScreen(1200);
     clearScreen(1, 1, 105, 5);
 }
@@ -477,7 +452,7 @@ void CustomerUI::displayVoucherList(const vector<shared_ptr<Discount>>& vouchers
     int totalPages = (totalItems + maxPerPage - 1) / maxPerPage;
     int currentPage = 0;
 
-    printFrame(30, 7, 60, 3);
+    printFrame(30, 7, 60, 3, LYELLOW);
     ConsoleUI::gotoXY(38, 8);
     ConsoleUI::setColor(Color::LGREEN);
     cout << "YOU HAVE THE FOLLOWING VOUCHERS AVAILABLE";
@@ -532,7 +507,7 @@ void CustomerUI::displayVoucherList(const vector<shared_ptr<Discount>>& vouchers
         std::cout << char(193); 
         
 
-        ConsoleUI::setColor(Color::LYELLOW);
+        ConsoleUI::setColor(Color::AQUA);
         // Hiển thị điều hướng trang
         ConsoleUI::gotoXY(111, 28);
         std::cout << "PAGE " << currentPage + 1 << "/" << totalPages;
@@ -558,7 +533,7 @@ void CustomerUI::displayVoucherList(const vector<shared_ptr<Discount>>& vouchers
 
         // Đợi người dùng nhập phím
   
-        printRepeatMessage(109, 1, "SELECT", LAQUA);
+        printRepeatMessage(109, 1, "SELECT", LBLUE);
 
         char key = _getch();
         if (13 == key){
@@ -577,7 +552,7 @@ void CustomerUI::displayVoucherList(const vector<shared_ptr<Discount>>& vouchers
 void CustomerUI::displayDiscountOptions() {
     printFrame(7, 8, 107, 9, LYELLOW);
     ConsoleUI::gotoXY(9, 9);
-    ConsoleUI::setColor(Color::LBLUE);
+    ConsoleUI::setColor(Color::AQUA);
     cout << "CONGRATULATIONS! AS THE TOTAL IS OVER $50, YOU WILL RECEIVE A DISCOUNT VOUCHER FOR YOUR NEXT PURCHASE";
     ConsoleUI::gotoXY(9, 11);
     cout << "WHAT TYPE OF DISCOUNT WOULD YOU LIKE TO APPLY?";

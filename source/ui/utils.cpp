@@ -40,9 +40,9 @@ void printMenu(const string& header, int x, int y)
 {
     string fileName = "";
     if(header == "WELCOME TO THE MUSIC STORE"){
+        ConsoleUI::setColor(Color::LAQUA);
         fileName = "ascii/musicStore.txt";
         x += 18;
-        ConsoleUI::setColor(Color::LRED);
     }
     else if (header == "ADMIN MENU"){
         fileName = "ascii/adminMenu.txt";
@@ -159,8 +159,7 @@ void printFrameOptions(int x, int y, int width, int select, Color fg, Color bg) 
 
 // Gets user input with a prompt
 // Returns the string input by the user
-string getInput(const string& prompt, int x, int y, Color fg, Color bg) {
-    ConsoleUI::setColor(fg);
+string getInput(const string& prompt, int x, int y) {
     ConsoleUI::gotoXY(x, y);
     cout << (char)175 << ' ' << prompt;
     string input; getline(cin, input);
