@@ -43,7 +43,7 @@ void CustomerUI::displayPurchasedHistory(const vector<Order>& orders) {
 
         printFrameOptions(x, 10, width, 1);
         ConsoleUI::gotoXY(x + 41, 11);
-        ConsoleUI::setColor(Color::LBLUE);
+        ConsoleUI::setColor(Color::AQUA);
         cout << "ORDER " << OrderIdx + 1;
         ConsoleUI::setColor(Color::WHITE);
 
@@ -91,7 +91,7 @@ void CustomerUI::displayPurchasedHistory(const vector<Order>& orders) {
 
         printFrameOptions(x, y + rows * 2, width, 1);
         ConsoleUI::gotoXY(17, y + rows * 2 + 1);
-        ConsoleUI::setColor(Color::LAQUA);
+        ConsoleUI::setColor(Color::AQUA);
         cout << "ORDER TOTAL: $" << orders[OrderIdx].getTotal();
         ConsoleUI::setColor(Color::WHITE);
 
@@ -133,7 +133,8 @@ void CustomerUI::displayPurchasedHistory(const vector<Order>& orders) {
 
         if (currentPage == 0) {
             clearScreen(2, 14, 1, 2);
-        } else if (currentPage == totalPages - 1) {
+        } 
+        if (currentPage == totalPages - 1) {
             clearScreen(117, 14, 1, 2);
         }
 
@@ -247,7 +248,8 @@ void CustomerUI::displayMusicList(vector<Music>& items, int maxPerPage) {
 
         if (currentPage == 0) {
             clearScreen(2, 14, 1, 2);
-        } else if (currentPage == totalPages - 1) {
+        } 
+        if (currentPage == totalPages - 1) {
             clearScreen(117, 14, 1, 2);
         }
 
@@ -256,7 +258,7 @@ void CustomerUI::displayMusicList(vector<Music>& items, int maxPerPage) {
             printRepeatMessage(2, 1, "EXIT", LRED);    
         }
         else if (6 == maxPerPage){
-            printRepeatMessage(107, 1, "ADD ITEM", LBLUE);
+            printRepeatMessage(108, 1, "ADD ITEM", LBLUE);
         }
 
         char key = _getch();
@@ -376,7 +378,8 @@ void CustomerUI::displayCart(const vector<Music>& items, int maxPerPage) {
 
         if (currentPage == 0) {
             clearScreen(2, 14, 1, 2);
-        } else if (currentPage == totalPages - 1) {
+        } 
+        if (currentPage == totalPages - 1) {
             clearScreen(117, 14, 1, 2);
         }
 
@@ -384,7 +387,6 @@ void CustomerUI::displayCart(const vector<Music>& items, int maxPerPage) {
         // Đợi người dùng nhập phím
         if(8 == maxPerPage){
             printRepeatMessage(2, 1, "EXIT", LRED);   
-            clearScreen(2, 1, 7, 4);
         }
         else if (7 == maxPerPage){
             printRepeatMessage(109, 1, "REMOVE", LBLUE);
@@ -425,7 +427,7 @@ void CustomerUI::displaySearchResults(vector<Music>& results) {
 
 // Displays a message when attempting to checkout with an empty cart
 void CustomerUI::displayEmptyCartMessage() {
-    printFrame(29, 14, 63, 3, LRED);
+    printFrame(29, 14, 65, 3, LRED);
     printMessage("CART IS EMPTY! PLEASE ADD ITEMS TO CART BEFORE CHECKING OUT.",  31, 15, LRED);
 }
 
@@ -527,7 +529,8 @@ void CustomerUI::displayVoucherList(const vector<shared_ptr<Discount>>& vouchers
 
         if (currentPage == 0) {
             clearScreen(2, 14, 1, 2);
-        } else if (currentPage == totalPages - 1) {
+        } 
+        if (currentPage == totalPages - 1) {
             clearScreen(117, 14, 1, 2);
         }
 
@@ -552,16 +555,17 @@ void CustomerUI::displayVoucherList(const vector<shared_ptr<Discount>>& vouchers
 void CustomerUI::displayDiscountOptions() {
     printFrame(7, 8, 107, 9, LYELLOW);
     ConsoleUI::gotoXY(9, 9);
-    ConsoleUI::setColor(Color::AQUA);
+    ConsoleUI::setColor(Color::LBLUE);
     cout << "CONGRATULATIONS! AS THE TOTAL IS OVER $50, YOU WILL RECEIVE A DISCOUNT VOUCHER FOR YOUR NEXT PURCHASE";
     ConsoleUI::gotoXY(9, 11);
     cout << "WHAT TYPE OF DISCOUNT WOULD YOU LIKE TO APPLY?";
     ConsoleUI::gotoXY(11, 13);
-    ConsoleUI::setColor(Color::LAQUA);
+    ConsoleUI::setColor(Color::AQUA);
     cout << "1. PERCENTAGE DISCOUNT";
     ConsoleUI::gotoXY(11, 15);
     cout << "2. FIXED AMOUNT DISCOUNT";
     ConsoleUI::gotoXY(11, 17);
+    ConsoleUI::setColor(Color::WHITE);
 }
 
 // Displays a success message after completing an order

@@ -334,7 +334,7 @@ bool DeleteUserCommand::execute() {
                 printFrame(30, 13, 60, 5, LRED);
                 printMessage("YOU HAVE DELETED YOURSELF. LOGGING OUT...", 45, 15, LRED);
                 currentUser = nullptr;
-                sleepScreen();
+                sleepScreen(1200);
                 return false; // Exit menu loop
             }
         } else {

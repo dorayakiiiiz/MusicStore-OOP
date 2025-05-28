@@ -40,7 +40,7 @@ void printMenu(const string& header, int x, int y)
 {
     string fileName = "";
     if(header == "WELCOME TO THE MUSIC STORE"){
-        ConsoleUI::setColor(Color::LAQUA);
+        ConsoleUI::setColor(Color::AQUA);
         fileName = "ascii/musicStore.txt";
         x += 18;
     }

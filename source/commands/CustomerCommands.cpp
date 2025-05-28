@@ -115,8 +115,8 @@ bool SearchMusicCommand::execute() {
         } else {
             CustomerUI::displaySearchResults(results);
 
-            printFrame(0, 0, 120, 30);
-            printHeader(header, (120 - header.length()*2) / 2 - 23, 1);
+        printFrame(0, 0, 120, 30, LYELLOW);
+        printHeader(header, (120 - header.length()*2) / 2 - 23, 1, YELLOW);
 
             printFrame(24, 10, 75, 3);
             printMessage("ENTER SEARCH CRITERIA (1 FOR NAME, 2 FOR ARTIST, 3 FOR GENRE): ", 26, 11);
@@ -197,7 +197,7 @@ bool AddToCartCommand::execute() {
             printFrame(49, 24, 66, 3, LGREEN); 
             printMessage("ADDED (" + to_string(quantity) + ") \"" + items[itemID - 1].getName() + "\" TO CART SUCCESSFULLY!", 55, 25, LGREEN);
         } else {
-            printFrame(49, 24, 40, 3, LRED); 
+            printFrame(49, 24, 43, 3, LRED); 
             printMessage("FAILED TO ADD ITEM. NOT ENOUGH STOCK!", 51, 25, LRED);
             sleepScreen(1200);
         }
@@ -319,135 +319,136 @@ bool CheckoutCommand::execute() {
 
     if (cart.getItems().empty()) {
         CustomerUI::displayEmptyCartMessage();
-    } else {
-        // Calculate initial total
-        float total = cart.calculateTotal();
-        CustomerUI::displayOrderDetails(customer->getUsername(), cart.getItems(), total);
-        
-        // Handle discount vouchers if available
-        vector<shared_ptr<Discount>> validVouchers = 
-        DiscountService::getInstance()->loadValidDiscounts(vouchers, customer->getUsername());
+        sleepScreen(1200);
+        return true;
+    } 
+    // Calculate initial total
+    float total = cart.calculateTotal();
+    CustomerUI::displayOrderDetails(customer->getUsername(), cart.getItems(), total);
+    
+    // Handle discount vouchers if available
+    vector<shared_ptr<Discount>> validVouchers = 
+    DiscountService::getInstance()->loadValidDiscounts(vouchers, customer->getUsername());
 
-        shared_ptr<Discount> selectedVoucher = nullptr;
+    shared_ptr<Discount> selectedVoucher = nullptr;
+    printFrame(0, 0, 120, 30, LYELLOW);
+    printHeader(header, (120 - header.length()*2) / 2 - 19, 1, YELLOW);
+
+    if (!validVouchers.empty()) {
+        // Display available vouchers
+        printFrame(25, 23, 70, 3, LYELLOW);
+        printMessage("DO YOU WANT TO USE A VOUCHER? (1 FOR YES, 2 FOR NO)  : ", 30, 24, YELLOW);
+
+        int useVoucher = getValidatedInput<int>(
+            "DO YOU WANT TO USE A VOUCHER? (1 FOR YES, 2 FOR NO): ",
+            [](const string& prompt) {
+                return InputChecker::checkInt(prompt, 30, 24, 1, 2);
+            },
+            30, 24
+        );
+
+        if (Agreement::YES == useVoucher) {
+            clearScreen();
+            printFrame(0, 0, 120, 30, LYELLOW);
+            printHeader(header, (120 - header.length()*2) / 2 - 19, 1, YELLOW);
+            CustomerUI::displayVoucherList(validVouchers);
+            // Get voucher code
+            printFrameOptions(40, 23, 40, 1);
+
+            ConsoleUI::setColor(LYELLOW);
+            ConsoleUI::gotoXY(42, 24);
+            cout << "ENTER VOUCHER CODE  : ";
+            ConsoleUI::setColor(WHITE);
+
+            string voucherCode = getValidatedInput<string>(
+                "ENTER VOUCHER CODE: ",
+                [](const string& prompt) {
+                    return InputChecker::checkString(prompt, 42, 24);
+                },
+                42, 24
+            );
+            
+            // Find and apply the selected voucher
+            for (const auto& voucher : validVouchers) {
+                if (voucher->getCode() == voucherCode) {
+                    selectedVoucher = voucher;
+                    
+                    // Apply the discount to the total
+                    total = DiscountService::getInstance()->applyDiscount(selectedVoucher, total);
+
+                    printFrame(30, 26, 60, 3, LYELLOW);
+                    printMessage("VOUCHER APPLIED! NEW TOTAL: $" + to_string(total), 40, 27, AQUA);
+                    
+                    // Remove the used voucher
+                    DiscountService::getInstance()->removeDiscount(selectedVoucher);
+                    break;
+                } 
+            }
+            
+            if (!selectedVoucher) {
+                printFrame(40, 26, 40, 3, LRED);
+                printMessage("INVALID VOUCHER CODE!", 50, 27, LRED);
+                if (total <= 50) {
+                    clearScreen(40, 23, 40, 3);
+                    printFrame(40, 23, 40, 3, LYELLOW);
+                    ConsoleUI::setColor(AQUA);
+                    ConsoleUI::gotoXY(50, 24);
+                    cout << char(175) << " TOTAL REVENUE: $" << total;
+                    ConsoleUI::setColor(WHITE);
+                }
+            }
+            sleepScreen(1200);
+        }
+    }
+
+    // add the items purchased to the sales record
+    SalesRecordService::getInstance()->addToRecord(cart);
+    
+    // Create the order with final total
+    OrderService::getInstance()->checkout(customer->getUsername(), cart, total);
+
+    // delete the item that was sold out from the inventory
+    MusicService::getInstance()->removeSoldOutItems();
+
+    // Give a new voucher if total is over $50
+    if (total > 50) {
+        clearScreen();
         printFrame(0, 0, 120, 30, LYELLOW);
         printHeader(header, (120 - header.length()*2) / 2 - 19, 1, YELLOW);
 
-        if (!validVouchers.empty()) {
-            // Display available vouchers
-            printFrame(25, 23, 70, 3, LYELLOW);
-            printMessage("DO YOU WANT TO USE A VOUCHER? (1 FOR YES, 2 FOR NO)  : ", 30, 24, YELLOW);
+        CustomerUI::displayDiscountOptions();
 
-            int useVoucher = getValidatedInput<int>(
-                "DO YOU WANT TO USE A VOUCHER? (1 FOR YES, 2 FOR NO): ",
-                [](const string& prompt) {
-                    return InputChecker::checkInt(prompt, 30, 24, 1, 2);
-                },
-                30, 24
-            );
+        printFrameOptions(20, 19, 80, 1);
 
-            if (Agreement::YES == useVoucher) {
-                clearScreen();
-                printFrame(0, 0, 120, 30);
-                printHeader(header, (120 - header.length()*2) / 2 - 19, 1);
-                CustomerUI::displayVoucherList(validVouchers);
-                // Get voucher code
-                printFrameOptions(40, 23, 40, 1);
+        ConsoleUI::setColor(LYELLOW);
+        ConsoleUI::gotoXY(30, 20);
+        cout << "CHOOSE A DISCOUNT TYPE (1 FOR 10% OFF, 2 FOR $5 OFF)  : ";
+        ConsoleUI::setColor(WHITE);
 
-                ConsoleUI::setColor(LYELLOW);
-                ConsoleUI::gotoXY(42, 24);
-                cout << "ENTER VOUCHER CODE  : ";
-                ConsoleUI::setColor(WHITE);
-
-                string voucherCode = getValidatedInput<string>(
-                    "ENTER VOUCHER CODE: ",
-                    [](const string& prompt) {
-                        return InputChecker::checkString(prompt, 42, 24);
-                    },
-                    42, 24
-                );
-                
-                // Find and apply the selected voucher
-                for (const auto& voucher : validVouchers) {
-                    if (voucher->getCode() == voucherCode) {
-                        selectedVoucher = voucher;
-                        
-                        // Apply the discount to the total
-                        total = DiscountService::getInstance()->applyDiscount(selectedVoucher, total);
-
-                        printFrame(30, 26, 60, 3, LYELLOW);
-                        printMessage("VOUCHER APPLIED! NEW TOTAL: $" + to_string(total), 40, 27, AQUA);
-                        
-                        // Remove the used voucher
-                        DiscountService::getInstance()->removeDiscount(selectedVoucher);
-                        break;
-                    } 
-                }
-                
-                if (!selectedVoucher) {
-                    printFrame(40, 26, 40, 3, LRED);
-                    printMessage("INVALID VOUCHER CODE!", 50, 27, LRED);
-                    if (total <= 50) {
-                        clearScreen(40, 23, 40, 3);
-                        printFrame(40, 23, 40, 3, LYELLOW);
-                        ConsoleUI::setColor(AQUA);
-                        ConsoleUI::gotoXY(50, 24);
-                        cout << char(175) << " TOTAL REVENUE: $" << total;
-                        ConsoleUI::setColor(WHITE);
-                    }
-                }
-                sleepScreen(1200);
-            }
-        }
-
-        // add the items purchased to the sales record
-        SalesRecordService::getInstance()->addToRecord(cart);
+        // Get discount type choice
+        int discountChoice = getValidatedInput<int>(
+            "CHOOSE A DISCOUNT TYPE (1 FOR 10% OFF, 2 FOR $5 OFF): ",
+            [](const string& prompt) {
+                return InputChecker::checkInt(prompt, 30, 20, 1, 2);
+            },
+            30, 20
+        );
         
-        // Create the order with final total
-        OrderService::getInstance()->checkout(customer->getUsername(), cart, total);
+        // Set discount value based on choice (10% for percentage, $5 for fixed amount)
+        int discountValue = (DiscountType::PERCENTAGE == discountChoice) ? 10 : 5;
 
-        // delete the item that was sold out from the inventory
-        MusicService::getInstance()->removeSoldOutItems();
+        // Create and add the new voucher
+        shared_ptr<Discount> discount = DiscountService::getInstance()->createDiscount(customer->getUsername(),
+                                        static_cast<DiscountType>(discountChoice), discountValue);
+        // Notify the user about the new voucher
+        string notify = (static_cast<DiscountType>(discountChoice) == DiscountType::PERCENTAGE) ? "10% off" : "$5 off";
 
-        // Give a new voucher if total is over $50
-        if (total > 50) {
-            clearScreen();
-            printFrame(0, 0, 120, 30);
-            printHeader(header, (120 - header.length()*2) / 2 - 19, 1);
-
-            CustomerUI::displayDiscountOptions();
-
-            printFrameOptions(20, 19, 80, 1);
-
-            ConsoleUI::setColor(LYELLOW);
-            ConsoleUI::gotoXY(30, 20);
-            cout << "CHOOSE A DISCOUNT TYPE (1 FOR 10% OFF, 2 FOR $5 OFF)  : ";
-
-            // Get discount type choice
-            int discountChoice = getValidatedInput<int>(
-                "CHOOSE A DISCOUNT TYPE (1 FOR 10% OFF, 2 FOR $5 OFF): ",
-                [](const string& prompt) {
-                    return InputChecker::checkInt(prompt, 30, 20, 1, 2);
-                },
-                30, 20
-            );
-            
-            // Set discount value based on choice (10% for percentage, $5 for fixed amount)
-            int discountValue = (DiscountType::PERCENTAGE == discountChoice) ? 10 : 5;
-
-            // Create and add the new voucher
-            shared_ptr<Discount> discount = DiscountService::getInstance()->createDiscount(customer->getUsername(),
-                                         static_cast<DiscountType>(discountChoice), discountValue);
-            // Notify the user about the new voucher
-            string notify = (static_cast<DiscountType>(discountChoice) == DiscountType::PERCENTAGE) ? "10% off" : "$5 off";
-
-            printFrame(20, 22, 80, 3, LYELLOW);
-            printMessage("NEW VOUCHER CREATED! VOUCHER CODE: " + discount->getCode() + ". " + notify + " ON YOUR NEXT PURCHASE.", 23, 23, AQUA);
-            sleepScreen(1200);
-        }
-        clearScreen(106, 1, 13, 4);
-        CustomerUI::displayOrderSuccessMessage();
-
+        printFrame(20, 22, 80, 3, LYELLOW);
+        printMessage("NEW VOUCHER CREATED! VOUCHER CODE: " + discount->getCode() + ". " + notify + " ON YOUR NEXT PURCHASE.", 23, 23, AQUA);
+        sleepScreen(1200);
     }
+    clearScreen(106, 1, 13, 4);
+    CustomerUI::displayOrderSuccessMessage();
 
     printRepeatMessage(2, 1, "EXIT", LRED);
 

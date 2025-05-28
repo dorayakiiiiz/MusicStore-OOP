@@ -21,7 +21,7 @@ void ConnectionStatusDisplay::showConnectionProcess() {
             // Connection succeeded
             printFrame(30, 13, 60, 5, LGREEN);
             printMessage("CONNECTED TO DATABASE SUCCESSFULLY", 40, 15, LGREEN);
-            sleepScreen(3000);  // Wait 3 seconds
+            sleepScreen(2000);  // Wait 3 seconds
             clearScreen(30, 13, 60, 4);  // Clear the success message
         } else {
             // Connection failed 

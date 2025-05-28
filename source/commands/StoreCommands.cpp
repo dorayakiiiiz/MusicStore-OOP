@@ -18,12 +18,12 @@ string SignUpCommand::getName() const {
 bool SignUpCommand::execute() {
     while(true){
         clearScreen();
-        printFrame(0, 0, 120, 30, LGREEN);
+        printFrame(0, 0, 120, 30, LYELLOW);
         
         string header = "signUp";
-        printHeader(header, (120 - header.length() * 2) / 2 - 15, 1, LAQUA);
+        printHeader(header, (120 - header.length() * 2) / 2 - 15, 1, AQUA);
         
-        printFrame(27, 7, 66, 3, LGREEN);
+        printFrame(27, 7, 66, 3, LYELLOW);
         ConsoleUI::setColor(LAQUA);
         ConsoleUI::gotoXY(34, 8);
         cout << "ENTER YOUR ROLE (1 FOR ADMIN, 2 FOR CUSTOMER)  : ";
@@ -39,7 +39,7 @@ bool SignUpCommand::execute() {
         );
 
         
-        printFrameOptions(30, 11, 60, 4 - role);
+        printFrameOptions(30, 11, 60, 4 - role, LYELLOW);
         ConsoleUI::setColor(LAQUA);
         ConsoleUI::gotoXY(32, 12);
         cout << "INPUT USERNAME       : ";
@@ -76,7 +76,7 @@ bool SignUpCommand::execute() {
             if (!Admin::isValidPasskey(passkey)) {
                 printFrame(30, 20, 60, 3, LRED);
                 printMessage("INVALID PASSKEY. PLEASE TRY AGAIN LATER!", 38, 21, LRED);
-                printRepeatMessage(107, 1, "CONTINUE", YELLOW);
+                printRepeatMessage(107, 1, "CONTINUE", LGREEN);
                 printRepeatMessage(2, 1, "EXIT", LRED);
                 char repeat = _getch();
                 if (repeat == 27) {
@@ -98,7 +98,7 @@ bool SignUpCommand::execute() {
         } else {
             printFrame(30, 20, 60, 3, LRED);
             printMessage("USERNAME ALREADY EXISTS. PLEASE TRY AGAIN LATER!", 34, 21, LRED);
-            printRepeatMessage(107, 1, "CONTINUE", YELLOW);
+            printRepeatMessage(107, 1, "CONTINUE", LGREEN);
             printRepeatMessage(2, 1, "EXIT", LRED);
             char repeat = _getch();
             if (repeat == 27) {
@@ -123,11 +123,11 @@ string LoginCommand::getName() const {
 bool LoginCommand::execute() {
     while(true){
         clearScreen();
-        printFrame(0, 0, 120, 30, LGREEN);
+        printFrame(0, 0, 120, 30, LYELLOW);
         string header = "login";
-        printHeader(header, (120 - header.length()*2) / 2 - 11, 1, LAQUA);
+        printHeader(header, (120 - header.length()*2) / 2 - 11, 1, AQUA);
 
-        printFrameOptions(30, 10, 60, 2);
+        printFrameOptions(30, 10, 60, 2, LYELLOW);
         ConsoleUI::setColor(LAQUA);
         ConsoleUI::gotoXY(32, 11);
         cout << "INPUT USERNAME  : ";
@@ -159,7 +159,7 @@ bool LoginCommand::execute() {
         if (!currentUser) {
             printFrame(30, 16, 60, 3, LRED);
             printMessage("INVALID USERNAME OR PASSWORD. PLEASE TRY AGAIN!", 36, 17, LRED);
-            printRepeatMessage(107, 1, "CONTINUE", YELLOW);
+            printRepeatMessage(107, 1, "CONTINUE", LGREEN);
             printRepeatMessage(2, 1, "EXIT", LRED);
             char repeat = _getch();
             if (repeat == 27) {
@@ -194,7 +194,7 @@ string ExitCommand::getName() const {
 }
 
 bool ExitCommand::execute() {
-    printFrame(5, 22, 40, 6);
+    printFrame(5, 22, 40, 6, LGREEN);
     ConsoleUI::gotoXY(9, 24);
     ConsoleUI::setColor(LGREEN);
     cout << "    EXITING THE APPLICATION\n";

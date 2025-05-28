@@ -115,7 +115,8 @@ void AdminUI::displayMusicList(vector<Music>& items, int maxPerPage) {
 
         if (currentPage == 0) {
             clearScreen(2, 14, 1, 2);
-        } else if (currentPage == totalPages - 1) {
+        } 
+        if (currentPage == totalPages - 1) {
             clearScreen(117, 14, 1, 2);
         }
 
@@ -231,7 +232,8 @@ void AdminUI::displayUserList(const vector<shared_ptr<User>>& users, int maxPerP
 
         if (currentPage == 0) {
             clearScreen(2, 14, 1, 2);
-        } else if (currentPage == totalPages - 1) {
+        } 
+        if (currentPage == totalPages - 1) {
             clearScreen(117, 14, 1, 2);
         }
 
@@ -289,7 +291,7 @@ void AdminUI::displayPurchasedHistory(vector<Order> orders) {
 
         printFrameOptions(x, 10, width, 1);
         ConsoleUI::gotoXY(x + 41, 11);
-        ConsoleUI::setColor(Color::YELLOW);
+        ConsoleUI::setColor(Color::LYELLOW);
         cout << "ORDER " << OrderIdx + 1;
         ConsoleUI::setColor(Color::WHITE);
 
@@ -378,7 +380,8 @@ void AdminUI::displayPurchasedHistory(vector<Order> orders) {
 
         if (currentPage == 0) {
             clearScreen(2, 14, 1, 2);
-        } else if (currentPage == totalPages - 1) {
+        } 
+        if (currentPage == totalPages - 1) {
             clearScreen(117, 14, 1, 2);
         }
 
@@ -490,14 +493,16 @@ void AdminUI::displaySaleStatistics(vector<SalesRecord> salesRecords, float tota
         ConsoleUI::gotoXY(117, 14);
         std::cout << "D";
 
-        printFrame(40, 26, 40, 3);
+        printFrame(40, 26, 40, 3, AQUA);
         ConsoleUI::gotoXY(50, 27);
+        ConsoleUI::setColor(LYELLOW);
         cout << "TOTAL REVENUE: $" << totalRevenue;
         ConsoleUI::setColor(Color::WHITE);
 
         if (currentPage == 0) {
             clearScreen(2, 14, 1, 2);
-        } else if (currentPage == totalPages - 1) {
+        } 
+        if (currentPage == totalPages - 1) {
             clearScreen(117, 14, 1, 2);
         }
         
