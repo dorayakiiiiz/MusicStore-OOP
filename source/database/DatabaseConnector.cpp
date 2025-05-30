@@ -80,21 +80,22 @@ bool DatabaseConnector::ensureConnected() {
 
 // Test if connection is still active
 bool DatabaseConnector::testConnection() const {
-    if (!connected) {
-        return false;
-    }
+    // if (!connected) {
+    //     return false;
+    // }
     
-    SQLHSTMT hStmt = nullptr;
-    bool isValid = false;
+    // SQLHSTMT hStmt = nullptr;
+    // bool isValid = false;
     
-    if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) == SQL_SUCCESS) {
-        // Simple query to test connection
-        SQLRETURN ret = SQLExecDirect(hStmt, (SQLCHAR*)"SELECT 1", SQL_NTS);
-        isValid = SQL_SUCCEEDED(ret);
-        SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
-    }
+    // if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt) == SQL_SUCCESS) {
+    //     // Simple query to test connection
+    //     SQLRETURN ret = SQLExecDirect(hStmt, (SQLCHAR*)"SELECT 1", SQL_NTS);
+    //     isValid = SQL_SUCCEEDED(ret);
+    //     SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+    // }
     
-    return isValid;
+    // return isValid;
+    return connected;
 }
 
 // Retrieve the current database connection handle

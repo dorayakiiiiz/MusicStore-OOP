@@ -194,8 +194,8 @@ bool AddToCartCommand::execute() {
 
         // Add item to cart
         if (CartService::getInstance()->addItemToCart(_cart, itemID, quantity)) {
-            printFrame(49, 24, 66, 3, LGREEN); 
-            printMessage("ADDED (" + to_string(quantity) + ") \"" + items[itemID - 1].getName() + "\" TO CART SUCCESSFULLY!", 55, 25, LGREEN);
+            printFrame(48, 24, 67, 3, LGREEN); 
+            printMessage("ADDED (" + to_string(quantity) + ") \"" + items[itemID - 1].getName() + "\" TO CART SUCCESSFULLY!", 50, 25, LGREEN);
         } else {
             printFrame(49, 24, 43, 3, LRED); 
             printMessage("FAILED TO ADD ITEM. NOT ENOUGH STOCK!", 51, 25, LRED);
