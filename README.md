@@ -110,23 +110,6 @@ Chương trình được phân tách ra 2 vai trò riêng biệt với 2 loại 
 - Bước 2: Cài đặt MSYS2 & UnixODBC
     + Mở MSYS2 UCRT64 Terminal và nhập lệnh: ```pacman -S mingw-w64-ucrt-x86_64-unixodbc```
     + Sau đó nhấn ```Y``` để cài đặt
-- Bước 3: Cài đặt SQL Server (mssql extension) trong VSCode
-    + Mở VSCode → nhấn ```Ctrl + Shift + X``` để mở Marketplace Extensions
-    + Tìm và cài đặt SQL Server (mssql) của Microsoft. 
-    + Sau khi cài, nhấn ```Ctrl + Alt + D``` → Chọn vào dấu + trong phần CONNECTIONS để thêm kết nối.
-- Bước 4: Tạo cơ sở dữ liệu
-    + Mở file ```music_store.sql``` bằng VSCode hoặc SQL Server Management Studio.
-    + Chạy lệnh Execute để tạo database ```music_store``` và các bảng cần thiết.
-- Bước 5: Kết nối đến cơ sở dữ liệu
-    + Tại VSCode trong phần Connection Dialog (Preview), ta nhập các thông tin như
-        - Profile Name: tên tùy chọn
-        - Server name: tên máy SQL Server của bạn
-        - Authentication type: SQL Login hoặc Windows Authentication. Nếu là SQL Login cần nhập User name và Password
-        - Database name: ```music_store```
-        - Encrypt: chọn Optional
-    + Tích chọn Trust server certificate
-    + Sau đó nhấn Connect để kết nối
-
 
 **Yêu cầu:**
 ```

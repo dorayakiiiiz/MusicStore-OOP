@@ -49,7 +49,6 @@ void OrderService::deleteOrder(const string& username) {
     for (int i = 0; i < orders.size(); ++i) {
         if (orders[i].getUsername() == username) {
             bool success = _dataProvider->order()->deleteById(i + 1); 
-            cout << (success ? "deleted order" : "cannot delete order") << std::endl;
             orders.erase(orders.begin() + i);
             i--;
         }
