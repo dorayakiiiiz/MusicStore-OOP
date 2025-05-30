@@ -85,7 +85,7 @@ bool SearchMusicCommand::execute() {
         printFrameOptions(40, 13, 40, 1);
         ConsoleUI::gotoXY(42, 14);
         ConsoleUI::setColor(LYELLOW);
-        cout << "ENTER PASSWORD : ";
+        cout << "ENTER CRITERIA : ";
         ConsoleUI::setColor(WHITE);
 
         // Get search criteria with validation
@@ -99,7 +99,7 @@ bool SearchMusicCommand::execute() {
 
         // Get search keyword with validation
         string keyword = getValidatedInput<string>(
-            "ENTER PASSWORD: ",
+            "ENTER KEYWORD: ",
             [](const string& prompt) {
                 return InputChecker::checkString(prompt, 42, 14);
             },
@@ -123,7 +123,7 @@ bool SearchMusicCommand::execute() {
 
             printFrameOptions(40, 13, 40, 1);
             ConsoleUI::gotoXY(42, 14);
-            cout << "ENTER PASSWORD : ";
+            cout << "ENTER CRITERIA : ";
         }
 
         printRepeatMessage(107, 1, "CONTINUE", LBLUE);

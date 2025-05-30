@@ -278,7 +278,7 @@ void CustomerUI::displayMusicList(vector<Music>& items, int maxPerPage) {
             printRepeatMessage(2, 1, "EXIT", LRED);    
         }
         else if (6 == maxPerPage){
-            printRepeatMessage(108, 1, "ADD ITEM", LBLUE);
+            printRepeatMessage(107, 1, "ADD ITEM", LBLUE);
         }
 
         char key = _getch();

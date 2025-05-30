@@ -80,8 +80,21 @@ Chương trình được phân tách ra 2 vai trò riêng biệt với 2 loại 
 #### Database: Truy xuất và lưu trữ dữ liệu từ database với SQL Server thay vì đọc file thông thường
 
 ### HƯỚNG DẪN BIÊN DỊCH CHƯƠNG TRÌNH
+
+- Bước 1: Cài đặt ODBC Driver for SQL Server 17 (Đây là driver cần thiết để C++ có thể giao tiếp với SQL Server thông qua ODBC)
+    + Tải từ trang chính thức của Microsoft: https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server
+    + Chọn phiên bản tương ứng hệ điều hành của máy bạn (Windows 64-bit) và cài đặt.
+- Bước 2: Cài đặt MSYS2 & UnixODBC
+    + Mở MSYS2 UCRT64 Terminal và nhập lệnh: ```pacman -S mingw-w64-ucrt-x86_64-unixodbc```
+    + Sau đó nhấn ```Y``` để cài đặt
+
+**Yêu cầu:**
 ```
-- Yêu cầu: Trình biên dịch g++ version 13 trở lên, có cài đặt ODBC Driver cho SQL Server (có thể tải từ trang chủ Microsoft)
+-  Trình biên dịch g++ version 13 trở lên.
+
+-  Cài đặt ODBC Driver for SQL Server 17 (hoặc phiên bản mới nhất) để có thể kết nối với SQL Server.
+
+- Link download: https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server
 
 - Hệ điều hành: Windows
 ```

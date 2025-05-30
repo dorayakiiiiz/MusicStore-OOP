@@ -16,7 +16,7 @@ public:
     static void setColor(Color fg, Color bg = BLACK);
     
     // Navigation menu with W/S/Enter
-    static int selectMenu(const vector<std::string>& options, const string& header);
+    static int selectMenu(const std::vector<std::string>& options, const std::string& header);
 };
 
 #endif // _CONSOLE_UI_H_
