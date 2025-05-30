@@ -1,0 +1,5 @@
+<map id="UpdatePriceCommand" name="UpdatePriceCommand">
+<area shape="rect" id="Node000001" title="Command to update item prices." alt="" coords="5,165,148,256"/>
+<area shape="rect" id="Node000002" href="$class_command.html" title="Interface for the Command pattern." alt="" coords="27,5,126,117"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="79,133,79,166,74,166,74,133"/>
+</map>

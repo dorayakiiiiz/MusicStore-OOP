@@ -1,0 +1,5 @@
+<map id="RemoveItemsCommand" name="RemoveItemsCommand">
+<area shape="rect" id="Node000001" title="Command to remove music items." alt="" coords="5,165,155,256"/>
+<area shape="rect" id="Node000002" href="$class_command.html" title="Interface for the Command pattern." alt="" coords="31,5,129,117"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="83,133,83,166,77,166,77,133"/>
+</map>

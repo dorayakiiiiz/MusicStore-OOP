@@ -10,11 +10,7 @@
 
 class ConnectionStatusDisplay {
 public:
-    /**
-     * @brief Hiển thị UI kết nối database với thông báo phù hợp
-     * 
-     * @return bool Trạng thái kết nối (true nếu thành công)
-     */
+
     static void showConnectionProcess();
 };
 

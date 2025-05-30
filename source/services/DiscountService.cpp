@@ -75,6 +75,20 @@ void DiscountService::removeDiscount(const shared_ptr<Discount>& discount) {
     }
 }
 
+// Remove a discount voucher by username
+void DiscountService::removeDiscountByUsername(const string& username) {
+    // get all the vouchers from the repository
+    vector<shared_ptr<Discount>> vouchers = _dataProvider->discount()->getAll();
+
+    for (int i = 0; i < vouchers.size(); ++i) {
+        if (vouchers[i]->getUsername() == username) {
+            _dataProvider->discount()->deleteById(i + 1);
+            vouchers.erase(vouchers.begin() + i);
+            --i;  
+        }
+    }
+}
+
 // Generate a random discount code
 string DiscountService::generateRandomCode() {
     const string characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

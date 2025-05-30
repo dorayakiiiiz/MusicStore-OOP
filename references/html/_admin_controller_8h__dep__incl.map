@@ -1,0 +1,7 @@
+<map id="source/controllers/AdminController.h" name="source/controllers/AdminController.h">
+<area shape="rect" id="Node000001" title="Header file for the AdminController class." alt="" coords="103,5,231,48"/>
+<area shape="rect" id="Node000002" href="$_admin_controller_8cpp.html" title="Implementation file for the AdminController class." alt="" coords="5,96,148,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="137,61,99,98,96,94,133,57"/>
+<area shape="rect" id="Node000003" href="$_controller_factory_8cpp.html" title="Implementation of the ControllerFactory class." alt="" coords="172,96,344,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="201,57,239,94,235,98,197,61"/>
+</map>

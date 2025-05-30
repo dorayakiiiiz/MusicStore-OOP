@@ -168,7 +168,7 @@ void CustomerUI::displayPurchasedHistory(const vector<Order>& orders) {
 // Displays a formatted list of all available music items
 void CustomerUI::displayMusicList(vector<Music>& items, int maxPerPage) {
     if (items.empty()) {
-        printFrame(30, 14, 60, 3, LRED); 
+        printFrame(30, 20, 60, 3, LRED); 
         printMessage("NO ITEMS FOUND!", 50, 15, LRED);
         sleepScreen(1200);
         return;

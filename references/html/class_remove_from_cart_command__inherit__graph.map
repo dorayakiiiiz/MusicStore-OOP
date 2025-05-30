@@ -1,0 +1,5 @@
+<map id="RemoveFromCartCommand" name="RemoveFromCartCommand">
+<area shape="rect" id="Node000001" title="Command to remove items from cart." alt="" coords="5,165,196,277"/>
+<area shape="rect" id="Node000002" href="$class_command.html" title="Interface for the Command pattern." alt="" coords="51,5,150,117"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,133,103,166,98,166,98,133"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="ViewSalesStatisticsCommand" name="ViewSalesStatisticsCommand">
+<area shape="rect" id="Node000001" title="Command to view sales statistics." alt="" coords="5,165,193,256"/>
+<area shape="rect" id="Node000002" href="$class_command.html" title="Interface for the Command pattern." alt="" coords="50,5,149,117"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,133,102,166,97,166,97,133"/>
+</map>

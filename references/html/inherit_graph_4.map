@@ -1,0 +1,43 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" href="$class_command.html" title="Interface for the Command pattern." alt="" coords="5,487,86,513"/>
+<area shape="rect" id="Node000001" href="$class_add_new_items_command.html" title="Command to add new music items." alt="" coords="156,5,316,32"/>
+<area shape="poly" id="edge1_Node000000_Node000001" title=" " alt="" coords="46,471,53,375,68,247,80,182,94,124,111,75,132,42,154,27,157,31,136,46,116,78,99,125,85,183,74,248,58,376,51,472"/>
+<area shape="rect" id="Node000002" href="$class_add_to_cart_command.html" title="Command to add items to cart." alt="" coords="165,56,306,83"/>
+<area shape="poly" id="edge2_Node000000_Node000002" title=" " alt="" coords="46,471,55,385,72,272,97,164,113,122,132,93,147,81,163,74,166,79,149,86,136,96,118,124,102,166,77,273,61,385,52,472"/>
+<area shape="rect" id="Node000003" href="$class_admin_logout_command.html" title="Command for admin logout." alt="" coords="158,107,314,133"/>
+<area shape="poly" id="edge3_Node000000_Node000003" title=" " alt="" coords="47,471,58,395,75,297,100,204,115,168,132,143,156,128,159,132,136,147,119,171,105,206,80,298,63,395,53,472"/>
+<area shape="rect" id="Node000004" href="$class_checkout_command.html" title="Command to checkout." alt="" coords="168,157,304,184"/>
+<area shape="poly" id="edge4_Node000000_Node000004" title=" " alt="" coords="44,471,46,413,58,339,69,299,85,261,105,225,132,194,148,182,167,175,169,180,151,187,135,198,110,228,90,263,74,301,63,340,52,413,49,471"/>
+<area shape="rect" id="Node000005" href="$class_customer_logout_command.html" title="Command for customer logout." alt="" coords="148,208,324,235"/>
+<area shape="poly" id="edge5_Node000000_Node000005" title=" " alt="" coords="46,471,51,422,65,361,91,298,109,270,132,245,149,233,152,238,135,249,114,273,96,301,70,362,57,422,51,471"/>
+<area shape="rect" id="Node000006" href="$class_delete_user_command.html" title="Command to delete users." alt="" coords="164,259,308,285"/>
+<area shape="poly" id="edge6_Node000000_Node000006" title=" " alt="" coords="48,471,57,431,73,384,97,336,113,314,132,295,162,279,165,283,135,299,117,318,102,339,78,386,62,433,54,472"/>
+<area shape="rect" id="Node000007" href="$class_exit_command.html" title="Command for exiting the application." alt="" coords="184,309,288,336"/>
+<area shape="poly" id="edge7_Node000000_Node000007" title=" " alt="" coords="53,471,81,407,103,374,132,346,157,332,183,325,185,330,159,337,135,350,108,377,86,410,58,473"/>
+<area shape="rect" id="Node000008" href="$class_login_command.html" title="Command for user login." alt="" coords="180,360,292,387"/>
+<area shape="poly" id="edge8_Node000000_Node000008" title=" " alt="" coords="60,472,90,433,110,413,132,396,155,385,179,378,180,383,157,390,135,401,114,417,94,436,65,475"/>
+<area shape="rect" id="Node000009" href="$class_remove_from_cart_command.html" title="Command to remove items from cart." alt="" coords="146,411,326,437"/>
+<area shape="poly" id="edge9_Node000000_Node000009" title=" " alt="" coords="78,476,133,447,167,435,169,440,135,452,81,480"/>
+<area shape="rect" id="Node000010" href="$class_remove_items_command.html" title="Command to remove music items." alt="" coords="157,461,315,488"/>
+<area shape="poly" id="edge10_Node000000_Node000010" title=" " alt="" coords="101,490,156,483,156,488,102,495"/>
+<area shape="rect" id="Node000011" href="$class_search_music_command.html" title="Command to search for music." alt="" coords="158,512,314,539"/>
+<area shape="poly" id="edge11_Node000000_Node000011" title=" " alt="" coords="101,505,158,512,157,518,101,510"/>
+<area shape="rect" id="Node000012" href="$class_sign_up_command.html" title="Command for user signup." alt="" coords="175,563,297,589"/>
+<area shape="poly" id="edge12_Node000000_Node000012" title=" " alt="" coords="81,520,135,548,175,561,174,566,133,553,78,524"/>
+<area shape="rect" id="Node000013" href="$class_update_price_command.html" title="Command to update item prices." alt="" coords="160,613,312,640"/>
+<area shape="poly" id="edge13_Node000000_Node000013" title=" " alt="" coords="65,525,94,564,114,583,135,599,161,611,159,616,132,604,110,587,90,567,60,528"/>
+<area shape="rect" id="Node000014" href="$class_view_all_purchase_histories_command.html" title="Command to view purchase history for all customers." alt="" coords="151,664,321,707"/>
+<area shape="poly" id="edge14_Node000000_Node000014" title=" " alt="" coords="58,527,86,589,108,622,135,650,152,661,150,666,132,654,104,625,82,592,53,529"/>
+<area shape="rect" id="Node000015" href="$class_view_current_cart_command.html" title="Command to view current cart." alt="" coords="149,731,323,757"/>
+<area shape="poly" id="edge15_Node000000_Node000015" title=" " alt="" coords="53,528,60,571,75,622,100,673,116,696,135,717,152,728,149,732,132,721,112,700,95,676,70,623,55,572,47,529"/>
+<area shape="rect" id="Node000016" href="$class_view_music_command.html" title="Command to view music list." alt="" coords="164,781,308,808"/>
+<area shape="poly" id="edge16_Node000000_Node000016" title=" " alt="" coords="50,528,55,580,68,645,79,678,94,711,112,741,135,767,165,784,162,789,132,771,108,744,89,713,74,680,63,646,50,581,45,529"/>
+<area shape="rect" id="Node000017" href="$class_view_music_list_command.html" title="Command to view music list." alt="" coords="154,832,318,859"/>
+<area shape="poly" id="edge17_Node000000_Node000017" title=" " alt="" coords="48,529,50,590,61,668,72,709,88,748,109,786,135,818,155,831,152,836,132,822,104,789,83,751,67,710,56,669,45,590,43,529"/>
+<area shape="rect" id="Node000018" href="$class_view_purchase_history_command.html" title="Command to view purchase history." alt="" coords="134,883,338,909"/>
+<area shape="poly" id="edge18_Node000000_Node000018" title=" " alt="" coords="52,528,62,608,79,710,104,807,119,844,136,869,150,880,147,884,132,872,114,846,99,808,74,711,57,609,47,529"/>
+<area shape="rect" id="Node000019" href="$class_view_sales_statistics_command.html" title="Command to view sales statistics." alt="" coords="138,933,334,960"/>
+<area shape="poly" id="edge19_Node000000_Node000019" title=" " alt="" coords="52,528,60,618,76,735,101,847,117,890,136,920,150,931,147,935,132,923,112,893,96,849,71,736,55,618,46,529"/>
+<area shape="rect" id="Node000020" href="$class_view_users_command.html" title="Command to view user list." alt="" coords="165,984,307,1011"/>
+<area shape="poly" id="edge20_Node000000_Node000020" title=" " alt="" coords="51,528,58,627,72,760,84,827,98,887,115,937,136,970,149,981,165,988,163,993,146,985,132,974,110,939,93,889,78,828,67,761,52,628,45,529"/>
+</map>

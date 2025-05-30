@@ -1,0 +1,5 @@
+<map id="LoginCommand" name="LoginCommand">
+<area shape="rect" id="Node000001" title="Command for user login." alt="" coords="5,165,127,277"/>
+<area shape="rect" id="Node000002" href="$class_command.html" title="Interface for the Command pattern." alt="" coords="17,5,115,117"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="69,133,69,166,63,166,63,133"/>
+</map>

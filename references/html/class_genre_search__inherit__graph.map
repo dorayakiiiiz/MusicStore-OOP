@@ -1,0 +1,5 @@
+<map id="GenreSearch" name="GenreSearch">
+<area shape="rect" id="Node000001" title="Concrete search strategy for searching by genre." alt="" coords="5,144,95,213"/>
+<area shape="rect" id="Node000002" href="$class_i_search.html" title="Abstract base class for search strategies." alt="" coords="8,5,92,96"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="53,111,53,144,47,144,47,111"/>
+</map>

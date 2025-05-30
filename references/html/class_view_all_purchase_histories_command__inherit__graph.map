@@ -1,0 +1,5 @@
+<map id="ViewAllPurchaseHistoriesCommand" name="ViewAllPurchaseHistoriesCommand">
+<area shape="rect" id="Node000001" title="Command to view purchase history for all customers." alt="" coords="5,165,167,272"/>
+<area shape="rect" id="Node000002" href="$class_command.html" title="Interface for the Command pattern." alt="" coords="37,5,135,117"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,132,89,165,83,165,83,132"/>
+</map>
