@@ -137,11 +137,11 @@ Chương trình được phân tách ra 2 vai trò riêng biệt với 2 loại 
 **Hướng dẫn cài đặt ODBC Driver**
 
 ```
-- Tải từ trang chính thức của Microsoft: https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server
+- Tải và cài đặt từ trang chính thức của Microsoft: https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server
 
 - Mở MSYS2 UCRT64 Terminal và nhập lệnh: pacman -S mingw-w64-ucrt-x86_64-unixodbc
 
-- Sau đó nhấn ```Y``` để cài đặt
+- Sau đó nhấn Y để cài đặt
 ```
 
 
