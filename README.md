@@ -15,18 +15,18 @@ MusicStore-OOP/
 ├── release/                # Chứa file thực thi sau khi biên dịch (program.exe)
 ├── references/             # Tài liệu tham khảo, class diagram
 │   ├── ClassDiagram.png
-│   └── html/               # Tài liệu tham khảo (Doxygen), Class Diagram
+│   └── html/              
 ├── source/                 # Toàn bộ mã nguồn của dự án
-│   ├── app/                # Lớp ứng dụng chính và cấu hình (StoreApp, ConsoleConfig)
-│   ├── commands/           # Các lớp Command (AdminCommands, CustomerCommands, StoreCommands, CommandInvoker)
-│   ├── controllers/        # Các lớp Controller (AdminController, CustomerController, IController)
-│   ├── database/           # Logic truy cập cơ sở dữ liệu (DatabaseConnector, Repositories, SQLDao, IDataProvider)
-│   ├── factories/          # Các lớp Factory (ControllerFactory, DiscountFactory, SearchFactory)
-│   ├── models/             # Các lớp Model (User, Music, Order, Cart, Discount, SalesRecord)
-│   ├── services/           # Các lớp Service xử lý logic nghiệp vụ (AuthService, MusicService, OrderService, v.v.)
-│   ├── strategies/         # Các lớp Strategy (DiscountStrategy, SearchStrategy)
-│   ├── ui/                 # Các lớp giao diện người dùng (AdminUI, CustomerUI, ConsoleUI, utils, InputChecker)
-│   └── main.cpp            # Điểm vào chính của chương trình
+│   ├── app/              
+│   ├── commands/      
+│   ├── controllers/       
+│   ├── database/       
+│   ├── factories/         
+│   ├── models/           
+│   ├── services/           
+│   ├── strategies/       
+│   ├── ui/              
+│   └── main.cpp          
 ├── ascii/                  # Các file ASCII art sử dụng trong chương trình
 ├── Makefile                # Makefile để biên dịch
 └── README.md               # Mô tả project
@@ -34,6 +34,7 @@ MusicStore-OOP/
 
 ## CÁC CÔNG VIỆC MÀ TỪNG THÀNH VIÊN ĐÃ THỰC HIỆN
 ### Trà Văn Sỹ
+```
 - Xây dựng các class Model (Music, Order, User, Cart...)
 
 - Xây dựng các class liên quan đến Service xử lí các chức năng cho các đối tượng (MusicService, OrderService,...) và các Controller cho từng role của User (admin/customer)
@@ -43,8 +44,10 @@ MusicStore-OOP/
 - Soạn tài liệu với doxygen
 
 - Thực hiện unit test chương trình
+```
 
 ### Lê Hoàng Nhật Anh
+```
 - Xây dựng các phương thức đọc/ghi dữ liệu trên database áp dụng MSSQL cho các kiểu dữ liệu khác nhau (Music, Order, User, Voucher...). Thiết kế class Factory cho ReadData và SaveData.
 
 - Thiết kế Repository Pattern truy xuất data cho chương trình
@@ -56,31 +59,43 @@ MusicStore-OOP/
 - Thực hiện unit test chương trình
 
 - Quay video demo
+```
 
 ## TỈ LỆ ĐÓNG GÓP
+```
 - Trà Văn Sỹ: 100%
 - Lê Hoàng Nhật Anh: 100%
+```
 
 ## TỈ LỆ ĐIỂM
+```
 Chia đều
+```
 
 ## MÔ TẢ CỤ THỂ CÁC YÊU CẦU TRONG PHẦN "CÁCH THỨC ĐÁNH GIÁ"
 
 ### TEAMWORK
+```
 [Báo cáo tiến độ hàng tuần](https://drive.google.com/file/d/1cNDfl0t8NO6C8FKhEn1OAmJPoIjnO8eF/view?usp=sharing)
+```
 
 ### UI/UX
 ### CÁC CHỨC NĂNG ĐÃ CÓ TRONG CHƯƠNG TRÌNH BAN ĐẦU
+```
 - Thêm, xóa, chỉnh sửa các bài hát trong kho.
 - Tìm nhạc theo các tiêu chí như tên, thể loại, ca sĩ...
 - Tạo đơn hàng mua/bán các bài hát.
 - Hiển thị số bài hát trong kho và các bài hát đã bán hết.  
+```
+```
 [Mã nguồn tham khảo](https://www.codewithc.com/music-store-management-system-c-program-with-mysql-database/)
+```
 
 ### CÁC CHỨC NĂNG ĐƯỢC CẢI TIẾN THÊM
 Chương trình được phân tách ra 2 vai trò riêng biệt với 2 loại đối tượng người dùng riêng so với chương trình gốc chỉ đơn giản là mua/bán trên chung 1 giao diện
 
 #### Tính năng dành cho người dùng (Customer)
+```
 - Đăng ký tài khoản mới: Người dùng có thể tạo tài khoản để sử dụng dịch vụ
 - Đăng nhập: Truy cập vào hệ thống với tài khoản đã đăng ký
 - Xem danh sách nhạc: Duyệt qua toàn bộ kho âm nhạc
@@ -91,8 +106,10 @@ Chương trình được phân tách ra 2 vai trò riêng biệt với 2 loại 
 - Xem lịch sử mua hàng: Kiểm tra các đơn hàng đã mua trước đó
 - Nhận voucher khuyến mãi: Nhận mã giảm giá khi mua hàng với giá trị lớn
 - Đăng xuất: Kết thúc phiên làm việc
+```
 
 #### Tính năng dành cho quản trị viên cửa hàng (Admin)
+```
 - Xem danh sách nhạc: Duyệt qua toàn bộ kho âm nhạc
 - Quản lý kho nhạc: Thêm, xóa, chỉnh sửa thông tin và giá bài hát
 - Xem danh sách người dùng: Quản lý thông tin tài khoản khách hàng
@@ -100,28 +117,33 @@ Chương trình được phân tách ra 2 vai trò riêng biệt với 2 loại 
 - Xem lịch sử đơn hàng: Kiểm tra toàn bộ đơn hàng trong hệ thống
 - Thống kê doanh thu: Xem báo cáo doanh thu và số lượng bài hát đã bán
 - Đăng xuất: Kết thúc phiên làm việc
+```
 
 #### Database: Truy xuất và lưu trữ dữ liệu từ database với SQL Server thay vì đọc file thông thường
 
 ### HƯỚNG DẪN BIÊN DỊCH CHƯƠNG TRÌNH
 
-- Bước 1: Cài đặt ODBC Driver for SQL Server 17 (Đây là driver cần thiết để C++ có thể giao tiếp với SQL Server thông qua ODBC)
-    + Tải từ trang chính thức của Microsoft: https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server
-    + Chọn phiên bản tương ứng hệ điều hành của máy bạn (Windows 64-bit) và cài đặt.
-- Bước 2: Cài đặt MSYS2 & UnixODBC
-    + Mở MSYS2 UCRT64 Terminal và nhập lệnh: ```pacman -S mingw-w64-ucrt-x86_64-unixodbc```
-    + Sau đó nhấn ```Y``` để cài đặt
+
 
 **Yêu cầu:**
 ```
--  Trình biên dịch g++ version 13 trở lên.
+- Trình biên dịch g++ version 13 trở lên.
 
--  Cài đặt ODBC Driver for SQL Server 17 (hoặc phiên bản mới nhất) để có thể kết nối với SQL Server.
-
-- Link download: https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server
+- Cài đặt ODBC Driver for SQL Server 17 (hoặc phiên bản mới nhất) để có thể kết nối với SQL Server
 
 - Hệ điều hành: Windows (do có sử dụng thư viện windows.h cho xây dựng giao diện console)
 ```
+
+**Hướng dẫn cài đặt ODBC Driver**
+
+```
+- Tải từ trang chính thức của Microsoft: https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server
+
+- Mở MSYS2 UCRT64 Terminal và nhập lệnh: pacman -S mingw-w64-ucrt-x86_64-unixodbc
+
+- Sau đó nhấn ```Y``` để cài đặt
+```
+
 
 Nhập lệnh sau ở terminal (bash) để biên dịch chương trình:  
 ```bash
@@ -165,9 +187,11 @@ Dự án được xây dựng theo mô hình kiến trúc nhiều lớp (Layered
 
 ### NGUYÊN LÍ OOP ĐƯỢC ÁP DỤNG
 #### Tính đóng gói (Encapsulation)
+
 - Tất cả các thuộc tính của các class Model như `Music`, `User`, `Order`, `Cart`, `Discount`, `SalesRecord` đều được khai báo private, chỉ cho phép truy cập thông qua các phương thức getter/setter công khai.
 - Các thao tác thay đổi dữ liệu (ví dụ: cập nhật giá, số lượng) đều phải thông qua các phương thức setter, đảm bảo kiểm soát truy cập và bảo vệ tính nhất quán của dữ liệu.
 - Các class Service (như `MusicService`, `OrderService`, `UserService`, v.v.) cũng đóng gói logic nghiệp vụ, chỉ cung cấp các phương thức công khai để thao tác với dữ liệu, không để lộ chi tiết xử lý bên trong.
+
 
 #### Tính kế thừa (Inheritance)
 - Sử dụng kế thừa để mở rộng chức năng và tái sử dụng mã nguồn:
@@ -299,23 +323,23 @@ Singleton Pattern đảm bảo mỗi service hoặc resource quan trọng chỉ 
 Dự án sử dụng kết nối trực tiếp đến SQL Server trên Azure Cloud thông qua ODBC API, mang lại khả năng truy cập dữ liệu mạnh mẽ và linh hoạt hơn so với việc đọc/ghi file text đơn thuần.
 
 *   **Quản lý kết nối tập trung với Singleton Pattern:**
-    *   Lớp [`DatabaseConnector`](source/database/DatabaseConnector.h) (`source/database/DatabaseConnector.cpp`) được thiết kế theo Singleton Pattern, đảm bảo chỉ có một đối tượng quản lý kết nối duy nhất trong toàn bộ ứng dụng.
+    *   Lớp `DatabaseConnector` được thiết kế theo Singleton Pattern, đảm bảo chỉ có một đối tượng quản lý kết nối duy nhất trong toàn bộ ứng dụng.
     *   Phương thức `DatabaseConnector::getInstance()` cung cấp điểm truy cập toàn cục đến đối tượng này.
     *   `ensureConnected()` và `testConnection()` giúp kiểm tra và duy trì trạng thái kết nối, tự động cố gắng kết nối lại nếu cần.
-    *   Lớp [`ConnectionStatusDisplay`](source/database/ConnectionStatusDisplay.cpp) cung cấp phản hồi trực quan cho người dùng trong quá trình kết nối đến database khi khởi động ứng dụng.
+    *   Lớp `ConnectionStatusDisplay` cung cấp phản hồi trực quan cho người dùng trong quá trình kết nối đến database khi khởi động ứng dụng.
 
 *   **Chuỗi kết nối (Connection String) được cấu hình sẵn:**
     *   Chuỗi kết nối ODBC được định nghĩa trực tiếp trong phương thức `DatabaseConnector::connect()`, trỏ đến instance SQL Server trên Azure (`musicstoredb.database.windows.net`).
     *   Bao gồm các thông tin xác thực (Uid, Pwd) và các tùy chọn quan trọng như `Encrypt=yes` và `TrustServerCertificate=no` để đảm bảo kết nối an toàn.
 
 *   **Quản lý Transaction để đảm bảo tính toàn vẹn dữ liệu:**
-    *   Trong các thao tác quan trọng như thêm đơn hàng mới (`SqlOrderRepository::add` trong [`SQLOrderRepository.cpp`](source/database/SQLOrderRepository.cpp)), transaction được sử dụng một cách rõ ràng.
+    *   Trong các thao tác quan trọng như thêm đơn hàng mới (`SqlOrderRepository::add` trong `SQLOrderRepository.cpp`), transaction được sử dụng một cách rõ ràng.
     *   `SQLSetConnectAttr(hDbc, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_OFF, 0);` được gọi để tắt chế độ tự động commit.
     *   Sau khi thực hiện thành công một loạt các thao tác chèn dữ liệu (vào bảng `orders` và `detail_order`), `SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_COMMIT);` được gọi để xác nhận tất cả các thay đổi.
     *   Nếu có lỗi xảy ra trong quá trình (mặc dù logic rollback chi tiết có thể cần xem xét thêm), cơ chế transaction này là nền tảng để đảm bảo dữ liệu không bị rơi vào trạng thái không nhất quán.
 
 *   **Sử dụng Prepared Statements để tăng cường bảo mật và hiệu suất:**
-    *   Hầu hết các thao tác truy vấn SQL trong các lớp Repository (ví dụ: `SqlUserRepository::add`, `SqlMusicRepository::add`, `SqlOrderRepository::add`, [`SQLDiscountRepository.cpp`](source/database/SQLDiscountRepository.cpp)) đều sử dụng prepared statements.
+    *   Hầu hết các thao tác truy vấn SQL trong các lớp Repository (ví dụ: `SqlUserRepository::add`, `SqlMusicRepository::add`, `SqlOrderRepository::add`, `SQLDiscountRepository.cpp`) đều sử dụng prepared statements.
     *   Các bước bao gồm:
         1.  `SQLPrepare()`: Chuẩn bị một câu lệnh SQL với các tham số giữ chỗ (ví dụ: `?`).
         2.  `SQLBindParameter()`: Liên kết các biến C++ với các tham số giữ chỗ này, chỉ định kiểu dữ liệu và kích thước.
@@ -356,12 +380,12 @@ Dự án áp dụng **Command Pattern** một cách hiệu quả để quản l�
 *   **Tổ chức Code Mạch lạc và Dễ Mở Rộng:**
     *   **Interface `Command` (`source/commands/Command.h`):** Định nghĩa một "hợp đồng" chung cho tất cả các lệnh với phương thức ảo `execute()` (thực thi lệnh) và `getName()` (lấy tên hiển thị trên menu).
     *   **Các lớp `Command` cụ thể:** Được phân chia logic theo vai trò và chức năng, giúp dễ quản lý:
-        *   `StoreCommands` (`source/commands/StoreCommands.h`): Các lệnh cho màn hình chính như `LoginCommand`, `SignUpCommand`, `ExitCommand`.
-        *   `AdminCommands` (`source/commands/AdminCommands.h`): Các lệnh quản trị như `ViewMusicListCommand`, `AddNewItemsCommand`, `DeleteUserCommand`.
-        *   `CustomerCommands` (`source/commands/CustomerCommands.h`): Các lệnh cho khách hàng như `ViewPurchaseHistoryCommand`, `AddToCartCommand`, `CheckoutCommand`.
+        *   `StoreCommands`: Các lệnh cho màn hình chính như `LoginCommand`, `SignUpCommand`, `ExitCommand`.
+        *   `AdminCommands`: Các lệnh quản trị như `ViewMusicListCommand`, `AddNewItemsCommand`, `DeleteUserCommand`.
+        *   `CustomerCommands`: Các lệnh cho khách hàng như `ViewPurchaseHistoryCommand`, `AddToCartCommand`, `CheckoutCommand`.
     *   Việc thêm một chức năng mới vào menu trở nên đơn giản: chỉ cần tạo một lớp `Command` mới kế thừa từ `Command`, triển khai logic trong `execute()` và `getName()`, sau đó đăng ký nó với `CommandInvoker` trong controller tương ứng (ví dụ `AdminController.cpp`, `CustomerController.cpp`).
 
-*   **`CommandInvoker` thông minh (`source/commands/CommandInvoker.h`, `source/commands/CommandInvoker.cpp`):**
+*   **`CommandInvoker` thông minh:**
     *   Quản lý một danh sách các đối tượng `Command` (thông qua `std::vector<std::shared_ptr<Command>>`).
     *   Tự động tạo menu động: `CommandInvoker` lấy tên của từng `Command` (qua `command->getName()`) để xây dựng các lựa chọn menu. Sau đó, nó sử dụng `ConsoleUI::selectMenu()` để hiển thị menu tương tác, cho phép người dùng điều hướng bằng phím W/S và chọn bằng Enter.
     *   Khi người dùng chọn một mục, `CommandInvoker` sẽ gọi phương thức `execute()` của đối tượng `Command` tương ứng.
@@ -390,32 +414,32 @@ void AdminController::menu(shared_ptr<User>& currentUser) {
 #### 3. Xây dựng Giao diện Người dùng Console Nâng cao (TUI)
 Dự án không chỉ dừng lại ở việc xuất/nhập liệu cơ bản với `std::cout` và `std::cin`, mà còn triển khai một Giao diện Người dùng dạng Text (Text-based User Interface - TUI) phức tạp và thân thiện hơn bằng cách tương tác trực tiếp với Windows API và tích hợp ASCII art.
 *   **Sử dụng Windows API cho Console:**
-    *   Các lớp `ConsoleUI` ([`source/ui/ConsoleUI.h`](source/ui/ConsoleUI.h), [`source/ui/ConsoleUI.cpp`](source/ui/ConsoleUI.cpp)) và `ConsoleConfig` ([`source/app/ConsoleConfig.h`](source/app/ConsoleConfig.h), [`source/app/ConsoleConfig.cpp`](source/app/ConsoleConfig.cpp)) đóng gói các lệnh gọi Windows API.
+    *   Các lớp `ConsoleUI` và `ConsoleConfig` đóng gói các lệnh gọi Windows API.
     *   Các hàm như `gotoXY()` để di chuyển con trỏ, `setColor()` để đổi màu chữ/nền, `SetWindowsSize()`, `DisableResizeWindow()`, và `DisableCursor()` được dùng để tùy biến môi trường console.
     *   Việc nhập liệu được xử lý bằng `_getch()` (trong `ConsoleUI::selectMenu`) để bắt phím không cần đệm, cho phép điều hướng menu tương tác bằng phím W/S và chọn bằng Enter.
 *   **Tạo Menu Động và Tương tác:**
     *   `ConsoleUI::selectMenu()` tự động hiển thị các tùy chọn menu, làm nổi bật lựa chọn hiện tại và xử lý việc điều hướng.
-    *   Các hàm tiện ích trong [`source/ui/utils.cpp`](source/ui/utils.cpp) như `printFrame()` và `printFrameOptions()` vẽ các khung viền và cấu trúc hóa các thành phần UI.
+    *   Các hàm tiện ích trong `source/ui/utils.cpp` như `printFrame()` và `printFrameOptions()` vẽ các khung viền và cấu trúc hóa các thành phần UI.
 *   **Tích hợp ASCII Art:**
-    *   Các hàm như `printHeader()` và `printMenu()` trong [`source/ui/utils.cpp`](source/ui/utils.cpp) tải và hiển thị ASCII art từ các file text (ví dụ: trong thư mục `ascii/`), tạo phong cách trực quan riêng biệt cho các phần khác nhau của ứng dụng (ví dụ: màn hình chào mừng, menu admin).
+    *   Các hàm như `printHeader()` và `printMenu()` tải và hiển thị ASCII art từ các file text (ví dụ: trong thư mục `ascii/`), tạo phong cách trực quan riêng biệt cho các phần khác nhau của ứng dụng (ví dụ: màn hình chào mừng, menu admin).
 
 #### 4. Xây dựng Repository Pattern với Template C++
 Dự án tận dụng sức mạnh của template trong C++ để xây dựng một **Repository Pattern** linh hoạt và có khả năng tái sử dụng cao, giúp trừu tượng hóa việc truy cập dữ liệu cho nhiều loại thực thể khác nhau.
 
 **Cách thức triển khai trong dự án:**
-*   **Interface `IRepository<T>` ([`source/database/IRepository.h`](source/database/IRepository.h)):**
+*   **Interface `IRepository<T>`:**
     *   Được định nghĩa là một template class: `template<class T> class IRepository { ... };`.
     *   Khai báo các phương thức ảo thuần túy (pure virtual functions) như `getAll()`, `getById(int id)`, `add(const T& entity)`, `updateById(int id, const T& entity)`, và `deleteById(int id)`.
 *   **Các lớp Repository cụ thể kế thừa `IRepository<T>`:**
-    *   Ví dụ: `SqlMusicRepository` kế thừa `IRepository<Music>` ([`source/database/SQLMusicRepository.h`](source/database/SQLMusicRepository.h)).
-    *   `SqlUserRepository` kế thừa `IRepository<shared_ptr<User>>` ([`source/database/SQLUserRepository.h`](source/database/SQLUserRepository.h)).
-    *   `SqlOrderRepository` kế thừa `IRepository<Order>` ([`source/database/SQLOrderRepository.h`](source/database/SQLOrderRepository.h)).
+    *   Ví dụ: `SqlMusicRepository` kế thừa `IRepository<Music>`.
+    *   `SqlUserRepository` kế thừa `IRepository<shared_ptr<User>>` .
+    *   `SqlOrderRepository` kế thừa `IRepository<Order>` 
     *   Mỗi lớp này triển khai các phương thức của `IRepository` với logic truy vấn SQL cụ thể cho kiểu dữ liệu tương ứng.
-*   **`IDataProvider` ([`source/database/IDataProvider.h`](source/database/IDataProvider.h)) và `SqlDao` ([`source/database/SQLDao.h`](source/database/SQLDao.h)):**
+*   **`IDataProvider` và `SqlDao`
     *   `IDataProvider` định nghĩa các phương thức trả về `shared_ptr` đến các `IRepository<T>` (ví dụ: `virtual shared_ptr<IRepository<Music>> music() = 0;`).
     *   `SqlDao` triển khai `IDataProvider` và tạo ra các instance cụ thể của các `Sql*Repository` (ví dụ: `return make_shared<SqlMusicRepository>();`).
 *   **Sử dụng trong Services:**
-    *   Các lớp Service (ví dụ: [`MusicService.cpp`](source/services/MusicService.cpp), [`UserService.cpp`](source/services/UserService.cpp)) tương tác với dữ liệu thông qua interface `IRepository<T>` được cung cấp bởi `IDataProvider`, giúp chúng không phụ thuộc vào cách triển khai cụ thể của repository.
+    *   Các lớp Service (ví dụ: `MusicService.cpp`, `UserService.cpp`) tương tác với dữ liệu thông qua interface `IRepository<T>` được cung cấp bởi `IDataProvider`, giúp chúng không phụ thuộc vào cách triển khai cụ thể của repository.
 
 
 ### Video demo mô tả:
