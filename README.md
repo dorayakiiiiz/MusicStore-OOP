@@ -67,7 +67,7 @@ Chia đều
 ## MÔ TẢ CỤ THỂ CÁC YÊU CẦU TRONG PHẦN "CÁCH THỨC ĐÁNH GIÁ"
 
 ### TEAMWORK
-[Báo cáo tiến độ hàng tuần](https://drive.google.com/file/d/1j_GBYkdf_Ny6QiK6zzkkofdpHIZHNRND/view?usp=sharing)
+[Báo cáo tiến độ hàng tuần](https://drive.google.com/file/d/1mnFjyH33ut1f5T2QyBRa-PQFx-P5k0ru/view?usp=sharing)
 
 ### UI/UX
 ### CÁC CHỨC NĂNG ĐÃ CÓ TRONG CHƯƠNG TRÌNH BAN ĐẦU
