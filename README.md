@@ -340,7 +340,7 @@ SQLExecute(hStmt);
 SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_COMMIT); 
 ```
 
-### 2. Command Pattern với Command Invoker
+#### 2. Command Pattern với Command Invoker
 
 Dự án áp dụng **Command Pattern** một cách hiệu quả để quản lý các thao tác người dùng và cấu trúc menu. Pattern này đóng gói mỗi yêu cầu (ví dụ: đăng nhập, xem danh sách nhạc, thêm vào giỏ hàng) thành một đối tượng `Command` riêng biệt. Cách tiếp cận này mang lại nhiều lợi ích thiết thực cho dự án:
 
@@ -384,7 +384,7 @@ void AdminController::menu(shared_ptr<User>& currentUser) {
 }
 ```
 
-### 3. Xây dựng Giao diện Người dùng Console Nâng cao (TUI)
+#### 3. Xây dựng Giao diện Người dùng Console Nâng cao (TUI)
 Dự án không chỉ dừng lại ở việc xuất/nhập liệu cơ bản với `std::cout` và `std::cin`, mà còn triển khai một Giao diện Người dùng dạng Text (Text-based User Interface - TUI) phức tạp và thân thiện hơn bằng cách tương tác trực tiếp với Windows API và tích hợp ASCII art.
 *   **Sử dụng Windows API cho Console:**
     *   Các lớp `ConsoleUI` ([`source/ui/ConsoleUI.h`](source/ui/ConsoleUI.h), [`source/ui/ConsoleUI.cpp`](source/ui/ConsoleUI.cpp)) và `ConsoleConfig` ([`source/app/ConsoleConfig.h`](source/app/ConsoleConfig.h), [`source/app/ConsoleConfig.cpp`](source/app/ConsoleConfig.cpp)) đóng gói các lệnh gọi Windows API.
@@ -396,7 +396,7 @@ Dự án không chỉ dừng lại ở việc xuất/nhập liệu cơ bản v�
 *   **Tích hợp ASCII Art:**
     *   Các hàm như `printHeader()` và `printMenu()` trong [`source/ui/utils.cpp`](source/ui/utils.cpp) tải và hiển thị ASCII art từ các file text (ví dụ: trong thư mục `ascii/`), tạo phong cách trực quan riêng biệt cho các phần khác nhau của ứng dụng (ví dụ: màn hình chào mừng, menu admin).
 
-### 4. Xây dựng Repository Pattern với Template C++
+#### 4. Xây dựng Repository Pattern với Template C++
 Dự án tận dụng sức mạnh của template trong C++ để xây dựng một **Repository Pattern** linh hoạt và có khả năng tái sử dụng cao, giúp trừu tượng hóa việc truy cập dữ liệu cho nhiều loại thực thể khác nhau.
 
 **Cách thức triển khai trong dự án:**
