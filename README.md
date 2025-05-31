@@ -27,6 +27,7 @@ MusicStore-OOP/
 │   ├── strategies/         # Các lớp Strategy (DiscountStrategy, SearchStrategy)
 │   ├── ui/                 # Các lớp giao diện người dùng (AdminUI, CustomerUI, ConsoleUI, utils, InputChecker)
 │   └── main.cpp            # Điểm vào chính của chương trình
+├── ascii/                  # Các file ASCII art sử dụng trong chương trình
 ├── Makefile                # Makefile để biên dịch
 └── README.md               # Mô tả project
 ```
