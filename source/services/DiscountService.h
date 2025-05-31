@@ -89,6 +89,13 @@ public:
     void removeDiscount(const shared_ptr<Discount>& discount);
 
     /**
+     * @brief Remove a discount voucher by username
+     * 
+     * @param username The username associated with the discount to remove
+     */
+    void removeDiscountByUsername(const string& username);
+
+    /**
      * @brief Generate a random discount code
      * 
      * @return string A randomly generated discount code

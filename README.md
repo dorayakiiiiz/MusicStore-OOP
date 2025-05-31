@@ -9,6 +9,29 @@
 - **23120197 - Trà Văn Sỹ (Nhóm trưởng)**
 - **23120209 - Lê Hoàng Nhật Anh**
 
+## CẤU TRÚC THƯ MỤC DỰ ÁN
+```
+MusicStore-OOP/
+├── release/                # Chứa file thực thi sau khi biên dịch (program.exe)
+├── references/             # Tài liệu tham khảo, class diagram
+│   ├── ClassDiagram.png
+│   └── html/               # Tài liệu tham khảo (Doxygen), Class Diagram
+├── source/                 # Toàn bộ mã nguồn của dự án
+│   ├── app/                # Lớp ứng dụng chính và cấu hình (StoreApp, ConsoleConfig)
+│   ├── commands/           # Các lớp Command (AdminCommands, CustomerCommands, StoreCommands, CommandInvoker)
+│   ├── controllers/        # Các lớp Controller (AdminController, CustomerController, IController)
+│   ├── database/           # Logic truy cập cơ sở dữ liệu (DatabaseConnector, Repositories, SQLDao, IDataProvider)
+│   ├── factories/          # Các lớp Factory (ControllerFactory, DiscountFactory, SearchFactory)
+│   ├── models/             # Các lớp Model (User, Music, Order, Cart, Discount, SalesRecord)
+│   ├── services/           # Các lớp Service xử lý logic nghiệp vụ (AuthService, MusicService, OrderService, v.v.)
+│   ├── strategies/         # Các lớp Strategy (DiscountStrategy, SearchStrategy)
+│   ├── ui/                 # Các lớp giao diện người dùng (AdminUI, CustomerUI, ConsoleUI, utils, InputChecker)
+│   └── main.cpp            # Điểm vào chính của chương trình
+├── .gitignore              # Các file và thư mục được Git bỏ qua
+├── Makefile                # Makefile để biên dịch dự án
+└── README.md               # Tài liệu mô tả dự án (file này)
+```
+
 ## CÁC CÔNG VIỆC MÀ TỪNG THÀNH VIÊN ĐÃ THỰC HIỆN
 ### Trà Văn Sỹ
 - Xây dựng các class Model (Music, Order, User, Cart...)
@@ -44,7 +67,7 @@ Chia đều
 ## MÔ TẢ CỤ THỂ CÁC YÊU CẦU TRONG PHẦN "CÁCH THỨC ĐÁNH GIÁ"
 
 ### TEAMWORK
-[Báo cáo tiến độ hàng tuần](https://drive.google.com/file/d/1j_GBYkdf_Ny6QiK6zzkkofdpHIZHNRND/view?usp=sharing)
+[Báo cáo tiến độ hàng tuần](https://drive.google.com/file/d/1mnFjyH33ut1f5T2QyBRa-PQFx-P5k0ru/view?usp=sharing)
 
 ### UI/UX
 ### CÁC CHỨC NĂNG ĐÃ CÓ TRONG CHƯƠNG TRÌNH BAN ĐẦU
@@ -62,14 +85,15 @@ Chương trình được phân tách ra 2 vai trò riêng biệt với 2 loại 
 - Đăng nhập: Truy cập vào hệ thống với tài khoản đã đăng ký
 - Xem danh sách nhạc: Duyệt qua toàn bộ kho âm nhạc
 - Tìm kiếm nhạc: Tìm kiếm bài hát theo tên, nghệ sĩ hoặc thể loại
-- Quản lý giỏ hàng: Thêm, xóa các bài hát trong giỏ hàng
+- Quản lý giỏ hàng: Xem danh sách các sản phẩm hiện có, thêm, xóa các bài hát trong giỏ hàng
 - Thanh toán đơn hàng: Hoàn tất quá trình mua nhạc
-- Sử dụng mã giảm giá: Áp dụng các voucher giảm giá vào đơn hàng
+- Sử dụng mã giảm giá: Áp dụng các voucher giảm giá vào đơn hàng (cho đơn hàng trên 50$)
 - Xem lịch sử mua hàng: Kiểm tra các đơn hàng đã mua trước đó
 - Nhận voucher khuyến mãi: Nhận mã giảm giá khi mua hàng với giá trị lớn
 - Đăng xuất: Kết thúc phiên làm việc
 
 #### Tính năng dành cho quản trị viên cửa hàng (Admin)
+- Xem danh sách nhạc: Duyệt qua toàn bộ kho âm nhạc
 - Quản lý kho nhạc: Thêm, xóa, chỉnh sửa thông tin và giá bài hát
 - Xem danh sách người dùng: Quản lý thông tin tài khoản khách hàng
 - Quản lý tài khoản: Có quyền xóa tài khoản người dùng vi phạm
@@ -255,8 +279,8 @@ Singleton Pattern đảm bảo mỗi service hoặc resource quan trọng chỉ 
 - **`DatabaseConnector`**: Được thiết kế singleton để đảm bảo chỉ có một kết nối tới database SQL Server xuyên suốt chương trình. Tất cả các repository đều sử dụng `DatabaseConnector::getInstance()` để truy cập kết nối database, đảm bảo quản lý tài nguyên hiệu quả và tránh lỗi kết nối trùng lặp.
 
 ### ĐẢM BẢO CHẤT LƯỢNG
-**Unit testing:** Chương trình đã được kiểm thử với 178 test cases, đạt tỷ lệ pass 100%. 
-- [Chi tiết báo cáo kiểm thử](https://docs.google.com/spreadsheets/d/1kW1PXAE2B0CP4XauVlffiyTqdsdMYj5Z/edit?usp=sharing&ouid=111498391809847142303&rtpof=true&sd=true)  
+**Unit testing:** Chương trình đã được kiểm thử với 110 test cases, đạt tỷ lệ pass 100%. 
+- [Chi tiết báo cáo kiểm thử](https://docs.google.com/spreadsheets/d/1h8u22Et0P12cnSNpjwmj6Vc233AFX60R/edit?usp=sharing&ouid=111498391809847142303&rtpof=true&sd=true)  
 
 
 **Coding convention:** Chương trình tuân thủ theo đúng các quy định về coding convention của C++.
@@ -264,377 +288,135 @@ Singleton Pattern đảm bảo mỗi service hoặc resource quan trọng chỉ 
 
 
 ### Tài liệu mô tả kiến trúc phần mềm
-- Class Diagram (cài đặt Extension Markdown Preview Mermaid Support để hiển thị)
-```mermaid
-classDiagram
-    %% Abstract Classes and Interfaces
-    class IUser {
-        <<abstract>>
-        -id: int
-        -username: string
-        -password: string
-        +IUser(username, password)
-        +getRole(): string
-        +getUsername(): string
-        +getPassword(): string
-        +toString(): string
-        +~IUser()
-    }
+- [Class Diagram](references/ClassDiagram.png)
     
-    class IController {
-        <<abstract>>
-        +menu(vector~Music~, vector~shared_ptr~IUser~~, vector~Order~, vector~shared_ptr~Discount~~, shared_ptr~IUser~): void
-    }
-    
-    class ISearch {
-        <<interface>>
-        +search(vector~Music~, string): vector~Music~
-    }
-    
-    class IReadData~T~ {
-        <<interface>>
-        +readData(): vector~T~
-    }
-    
-    class ISaveData~T~ {
-        <<interface>>
-        +saveData(vector~T~): void
-    }
-    
-    class DiscountStrategy {
-        <<interface>>
-        +calculateDiscount(float): float
-    }
-    
-    %% Model Classes
-    class Music {
-        -id: int
-        -name: string
-        -artist: string
-        -genre: string
-        -price: float
-        -quantity: int
-        +Music(id, name, artist, genre, price, quantity)
-        +getId(): int
-        +getName(): string
-        +getArtist(): string
-        +getGenre(): string
-        +getPrice(): float
-        +getQuantity(): int
-        +setName(string): void
-        +setArtist(string): void
-        +setGenre(string): void
-        +setPrice(float): void
-        +setQuantity(int): void
-    }
-    
-    class Order {
-        -username: string
-        -purchasedItems: vector~Music~
-        -total: float
-        +Order(username, items, total)
-        +getUsername(): string
-        +getPurchasedItems(): vector~Music~
-        +getTotal(): float
-    }
-    
-    class Admin {
-        +Admin(username, password)
-        +getRole(): string
-    }
-    
-    class Customer {
-        +Customer(username, password)
-        +getRole(): string
-    }
-    
-    class Cart {
-        -items: vector~Music~
-        +addItem(Music): void
-        +removeItem(int): void
-        +getItems(): vector~Music~
-        +clear(): void
-        +calculateTotal(): float
-    }
-    
-    class Discount {
-        -code: string
-        -username: string
-        -strategy: shared_ptr~DiscountStrategy~
-        +Discount(code, username, strategy)
-        +apply(float): float
-        +getCode(): string
-        +getUsername(): string
-    }
-    
-    %% Service Classes
-    class MusicService {
-        +addMusic(Music): void
-        +getMusic(int): Music
-        +updateMusic(Music): void
-        +deleteMusic(int): void
-        +getAllMusic(): vector~Music~
-        +searchMusic(string, string): vector~Music~
-    }
-    
-    class OrderService {
-        +createOrder(string, vector~Music~, float): void
-        +getUserOrders(vector~Order~, string): vector~Order~
-        +getAllOrders(): vector~Order~
-    }
-    
-    class UserService {
-        +addUser(shared_ptr~IUser~): void
-        +getUser(string): shared_ptr~IUser~
-        +deleteUser(string): void
-        +getAllUsers(): vector~shared_ptr~IUser~~
-    }
-    
-    class DiscountService {
-        +addDiscount(shared_ptr~Discount~): void
-        +getUserDiscounts(vector~shared_ptr~Discount~~, string): vector~shared_ptr~Discount~~
-        +applyDiscount(string, float): float
-    }
-    
-    class CartService {
-        -cart: Cart
-        +addToCart(Music): void
-        +removeFromCart(int): void
-        +getCartItems(): vector~Music~
-        +clearCart(): void
-        +calculateTotal(): float
-    }
-    
-    class Authentication {
-        +register(string, string, string): bool
-        +login(string, string): shared_ptr~IUser~
-    }
-    
-    %% Controllers
-    class AdminController {
-        -musicService: MusicService&
-        -userService: UserService&
-        -orderService: OrderService&
-        +AdminController(MusicService&, UserService&, OrderService&)
-        +menu(vector~Music~, vector~shared_ptr~IUser~~, vector~Order~, vector~shared_ptr~Discount~~, shared_ptr~IUser~): void
-        -handleMusicManagement(vector~Music~): void
-        -handleUserManagement(vector~shared_ptr~IUser~~): void
-        -handleOrderHistory(vector~Order~): void
-        -handleSalesStatistics(vector~Order~): void
-    }
-    
-    class CustomerController {
-        -musicService: MusicService&
-        -cartService: CartService&
-        -orderService: OrderService&
-        -discountService: DiscountService&
-        +CustomerController(MusicService&, CartService&, OrderService&, DiscountService&)
-        +menu(vector~Music~, vector~shared_ptr~IUser~~, vector~Order~, vector~shared_ptr~Discount~~, shared_ptr~IUser~): void
-        -handlePurchaseHistory(vector~Order~, Customer*&): void
-        -handleMusicList(vector~Music~): void
-        -handleSearch(vector~Music~): void
-        -handleAddToCart(vector~Music~, Cart&): void
-        -handleRemoveFromCart(Cart&, vector~Music~): void
-        -handleCheckout(vector~Order~, vector~Music~, Cart&, vector~shared_ptr~Discount~~, Customer*&): void
-        -handleLogout(Cart&, shared_ptr~IUser~&): bool
-    }
-    
-    class ControllerFactory {
-        -musicService: MusicService&
-        -cartService: CartService&
-        -orderService: OrderService&
-        -discountService: DiscountService&
-        -userService: UserService&
-        +ControllerFactory(MusicService&, CartService&, OrderService&, DiscountService&, UserService&)
-        +createController(string): shared_ptr~IController~
-    }
-    
-    %% UI Classes
-    class AdminUI {
-        +displayWelcomeMessage(string): void
-        +displayMenu(): void
-        +displayMusicList(vector~Music~&): void
-        +displayUserList(vector~shared_ptr~IUser~~&): void
-        +displayPurchasedHistory(Order&, int): void
-        +displaySaleStatistics(vector~pair~string,pair~int,float~~~&): void
-        +getNewMusicDetails(): Music
-    }
-    
-    class CustomerUI {
-        +displayWelcomeMessage(string): void
-        +displayMenu(): void
-        +displayMusicList(vector~Music~&): void
-        +displayCart(vector~Music~&): void
-        +displayPurchasedHistory(vector~Order~&, string): void
-        +getMusicSearchType(): int
-        +getMusicSearchQuery(): string
-    }
-    
-    %% Utility Classes
-    class SearchFactory {
-        +createSearchStrategy(string): shared_ptr~ISearch~
-    }
-    
-    class NameSearch {
-        +search(vector~Music~, string): vector~Music~
-    }
-    
-    class ArtistSearch {
-        +search(vector~Music~, string): vector~Music~
-    }
-    
-    class GenreSearch {
-        +search(vector~Music~, string): vector~Music~
-    }
-    
-    class ReadDataFactory~T~ {
-        +createReader(string): shared_ptr~IReadData~T~~
-    }
-    
-    class SaveDataFactory~T~ {
-        +createSaver(string): shared_ptr~ISaveData~T~~
-    }
-    
-    class DatabaseConnector {
-        -connection: SQLHDBC
-        -environment: SQLHENV
-        -connectionString: string
-        +connect(): bool
-        +disconnect(): void
-        +executeQuery(string): bool
-        +fetchResults(): vector~vector~string~~
-    }
-    
-    class PercentageDiscountStrategy {
-        -percentage: float
-        +PercentageDiscountStrategy(float)
-        +calculateDiscount(float): float
-    }
-    
-    class FixedDiscountStrategy {
-        -amount: float
-        +FixedDiscountStrategy(float)
-        +calculateDiscount(float): float
-    }
-    
-    class InputValidator {
-        +validateInt(string): pair~bool,int~
-        +validateFloat(string): pair~bool,float~
-        +validateString(string): pair~bool,string~
-    }
-    
-    class StoreApp {
-        -items: vector~Music~
-        -users: vector~shared_ptr~IUser~~
-        -orders: vector~Order~
-        -vouchers: vector~shared_ptr~Discount~~
-        -auth: Authentication
-        -musicService: MusicService
-        -userService: UserService
-        -orderService: OrderService
-        -cartService: CartService
-        -discountService: DiscountService
-        -controllerFactory: ControllerFactory
-        +StoreApp()
-        +run(): void
-        -handleSignUp(): void
-        -handleLogin(shared_ptr~IUser~&): bool
-        -loadData(): void
-        -saveData(): void
-    }
-    
-    %% Relationships
-    IUser <|-- Admin
-    IUser <|-- Customer
-    IController <|-- AdminController
-    IController <|-- CustomerController
-    ISearch <|-- NameSearch
-    ISearch <|-- ArtistSearch
-    ISearch <|-- GenreSearch
-    DiscountStrategy <|-- PercentageDiscountStrategy
-    DiscountStrategy <|-- FixedDiscountStrategy
-    
-    AdminController --> AdminUI 
-    CustomerController --> CustomerUI 
-    
-    ControllerFactory --> AdminController
-    ControllerFactory --> CustomerController 
-    
-    SearchFactory --> NameSearch 
-    SearchFactory --> ArtistSearch 
-    SearchFactory --> GenreSearch 
-    
-    StoreApp --> ControllerFactory 
-    StoreApp --> Authentication 
-    StoreApp --> MusicService 
-    StoreApp --> UserService 
-    StoreApp --> OrderService 
-    StoreApp --> CartService 
-    StoreApp --> DiscountService 
-    
-    Discount --> DiscountStrategy 
-    
-    AdminController --> MusicService 
-    AdminController --> UserService 
-    AdminController --> OrderService 
-    
-    CustomerController --> MusicService 
-    CustomerController --> CartService 
-    CustomerController --> OrderService 
-    CustomerController --> DiscountService 
-    
-    MusicService --> Music 
-    OrderService --> Order 
-    UserService --> IUser 
-    CartService --> Cart 
-    DiscountService --> Discount 
-```
-    
-- [Tài liệu mô tả (trong thư mục references)](references/html/index.html)
+- [Tài liệu mô tả](references/html/index.html)
 
 ### CÁC CHỦ ĐỀ NÂNG CAO
 #### 1. Kết nối và truy xuất Database SQL Server trên Cloud với ODBC
-Dự án sử dụng kết nối trực tiếp đến SQL Server trên cloud thông qua ODBC API thay vì đọc/ghi file text đơn giản:
+Dự án sử dụng kết nối trực tiếp đến SQL Server trên Azure Cloud thông qua ODBC API, mang lại khả năng truy cập dữ liệu mạnh mẽ và linh hoạt hơn so với việc đọc/ghi file text đơn thuần.
 
-- **Quản lý kết nối với Singleton Pattern:** [`DatabaseConnector`](DatabaseConnector.h) đảm bảo chỉ có một kết nối duy nhất đến database, tự động reconnect khi mất kết nối
-- **Xử lý lỗi ODBC chuyên nghiệp:** [`ODBCErrorHandler`](DatabaseConnector.h) cung cấp thông tin chi tiết về lỗi SQL
-- **Connection String động:** Kết nối đến SQL Server cloud với chuỗi kết nối được tối ưu hóa
-- **Transaction Management:** Sử dụng commit/rollback trong [`SqlOrderRepository`](SQLOrderRepository.cpp) để đảm bảo tính toàn vẹn dữ liệu khi thêm order
-- **Prepared Statements:** Tất cả các repository sử dụng prepared statements để tránh SQL injection
+*   **Quản lý kết nối tập trung với Singleton Pattern:**
+    *   Lớp [`DatabaseConnector`](source/database/DatabaseConnector.h) (`source/database/DatabaseConnector.cpp`) được thiết kế theo Singleton Pattern, đảm bảo chỉ có một đối tượng quản lý kết nối duy nhất trong toàn bộ ứng dụng.
+    *   Phương thức `DatabaseConnector::getInstance()` cung cấp điểm truy cập toàn cục đến đối tượng này.
+    *   `ensureConnected()` và `testConnection()` giúp kiểm tra và duy trì trạng thái kết nối, tự động cố gắng kết nối lại nếu cần.
+    *   Lớp [`ConnectionStatusDisplay`](source/database/ConnectionStatusDisplay.cpp) cung cấp phản hồi trực quan cho người dùng trong quá trình kết nối đến database khi khởi động ứng dụng.
+
+*   **Chuỗi kết nối (Connection String) được cấu hình sẵn:**
+    *   Chuỗi kết nối ODBC được định nghĩa trực tiếp trong phương thức `DatabaseConnector::connect()`, trỏ đến instance SQL Server trên Azure (`musicstoredb.database.windows.net`).
+    *   Bao gồm các thông tin xác thực (Uid, Pwd) và các tùy chọn quan trọng như `Encrypt=yes` và `TrustServerCertificate=no` để đảm bảo kết nối an toàn.
+
+*   **Quản lý Transaction để đảm bảo tính toàn vẹn dữ liệu:**
+    *   Trong các thao tác quan trọng như thêm đơn hàng mới (`SqlOrderRepository::add` trong [`SQLOrderRepository.cpp`](source/database/SQLOrderRepository.cpp)), transaction được sử dụng một cách rõ ràng.
+    *   `SQLSetConnectAttr(hDbc, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_OFF, 0);` được gọi để tắt chế độ tự động commit.
+    *   Sau khi thực hiện thành công một loạt các thao tác chèn dữ liệu (vào bảng `orders` và `detail_order`), `SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_COMMIT);` được gọi để xác nhận tất cả các thay đổi.
+    *   Nếu có lỗi xảy ra trong quá trình (mặc dù logic rollback chi tiết có thể cần xem xét thêm), cơ chế transaction này là nền tảng để đảm bảo dữ liệu không bị rơi vào trạng thái không nhất quán.
+
+*   **Sử dụng Prepared Statements để tăng cường bảo mật và hiệu suất:**
+    *   Hầu hết các thao tác truy vấn SQL trong các lớp Repository (ví dụ: `SqlUserRepository::add`, `SqlMusicRepository::add`, `SqlOrderRepository::add`, [`SQLDiscountRepository.cpp`](source/database/SQLDiscountRepository.cpp)) đều sử dụng prepared statements.
+    *   Các bước bao gồm:
+        1.  `SQLPrepare()`: Chuẩn bị một câu lệnh SQL với các tham số giữ chỗ (ví dụ: `?`).
+        2.  `SQLBindParameter()`: Liên kết các biến C++ với các tham số giữ chỗ này, chỉ định kiểu dữ liệu và kích thước.
+        3.  `SQLExecute()`: Thực thi câu lệnh đã chuẩn bị.
+    *   Cách tiếp cận này giúp ngăn chặn hiệu quả các cuộc tấn công SQL Injection bằng cách tách biệt mã SQL khỏi dữ liệu người dùng. Đồng thời, nó cũng có thể cải thiện hiệu suất cho các truy vấn được thực thi nhiều lần với các giá trị tham số khác nhau.
 
 ```cpp
-// Ví dụ transaction trong SqlOrderRepository
+// Ví dụ về việc sử dụng Transaction và Prepared Statement trong SqlOrderRepository::add
+// Tắt auto-commit để bắt đầu transaction
 SQLSetConnectAttr(hDbc, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_OFF, 0);
-// Insert operations...
-SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_COMMIT);   
+
+// ... (Lấy ID mới cho đơn hàng) ...
+
+// Thêm vào bảng orders (sử dụng prepared statement)
+string orderQuery = "INSERT INTO orders (ID, Username, TotalPrice) VALUES (?, ?, ?)";
+SQLPrepare(hStmt, (SQLCHAR*)orderQuery.c_str(), SQL_NTS);
+SQLBindParameter(hStmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &newOrderId, 0, nullptr);
+// ... (Bind các tham số khác cho Username, TotalPrice) ...
+SQLExecute(hStmt);
+
+// ... (Thêm vào bảng detail_order cho từng sản phẩm, cũng sử dụng prepared statement) ...
+// ... (SQLPrepare, SQLBindParameter, SQLExecute cho mỗi item) ...
+
+// Commit transaction nếu tất cả thành công
+SQLEndTran(SQL_HANDLE_DBC, hDbc, SQL_COMMIT); 
 ```
 
 ### 2. Command Pattern với Command Invoker
 
-Triển khai triển khai Command Pattern để tách biệt giao diện người dùng và logic nghiệp vụ, giúp việc thêm hoặc sửa đổi chức năng trở nên dễ dàng.   
-- Interface Command: Command định nghĩa hợp đồng chung cho mọi lệnh trong hệ thống
-- Invoker: CommandInvoker quản lý và thực thi các lệnh, tự động tạo menu từ danh sách lệnh
-- Phân chia command theo chức năng: Chia thành StoreCommands, AdminCommands và CustomerCommands
-- Dependency Injection: Các command nhận dependencies qua constructor, tăng tính tái sử dụng
-- Menu tương tác W/S/Enter: Tự động tạo giao diện người dùng từ danh sách command
+Dự án áp dụng **Command Pattern** một cách hiệu quả để quản lý các thao tác người dùng và cấu trúc menu. Pattern này đóng gói mỗi yêu cầu (ví dụ: đăng nhập, xem danh sách nhạc, thêm vào giỏ hàng) thành một đối tượng `Command` riêng biệt. Cách tiếp cận này mang lại nhiều lợi ích thiết thực cho dự án:
+
+*   **Tách biệt rõ ràng giữa các thành phần (Decoupling):**
+    *   Logic nghiệp vụ của mỗi chức năng được chứa trong phương thức `execute()` của từng `Command` cụ thể (thường gọi đến các `Service` tương ứng như `AuthService`, `MusicService`).
+    *   `CommandInvoker` là lớp chịu trách nhiệm điều phối: nó hiển thị menu cho người dùng và gọi `execute()` trên `Command` được chọn, mà không cần biết chi tiết về cách `Command` đó được thực thi.
+    *   Giao diện người dùng (ví dụ: `ConsoleUI` trong `ConsoleUI.cpp`) được tách biệt, chỉ đảm nhận việc hiển thị và nhận input.
+    *   Nhờ sự tách biệt này, việc thay đổi logic một chức năng, giao diện người dùng, hoặc cách menu được gọi không ảnh hưởng lớn đến các phần khác của hệ thống.
+
+*   **Tổ chức Code Mạch lạc và Dễ Mở Rộng:**
+    *   **Interface `Command` (`source/commands/Command.h`):** Định nghĩa một "hợp đồng" chung cho tất cả các lệnh với phương thức ảo `execute()` (thực thi lệnh) và `getName()` (lấy tên hiển thị trên menu).
+    *   **Các lớp `Command` cụ thể:** Được phân chia logic theo vai trò và chức năng, giúp dễ quản lý:
+        *   `StoreCommands` (`source/commands/StoreCommands.h`): Các lệnh cho màn hình chính như `LoginCommand`, `SignUpCommand`, `ExitCommand`.
+        *   `AdminCommands` (`source/commands/AdminCommands.h`): Các lệnh quản trị như `ViewMusicListCommand`, `AddNewItemsCommand`, `DeleteUserCommand`.
+        *   `CustomerCommands` (`source/commands/CustomerCommands.h`): Các lệnh cho khách hàng như `ViewPurchaseHistoryCommand`, `AddToCartCommand`, `CheckoutCommand`.
+    *   Việc thêm một chức năng mới vào menu trở nên đơn giản: chỉ cần tạo một lớp `Command` mới kế thừa từ `Command`, triển khai logic trong `execute()` và `getName()`, sau đó đăng ký nó với `CommandInvoker` trong controller tương ứng (ví dụ `AdminController.cpp`, `CustomerController.cpp`).
+
+*   **`CommandInvoker` thông minh (`source/commands/CommandInvoker.h`, `source/commands/CommandInvoker.cpp`):**
+    *   Quản lý một danh sách các đối tượng `Command` (thông qua `std::vector<std::shared_ptr<Command>>`).
+    *   Tự động tạo menu động: `CommandInvoker` lấy tên của từng `Command` (qua `command->getName()`) để xây dựng các lựa chọn menu. Sau đó, nó sử dụng `ConsoleUI::selectMenu()` để hiển thị menu tương tác, cho phép người dùng điều hướng bằng phím W/S và chọn bằng Enter.
+    *   Khi người dùng chọn một mục, `CommandInvoker` sẽ gọi phương thức `execute()` của đối tượng `Command` tương ứng.
+
+*   **Tăng tính linh hoạt và tái sử dụng với Dependency Injection:**
+    *   Nhiều `Command` được thiết kế để nhận các đối tượng phụ thuộc cần thiết (ví dụ: `shared_ptr<User>& currentUser` để biết người dùng hiện tại, hoặc `Cart& cart` để thao tác với giỏ hàng) thông qua constructor.
+    *   Cách làm này (một dạng Dependency Injection) giúp các `Command` không bị phụ thuộc cứng vào việc tự tạo ra hay tìm kiếm các đối tượng này, làm tăng khả năng tái sử dụng và giúp việc viết unit test cho từng `Command` trở nên dễ dàng hơn.
 
 ```cpp
-// Ví dụ sử dụng trong AdminController
+// Ví dụ sử dụng CommandInvoker trong AdminController.cpp
 void AdminController::menu(shared_ptr<User>& currentUser) {
-    CommandInvoker invoker("ADMIN MENU");
-    
+    // ...
+    CommandInvoker invoker("ADMIN MENU"); // Khởi tạo Invoker với tiêu đề menu
+
+    // Đăng ký các command cụ thể cho menu Admin
     invoker.addCommand(std::make_shared<ViewMusicListCommand>());
     invoker.addCommand(std::make_shared<AddNewItemsCommand>());
-    invoker.addCommand(std::make_shared<ViewUsersCommand>());
-    // Thêm các command khác...
+    // ... thêm các command khác ...
+    invoker.addCommand(std::make_shared<AdminLogoutCommand>(currentUser));
     
-    invoker.executeMenu();  // Tự động hiển thị và xử lý menu
+    // Hiển thị menu và bắt đầu vòng lặp xử lý lựa chọn của người dùng
+    invoker.executeMenu();
 }
 ```
+
+### 3. Xây dựng Giao diện Người dùng Console Nâng cao (TUI)
+Dự án không chỉ dừng lại ở việc xuất/nhập liệu cơ bản với `std::cout` và `std::cin`, mà còn triển khai một Giao diện Người dùng dạng Text (Text-based User Interface - TUI) phức tạp và thân thiện hơn bằng cách tương tác trực tiếp với Windows API và tích hợp ASCII art.
+*   **Sử dụng Windows API cho Console:**
+    *   Các lớp `ConsoleUI` ([`source/ui/ConsoleUI.h`](source/ui/ConsoleUI.h), [`source/ui/ConsoleUI.cpp`](source/ui/ConsoleUI.cpp)) và `ConsoleConfig` ([`source/app/ConsoleConfig.h`](source/app/ConsoleConfig.h), [`source/app/ConsoleConfig.cpp`](source/app/ConsoleConfig.cpp)) đóng gói các lệnh gọi Windows API.
+    *   Các hàm như `gotoXY()` để di chuyển con trỏ, `setColor()` để đổi màu chữ/nền, `SetWindowsSize()`, `DisableResizeWindow()`, và `DisableCursor()` được dùng để tùy biến môi trường console.
+    *   Việc nhập liệu được xử lý bằng `_getch()` (trong `ConsoleUI::selectMenu`) để bắt phím không cần đệm, cho phép điều hướng menu tương tác bằng phím W/S và chọn bằng Enter.
+*   **Tạo Menu Động và Tương tác:**
+    *   `ConsoleUI::selectMenu()` tự động hiển thị các tùy chọn menu, làm nổi bật lựa chọn hiện tại và xử lý việc điều hướng.
+    *   Các hàm tiện ích trong [`source/ui/utils.cpp`](source/ui/utils.cpp) như `printFrame()` và `printFrameOptions()` vẽ các khung viền và cấu trúc hóa các thành phần UI.
+*   **Tích hợp ASCII Art:**
+    *   Các hàm như `printHeader()` và `printMenu()` trong [`source/ui/utils.cpp`](source/ui/utils.cpp) tải và hiển thị ASCII art từ các file text (ví dụ: trong thư mục `ascii/`), tạo phong cách trực quan riêng biệt cho các phần khác nhau của ứng dụng (ví dụ: màn hình chào mừng, menu admin).
+
+### 4. Xây dựng Repository Pattern với Template C++
+Dự án tận dụng sức mạnh của template trong C++ để xây dựng một **Repository Pattern** linh hoạt và có khả năng tái sử dụng cao, giúp trừu tượng hóa việc truy cập dữ liệu cho nhiều loại thực thể khác nhau.
+
+**Cách thức triển khai trong dự án:**
+*   **Interface `IRepository<T>` ([`source/database/IRepository.h`](source/database/IRepository.h)):**
+    *   Được định nghĩa là một template class: `template<class T> class IRepository { ... };`.
+    *   Khai báo các phương thức ảo thuần túy (pure virtual functions) như `getAll()`, `getById(int id)`, `add(const T& entity)`, `updateById(int id, const T& entity)`, và `deleteById(int id)`.
+*   **Các lớp Repository cụ thể kế thừa `IRepository<T>`:**
+    *   Ví dụ: `SqlMusicRepository` kế thừa `IRepository<Music>` ([`source/database/SQLMusicRepository.h`](source/database/SQLMusicRepository.h)).
+    *   `SqlUserRepository` kế thừa `IRepository<shared_ptr<User>>` ([`source/database/SQLUserRepository.h`](source/database/SQLUserRepository.h)).
+    *   `SqlOrderRepository` kế thừa `IRepository<Order>` ([`source/database/SQLOrderRepository.h`](source/database/SQLOrderRepository.h)).
+    *   Mỗi lớp này triển khai các phương thức của `IRepository` với logic truy vấn SQL cụ thể cho kiểu dữ liệu tương ứng.
+*   **`IDataProvider` ([`source/database/IDataProvider.h`](source/database/IDataProvider.h)) và `SqlDao` ([`source/database/SQLDao.h`](source/database/SQLDao.h)):**
+    *   `IDataProvider` định nghĩa các phương thức trả về `shared_ptr` đến các `IRepository<T>` (ví dụ: `virtual shared_ptr<IRepository<Music>> music() = 0;`).
+    *   `SqlDao` triển khai `IDataProvider` và tạo ra các instance cụ thể của các `Sql*Repository` (ví dụ: `return make_shared<SqlMusicRepository>();`).
+*   **Sử dụng trong Services:**
+    *   Các lớp Service (ví dụ: [`MusicService.cpp`](source/services/MusicService.cpp), [`UserService.cpp`](source/services/UserService.cpp)) tương tác với dữ liệu thông qua interface `IRepository<T>` được cung cấp bởi `IDataProvider`, giúp chúng không phụ thuộc vào cách triển khai cụ thể của repository.
 
 
 ### Video demo mô tả:
 ```bash
-https://youtu.be/7A5fEKxOeRI?si=2_lJkSKKqz_AJuZ-
+https://www.youtube.com/watch?v=ED6AO7MpQig
 ```
-

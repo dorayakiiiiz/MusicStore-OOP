@@ -1,0 +1,7 @@
+<map id="DiscountStrategy" name="DiscountStrategy">
+<area shape="rect" id="Node000001" title="Interface for different discount calculation strategies." alt="" coords="120,5,260,181"/>
+<area shape="rect" id="Node000002" href="$class_fixed_discount_strategy.html" title="Strategy for fixed amount discounts." alt="" coords="5,229,169,405"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="146,196,130,231,125,229,141,193"/>
+<area shape="rect" id="Node000003" href="$class_percentage_discount_strategy.html" title="Strategy for percentage&#45;based discounts." alt="" coords="194,229,391,405"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="239,193,255,229,250,231,234,196"/>
+</map>

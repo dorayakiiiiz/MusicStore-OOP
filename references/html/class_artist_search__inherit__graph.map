@@ -1,0 +1,5 @@
+<map id="ArtistSearch" name="ArtistSearch">
+<area shape="rect" id="Node000001" title="Concrete search strategy for searching by artist." alt="" coords="5,144,91,213"/>
+<area shape="rect" id="Node000002" href="$class_i_search.html" title="Abstract base class for search strategies." alt="" coords="6,5,90,96"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="51,111,51,144,45,144,45,111"/>
+</map>

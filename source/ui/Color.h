@@ -1,6 +1,12 @@
 #ifndef _COLOR_H_
 #define _COLOR_H_
 
+/**
+ * @file Color.h
+ * @brief Enumeration for console colors
+ * 
+ * This file defines an enumeration for various console colors used in the application.
+ */
 enum Color {
     BLACK = 0,
     BLUE = 1,

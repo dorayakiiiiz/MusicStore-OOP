@@ -7,6 +7,7 @@
 #include "../services/UserService.h"
 #include "../services/OrderService.h"
 #include "../services/SalesRecordService.h"
+#include "../services/DiscountService.h"
 #include "../ui/utils.h"
 #include "../ui/InputChecker.h"
 #include "../ui/ConsoleUI.h"
@@ -342,8 +343,9 @@ bool DeleteUserCommand::execute() {
             printMessage("USER NOT FOUND!", 55, 26, LRED);
         }
 
-        // delete the order history of the deleted user
+        // delete the order history and the voucher of the deleted user
         OrderService::getInstance()->deleteOrder(delUser->getUsername());
+        DiscountService::getInstance()->removeDiscountByUsername(delUser->getUsername());
 
         printRepeatMessage(107, 1, "CONTINUE", YELLOW);
         printRepeatMessage(2, 1, "EXIT", LRED);

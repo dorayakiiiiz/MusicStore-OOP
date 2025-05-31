@@ -1,0 +1,5 @@
+<map id="ViewMusicCommand" name="ViewMusicCommand">
+<area shape="rect" id="Node000001" title="Command to view music list." alt="" coords="5,165,140,256"/>
+<area shape="rect" id="Node000002" href="$class_command.html" title="Interface for the Command pattern." alt="" coords="23,5,122,117"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,133,75,166,70,166,70,133"/>
+</map>

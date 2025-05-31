@@ -1,0 +1,13 @@
+<map id="source/controllers" name="source/controllers">
+<area shape="rect" id="node1" href="dir_1122cb0bcbead8a4499c4e90009cc6c5.html" title="models" alt="" coords="27,128,90,155"/>
+<area shape="rect" id="node2" href="dir_deceaff77956aa19030daff2ff320b51.html" title="ui" alt="" coords="114,128,153,155"/>
+<area shape="rect" id="node3" href="dir_9c9277e36685cf4743bc55e98e572fba.html" title="services" alt="" coords="176,128,245,155"/>
+<area shape="rect" id="node4" href="dir_0d091f906370f7e22c5c0cc75e8e298c.html" title="controllers" alt="" coords="93,53,174,80"/>
+<area shape="poly" id="edge1" href="dir_000002_000005.html" alt="" coords="122,82,84,119,80,115,118,79"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000002_000005.html" title="6" alt="" coords="87,113,94,129"/>
+<area shape="poly" id="edge3" href="dir_000002_000009.html" alt="" coords="136,81,136,112,131,112,131,81"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000002_000009.html" title="2" alt="" coords="138,101,145,117"/>
+<area shape="poly" id="edge2" href="dir_000002_000006.html" alt="" coords="149,79,188,115,184,119,145,82"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000002_000006.html" title="5" alt="" coords="186,101,193,117"/>
+<area shape="rect" id="clust1" href="dir_b2f33c71d4aa5e7af42a1ca61ff5af1b.html" title="source" alt="" coords="16,16,256,165"/>
+</map>

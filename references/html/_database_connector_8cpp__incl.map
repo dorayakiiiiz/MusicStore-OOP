@@ -1,0 +1,19 @@
+<map id="source/database/DatabaseConnector.cpp" name="source/database/DatabaseConnector.cpp">
+<area shape="rect" id="Node000001" title="Implementation file for the DatabaseConnector class." alt="" coords="244,5,421,48"/>
+<area shape="rect" id="Node000002" href="$_database_connector_8h.html" title="Header file for the DatabaseConnector class." alt="" coords="260,96,406,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="335,49,335,80,330,80,330,49"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,171,87,197"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="283,126,102,171,101,166,282,121"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="111,171,178,197"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="301,126,193,167,191,162,299,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="203,171,284,197"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="319,125,272,163,269,159,315,121"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="308,171,357,197"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="335,123,335,155,330,155,330,123"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="381,171,452,197"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="349,121,392,158,389,162,346,125"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="477,171,530,197"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="363,121,463,163,461,168,361,126"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="554,171,610,197"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="378,121,540,167,539,173,376,126"/>
+</map>

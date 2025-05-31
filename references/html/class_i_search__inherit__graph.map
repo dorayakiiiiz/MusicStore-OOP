@@ -1,0 +1,9 @@
+<map id="ISearch" name="ISearch">
+<area shape="rect" id="Node000001" title="Abstract base class for search strategies." alt="" coords="118,5,202,96"/>
+<area shape="rect" id="Node000002" href="$class_artist_search.html" title="Concrete search strategy for searching by artist." alt="" coords="5,144,91,213"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,109,79,146,75,143,109,105"/>
+<area shape="rect" id="Node000003" href="$class_genre_search.html" title="Concrete search strategy for searching by genre." alt="" coords="115,144,205,213"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="163,111,163,144,157,144,157,111"/>
+<area shape="rect" id="Node000004" href="$class_name_search.html" title="Concrete search strategy for searching by name." alt="" coords="229,144,317,213"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="212,105,246,143,242,146,208,109"/>
+</map>

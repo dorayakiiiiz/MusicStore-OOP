@@ -1,0 +1,5 @@
+<map id="Admin" name="Admin">
+<area shape="rect" id="Node000001" title="Admin user type &#45; privileged user with administrative capabilities." alt="" coords="5,208,127,341"/>
+<area shape="rect" id="Node000002" href="$class_user.html" title="Abstract base class for all user types in the system." alt="" coords="12,5,120,160"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="69,175,69,208,63,208,63,175"/>
+</map>

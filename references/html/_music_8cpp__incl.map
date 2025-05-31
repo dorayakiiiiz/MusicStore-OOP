@@ -1,0 +1,9 @@
+<map id="source/models/Music.cpp" name="source/models/Music.cpp">
+<area shape="rect" id="Node000001" title="Implementation file for the Music class." alt="" coords="5,5,176,32"/>
+<area shape="rect" id="Node000002" href="$_music_8h.html" title="Header file for the Music class." alt="" coords="12,80,79,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="85,34,63,68,59,65,80,31"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="103,80,171,107"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="101,31,123,66,119,68,96,34"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="18,155,72,181"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="48,107,48,139,42,139,42,107"/>
+</map>

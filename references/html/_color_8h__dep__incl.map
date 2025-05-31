@@ -1,0 +1,26 @@
+<map id="source/ui/Color.h" name="source/ui/Color.h">
+<area shape="rect" id="Node000001" title="Enumeration for console colors." alt="" coords="449,5,569,32"/>
+<area shape="rect" id="Node000002" href="$utils_8h_source.html" title=" " alt="" coords="452,80,566,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="512,48,512,80,506,80,506,48"/>
+<area shape="rect" id="Node000003" href="$_store_app_8cpp.html" title="Implementation file for the StoreApp class." alt="" coords="375,336,544,363"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="437,101,194,121,85,137,49,146,29,157,15,177,9,196,10,214,18,230,33,245,52,259,105,283,171,303,242,318,375,338,375,343,241,323,169,308,103,288,50,263,29,249,14,233,5,215,3,196,10,175,26,153,47,141,84,132,194,115,436,96"/>
+<area shape="rect" id="Node000004" href="$_admin_controller_8cpp.html" title="Implementation file for the AdminController class." alt="" coords="39,155,181,197"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="437,110,194,157,183,160,181,154,192,152,436,105"/>
+<area shape="rect" id="Node000005" href="$_auth_service_8cpp.html" title="Implementation file for the Authentication service." alt="" coords="206,163,415,189"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="465,115,342,165,340,160,463,110"/>
+<area shape="rect" id="Node000006" href="$_admin_u_i_8cpp.html" title="Implementation file for the AdminUI class." alt="" coords="270,253,422,280"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="494,120,465,158,430,199,365,255,362,251,426,195,461,155,490,117"/>
+<area shape="rect" id="Node000007" href="$_console_u_i_8h_source.html" title=" " alt="" coords="491,163,639,189"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="520,119,552,161,548,164,516,122"/>
+<area shape="rect" id="Node000009" href="$_customer_u_i_8cpp.html" title="Implementation file for the CustomerUI class." alt="" coords="707,253,879,280"/>
+<area shape="poly" id="edge12_Node000002_Node000009" title=" " alt="" coords="563,110,608,129,653,152,679,173,704,195,777,251,774,255,701,199,676,177,650,157,605,133,561,115"/>
+<area shape="rect" id="Node000010" href="$_customer_u_i_8h.html" title="Header file for the CustomerUI class." alt="" coords="714,163,872,189"/>
+<area shape="poly" id="edge13_Node000002_Node000010" title=" " alt="" coords="569,109,749,160,748,165,567,114"/>
+<area shape="poly" id="edge11_Node000007_Node000002" title=" " alt="" coords="553,151,522,109,527,106,558,148"/>
+<area shape="poly" id="edge7_Node000007_Node000003" title=" " alt="" coords="533,201,508,221,487,247,476,270,469,294,463,336,458,335,464,293,471,268,483,244,504,218,530,197"/>
+<area shape="poly" id="edge10_Node000007_Node000006" title=" " alt="" coords="521,198,379,255,377,250,519,193"/>
+<area shape="rect" id="Node000008" href="$_connection_status_display_8h_source.html" title=" " alt="" coords="497,245,683,288"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="575,204,587,244,582,246,570,205"/>
+<area shape="poly" id="edge9_Node000008_Node000003" title=" " alt="" coords="545,299,482,338,479,333,542,294"/>
+<area shape="poly" id="edge14_Node000010_Node000009" title=" " alt="" coords="796,205,796,253,790,253,790,205"/>
+</map>

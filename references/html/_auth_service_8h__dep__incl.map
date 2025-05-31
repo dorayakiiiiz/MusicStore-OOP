@@ -1,0 +1,28 @@
+<map id="source/services/AuthService.h" name="source/services/AuthService.h">
+<area shape="rect" id="Node000001" title="Header file for the Authentication service." alt="" coords="443,5,639,32"/>
+<area shape="rect" id="Node000002" href="$_store_app_8cpp.html" title="Implementation file for the StoreApp class." alt="" coords="101,352,269,379"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="444,38,331,59,208,90,151,108,101,128,61,149,35,172,15,205,8,237,14,268,32,302,47,319,64,331,104,349,102,354,61,336,43,322,28,306,9,270,3,237,10,203,31,169,58,145,98,123,149,103,206,84,330,54,443,33"/>
+<area shape="rect" id="Node000003" href="$_store_app_8h_source.html" title=" " alt="" coords="453,269,607,296"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="556,45,568,79,579,122,583,168,577,214,562,246,544,271,539,267,557,243,572,213,578,168,573,123,563,81,550,47"/>
+<area shape="rect" id="Node000005" href="$_i_controller_8h.html" title="Header file for the IController interface." alt="" coords="392,80,516,123"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="518,45,478,81,475,78,515,41"/>
+<area shape="rect" id="Node000011" href="$_auth_service_8cpp.html" title="Implementation file for the Authentication service." alt="" coords="667,88,876,115"/>
+<area shape="poly" id="edge15_Node000001_Node000011" title=" " alt="" coords="592,35,736,85,735,90,590,40"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="462,303,240,354,239,349,461,297"/>
+<area shape="rect" id="Node000004" href="$main_8cpp.html" title="Main entry point for the Music Store application." alt="" coords="472,352,589,379"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="533,312,533,352,528,352,528,312"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="517,129,538,147,555,170,562,197,559,225,550,250,540,270,535,268,545,248,554,223,557,197,551,172,534,150,513,133"/>
+<area shape="rect" id="Node000006" href="$_admin_controller_8h.html" title="Header file for the AdminController class." alt="" coords="45,171,173,213"/>
+<area shape="poly" id="edge7_Node000005_Node000006" title=" " alt="" coords="378,125,186,173,174,176,173,171,184,168,376,119"/>
+<area shape="rect" id="Node000009" href="$_customer_controller_8h.html" title="Header file for the CustomerController class." alt="" coords="197,171,344,213"/>
+<area shape="poly" id="edge10_Node000005_Node000009" title=" " alt="" coords="399,132,314,173,312,168,396,127"/>
+<area shape="rect" id="Node000010" href="$_controller_factory_8h_source.html" title=" " alt="" coords="368,171,540,213"/>
+<area shape="poly" id="edge12_Node000005_Node000010" title=" " alt="" coords="457,138,457,170,452,170,452,138"/>
+<area shape="rect" id="Node000007" href="$_admin_controller_8cpp.html" title="Implementation file for the AdminController class." alt="" coords="42,261,184,304"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="113,229,115,261,109,261,108,229"/>
+<area shape="rect" id="Node000008" href="$_controller_factory_8cpp.html" title="Implementation of the ControllerFactory class." alt="" coords="208,261,380,304"/>
+<area shape="poly" id="edge9_Node000006_Node000008" title=" " alt="" coords="167,218,252,258,250,263,165,223"/>
+<area shape="poly" id="edge11_Node000009_Node000008" title=" " alt="" coords="282,228,291,260,286,262,277,229"/>
+<area shape="poly" id="edge13_Node000010_Node000003" title=" " alt="" coords="484,224,522,267,518,271,480,227"/>
+<area shape="poly" id="edge14_Node000010_Node000008" title=" " alt="" coords="405,224,333,263,330,258,402,219"/>
+</map>
