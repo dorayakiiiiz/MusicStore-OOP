@@ -87,12 +87,13 @@ Chương trình được phân tách ra 2 vai trò riêng biệt với 2 loại 
 - Tìm kiếm nhạc: Tìm kiếm bài hát theo tên, nghệ sĩ hoặc thể loại
 - Quản lý giỏ hàng: Xem danh sách các sản phẩm hiện có, thêm, xóa các bài hát trong giỏ hàng
 - Thanh toán đơn hàng: Hoàn tất quá trình mua nhạc
-- Sử dụng mã giảm giá: Áp dụng các voucher giảm giá vào đơn hàng
+- Sử dụng mã giảm giá: Áp dụng các voucher giảm giá vào đơn hàng (cho đơn hàng trên 50$)
 - Xem lịch sử mua hàng: Kiểm tra các đơn hàng đã mua trước đó
 - Nhận voucher khuyến mãi: Nhận mã giảm giá khi mua hàng với giá trị lớn
 - Đăng xuất: Kết thúc phiên làm việc
 
 #### Tính năng dành cho quản trị viên cửa hàng (Admin)
+- Xem danh sách nhạc: Duyệt qua toàn bộ kho âm nhạc
 - Quản lý kho nhạc: Thêm, xóa, chỉnh sửa thông tin và giá bài hát
 - Xem danh sách người dùng: Quản lý thông tin tài khoản khách hàng
 - Quản lý tài khoản: Có quyền xóa tài khoản người dùng vi phạm
@@ -278,8 +279,8 @@ Singleton Pattern đảm bảo mỗi service hoặc resource quan trọng chỉ 
 - **`DatabaseConnector`**: Được thiết kế singleton để đảm bảo chỉ có một kết nối tới database SQL Server xuyên suốt chương trình. Tất cả các repository đều sử dụng `DatabaseConnector::getInstance()` để truy cập kết nối database, đảm bảo quản lý tài nguyên hiệu quả và tránh lỗi kết nối trùng lặp.
 
 ### ĐẢM BẢO CHẤT LƯỢNG
-**Unit testing:** Chương trình đã được kiểm thử với 178 test cases, đạt tỷ lệ pass 100%. 
-- [Chi tiết báo cáo kiểm thử](https://docs.google.com/spreadsheets/d/1kW1PXAE2B0CP4XauVlffiyTqdsdMYj5Z/edit?usp=sharing&ouid=111498391809847142303&rtpof=true&sd=true)  
+**Unit testing:** Chương trình đã được kiểm thử với 110 test cases, đạt tỷ lệ pass 100%. 
+- [Chi tiết báo cáo kiểm thử](https://docs.google.com/spreadsheets/d/1h8u22Et0P12cnSNpjwmj6Vc233AFX60R/edit?usp=sharing&ouid=111498391809847142303&rtpof=true&sd=true)  
 
 
 **Coding convention:** Chương trình tuân thủ theo đúng các quy định về coding convention của C++.

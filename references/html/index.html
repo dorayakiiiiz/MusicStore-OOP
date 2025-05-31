@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.13.2"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Music Store Application: Main Page</title>
+<title>Music Store Application: Music Store Management System</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -102,10 +102,56 @@ $(function(){initNavTree('index.html',''); initResizable(true); });
 </div>
 </div>
 
-<div class="header">
-  <div class="headertitle"><div class="title">Music Store Application Documentation</div></div>
+<div><div class="header">
+  <div class="headertitle"><div class="title"><a class="el" href="class_music.html" title="Class representing a music item that can be purchased in the store.">Music</a> Store Management System </div></div>
 </div><!--header-->
 <div class="contents">
+<div class="textblock"><h1><a class="anchor" id="intro_sec"></a>
+Introduction</h1>
+<p>This is a comprehensive Object-Oriented <a class="el" href="class_music.html" title="Class representing a music item that can be purchased in the store.">Music</a> Store Management System built in C++. The system provides functionality for both administrators and customers to manage and purchase music items.</p>
+<h1><a class="anchor" id="features_sec"></a>
+Key Features</h1>
+<ul>
+<li><b><a class="el" href="class_user.html" title="Abstract base class for all user types in the system.">User</a> Management</b>: Support for <a class="el" href="class_admin.html" title="Admin user type - privileged user with administrative capabilities.">Admin</a> and <a class="el" href="class_customer.html" title="Customer user type - regular user with standard privileges.">Customer</a> roles with authentication</li>
+<li><b><a class="el" href="class_music.html" title="Class representing a music item that can be purchased in the store.">Music</a> Inventory</b>: Complete music catalog management with search capabilities</li>
+<li><b>Shopping <a class="el" href="class_cart.html" title="Class representing a customer&#39;s shopping cart.">Cart</a></b>: Full shopping cart functionality with discount support</li>
+<li><b><a class="el" href="class_order.html" title="Class representing a customer order in the system.">Order</a> Processing</b>: Complete order management and purchase history</li>
+<li><b>Sales Analytics</b>: Comprehensive sales reporting and statistics</li>
+<li><b>Database Integration</b>: SQL Server integration for data persistence</li>
+</ul>
+<h1><a class="anchor" id="architecture_sec"></a>
+System Architecture</h1>
+<p>The system follows object-oriented design principles and implements several design patterns:</p><ul>
+<li><b>Factory Pattern</b>: For creating appropriate controllers based on user roles</li>
+<li><b>Strategy Pattern</b>: For discount calculations and search functionality</li>
+<li><b><a class="el" href="class_command.html" title="Interface for the Command pattern.">Command</a> Pattern</b>: For menu operations and user actions</li>
+<li><b>Singleton Pattern</b>: For service classes and database connections</li>
+<li><b>Repository Pattern</b>: For data access abstraction</li>
+</ul>
+<h1><a class="anchor" id="modules_sec"></a>
+Main Modules</h1>
+<ul>
+<li><b>Models</b>: Core business entities (<a class="el" href="class_user.html" title="Abstract base class for all user types in the system.">User</a>, <a class="el" href="class_music.html" title="Class representing a music item that can be purchased in the store.">Music</a>, <a class="el" href="class_order.html" title="Class representing a customer order in the system.">Order</a>, <a class="el" href="class_cart.html" title="Class representing a customer&#39;s shopping cart.">Cart</a>, <a class="el" href="class_discount.html">Discount</a>)</li>
+<li><b>Services</b>: Business logic layer (<a class="el" href="class_auth_service.html" title="Service class for user authentication operations.">AuthService</a>, <a class="el" href="class_music_service.html" title="Service class for managing music inventory.">MusicService</a>, <a class="el" href="class_order_service.html" title="Service class for managing order-related operations.">OrderService</a>, etc.)</li>
+<li><b>Controllers</b>: <a class="el" href="class_user.html" title="Abstract base class for all user types in the system.">User</a> interface controllers (<a class="el" href="class_admin_controller.html" title="Controller class for administrator-specific functionality.">AdminController</a>, <a class="el" href="class_customer_controller.html" title="Controller class for customer-specific functionality.">CustomerController</a>)</li>
+<li><b>Database</b>: Data access layer with SQL Server integration</li>
+<li><b>UI</b>: Console-based user interface components</li>
+<li><b>Commands</b>: <a class="el" href="class_command.html" title="Interface for the Command pattern.">Command</a> pattern implementation for user actions</li>
+</ul>
+<h1><a class="anchor" id="authors_sec"></a>
+Authors</h1>
+<ul>
+<li><b>Trà Văn Sỹ (Leader)</b> - 23120197</li>
+<li><b>Lê Hoàng Nhật Anh</b> - 23120209</li>
+</ul>
+<h1><a class="anchor" id="course_info"></a>
+Course Information</h1>
+<ul>
+<li><b>Course</b>: Object-Oriented Programming</li>
+<li><b>Class</b>: 23CTT3</li>
+<li><b>Instructor</b>: Trần Duy Quang </li>
+</ul>
+</div></div><!-- PageDoc -->
 <a href="doxygen_crawl.html"></a>
 </div><!-- contents -->
 </div><!-- doc-content -->

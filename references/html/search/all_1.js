@@ -19,8 +19,10 @@ var searchData=
   ['adminui_2eh_16',['AdminUI.h',['../_admin_u_i_8h.html',1,'']]],
   ['apply_17',['apply',['../class_discount.html#a0d285b5f5d4f36a83d9e77fa8c9574d8',1,'Discount']]],
   ['applydiscount_18',['applyDiscount',['../class_discount_service.html#a7f4c98ec8f5a70bb6571168af9055fd5',1,'DiscountService']]],
-  ['artistsearch_19',['ArtistSearch',['../class_artist_search.html',1,'']]],
-  ['authservice_20',['AuthService',['../class_auth_service.html',1,'AuthService'],['../class_auth_service.html#a31e0539296c3b17b959b5242bcaaff78',1,'AuthService::AuthService()']]],
-  ['authservice_2ecpp_21',['AuthService.cpp',['../_auth_service_8cpp.html',1,'']]],
-  ['authservice_2eh_22',['AuthService.h',['../_auth_service_8h.html',1,'']]]
+  ['architecture_19',['System Architecture',['../index.html#architecture_sec',1,'']]],
+  ['artistsearch_20',['ArtistSearch',['../class_artist_search.html',1,'']]],
+  ['authors_21',['Authors',['../index.html#authors_sec',1,'']]],
+  ['authservice_22',['AuthService',['../class_auth_service.html',1,'AuthService'],['../class_auth_service.html#a31e0539296c3b17b959b5242bcaaff78',1,'AuthService::AuthService()']]],
+  ['authservice_2ecpp_23',['AuthService.cpp',['../_auth_service_8cpp.html',1,'']]],
+  ['authservice_2eh_24',['AuthService.h',['../_auth_service_8h.html',1,'']]]
 ];
