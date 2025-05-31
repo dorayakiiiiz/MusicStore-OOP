@@ -169,7 +169,11 @@ void CustomerUI::displayPurchasedHistory(const vector<Order>& orders) {
 void CustomerUI::displayMusicList(vector<Music>& items, int maxPerPage) {
     if (items.empty()) {
         printFrame(30, 20, 60, 3, LRED); 
+<<<<<<< HEAD
+        printMessage("NO ITEMS FOUND!", 50, 21, LRED);
+=======
         printMessage("NO ITEMS FOUND!", 50, 15, LRED);
+>>>>>>> e8445061482de1686611d750114ebe0818a559d1
         sleepScreen(1200);
         return;
     }
