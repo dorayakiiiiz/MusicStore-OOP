@@ -27,7 +27,6 @@ MusicStore-OOP/
 │   ├── strategies/         # Các lớp Strategy (DiscountStrategy, SearchStrategy)
 │   ├── ui/                 # Các lớp giao diện người dùng (AdminUI, CustomerUI, ConsoleUI, utils, InputChecker)
 │   └── main.cpp            # Điểm vào chính của chương trình
-├── .gitignore              # Các file và thư mục được Git bỏ qua
 ├── Makefile                # Makefile để biên dịch dự án
 └── README.md               # Tài liệu mô tả dự án (file này)
 ```
