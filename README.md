@@ -120,7 +120,7 @@ Chương trình được phân tách ra 2 vai trò riêng biệt với 2 loại 
 
 - Link download: https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server
 
-- Hệ điều hành: Windows
+- Hệ điều hành: Windows (do có sử dụng thư viện windows.h cho xây dựng giao diện console)
 ```
 
 Nhập lệnh sau ở terminal (bash) để biên dịch chương trình:  
