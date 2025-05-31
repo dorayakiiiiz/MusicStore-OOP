@@ -9,7 +9,7 @@
 - **23120197 - Trà Văn Sỹ (Nhóm trưởng)**
 - **23120209 - Lê Hoàng Nhật Anh**
 
-## CẤU TRÚC THƯ MỤC DỰ ÁN
+## CẤU TRÚC THƯ MỤC
 ```
 MusicStore-OOP/
 ├── release/                # Chứa file thực thi sau khi biên dịch (program.exe)
@@ -27,8 +27,8 @@ MusicStore-OOP/
 │   ├── strategies/         # Các lớp Strategy (DiscountStrategy, SearchStrategy)
 │   ├── ui/                 # Các lớp giao diện người dùng (AdminUI, CustomerUI, ConsoleUI, utils, InputChecker)
 │   └── main.cpp            # Điểm vào chính của chương trình
-├── Makefile                # Makefile để biên dịch dự án
-└── README.md               # Tài liệu mô tả dự án (file này)
+├── Makefile                # Makefile để biên dịch
+└── README.md               # Mô tả project
 ```
 
 ## CÁC CÔNG VIỆC MÀ TỪNG THÀNH VIÊN ĐÃ THỰC HIỆN
@@ -228,7 +228,9 @@ Dự án Music Store được thiết kế và triển khai tuân thủ đầy �
 - **CommandInvoker phụ thuộc abstraction:** Chỉ làm việc với `Command` (interface), không quan tâm đến command cụ thể.
 - **Factory trả về abstraction:** `ControllerFactory` trả về `IController`, `SearchFactory` trả về `ISearch`, `DiscountFactory` trả về `DiscountStrategy`.
 
-Nhờ tuân thủ chặt chẽ các nguyên tắc SOLID ở mọi tầng (Model, Service, Controller, UI, Repository, Command, Factory), hệ thống dễ dàng mở rộng, bảo trì, kiểm thử và phát triển thêm các tính năng mới mà không ảnh hưởng đến các thành phần đã ổn định.
+Cụ thể hơn, việc "tiêm" các phụ thuộc (dependency injection) này thường được thực hiện qua constructor, ví dụ như các lớp Service nhận một `IDataProvider`, hoặc `Discount` nhận một `DiscountStrategy`. Cách tiếp cận này giúp các module không bị ràng buộc chặt chẽ với các triển khai cụ thể, dễ dàng thay thế và kiểm thử độc lập.
+
+Nhờ tuân thủ chặt chẽ các nguyên tắc SOLID ở mọi tầng (Model, Service, Controller, UI, Repository, Command, Factory), nguyên lí Dependency Injection, hệ thống dễ dàng mở rộng, bảo trì, kiểm thử và phát triển thêm các tính năng mới mà không ảnh hưởng đến các thành phần đã ổn định.
 
 ### DESIGN PATTERN ĐƯỢC SỬ DỤNG
 #### Factory Pattern
